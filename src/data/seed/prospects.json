@@ -1,0 +1,72 @@
+[
+  {
+    "id": "pros1",
+    "company_name": "Apex Logistics BD",
+    "contact_person": "Reza Khan",
+    "phone": "+880 17 1111 2222",
+    "email": "reza.khan@apexlogistics.com",
+    "business_context": "Mid-sized logistics firm looking to automate supply chain tracking and warehouse ops.",
+    "stage": "proposal",
+    "notes": "Very interested in ERP Integration Suite. Schedule follow-up after Eid holidays.",
+    "estimated_value": 450000,
+    "created_by": "u4",
+    "created_at": "2025-01-10T09:00:00Z",
+    "updated_at": "2025-01-18T14:00:00Z"
+  },
+  {
+    "id": "pros2",
+    "company_name": "Summit Finance Ltd",
+    "contact_person": "Tahmina Akter",
+    "phone": "+880 19 3333 4444",
+    "email": "tahmina@summitfinance.com",
+    "business_context": "Financial services firm needing CRM and analytics integration to reduce manual reporting.",
+    "stage": "negotiation",
+    "notes": "Demo went very well. Pricing discussion ongoing — they want a 15% volume discount.",
+    "estimated_value": 320000,
+    "created_by": "u4",
+    "created_at": "2025-01-05T11:00:00Z",
+    "updated_at": "2025-01-20T09:00:00Z"
+  },
+  {
+    "id": "pros3",
+    "company_name": "GreenTech BD",
+    "contact_person": "Farhan Hossain",
+    "phone": "+880 18 5555 6666",
+    "email": "farhan@greentechbd.com",
+    "business_context": "Tech startup in green energy sector interested in cloud data warehouse for IoT telemetry.",
+    "stage": "discovery",
+    "notes": "First call done. Sharing product brochure this week.",
+    "estimated_value": 180000,
+    "created_by": "u4",
+    "created_at": "2025-01-22T10:00:00Z",
+    "updated_at": "2025-01-22T10:00:00Z"
+  },
+  {
+    "id": "pros4",
+    "company_name": "Meridian Pharma",
+    "contact_person": "Dr. Sultana Begum",
+    "phone": "+880 17 7777 8888",
+    "email": "sultana@meridianpharma.com",
+    "business_context": "Pharmaceutical distribution company needing IMS with lot tracking and expiry management.",
+    "stage": "closed_won",
+    "notes": "Contract signed! Onboarding to begin Q2.",
+    "estimated_value": 550000,
+    "created_by": "u4",
+    "created_at": "2024-12-15T10:00:00Z",
+    "updated_at": "2025-01-25T10:00:00Z"
+  },
+  {
+    "id": "pros5",
+    "company_name": "Coastal Traders",
+    "contact_person": "Minhaj Uddin",
+    "phone": "+880 16 9999 0000",
+    "email": "minhaj@coastaltraders.com",
+    "business_context": "Import/export company that evaluated our ERP but found cost prohibitive at current scale.",
+    "stage": "closed_lost",
+    "notes": "Lost to competitor. Revenue was too small for enterprise tier. Re-approach in 12 months.",
+    "estimated_value": 90000,
+    "created_by": "u4",
+    "created_at": "2024-11-01T10:00:00Z",
+    "updated_at": "2024-12-20T10:00:00Z"
+  }
+]
