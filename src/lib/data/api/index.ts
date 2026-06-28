@@ -4,7 +4,7 @@
 
 import type { DataProvider, ListScope, CaseFilters, Paginated } from '../provider'
 import type {
-  User, Client, Solution, ClientSolution, Team, Product,
+  User, Client, Solution, ClientSolution, Team, Product, Role,
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
@@ -41,6 +41,11 @@ export class ApiDataProvider implements DataProvider {
   async createSolution(input: Omit<Solution, 'id' | 'created_at'>): Promise<Solution> { return http('/solutions', { method: 'POST', body: JSON.stringify(input) }) }
   async updateSolution(id: string, patch: Partial<Solution>): Promise<Solution> { return http(`/solutions/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
   async deleteSolution(id: string): Promise<void> { return http(`/solutions/${id}`, { method: 'DELETE' }) }
+  async toggleSolutionLike(id: string, userId: string): Promise<Solution> { return http(`/solutions/${id}/like`, { method: 'POST', body: JSON.stringify({ user_id: userId }) }) }
+  async toggleSolutionDislike(id: string, userId: string): Promise<Solution> { return http(`/solutions/${id}/dislike`, { method: 'POST', body: JSON.stringify({ user_id: userId }) }) }
+  async addSolutionComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<Solution> { return http(`/solutions/${id}/comments`, { method: 'POST', body: JSON.stringify(input) }) }
+  async deleteSolutionComment(id: string, commentId: string): Promise<Solution> { return http(`/solutions/${id}/comments/${commentId}`, { method: 'DELETE' }) }
+  async toggleSolutionCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<Solution> { return http(`/solutions/${id}/comments/${commentId}/reaction`, { method: 'POST', body: JSON.stringify({ user_id: userId, reaction }) }) }
 
   async listClientSolutions(clientId?: string): Promise<ClientSolution[]> { return http(`/client-solutions${clientId ? `?client_id=${clientId}` : ''}`) }
   async addClientSolution(clientId: string, solutionId: string): Promise<ClientSolution> { return http('/client-solutions', { method: 'POST', body: JSON.stringify({ client_id: clientId, solution_id: solutionId }) }) }

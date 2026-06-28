@@ -13,9 +13,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Lightbulb, PlusCircle, Pencil, Eye, User as UserIcon, Calendar, CheckCircle2, XCircle, X, ThumbsUp, ThumbsDown, MessageCircle, Trash2, Send } from 'lucide-react'
+import { Lightbulb, PlusCircle, Pencil, Eye, User as UserIcon, Calendar, CheckCircle2, XCircle, X, ThumbsUp, ThumbsDown, MessageCircle, Trash2, Send, Reply, ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { Solution, SolutionComment } from '@/types'
+import { ROLE_LABELS } from '@/lib/rbac'
+import type { Solution, SolutionComment, Role } from '@/types'
 
 const ALL_TAB = 'all'
 
@@ -24,15 +25,210 @@ type Banner = { kind: 'success' | 'error'; message: string }
 // Fallback Type options, unioned with categories already present in the data.
 const DEFAULT_TYPES = ['Integration', 'Data & Analytics', 'CRM', 'Operations', 'HR']
 
+// Cap how deep replies keep indenting so very deep threads don't run off-screen.
+const MAX_INDENT_DEPTH = 4
+
 // Module-scope so the impure id/timestamp generation isn't evaluated during render.
-function buildComment(authorId: string, authorName: string, body: string): SolutionComment {
+// The id is a temporary client id used only for optimistic rendering; the real id
+// is assigned by the data provider (mock or backend) and reconciled on refetch.
+function buildOptimisticComment(
+  authorId: string, authorName: string, authorRole: Role, body: string, parentId: string | null,
+): SolutionComment {
   return {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    id: `tmp-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    parent_id: parentId,
     author_id: authorId,
     author_name: authorName,
+    author_role: authorRole,
     body: body.trim(),
     created_at: new Date().toISOString(),
+    likes: [],
+    dislikes: [],
   }
+}
+
+// Pure helpers that compute the toggled like/dislike arrays for optimistic UI.
+function applyLikeToggle(s: Solution, uid: string): Partial<Solution> {
+  const likes = new Set(s.likes ?? [])
+  const dislikes = new Set(s.dislikes ?? [])
+  if (likes.has(uid)) { likes.delete(uid) } else { likes.add(uid); dislikes.delete(uid) }
+  return { likes: [...likes], dislikes: [...dislikes] }
+}
+function applyDislikeToggle(s: Solution, uid: string): Partial<Solution> {
+  const likes = new Set(s.likes ?? [])
+  const dislikes = new Set(s.dislikes ?? [])
+  if (dislikes.has(uid)) { dislikes.delete(uid) } else { dislikes.add(uid); likes.delete(uid) }
+  return { likes: [...likes], dislikes: [...dislikes] }
+}
+
+// Toggle a single comment's like/dislike (one active reaction per user).
+function applyCommentReaction(
+  comments: SolutionComment[], commentId: string, uid: string, reaction: 'like' | 'dislike',
+): SolutionComment[] {
+  return comments.map((c) => {
+    if (c.id !== commentId) return c
+    const likes = new Set(c.likes ?? [])
+    const dislikes = new Set(c.dislikes ?? [])
+    if (reaction === 'like') {
+      if (likes.has(uid)) { likes.delete(uid) } else { likes.add(uid); dislikes.delete(uid) }
+    } else {
+      if (dislikes.has(uid)) { dislikes.delete(uid) } else { dislikes.add(uid); likes.delete(uid) }
+    }
+    return { ...c, likes: [...likes], dislikes: [...dislikes] }
+  })
+}
+
+// Remove a comment and every descendant reply (matches backend cascade behaviour).
+function removeCommentAndDescendants(comments: SolutionComment[], commentId: string): SolutionComment[] {
+  const toRemove = new Set<string>()
+  const collect = (cid: string) => {
+    toRemove.add(cid)
+    comments.filter((c) => (c.parent_id ?? null) === cid).forEach((child) => collect(child.id))
+  }
+  collect(commentId)
+  return comments.filter((c) => !toRemove.has(c.id))
+}
+
+// Relative "2h ago" style timestamp. Module-scope so the impure Date.now() call
+// isn't flagged as an impure-during-render violation.
+function timeAgo(iso: string): string {
+  const secs = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000))
+  if (secs < 60) return 'just now'
+  const mins = Math.floor(secs / 60)
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  const days = Math.floor(hrs / 24)
+  if (days < 7) return `${days}d ago`
+  const weeks = Math.floor(days / 7)
+  if (weeks < 5) return `${weeks}w ago`
+  const months = Math.floor(days / 30)
+  if (months < 12) return `${months}mo ago`
+  return `${Math.floor(days / 365)}y ago`
+}
+
+// Recursive comment renderer — a reply is just a comment with a parent, so it
+// renders itself for each of its children, giving every level the same actions.
+function CommentNode({
+  comment, allComments, depth, currentUserId,
+  onReact, onReply, onDelete, busyReact, busyReply, busyDelete,
+}: {
+  comment: SolutionComment
+  allComments: SolutionComment[]
+  depth: number
+  currentUserId: string
+  onReact: (commentId: string, reaction: 'like' | 'dislike') => void
+  onReply: (parentId: string, body: string) => void
+  onDelete: (commentId: string) => void
+  busyReact: boolean
+  busyReply: boolean
+  busyDelete: boolean
+}) {
+  const [showReply, setShowReply] = useState(false)
+  const [replyText, setReplyText] = useState('')
+  const [collapsed, setCollapsed] = useState(false)
+
+  const children = allComments.filter((c) => (c.parent_id ?? null) === comment.id)
+  const myReaction: 'like' | 'dislike' | null =
+    (comment.likes ?? []).includes(currentUserId) ? 'like'
+      : (comment.dislikes ?? []).includes(currentUserId) ? 'dislike'
+        : null
+
+  function submitReply() {
+    const body = replyText.trim()
+    if (!body) return
+    onReply(comment.id, body)
+    setReplyText('')
+    setShowReply(false)
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="rounded-lg border bg-muted/30 p-3">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1 flex-wrap">
+          <UserIcon className="h-3 w-3 shrink-0" />
+          <span className="font-medium text-foreground">{comment.author_name}</span>
+          {comment.author_role && (
+            <span className="rounded bg-muted px-1.5 py-0.5">{ROLE_LABELS[comment.author_role] ?? comment.author_role}</span>
+          )}
+          <span>·</span>
+          <span>{timeAgo(comment.created_at)}</span>
+          {comment.author_id === currentUserId && (
+            <button
+              type="button"
+              className="ml-auto hover:text-destructive disabled:opacity-50"
+              disabled={busyDelete}
+              onClick={() => onDelete(comment.id)}
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
+        <p className="text-sm break-words whitespace-pre-wrap">{comment.body}</p>
+
+        <div className="flex items-center gap-1 mt-1 -ml-2 flex-wrap">
+          <Button
+            variant="ghost" size="sm" disabled={busyReact}
+            className={cn('gap-1 px-2 h-7', myReaction === 'like' && 'text-primary')}
+            onClick={() => onReact(comment.id, 'like')}
+          >
+            <ThumbsUp className="h-3 w-3" /> {(comment.likes ?? []).length}
+          </Button>
+          <Button
+            variant="ghost" size="sm" disabled={busyReact}
+            className={cn('gap-1 px-2 h-7', myReaction === 'dislike' && 'text-destructive')}
+            onClick={() => onReact(comment.id, 'dislike')}
+          >
+            <ThumbsDown className="h-3 w-3" /> {(comment.dislikes ?? []).length}
+          </Button>
+          <Button variant="ghost" size="sm" className="gap-1 px-2 h-7" onClick={() => setShowReply((v) => !v)}>
+            <Reply className="h-3 w-3" /> Reply
+          </Button>
+          {children.length > 0 && (
+            <Button variant="ghost" size="sm" className="gap-1 px-2 h-7" onClick={() => setCollapsed((v) => !v)}>
+              {collapsed ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
+              {children.length} {children.length > 1 ? 'replies' : 'reply'}
+            </Button>
+          )}
+        </div>
+
+        {showReply && (
+          <div className="flex items-end gap-2 mt-2">
+            <Textarea
+              rows={2}
+              placeholder={`Reply to ${comment.author_name}...`}
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              className="flex-1"
+            />
+            <Button size="sm" disabled={busyReply || !replyText.trim()} onClick={submitReply}>
+              <Send className="h-3 w-3" /> Reply
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {children.length > 0 && !collapsed && (
+        <div className={cn('space-y-2', depth < MAX_INDENT_DEPTH ? 'ml-4 border-l pl-3' : 'pl-1')}>
+          {children.map((child) => (
+            <CommentNode
+              key={child.id}
+              comment={child}
+              allComments={allComments}
+              depth={depth + 1}
+              currentUserId={currentUserId}
+              onReact={onReact}
+              onReply={onReply}
+              onDelete={onDelete}
+              busyReact={busyReact}
+              busyReply={busyReply}
+              busyDelete={busyDelete}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function SolutionsPage() {
@@ -83,39 +279,75 @@ export default function SolutionsPage() {
   // Author-only: edit + delete are visible only to the user who created the solution
   const canEditSolution = (s: Solution) => !!s.author_id && s.author_id === session.userId
 
-  // Optimistically patch a single solution in the cache; returns the previous
-  // snapshot so the change can be rolled back if the request fails.
-  function patchSolutionInCache(id: string, patch: Partial<Solution>) {
+  // Optimistically apply a patch to one solution in the cache; returns a rollback fn.
+  function optimisticPatch(id: string, mapper: (s: Solution) => Solution) {
     const prev = qc.getQueryData<Solution[]>(['solutions'])
     qc.setQueryData<Solution[]>(['solutions'], (old) =>
-      (old ?? []).map((x) => (x.id === id ? { ...x, ...patch } : x)))
-    return prev
+      (old ?? []).map((x) => (x.id === id ? mapper(x) : x)))
+    return () => { if (prev) qc.setQueryData(['solutions'], prev) }
   }
 
-  // Like / dislike — persisted via updateSolution, with optimistic UI + rollback
-  const reactMutation = useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<Solution> }) => dp.updateSolution(id, patch),
-    onMutate: async ({ id, patch }) => {
+  // ── Engagement mutations ────────────────────────────────────────────────────
+  // Each calls a dedicated provider method (mock today, REST endpoint once the
+  // backend exists) and applies an optimistic update with rollback on failure.
+  const likeMutation = useMutation({
+    mutationFn: (id: string) => dp.toggleSolutionLike(id, session.userId),
+    onMutate: async (id) => {
       await qc.cancelQueries({ queryKey: ['solutions'] })
-      return { prev: patchSolutionInCache(id, patch) }
+      return { rollback: optimisticPatch(id, (s) => ({ ...s, ...applyLikeToggle(s, session.userId) })) }
     },
-    onError: (_e, _v, ctx) => {
-      if (ctx?.prev) qc.setQueryData(['solutions'], ctx.prev)
-      setBanner({ kind: 'error', message: "Couldn't save your reaction. Please try again." })
-    },
+    onError: (_e, _v, ctx) => { ctx?.rollback(); setBanner({ kind: 'error', message: "Couldn't save your reaction. Please try again." }) },
     onSettled: () => { qc.invalidateQueries({ queryKey: ['solutions'] }) },
   })
 
-  const commentMutation = useMutation({
-    mutationFn: ({ id, comments }: { id: string; comments: SolutionComment[] }) => dp.updateSolution(id, { comments }),
-    onMutate: async ({ id, comments }) => {
+  const dislikeMutation = useMutation({
+    mutationFn: (id: string) => dp.toggleSolutionDislike(id, session.userId),
+    onMutate: async (id) => {
       await qc.cancelQueries({ queryKey: ['solutions'] })
-      return { prev: patchSolutionInCache(id, { comments }) }
+      return { rollback: optimisticPatch(id, (s) => ({ ...s, ...applyDislikeToggle(s, session.userId) })) }
     },
-    onError: (_e, _v, ctx) => {
-      if (ctx?.prev) qc.setQueryData(['solutions'], ctx.prev)
-      setBanner({ kind: 'error', message: "Couldn't post the comment. Please try again." })
+    onError: (_e, _v, ctx) => { ctx?.rollback(); setBanner({ kind: 'error', message: "Couldn't save your reaction. Please try again." }) },
+    onSettled: () => { qc.invalidateQueries({ queryKey: ['solutions'] }) },
+  })
+
+  // Add a comment or a reply (parentId = null for a top-level comment).
+  const commentMutation = useMutation({
+    mutationFn: ({ id, body, parentId }: { id: string; body: string; parentId: string | null }) =>
+      dp.addSolutionComment(id, {
+        author_id: session.userId,
+        author_name: currentUser?.name ?? session.userId,
+        author_role: session.role,
+        body,
+        parent_id: parentId,
+      }),
+    onMutate: async ({ id, body, parentId }) => {
+      await qc.cancelQueries({ queryKey: ['solutions'] })
+      const optimistic = buildOptimisticComment(session.userId, currentUser?.name ?? session.userId, session.role, body, parentId)
+      return { rollback: optimisticPatch(id, (s) => ({ ...s, comments: [...(s.comments ?? []), optimistic] })) }
     },
+    onError: (_e, _v, ctx) => { ctx?.rollback(); setBanner({ kind: 'error', message: "Couldn't post the comment. Please try again." }) },
+    onSettled: () => { qc.invalidateQueries({ queryKey: ['solutions'] }) },
+  })
+
+  // Like / dislike a single comment (one active reaction per user, enforced server-side).
+  const commentReactionMutation = useMutation({
+    mutationFn: ({ id, commentId, reaction }: { id: string; commentId: string; reaction: 'like' | 'dislike' }) =>
+      dp.toggleSolutionCommentReaction(id, commentId, session.userId, reaction),
+    onMutate: async ({ id, commentId, reaction }) => {
+      await qc.cancelQueries({ queryKey: ['solutions'] })
+      return { rollback: optimisticPatch(id, (s) => ({ ...s, comments: applyCommentReaction(s.comments ?? [], commentId, session.userId, reaction) })) }
+    },
+    onError: (_e, _v, ctx) => { ctx?.rollback(); setBanner({ kind: 'error', message: "Couldn't save your reaction. Please try again." }) },
+    onSettled: () => { qc.invalidateQueries({ queryKey: ['solutions'] }) },
+  })
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: ({ id, commentId }: { id: string; commentId: string }) => dp.deleteSolutionComment(id, commentId),
+    onMutate: async ({ id, commentId }) => {
+      await qc.cancelQueries({ queryKey: ['solutions'] })
+      return { rollback: optimisticPatch(id, (s) => ({ ...s, comments: removeCommentAndDescendants(s.comments ?? [], commentId) })) }
+    },
+    onError: (_e, _v, ctx) => { ctx?.rollback(); setBanner({ kind: 'error', message: "Couldn't delete the comment. Please try again." }) },
     onSettled: () => { qc.invalidateQueries({ queryKey: ['solutions'] }) },
   })
 
@@ -129,26 +361,9 @@ export default function SolutionsPage() {
     onError: () => setBanner({ kind: 'error', message: "Couldn't delete the solution. Please try again." }),
   })
 
-  function toggleLike(s: Solution) {
-    const uid = session.userId
-    const likes = new Set(s.likes ?? [])
-    const dislikes = new Set(s.dislikes ?? [])
-    if (likes.has(uid)) { likes.delete(uid) } else { likes.add(uid); dislikes.delete(uid) }
-    reactMutation.mutate({ id: s.id, patch: { likes: [...likes], dislikes: [...dislikes] } })
-  }
-
-  function toggleDislike(s: Solution) {
-    const uid = session.userId
-    const likes = new Set(s.likes ?? [])
-    const dislikes = new Set(s.dislikes ?? [])
-    if (dislikes.has(uid)) { dislikes.delete(uid) } else { dislikes.add(uid); likes.delete(uid) }
-    reactMutation.mutate({ id: s.id, patch: { likes: [...likes], dislikes: [...dislikes] } })
-  }
-
   function postComment() {
     if (!commenting || !commentText.trim()) return
-    const comment = buildComment(session.userId, currentUser?.name ?? session.userId, commentText)
-    commentMutation.mutate({ id: commenting.id, comments: [...(commenting.comments ?? []), comment] })
+    commentMutation.mutate({ id: commenting.id, body: commentText, parentId: null })
     setCommentText('')
   }
 
@@ -225,15 +440,17 @@ export default function SolutionsPage() {
                         <div className="flex items-center gap-1 mt-3 -ml-2">
                           <Button
                             variant="ghost" size="sm"
+                            disabled={likeMutation.isPending}
                             className={cn('gap-1.5 px-2', (s.likes ?? []).includes(session.userId) && 'text-primary')}
-                            onClick={() => toggleLike(s)}
+                            onClick={() => likeMutation.mutate(s.id)}
                           >
                             <ThumbsUp className="h-3.5 w-3.5" /> {(s.likes ?? []).length}
                           </Button>
                           <Button
                             variant="ghost" size="sm"
+                            disabled={dislikeMutation.isPending}
                             className={cn('gap-1.5 px-2', (s.dislikes ?? []).includes(session.userId) && 'text-destructive')}
-                            onClick={() => toggleDislike(s)}
+                            onClick={() => dislikeMutation.mutate(s.id)}
                           >
                             <ThumbsDown className="h-3.5 w-3.5" /> {(s.dislikes ?? []).length}
                           </Button>
@@ -357,24 +574,30 @@ export default function SolutionsPage() {
       {/* Comments */}
       {commenting && (
         <Dialog open={!!commenting} onOpenChange={(o) => { if (!o) { setCommentingId(null); setCommentText('') } }}>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-2xl">
             <DialogHeader><DialogTitle>Comments · {commenting.name}</DialogTitle></DialogHeader>
 
-            <div className="space-y-3 max-h-72 overflow-y-auto">
-              {(commenting.comments ?? []).length === 0 ? (
+            <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+              {(commenting.comments ?? []).filter((c) => (c.parent_id ?? null) === null).length === 0 ? (
                 <p className="text-sm text-muted-foreground">No comments yet. Be the first to comment.</p>
               ) : (
-                (commenting.comments ?? []).map((c: SolutionComment) => (
-                  <div key={c.id} className="rounded-lg border bg-muted/30 p-3">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
-                      <UserIcon className="h-3 w-3" />
-                      <span className="font-medium text-foreground">{c.author_name}</span>
-                      <span>·</span>
-                      <span>{new Date(c.created_at).toLocaleString()}</span>
-                    </div>
-                    <p className="text-sm break-words whitespace-pre-wrap">{c.body}</p>
-                  </div>
-                ))
+                (commenting.comments ?? [])
+                  .filter((c) => (c.parent_id ?? null) === null)
+                  .map((c: SolutionComment) => (
+                    <CommentNode
+                      key={c.id}
+                      comment={c}
+                      allComments={commenting.comments ?? []}
+                      depth={0}
+                      currentUserId={session.userId}
+                      onReact={(commentId, reaction) => commentReactionMutation.mutate({ id: commenting.id, commentId, reaction })}
+                      onReply={(parentId, body) => commentMutation.mutate({ id: commenting.id, body, parentId })}
+                      onDelete={(commentId) => deleteCommentMutation.mutate({ id: commenting.id, commentId })}
+                      busyReact={commentReactionMutation.isPending}
+                      busyReply={commentMutation.isPending}
+                      busyDelete={deleteCommentMutation.isPending}
+                    />
+                  ))
               )}
             </div>
 

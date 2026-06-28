@@ -50,6 +50,18 @@ export interface DataProvider {
   createSolution(input: Omit<Solution, 'id' | 'created_at'>): Promise<Solution>
   updateSolution(id: string, patch: Partial<Solution>): Promise<Solution>
   deleteSolution(id: string): Promise<void>
+  // Engagement — dedicated, atomic actions (backend maps these to REST endpoints):
+  //   toggleSolutionLike            → POST   /solutions/:id/like        { user_id }
+  //   toggleSolutionDislike         → POST   /solutions/:id/dislike     { user_id }
+  //   addSolutionComment            → POST   /solutions/:id/comments    { author_id, author_name, author_role, body, parent_id }  (server assigns id/created_at)
+  //   deleteSolutionComment         → DELETE /solutions/:id/comments/:commentId   (also removes descendant replies)
+  //   toggleSolutionCommentReaction → POST   /solutions/:id/comments/:commentId/reaction { user_id, reaction }
+  // Each returns the updated Solution so the UI can reconcile in one round-trip.
+  toggleSolutionLike(id: string, userId: string): Promise<Solution>
+  toggleSolutionDislike(id: string, userId: string): Promise<Solution>
+  addSolutionComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<Solution>
+  deleteSolutionComment(id: string, commentId: string): Promise<Solution>
+  toggleSolutionCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<Solution>
 
   // Client Solutions
   listClientSolutions(clientId?: string): Promise<ClientSolution[]>

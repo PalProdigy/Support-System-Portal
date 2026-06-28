@@ -2,7 +2,7 @@
 
 import type { DataProvider, ListScope, CaseFilters, Paginated } from '../provider'
 import type {
-  User, Client, Solution, ClientSolution, Team, Product,
+  User, Client, Solution, SolutionComment, ClientSolution, Team, Product, Role,
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
@@ -225,6 +225,82 @@ class MockDataProvider implements DataProvider {
     const solutions = load<Solution>(STORAGE_KEYS.solutions).filter((s) => s.id !== id)
     save(STORAGE_KEYS.solutions, solutions)
     return delay(undefined)
+  }
+
+  // ── Solution engagement ────────────────────────────────────────────────────
+  private mutateSolution(id: string, fn: (s: Solution) => Solution): Promise<Solution> {
+    const solutions = load<Solution>(STORAGE_KEYS.solutions)
+    const idx = solutions.findIndex((s) => s.id === id)
+    if (idx === -1) throw new Error(`Solution ${id} not found`)
+    solutions[idx] = fn(solutions[idx])
+    save(STORAGE_KEYS.solutions, solutions)
+    return delay(solutions[idx])
+  }
+
+  async toggleSolutionLike(id: string, userId: string): Promise<Solution> {
+    return this.mutateSolution(id, (s) => {
+      const likes = new Set(s.likes ?? [])
+      const dislikes = new Set(s.dislikes ?? [])
+      if (likes.has(userId)) { likes.delete(userId) } else { likes.add(userId); dislikes.delete(userId) }
+      return { ...s, likes: [...likes], dislikes: [...dislikes] }
+    })
+  }
+
+  async toggleSolutionDislike(id: string, userId: string): Promise<Solution> {
+    return this.mutateSolution(id, (s) => {
+      const likes = new Set(s.likes ?? [])
+      const dislikes = new Set(s.dislikes ?? [])
+      if (dislikes.has(userId)) { dislikes.delete(userId) } else { dislikes.add(userId); likes.delete(userId) }
+      return { ...s, likes: [...likes], dislikes: [...dislikes] }
+    })
+  }
+
+  async addSolutionComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<Solution> {
+    return this.mutateSolution(id, (s) => {
+      const comment: SolutionComment = {
+        id: genId(),
+        parent_id: input.parent_id ?? null,
+        author_id: input.author_id,
+        author_name: input.author_name,
+        author_role: input.author_role,
+        body: input.body.trim(),
+        created_at: now(),
+        likes: [],
+        dislikes: [],
+      }
+      return { ...s, comments: [...(s.comments ?? []), comment] }
+    })
+  }
+
+  async deleteSolutionComment(id: string, commentId: string): Promise<Solution> {
+    return this.mutateSolution(id, (s) => {
+      const all = s.comments ?? []
+      // Remove the comment and all of its descendant replies (any depth).
+      const toRemove = new Set<string>()
+      const collect = (cid: string) => {
+        toRemove.add(cid)
+        all.filter((c) => (c.parent_id ?? null) === cid).forEach((child) => collect(child.id))
+      }
+      collect(commentId)
+      return { ...s, comments: all.filter((c) => !toRemove.has(c.id)) }
+    })
+  }
+
+  async toggleSolutionCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<Solution> {
+    return this.mutateSolution(id, (s) => ({
+      ...s,
+      comments: (s.comments ?? []).map((c) => {
+        if (c.id !== commentId) return c
+        const likes = new Set(c.likes ?? [])
+        const dislikes = new Set(c.dislikes ?? [])
+        if (reaction === 'like') {
+          if (likes.has(userId)) { likes.delete(userId) } else { likes.add(userId); dislikes.delete(userId) }
+        } else {
+          if (dislikes.has(userId)) { dislikes.delete(userId) } else { dislikes.add(userId); likes.delete(userId) }
+        }
+        return { ...c, likes: [...likes], dislikes: [...dislikes] }
+      }),
+    }))
   }
 
   // ── Client Solutions ───────────────────────────────────────────────────────

@@ -66,10 +66,14 @@ export interface Solution {
 
 export interface SolutionComment {
   id: string
+  parent_id?: string | null   // null/undefined = top-level; otherwise the parent comment id
   author_id: string
   author_name: string
+  author_role?: Role
   body: string
   created_at: string
+  likes?: string[]            // user ids who liked this comment
+  dislikes?: string[]         // user ids who disliked this comment
 }
 
 export interface ClientSolution {
