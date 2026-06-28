@@ -45,8 +45,8 @@ export default function SolutionsPage() {
   })
 
   return (
-    <div className="p-6 space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="p-6 space-y-4 max-w-full overflow-x-hidden">
+      <div className="flex items-center justify-between gap-3">
         <div><h1 className="text-2xl font-bold">Solutions</h1><p className="text-sm text-muted-foreground">{solutions?.length ?? 0} products/services</p></div>
         {canAddSolution && <Button onClick={() => router.push('/solutions/new')}><PlusCircle className="h-4 w-4" /> Add Solution</Button>}
       </div>
@@ -56,11 +56,11 @@ export default function SolutionsPage() {
       ) : (solutions ?? []).length === 0 ? (
         <EmptyState icon={Lightbulb} title="No solutions" />
       ) : (
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="flex h-auto w-full flex-wrap justify-start">
-            <TabsTrigger value={ALL_TAB} className="flex-1">All</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-full min-w-0 space-y-4">
+          <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 overflow-hidden">
+            <TabsTrigger value={ALL_TAB} className="min-w-0 truncate">All</TabsTrigger>
             {categories.map((c) => (
-              <TabsTrigger key={c} value={c} className="flex-1">{c}</TabsTrigger>
+              <TabsTrigger key={c} value={c} className="min-w-0 truncate">{c}</TabsTrigger>
             ))}
           </TabsList>
 
@@ -69,22 +69,28 @@ export default function SolutionsPage() {
           ) : (
             <div className="space-y-3">
               {filteredSolutions.map((s: Solution) => (
-            <div key={s.id} className="rounded-xl border bg-card p-4 flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3 flex-1 min-w-0">
-                <div className="rounded-lg bg-primary/10 p-2.5 mt-0.5"><Lightbulb className="h-4 w-4 text-primary" /></div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold">{s.name}</p>
-                    {!s.is_active && <span className="text-xs text-muted-foreground">(inactive)</span>}
+                  <div key={s.id} className="rounded-xl border bg-card p-4 flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      <div className="rounded-lg bg-primary/10 p-2.5 mt-0.5 shrink-0">
+                        <Lightbulb className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <p className="font-semibold truncate min-w-0">{s.name}</p>
+                          {!s.is_active && (
+                              <span className="text-xs text-muted-foreground shrink-0">(inactive)</span>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5 truncate">{s.category}</p>
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2 break-words">{s.description}</p>
+                      </div>
+                    </div>
+                    {canManage && (
+                        <Button variant="ghost" size="icon" className="shrink-0" onClick={() => setEditing({ ...s })}>
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                    )}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">{s.category}</p>
-                  <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{s.description}</p>
-                </div>
-              </div>
-              {canManage && (
-                <Button variant="ghost" size="icon" onClick={() => setEditing({ ...s })}><Pencil className="h-3.5 w-3.5" /></Button>
-              )}
-            </div>
               ))}
             </div>
           )}
