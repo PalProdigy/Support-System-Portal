@@ -113,10 +113,28 @@ export interface DataProvider {
   upsertRCA(input: Omit<RCA, 'id' | 'created_at'>): Promise<RCA>
 
   // KB Articles
-  listKBArticles(filters?: { status?: string; search?: string }): Promise<KBArticle[]>
+  // When scope is provided, the public list enforces visibility: published articles
+  // for everyone, plus the requester's own submissions, plus all articles for a
+  // Technical Head. Without scope the legacy (unfiltered) behaviour is preserved.
+  listKBArticles(filters?: { status?: string; search?: string }, scope?: ListScope): Promise<KBArticle[]>
   getKBArticle(id: string): Promise<KBArticle | null>
   createKBArticle(input: Omit<KBArticle, 'id' | 'created_at' | 'updated_at'>): Promise<KBArticle>
   updateKBArticle(id: string, patch: Partial<KBArticle>): Promise<KBArticle>
+  deleteKBArticle(id: string): Promise<void>
+  // Submission & approval workflow (backend enforces the Technical-Head-only rules):
+  //   submitKBArticle  → POST /kb/submit         → creates a status:'pending' article
+  //   publishKBArticle → POST /kb/:id/publish    → TH-only; pending → published
+  //   rejectKBArticle  → POST /kb/:id/reject     → TH-only; pending → rejected
+  submitKBArticle(input: { title: string; body: string; tags: string[]; author_id: string; author_name?: string; author_role?: Role }): Promise<KBArticle>
+  publishKBArticle(id: string, actor: ListScope): Promise<KBArticle>
+  rejectKBArticle(id: string, actor: ListScope, reason?: string): Promise<KBArticle>
+  // KB comments — same dedicated/atomic pattern as solution comments:
+  //   addKBComment            → POST   /kb/:id/comments    { author_id, author_name, author_role, body, parent_id }
+  //   deleteKBComment         → DELETE /kb/:id/comments/:commentId  (cascades to descendant replies)
+  //   toggleKBCommentReaction → POST   /kb/:id/comments/:commentId/reaction { user_id, reaction }
+  addKBComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<KBArticle>
+  deleteKBComment(id: string, commentId: string): Promise<KBArticle>
+  toggleKBCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<KBArticle>
 
   // Feedback
   listFeedback(scope: ListScope): Promise<Feedback[]>

@@ -2,7 +2,7 @@
 
 import type { DataProvider, ListScope, CaseFilters, Paginated } from '../provider'
 import type {
-  User, Client, Solution, SolutionComment, ClientSolution, Team, Product, Role,
+  User, Client, Solution, SolutionComment, ThreadComment, ClientSolution, Team, Product, Role,
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
@@ -757,8 +757,15 @@ class MockDataProvider implements DataProvider {
   }
 
   // ── KB Articles ────────────────────────────────────────────────────────────
-  async listKBArticles(filters: { status?: string; search?: string } = {}): Promise<KBArticle[]> {
+  async listKBArticles(filters: { status?: string; search?: string } = {}, scope?: ListScope): Promise<KBArticle[]> {
     let articles = load<KBArticle>(STORAGE_KEYS.kbArticles)
+    // Visibility enforcement (backend-style): published is public; authors see their
+    // own submissions; a Technical Head sees everything.
+    if (scope) {
+      articles = articles.filter(
+        (a) => a.status === 'published' || a.author_id === scope.userId || scope.role === 'technical_head',
+      )
+    }
     if (filters.status) articles = articles.filter((a) => a.status === filters.status)
     if (filters.search) {
       const terms = filters.search.toLowerCase().split(/\s+/).filter(Boolean)
@@ -788,6 +795,110 @@ class MockDataProvider implements DataProvider {
     articles[idx] = { ...articles[idx], ...patch, updated_at: now() }
     save(STORAGE_KEYS.kbArticles, articles)
     return delay(articles[idx])
+  }
+
+  async deleteKBArticle(id: string): Promise<void> {
+    const articles = load<KBArticle>(STORAGE_KEYS.kbArticles).filter((a) => a.id !== id)
+    save(STORAGE_KEYS.kbArticles, articles)
+    return delay(undefined)
+  }
+
+  // ── KB submission & approval workflow ────────────────────────────────────────
+  async submitKBArticle(input: { title: string; body: string; tags: string[]; author_id: string; author_name?: string; author_role?: Role }): Promise<KBArticle> {
+    const articles = load<KBArticle>(STORAGE_KEYS.kbArticles)
+    const article: KBArticle = {
+      id: genId(),
+      title: input.title,
+      body: input.body,
+      tags: input.tags,
+      status: 'pending',
+      author_id: input.author_id,
+      author_name: input.author_name,
+      author_role: input.author_role,
+      created_at: now(),
+      updated_at: now(),
+    }
+    save(STORAGE_KEYS.kbArticles, [...articles, article])
+    return delay(article)
+  }
+
+  async publishKBArticle(id: string, actor: ListScope): Promise<KBArticle> {
+    if (actor.role !== 'technical_head') throw new Error('Only the Technical Head can publish articles')
+    return this.mutateKBArticle(id, (a) => ({
+      ...a,
+      status: 'published',
+      published_at: now(),
+      published_by: actor.userId,
+      rejected_by: undefined,
+      rejection_reason: undefined,
+    }))
+  }
+
+  async rejectKBArticle(id: string, actor: ListScope, reason?: string): Promise<KBArticle> {
+    if (actor.role !== 'technical_head') throw new Error('Only the Technical Head can reject articles')
+    return this.mutateKBArticle(id, (a) => ({
+      ...a,
+      status: 'rejected',
+      rejected_by: actor.userId,
+      rejection_reason: reason,
+    }))
+  }
+
+  // ── KB comments ────────────────────────────────────────────────────────────
+  private mutateKBArticle(id: string, fn: (a: KBArticle) => KBArticle): Promise<KBArticle> {
+    const articles = load<KBArticle>(STORAGE_KEYS.kbArticles)
+    const idx = articles.findIndex((a) => a.id === id)
+    if (idx === -1) throw new Error(`KB Article ${id} not found`)
+    articles[idx] = fn(articles[idx])
+    save(STORAGE_KEYS.kbArticles, articles)
+    return delay(articles[idx])
+  }
+
+  async addKBComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<KBArticle> {
+    return this.mutateKBArticle(id, (a) => {
+      const comment: ThreadComment = {
+        id: genId(),
+        parent_id: input.parent_id ?? null,
+        author_id: input.author_id,
+        author_name: input.author_name,
+        author_role: input.author_role,
+        body: input.body.trim(),
+        created_at: now(),
+        likes: [],
+        dislikes: [],
+      }
+      return { ...a, comments: [...(a.comments ?? []), comment] }
+    })
+  }
+
+  async deleteKBComment(id: string, commentId: string): Promise<KBArticle> {
+    return this.mutateKBArticle(id, (a) => {
+      const all = a.comments ?? []
+      const toRemove = new Set<string>()
+      const collect = (cid: string) => {
+        toRemove.add(cid)
+        all.filter((c) => (c.parent_id ?? null) === cid).forEach((child) => collect(child.id))
+      }
+      collect(commentId)
+      return { ...a, comments: all.filter((c) => !toRemove.has(c.id)) }
+    })
+  }
+
+  async toggleKBCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<KBArticle> {
+    return this.mutateKBArticle(id, (a) => ({
+      ...a,
+      comments: (a.comments ?? []).map((c) => {
+        if (c.id !== commentId) return c
+        const likes = new Set(c.likes ?? [])
+        const dislikes = new Set(c.dislikes ?? [])
+        if (reaction === 'like') {
+          if (likes.has(userId)) { likes.delete(userId) } else { likes.add(userId); dislikes.delete(userId) }
+        } else {
+          if (dislikes.has(userId)) { dislikes.delete(userId) } else { dislikes.add(userId); likes.delete(userId) }
+        }
+        return { ...c, likes: [...likes], dislikes: [...dislikes] }
+      }),
+    }))
   }
 
   // ── Feedback ───────────────────────────────────────────────────────────────

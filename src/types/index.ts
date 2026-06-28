@@ -64,7 +64,9 @@ export interface Solution {
   comments?: SolutionComment[]
 }
 
-export interface SolutionComment {
+// Generic threaded comment shape — shared by any entity that supports nested
+// comments with per-comment like/dislike (solutions, KB articles, …).
+export interface ThreadComment {
   id: string
   parent_id?: string | null   // null/undefined = top-level; otherwise the parent comment id
   author_id: string
@@ -75,6 +77,9 @@ export interface SolutionComment {
   likes?: string[]            // user ids who liked this comment
   dislikes?: string[]         // user ids who disliked this comment
 }
+
+// Backward-compatible alias for existing Solution code.
+export type SolutionComment = ThreadComment
 
 export interface ClientSolution {
   id: string
@@ -172,11 +177,17 @@ export interface KBArticle {
   solution_id?: string
   product_id?: string
   tags: string[]
-  status: 'draft' | 'published' | 'archived'
+  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived'
   author_id: string
+  author_name?: string
+  author_role?: Role
   published_at?: string
+  published_by?: string        // user id of the Technical Head who approved
+  rejected_by?: string
+  rejection_reason?: string
   created_at: string
   updated_at: string
+  comments?: ThreadComment[]
 }
 
 export interface Feedback {

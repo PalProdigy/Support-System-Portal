@@ -87,10 +87,17 @@ export class ApiDataProvider implements DataProvider {
   async getRCA(caseId: string): Promise<RCA | null> { return http(`/cases/${caseId}/rca`) }
   async upsertRCA(input: Omit<RCA, 'id' | 'created_at'>): Promise<RCA> { return http(`/cases/${input.case_id}/rca`, { method: 'PUT', body: JSON.stringify(input) }) }
 
-  async listKBArticles(filters: { status?: string; search?: string } = {}): Promise<KBArticle[]> { return http(`/kb?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async listKBArticles(filters: { status?: string; search?: string } = {}, _scope?: ListScope): Promise<KBArticle[]> { return http(`/kb?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
   async getKBArticle(id: string): Promise<KBArticle | null> { return http(`/kb/${id}`) }
   async createKBArticle(input: Omit<KBArticle, 'id' | 'created_at' | 'updated_at'>): Promise<KBArticle> { return http('/kb', { method: 'POST', body: JSON.stringify(input) }) }
   async updateKBArticle(id: string, patch: Partial<KBArticle>): Promise<KBArticle> { return http(`/kb/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
+  async deleteKBArticle(id: string): Promise<void> { return http(`/kb/${id}`, { method: 'DELETE' }) }
+  async submitKBArticle(input: { title: string; body: string; tags: string[]; author_id: string; author_name?: string; author_role?: Role }): Promise<KBArticle> { return http('/kb/submit', { method: 'POST', body: JSON.stringify(input) }) }
+  async publishKBArticle(id: string, _actor: ListScope): Promise<KBArticle> { return http(`/kb/${id}/publish`, { method: 'POST' }) }
+  async rejectKBArticle(id: string, _actor: ListScope, reason?: string): Promise<KBArticle> { return http(`/kb/${id}/reject`, { method: 'POST', body: JSON.stringify({ reason }) }) }
+  async addKBComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<KBArticle> { return http(`/kb/${id}/comments`, { method: 'POST', body: JSON.stringify(input) }) }
+  async deleteKBComment(id: string, commentId: string): Promise<KBArticle> { return http(`/kb/${id}/comments/${commentId}`, { method: 'DELETE' }) }
+  async toggleKBCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<KBArticle> { return http(`/kb/${id}/comments/${commentId}/reaction`, { method: 'POST', body: JSON.stringify({ user_id: userId, reaction }) }) }
 
   async listFeedback(_scope: ListScope): Promise<Feedback[]> { return http('/feedback') }
   async submitFeedback(input: Omit<Feedback, 'id' | 'created_at'>, _scope: ListScope): Promise<Feedback> { return http('/feedback', { method: 'POST', body: JSON.stringify(input) }) }
