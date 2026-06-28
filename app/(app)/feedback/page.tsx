@@ -91,11 +91,19 @@ export default function FeedbackPage() {
                       {team && <span>{team.name}</span>}
                       {engineer && <span>{engineer.name}</span>}
                       <span>{formatDate(f.created_at)}</span>
-                      {f.lead_reviewed && (
+                      {f.ml_reviewed && f.th_reviewed ? (
                         <span className="flex items-center gap-1 text-emerald-600 font-medium">
-                          <CheckCircle2 className="h-3 w-3" /> Lead reviewed
+                          <CheckCircle2 className="h-3 w-3" /> Reviewed by ML &amp; TH
                         </span>
-                      )}
+                      ) : f.ml_reviewed ? (
+                        <span className="flex items-center gap-1 text-emerald-600 font-medium">
+                          <CheckCircle2 className="h-3 w-3" /> Reviewed by Module Lead
+                        </span>
+                      ) : f.th_reviewed ? (
+                        <span className="flex items-center gap-1 text-emerald-600 font-medium">
+                          <CheckCircle2 className="h-3 w-3" /> Reviewed by Technical Head
+                        </span>
+                      ) : null}
                     </div>
                   </div>
 

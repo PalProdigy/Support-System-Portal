@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { canAccess } from '@/lib/rbac'
-import { redirect } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Users, LayoutList, Bell } from 'lucide-react'
 
@@ -28,6 +28,8 @@ const ClosureQueue = dynamic(
 )
 
 type Tab = 'queue' | 'workload' | 'activity' | 'closure'
+
+const VALID_TABS: Tab[] = ['queue', 'workload', 'closure', 'activity']
 
 const TABS: { key: Tab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: 'queue', label: 'Team Queue', icon: LayoutList },
@@ -87,7 +89,11 @@ function TeamHeader() {
 }
 
 export default function LeadPage() {
-  const [tab, setTab] = useState<Tab>('queue')
+  const searchParams = useSearchParams()
+  const initialTab = searchParams.get('tab') as Tab | null
+  const [tab, setTab] = useState<Tab>(
+    initialTab && VALID_TABS.includes(initialTab) ? initialTab : 'queue'
+  )
 
   return (
     <div className="space-y-6">

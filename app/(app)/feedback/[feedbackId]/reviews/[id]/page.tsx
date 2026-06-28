@@ -107,9 +107,13 @@ export default function ReviewDetailPage({ params }: { params: Promise<{ feedbac
   const { data: solutions } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
 
   const reviewMutation = useMutation({
-    mutationFn: () => dp.updateFeedback(id, { lead_reviewed: true }),
+    mutationFn: () => {
+      const patch = scope.role === 'module_lead'
+        ? { ml_reviewed: true }
+        : { th_reviewed: true }
+      return dp.updateFeedback(id, patch)
+    },
     onSuccess: () => {
-      // invalidate both so the listing page card updates immediately
       qc.invalidateQueries({ queryKey: ['feedback'] })
       toast({ title: 'Marked as reviewed', variant: 'success' })
     },
@@ -319,17 +323,34 @@ export default function ReviewDetailPage({ params }: { params: Promise<{ feedbac
               <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wide">
                 Review Status
               </p>
-              {feedback.lead_reviewed ? (
-                <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
-                  <CheckCircle2 className="h-3.5 w-3.5" /> Reviewed
-                </span>
-              ) : (
+              {!feedback.ml_reviewed && !feedback.th_reviewed && (
                 <span className="text-xs text-amber-600 font-medium">Pending review</span>
+              )}
+              {feedback.ml_reviewed && (
+                <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Module Lead reviewed
+                </span>
+              )}
+              {feedback.th_reviewed && (
+                <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Technical Head reviewed
+                </span>
               )}
             </div>
 
-            {/* Mark as Reviewed action */}
-            {canReview && !feedback.lead_reviewed && (
+            {/* Mark as Reviewed action — shown only for the role that hasn't reviewed yet */}
+            {canReview && scope.role === 'module_lead' && !feedback.ml_reviewed && (
+              <Button
+                className="w-full"
+                size="sm"
+                onClick={() => reviewMutation.mutate()}
+                disabled={reviewMutation.isPending}
+              >
+                <CheckCircle2 className="h-4 w-4" />
+                {reviewMutation.isPending ? 'Saving…' : 'Mark Reviewed'}
+              </Button>
+            )}
+            {canReview && scope.role === 'technical_head' && !feedback.th_reviewed && (
               <Button
                 className="w-full"
                 size="sm"

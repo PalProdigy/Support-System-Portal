@@ -76,7 +76,7 @@ function save<T>(key: string, data: T[]): void {
   localStorage.setItem(key, JSON.stringify(data))
 }
 
-const SEED_VERSION = '5' // bump when seed schema changes
+const SEED_VERSION = '6' // bump when seed schema changes
 
 function ensureSeeded(): void {
   if (typeof window === 'undefined') return

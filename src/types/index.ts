@@ -53,6 +53,10 @@ export interface Solution {
   category: string
   is_active: boolean
   created_at: string
+  // Auto-captured author metadata (set from the logged-in user on save)
+  author_id?: string
+  author_name?: string
+  author_role?: Role
 }
 
 export interface ClientSolution {
@@ -164,7 +168,8 @@ export interface Feedback {
   client_id: string
   feedback_text: string
   rating?: number
-  lead_reviewed: boolean
+  ml_reviewed?: boolean
+  th_reviewed?: boolean
   created_at: string
 }
 
