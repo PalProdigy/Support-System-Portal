@@ -57,6 +57,19 @@ export interface Solution {
   author_id?: string
   author_name?: string
   author_role?: Role
+  updated_at?: string
+  // Engagement
+  likes?: string[]        // user ids who liked
+  dislikes?: string[]     // user ids who disliked
+  comments?: SolutionComment[]
+}
+
+export interface SolutionComment {
+  id: string
+  author_id: string
+  author_name: string
+  body: string
+  created_at: string
 }
 
 export interface ClientSolution {

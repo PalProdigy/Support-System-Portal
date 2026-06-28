@@ -40,6 +40,7 @@ export class ApiDataProvider implements DataProvider {
   async getSolution(id: string): Promise<Solution | null> { return http(`/solutions/${id}`) }
   async createSolution(input: Omit<Solution, 'id' | 'created_at'>): Promise<Solution> { return http('/solutions', { method: 'POST', body: JSON.stringify(input) }) }
   async updateSolution(id: string, patch: Partial<Solution>): Promise<Solution> { return http(`/solutions/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
+  async deleteSolution(id: string): Promise<void> { return http(`/solutions/${id}`, { method: 'DELETE' }) }
 
   async listClientSolutions(clientId?: string): Promise<ClientSolution[]> { return http(`/client-solutions${clientId ? `?client_id=${clientId}` : ''}`) }
   async addClientSolution(clientId: string, solutionId: string): Promise<ClientSolution> { return http('/client-solutions', { method: 'POST', body: JSON.stringify({ client_id: clientId, solution_id: solutionId }) }) }

@@ -221,6 +221,12 @@ class MockDataProvider implements DataProvider {
     return delay(solutions[idx])
   }
 
+  async deleteSolution(id: string): Promise<void> {
+    const solutions = load<Solution>(STORAGE_KEYS.solutions).filter((s) => s.id !== id)
+    save(STORAGE_KEYS.solutions, solutions)
+    return delay(undefined)
+  }
+
   // ── Client Solutions ───────────────────────────────────────────────────────
   async listClientSolutions(clientId?: string): Promise<ClientSolution[]> {
     let cs = load<ClientSolution>(STORAGE_KEYS.clientSolutions)

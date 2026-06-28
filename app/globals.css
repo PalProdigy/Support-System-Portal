@@ -55,6 +55,12 @@
   * {
     border-color: hsl(var(--border));
   }
+  /* Reserve space for the vertical scrollbar so page width stays constant
+     whether or not the scrollbar is present (prevents layout shift). */
+  html {
+    scrollbar-gutter: stable;
+    overflow-y: scroll; /* fallback for browsers without scrollbar-gutter */
+  }
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));

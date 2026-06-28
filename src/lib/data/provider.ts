@@ -49,6 +49,7 @@ export interface DataProvider {
   getSolution(id: string): Promise<Solution | null>
   createSolution(input: Omit<Solution, 'id' | 'created_at'>): Promise<Solution>
   updateSolution(id: string, patch: Partial<Solution>): Promise<Solution>
+  deleteSolution(id: string): Promise<void>
 
   // Client Solutions
   listClientSolutions(clientId?: string): Promise<ClientSolution[]>
