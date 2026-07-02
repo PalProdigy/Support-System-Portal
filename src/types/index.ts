@@ -35,6 +35,45 @@ export type AuditAction = 'create' | 'update' | 'delete' | 'status_change' | 'as
 // Skill/certification tier for support engineers (L1 = junior … L5 = expert).
 export type CertificationLevel = 'L1' | 'L2' | 'L3' | 'L4' | 'L5'
 
+// One entry in a user's educational background (e.g. BSc, HSC, SSC).
+export interface EducationEntry {
+  id: string
+  degree: string        // e.g. "BSc in Computer Science"
+  institution: string   // e.g. "University of Dhaka"
+  year?: string         // graduation year, e.g. "2018"
+  gpa?: string          // CGPA/GPA, e.g. "3.85 / 4.00"
+}
+
+// An uploaded certification document (PDF/DOC) with editable metadata.
+export interface CertificationDoc {
+  id: string
+  title: string
+  description?: string
+  file_name?: string
+  file_type?: string
+  file_url?: string     // base64 data URL so it persists and stays downloadable
+  size?: number
+}
+
+export type AchievementType =
+  | 'employee_of_month'
+  | 'best_sla'
+  | 'fastest_resolution'
+  | 'top_rating'
+  | 'internal_award'
+
+// An award/recognition earned by the engineer (display-only, not self-editable).
+export interface Achievement {
+  id: string
+  type: AchievementType
+  title: string
+  description?: string
+  date?: string
+}
+
+// Which broad department a staff member belongs to.
+export type Department = 'technical' | 'sales'
+
 export interface User {
   id: string
   name: string
@@ -47,6 +86,19 @@ export interface User {
   // Support-engineer profile fields (optional; other roles leave these unset).
   years_of_experience?: number
   certification_level?: CertificationLevel
+  // ── Extended profile (editable by the engineer) ──────────────────────────
+  about?: string
+  contact_numbers?: string[]
+  languages?: string[]
+  technical_skills?: string[]
+  expertise?: string[]
+  education?: EducationEntry[]
+  certifications?: CertificationDoc[]
+  // ── Extended profile (org-managed, display-only) ─────────────────────────
+  designation?: string
+  department?: Department
+  employee_id?: string
+  achievements?: Achievement[]
 }
 
 export interface Client {

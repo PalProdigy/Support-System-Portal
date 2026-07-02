@@ -50,6 +50,19 @@ export function KpiCard({ icon, label, value, sub }: { icon: ReactNode; label: s
   )
 }
 
+// Compact stat used in dense grids (e.g. the performance summary panel).
+export function StatTile({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+  return (
+    <div className="rounded-lg border bg-muted/30 p-3 space-y-1">
+      <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        {icon}
+        <span className="truncate">{label}</span>
+      </div>
+      <p className="text-lg font-bold text-foreground leading-none">{value}</p>
+    </div>
+  )
+}
+
 // A titled card wrapper for grouped content (lists, key-value rows).
 export function InfoCard({ title, icon, children }: { title: string; icon?: ReactNode; children: ReactNode }) {
   return (

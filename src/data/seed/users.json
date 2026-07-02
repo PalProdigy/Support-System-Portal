@@ -58,7 +58,29 @@
     "avatar": "",
     "created_at": "2024-01-04T00:00:00Z",
     "years_of_experience": 6,
-    "certification_level": "L4"
+    "certification_level": "L4",
+    "designation": "Senior Support Engineer",
+    "department": "technical",
+    "employee_id": "NHQ-0006",
+    "about": "Senior support engineer focused on network infrastructure and rapid incident resolution. Passionate about mentoring junior engineers and driving SLA excellence across the team.",
+    "contact_numbers": ["+880 1711 000006", "+880 1811 000006"],
+    "languages": ["Bengali", "English", "Hindi"],
+    "technical_skills": ["Networking", "Linux", "Firewall Config", "VPN", "Troubleshooting", "Bash Scripting"],
+    "expertise": ["Network Security", "Incident Response", "Infrastructure"],
+    "education": [
+      { "id": "edu1", "degree": "BSc in Computer Science & Engineering", "institution": "University of Dhaka", "year": "2018", "gpa": "3.85 / 4.00" },
+      { "id": "edu2", "degree": "Higher Secondary Certificate (Science)", "institution": "Notre Dame College", "year": "2013", "gpa": "5.00 / 5.00" },
+      { "id": "edu3", "degree": "Secondary School Certificate", "institution": "Dhaka Residential Model College", "year": "2011", "gpa": "5.00 / 5.00" }
+    ],
+    "certifications": [
+      { "id": "cert1", "title": "Cisco Certified Network Associate (CCNA)", "description": "Routing & switching fundamentals." },
+      { "id": "cert2", "title": "CompTIA Security+", "description": "Core cybersecurity skills certification." }
+    ],
+    "achievements": [
+      { "id": "ach1", "type": "employee_of_month", "title": "Employee of the Month", "description": "March 2026 — outstanding client support", "date": "2026-03-01T00:00:00Z" },
+      { "id": "ach2", "type": "best_sla", "title": "Best SLA Performance", "description": "Q1 2026 — 98% SLA compliance", "date": "2026-04-01T00:00:00Z" },
+      { "id": "ach3", "type": "top_rating", "title": "Top Customer Rating", "description": "Highest satisfaction score on the team", "date": "2026-05-01T00:00:00Z" }
+    ]
   },
   {
     "id": "u7",
