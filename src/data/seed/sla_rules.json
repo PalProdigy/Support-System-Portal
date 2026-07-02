@@ -1,0 +1,30 @@
+[
+  {
+    "id": "sla1",
+    "priority": "low",
+    "response_time_minutes": 480,
+    "resolution_time_minutes": 2880,
+    "business_hours_only": true
+  },
+  {
+    "id": "sla2",
+    "priority": "medium",
+    "response_time_minutes": 240,
+    "resolution_time_minutes": 1440,
+    "business_hours_only": true
+  },
+  {
+    "id": "sla3",
+    "priority": "high",
+    "response_time_minutes": 60,
+    "resolution_time_minutes": 480,
+    "business_hours_only": false
+  },
+  {
+    "id": "sla4",
+    "priority": "critical",
+    "response_time_minutes": 15,
+    "resolution_time_minutes": 120,
+    "business_hours_only": false
+  }
+]

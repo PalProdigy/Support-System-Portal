@@ -1,0 +1,73 @@
+[
+  {
+    "id": "kb1",
+    "title": "How to configure ERP Integration Suite API credentials",
+    "body": "# Configuring ERP Integration Suite API Credentials\n\nThis guide walks you through updating the API credentials for the ERP Integration Suite.\n\n## Prerequisites\n- Admin access to the NHQ Connect portal\n- New credentials from your WMS/ERP provider\n\n## Steps\n1. Navigate to **Settings > Integrations > ERP Connector**\n2. Click **Edit Credentials**\n3. Enter the new API key and secret\n4. Click **Test Connection** to verify\n5. Click **Save**\n\n> **Note**: After saving, the connector will automatically retry any failed sync jobs from the past 24 hours.",
+    "solution_id": "s1",
+    "tags": ["integration", "api", "credentials", "erp"],
+    "status": "published",
+    "author_id": "u6",
+    "published_at": "2024-03-01T00:00:00Z",
+    "created_at": "2024-03-01T00:00:00Z",
+    "updated_at": "2024-03-01T00:00:00Z"
+  },
+  {
+    "id": "kb2",
+    "title": "Resolving journal entry mismatch errors in Analytics Engine",
+    "body": "# Resolving Journal Entry Mismatch Errors\n\nJournal entry mismatches typically occur due to rounding differences or mismatched GL account mappings.\n\n## Common Causes\n- Foreign currency rounding differences\n- Incorrect GL account mapping for exchange gain/loss\n- Date filter spanning fiscal year boundary\n\n## Resolution Steps\n1. Go to **Settings > Chart of Accounts**\n2. Verify the 'Foreign Exchange Gain/Loss' account is correctly mapped\n3. Re-run the report with a narrower date range to isolate the issue\n4. Use **Tools > Journal Reconciliation** to identify mismatched entries\n\nIf the issue persists, contact support with the reconciliation report export.",
+    "solution_id": "s2",
+    "tags": ["analytics", "journal", "error", "reporting"],
+    "status": "published",
+    "author_id": "u8",
+    "published_at": "2024-03-15T00:00:00Z",
+    "created_at": "2024-03-15T00:00:00Z",
+    "updated_at": "2024-04-01T00:00:00Z"
+  },
+  {
+    "id": "kb3",
+    "title": "Setting up 2FA for CRM Pro users",
+    "body": "# Setting Up Two-Factor Authentication in CRM Pro\n\n## Enabling 2FA for your organization\n1. Log in as an Organization Admin\n2. Go to **Settings > Security > Two-Factor Authentication**\n3. Toggle **Require 2FA for all users** to ON\n4. Select your preferred method: Authenticator App (recommended), SMS, or Email OTP\n5. Click **Save Policy**\n\n## User enrollment\nUsers will be prompted to enroll on their next login. They will need to:\n1. Download an authenticator app (Google Authenticator, Authy, or Microsoft Authenticator)\n2. Scan the QR code shown on screen\n3. Enter the 6-digit code to verify enrollment\n\n## Backup codes\nEach user receives 10 single-use backup codes. Store these securely.",
+    "solution_id": "s3",
+    "tags": ["security", "2fa", "authentication", "crm"],
+    "status": "published",
+    "author_id": "u7",
+    "published_at": "2024-04-01T00:00:00Z",
+    "created_at": "2024-04-01T00:00:00Z",
+    "updated_at": "2024-04-01T00:00:00Z"
+  },
+  {
+    "id": "kb4",
+    "title": "Configuring overtime rules in HR & Payroll",
+    "body": "# Configuring Overtime Calculation Rules\n\nOvertime rules in NHQ HR & Payroll are configured at the department level, allowing different multipliers for different employee groups.\n\n## Accessing Department Settings\n1. Navigate to **HR > Organization > Departments**\n2. Select the department you want to configure\n3. Click the **Payroll Rules** tab\n\n## Overtime Multiplier Settings\n- **Standard Overtime**: 1.5x (default for most departments)\n- **Production/Manufacturing**: 2.0x (as per Bangladesh Labor Law)\n- **Holiday Overtime**: 3.0x\n\n## Important\nChanges to overtime multipliers only affect payroll runs processed **after** the change is saved. They do not retroactively recalculate past payroll.",
+    "solution_id": "s5",
+    "tags": ["hr", "payroll", "overtime", "department"],
+    "status": "published",
+    "author_id": "u7",
+    "published_at": "2024-04-15T00:00:00Z",
+    "created_at": "2024-04-15T00:00:00Z",
+    "updated_at": "2024-06-20T00:00:00Z"
+  },
+  {
+    "id": "kb5",
+    "title": "Troubleshooting mobile barcode scanner on Android 14",
+    "body": "# Troubleshooting Mobile Barcode Scanner on Android 14\n\nAndroid 14 introduced changes to camera permission handling that affect the NHQ Mobile Suite barcode scanner.\n\n## Symptoms\n- Scanner fails to initialize\n- Blank camera preview\n- App crashes on scan attempt\n\n## Resolution\n1. Update NHQ Mobile Suite to v3.2.1 or later (available on Play Store)\n2. Grant 'Camera' permission explicitly: **Phone Settings > Apps > NHQ Mobile > Permissions > Camera > Allow**\n3. If using a custom ROM, ensure Google Play Services is up to date\n\n## Workaround (until update)\nUse the **Manual Entry** button to enter barcodes/QR codes by typing them directly.",
+    "product_id": "p4",
+    "tags": ["mobile", "android", "barcode", "scanner", "troubleshooting"],
+    "status": "published",
+    "author_id": "u6",
+    "published_at": "2024-05-01T00:00:00Z",
+    "created_at": "2024-05-01T00:00:00Z",
+    "updated_at": "2024-06-21T00:00:00Z"
+  },
+  {
+    "id": "kb6",
+    "title": "API rate limit management for NHQ Connect",
+    "body": "# Managing API Rate Limits in NHQ Connect\n\nThis article explains how to configure NHQ Connect to gracefully handle third-party API rate limits.\n\n## Understanding Rate Limits\nMost third-party logistics and payment APIs impose rate limits (e.g., 100 requests/minute). NHQ Connect includes a built-in rate limit manager.\n\n## Configuration\n1. Go to **Connect > Connectors > [Your Connector] > Advanced Settings**\n2. Set **Max Requests Per Minute** to stay within the API provider's limit\n3. Enable **Automatic Retry** with exponential backoff\n4. Set **Queue Priority** for time-sensitive operations\n\n## Monitoring\nThe **Connect Dashboard** shows real-time API call volumes and rate limit proximity indicators.",
+    "product_id": "p3",
+    "tags": ["api", "rate-limit", "connect", "integration"],
+    "status": "draft",
+    "author_id": "u1",
+    "created_at": "2024-06-22T00:00:00Z",
+    "updated_at": "2024-06-22T00:00:00Z"
+  }
+]

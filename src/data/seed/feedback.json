@@ -1,0 +1,72 @@
+[
+  {
+    "id": "fb1",
+    "case_id": "case11",
+    "client_id": "c1",
+    "feedback_text": "The issue was resolved quickly once we connected with the support team. The engineer was very knowledgeable and walked us through the fix step by step. Very satisfied.",
+    "rating": 5,
+    "ml_reviewed": true,
+    "th_reviewed": false,
+    "created_at": "2024-06-10T11:00:00Z"
+  },
+  {
+    "id": "fb2",
+    "case_id": "case15",
+    "client_id": "c3",
+    "feedback_text": "Good response time and the documentation provided was thorough. Would have appreciated a video walkthrough in addition to the written guide.",
+    "rating": 4,
+    "ml_reviewed": false,
+    "th_reviewed": false,
+    "created_at": "2024-06-15T10:00:00Z"
+  },
+  {
+    "id": "fb3",
+    "case_id": "case5",
+    "client_id": "c3",
+    "feedback_text": "The payroll error was very serious and could have caused legal issues for us. While the fix was correct, we feel the initial response time was too slow for a critical payroll issue.",
+    "rating": 3,
+    "ml_reviewed": false,
+    "th_reviewed": false,
+    "created_at": "2024-06-21T09:00:00Z"
+  },
+  {
+    "id": "fb4",
+    "case_id": "case1",
+    "client_id": "c1",
+    "feedback_text": "The ERP sync issue for our warehouse was handled really well. The engineer kept us updated throughout and got the inventory counts back in line by end of day. Great work.",
+    "rating": 5,
+    "ml_reviewed": true,
+    "th_reviewed": true,
+    "created_at": "2024-06-12T14:30:00Z"
+  },
+  {
+    "id": "fb5",
+    "case_id": "case6",
+    "client_id": "c1",
+    "feedback_text": "Barcode scanner fix on the mobile app worked, but it took a couple of back-and-forth rounds to reproduce the Android 14 issue. Decent outcome overall.",
+    "rating": 4,
+    "ml_reviewed": true,
+    "th_reviewed": false,
+    "created_at": "2024-06-18T09:15:00Z"
+  },
+  {
+    "id": "fb6",
+    "case_id": "case10",
+    "client_id": "c1",
+    "feedback_text": "API rate-limit problem on the ERP connector was resolved and shipment confirmations are flowing on time again. Appreciated the clear explanation of the root cause.",
+    "rating": 5,
+    "ml_reviewed": false,
+    "th_reviewed": false,
+    "created_at": "2024-06-24T16:45:00Z"
+  },
+  {
+    "id": "fb7",
+    "case_id": "case16",
+    "client_id": "c1",
+    "feedback_text": "Database recovery after the failed migration was stressful on our end. The fix was solid and no data was lost, though we'd have liked faster initial acknowledgement given how critical it was.",
+    "rating": 3,
+    "ml_reviewed": false,
+    "th_reviewed": false,
+    "created_at": "2024-06-27T08:20:00Z"
+  }
+]

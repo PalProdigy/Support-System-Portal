@@ -1,0 +1,98 @@
+[
+  {
+    "id": "p1",
+    "name": "McAfee Endpoint Security",
+    "description": "Enterprise endpoint protection with anti-malware, threat prevention, firewall, and centralized ePO management for desktops and servers.",
+    "category": "Endpoint & Server Security",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p2",
+    "name": "Symantec Endpoint Protection",
+    "description": "Multilayered endpoint defense against ransomware and advanced threats across physical, virtual, and cloud machines.",
+    "category": "Endpoint & Server Security",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p3",
+    "name": "Palo Alto Networks NGFW",
+    "description": "Next-generation firewalls delivering application-aware traffic control, intrusion prevention, and threat prevention at the network gateway.",
+    "category": "Network & Gateway Security",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p4",
+    "name": "Forcepoint Web Security & DLP",
+    "description": "Secure web gateway and data loss prevention protecting users and sensitive data across web, cloud, and email channels.",
+    "category": "Network & Gateway Security",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p5",
+    "name": "Secure64 DNS Security",
+    "description": "Hardened, purpose-built DNS infrastructure that resists DDoS, cache-poisoning, and amplification attacks.",
+    "category": "Network & Gateway Security",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p6",
+    "name": "RSA SecurID & Identity Governance",
+    "description": "Multi-factor authentication, identity assurance, and identity governance to manage access risk and meet compliance mandates.",
+    "category": "Risk & Compliance",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p7",
+    "name": "Skybox Security Posture Management",
+    "description": "Vulnerability and attack-surface management with network modeling and risk-based prioritization of remediation.",
+    "category": "Vulnerability Assessment",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p8",
+    "name": "Veritas NetBackup",
+    "description": "Enterprise backup, recovery, and information governance protecting data across data centers and multi-cloud environments.",
+    "category": "Data Protection",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p9",
+    "name": "Acronis Cyber Protect",
+    "description": "Integrated backup, disaster recovery, and anti-ransomware protection for endpoints, servers, and cloud workloads.",
+    "category": "Data Protection",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p10",
+    "name": "Microsoft Cloud & Virtualization",
+    "description": "Microsoft Azure, Hyper-V, and Microsoft 365 licensing and deployment for hybrid cloud and virtualized workloads.",
+    "category": "Virtualization & Cloud",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p11",
+    "name": "Data Center Security Suite",
+    "description": "Workload, server, and micro-segmentation security to protect physical and virtualized data center environments.",
+    "category": "Data Center Security",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "p12",
+    "name": "Adobe Enterprise Licensing",
+    "description": "Adobe Creative Cloud, Acrobat, and document solutions licensing and deployment for enterprise productivity.",
+    "category": "Infrastructure",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z"
+  }
+]
