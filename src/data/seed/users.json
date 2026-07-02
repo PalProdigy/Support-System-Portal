@@ -6,7 +6,27 @@
     "role": "technical_head",
     "is_active": true,
     "avatar": "",
-    "created_at": "2024-01-01T00:00:00Z"
+    "created_at": "2024-01-01T00:00:00Z",
+    "designation": "Technical Head",
+    "department": "technical",
+    "employee_id": "NHQ-0001",
+    "about": "Technical Head overseeing all support operations, engineering teams, and service quality. Focused on SLA governance, escalation management, and building a high-performing support organization.",
+    "contact_numbers": ["+880 1711 000001", "+880 1911 000001"],
+    "languages": ["Bengali", "English", "Arabic"],
+    "technical_skills": ["System Architecture", "ITIL", "Team Leadership", "Cloud Infrastructure", "Incident Management"],
+    "expertise": ["Service Delivery", "Escalation Governance", "Capacity Planning", "SLA Strategy"],
+    "education": [
+      { "id": "u1edu1", "degree": "MSc in Information Systems", "institution": "BUET", "year": "2012", "gpa": "3.90 / 4.00" },
+      { "id": "u1edu2", "degree": "BSc in Computer Science & Engineering", "institution": "BUET", "year": "2010", "gpa": "3.80 / 4.00" }
+    ],
+    "certifications": [
+      { "id": "u1cert1", "title": "ITIL 4 Foundation", "description": "IT service management best practices." },
+      { "id": "u1cert2", "title": "AWS Certified Solutions Architect", "description": "Cloud architecture certification." }
+    ],
+    "achievements": [
+      { "id": "u1ach1", "type": "internal_award", "title": "Leadership Excellence Award", "description": "2025 — outstanding department leadership", "date": "2025-12-01T00:00:00Z" },
+      { "id": "u1ach2", "type": "best_sla", "title": "Best SLA Performance", "description": "Department-wide 96% SLA compliance", "date": "2026-01-01T00:00:00Z" }
+    ]
   },
   {
     "id": "u2",
@@ -16,7 +36,25 @@
     "team_id": "t1",
     "is_active": true,
     "avatar": "",
-    "created_at": "2024-01-02T00:00:00Z"
+    "created_at": "2024-01-02T00:00:00Z",
+    "designation": "Team Lead — Network & Infrastructure",
+    "department": "technical",
+    "employee_id": "NHQ-0002",
+    "about": "Team lead for the network and infrastructure squad. Mentors support engineers, balances workloads, and drives first-response quality while keeping escalations low.",
+    "contact_numbers": ["+880 1711 000002"],
+    "languages": ["Bengali", "English"],
+    "technical_skills": ["Networking", "Team Coordination", "Root Cause Analysis", "Firewall", "Monitoring"],
+    "expertise": ["Team Management", "Workload Balancing", "Incident Triage"],
+    "education": [
+      { "id": "u2edu1", "degree": "BSc in Electrical & Electronic Engineering", "institution": "BUET", "year": "2013", "gpa": "3.70 / 4.00" },
+      { "id": "u2edu2", "degree": "Higher Secondary Certificate (Science)", "institution": "Viqarunnisa Noon College", "year": "2008", "gpa": "5.00 / 5.00" }
+    ],
+    "certifications": [
+      { "id": "u2cert1", "title": "Cisco Certified Network Professional (CCNP)", "description": "Advanced networking certification." }
+    ],
+    "achievements": [
+      { "id": "u2ach1", "type": "employee_of_month", "title": "Employee of the Month", "description": "February 2026 — team leadership", "date": "2026-02-01T00:00:00Z" }
+    ]
   },
   {
     "id": "u3",
@@ -36,7 +74,26 @@
     "team_id": "t1",
     "is_active": true,
     "avatar": "",
-    "created_at": "2024-01-03T00:00:00Z"
+    "created_at": "2024-01-03T00:00:00Z",
+    "designation": "Account Manager",
+    "department": "sales",
+    "employee_id": "NHQ-0004",
+    "about": "Account manager building long-term client relationships across the enterprise portfolio. Focused on onboarding, retention, and turning pre-sales conversations into successful deployments.",
+    "contact_numbers": ["+880 1711 000004", "+880 1811 000004"],
+    "languages": ["Bengali", "English", "Hindi"],
+    "technical_skills": ["CRM", "Negotiation", "Solution Selling", "Pipeline Management", "Presentations"],
+    "expertise": ["Account Management", "Client Onboarding", "Pre-sales Consulting", "Retention"],
+    "education": [
+      { "id": "u4edu1", "degree": "BBA in Marketing", "institution": "IBA, University of Dhaka", "year": "2015", "gpa": "3.75 / 4.00" },
+      { "id": "u4edu2", "degree": "Higher Secondary Certificate (Business)", "institution": "Dhaka City College", "year": "2010", "gpa": "4.80 / 5.00" }
+    ],
+    "certifications": [
+      { "id": "u4cert1", "title": "HubSpot Sales Software Certification", "description": "CRM and sales pipeline management." }
+    ],
+    "achievements": [
+      { "id": "u4ach1", "type": "top_rating", "title": "Top Client Satisfaction", "description": "Highest client retention on the sales team", "date": "2026-03-01T00:00:00Z" },
+      { "id": "u4ach2", "type": "internal_award", "title": "Deal Closer of the Quarter", "description": "Q1 2026 — most enterprise deals closed", "date": "2026-04-01T00:00:00Z" }
+    ]
   },
   {
     "id": "u5",
