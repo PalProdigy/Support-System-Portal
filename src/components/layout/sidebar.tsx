@@ -85,15 +85,18 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
       )}
     >
       {/* Logo */}
-      <div className={cn('flex h-14 items-center border-b px-4', collapsed && 'justify-center px-2')}>
+      <div className={cn('flex h-14 items-center border-b px-0', collapsed && 'justify-center px-1')}>
         {!collapsed ? (
           <Link href="/dashboard" className="flex items-center gap-2">
-            <span className="text-primary font-bold text-lg">NHQ</span>
-            <span className="text-foreground/70 text-sm font-medium">Support</span>
+            <span className="text-primary font-bold text-lg">
+              <img src="/Gnvbo01 (1).svg" alt="Logo" className="w-auto h-20" />
+            </span>
           </Link>
         ) : (
           <Link href="/dashboard">
-            <span className="text-primary font-bold text-lg">N</span>
+            <span className="text-primary font-bold text-lg">
+              <img src="/Gnvbo01 (1).svg" alt="Logo" className="w-auto h-18" />
+            </span>
           </Link>
         )}
       </div>

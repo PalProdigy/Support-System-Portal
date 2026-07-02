@@ -47,6 +47,7 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <SLAEngineProvider>
       <div className="flex h-screen overflow-hidden bg-background">
+
         <Sidebar
           userName={currentUser?.name ?? 'User'}
           userRole={session.role}

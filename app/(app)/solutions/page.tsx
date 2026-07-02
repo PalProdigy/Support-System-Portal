@@ -13,10 +13,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Lightbulb, PlusCircle, Pencil, Eye, User as UserIcon, Calendar, CheckCircle2, XCircle, X, ThumbsUp, ThumbsDown, MessageCircle, Trash2, Send, Reply, ChevronDown, ChevronUp } from 'lucide-react'
+import { Lightbulb, PlusCircle, Pencil, Eye, User as UserIcon, Calendar, CheckCircle2, XCircle, X, ThumbsUp, ThumbsDown, MessageCircle, Trash2, Send, Reply, ChevronDown, ChevronUp, Newspaper, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ROLE_LABELS } from '@/lib/rbac'
 import type { Solution, SolutionComment, Role } from '@/types'
+import type { HashnodePostSummary } from '@/lib/hashnode'
 
 const ALL_TAB = 'all'
 
@@ -27,6 +28,18 @@ const DEFAULT_TYPES = ['Integration', 'Data & Analytics', 'CRM', 'Operations', '
 
 // Cap how deep replies keep indenting so very deep threads don't run off-screen.
 const MAX_INDENT_DEPTH = 4
+
+// Solution articles come from the org's Hashnode publication (headless CMS).
+// The route handler proxies gql.hashnode.com and reports { configured: false }
+// when no publication host is set, so the section hides itself gracefully.
+async function fetchHashnodeArticles(): Promise<{ configured: boolean; posts: HashnodePostSummary[] }> {
+  const res = await fetch('/api/hashnode/posts')
+  if (!res.ok) {
+    const body = await res.json().catch(() => null)
+    throw new Error(body?.error ?? 'Failed to load solution articles')
+  }
+  return res.json()
+}
 
 // Module-scope so the impure id/timestamp generation isn't evaluated during render.
 // The id is a temporary client id used only for optimistic rendering; the real id
@@ -254,6 +267,15 @@ export default function SolutionsPage() {
 
   const { data: solutions, isLoading } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
   const { data: currentUser } = useQuery({ queryKey: ['user', session.userId], queryFn: () => dp.getUser(session.userId) })
+  const { data: articlesData, isLoading: articlesLoading, isError: articlesError } = useQuery({
+    queryKey: ['hashnode-posts'],
+    queryFn: fetchHashnodeArticles,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  })
+  const articles = articlesData?.posts ?? []
+  // Show the CMS section unless Hashnode is explicitly unconfigured.
+  const showArticles = articlesError || articlesLoading || (articlesData?.configured ?? false)
 
   const canAddSolution = session.role !== 'client'
 
@@ -484,6 +506,63 @@ export default function SolutionsPage() {
             </div>
           )}
         </Tabs>
+      )}
+
+      {/* Solution Articles — authored on Hashnode (headless CMS), rendered here */}
+      {showArticles && (
+        <div className="space-y-3 pt-2">
+          <div className="flex items-center justify-between gap-3 border-t pt-4">
+            <div>
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Newspaper className="h-4 w-4 text-primary" /> Solution Articles
+              </h2>
+              <p className="text-xs text-muted-foreground">In-depth guides from our publication</p>
+            </div>
+          </div>
+
+          {articlesLoading ? (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {[...Array(3)].map((_, i) => <div key={i} className="h-48 rounded-xl bg-muted animate-pulse" />)}
+            </div>
+          ) : articlesError ? (
+            <p className="text-sm text-muted-foreground">
+              Couldn&apos;t load solution articles right now. Please try again later.
+            </p>
+          ) : articles.length === 0 ? (
+            <EmptyState icon={Newspaper} title="No articles published yet" />
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {articles.map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => router.push(`/solutions/articles/${a.slug}`)}
+                  className="group rounded-xl border bg-card text-left overflow-hidden hover:border-primary/50 hover:shadow-sm transition-all flex flex-col"
+                >
+                  {a.coverImageUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element -- CMS-hosted image, size unknown at build time
+                    <img src={a.coverImageUrl} alt="" className="h-32 w-full object-cover" />
+                  )}
+                  <div className="p-4 space-y-2 flex-1 flex flex-col">
+                    <p className="font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors">{a.title}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-2 flex-1">{a.brief}</p>
+                    {a.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {a.tags.slice(0, 3).map((t) => (
+                          <span key={t.slug} className="rounded bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground">{t.name}</span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground pt-1">
+                      <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {new Date(a.publishedAt).toLocaleDateString()}</span>
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {a.readTimeInMinutes} min read</span>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Edit */}
