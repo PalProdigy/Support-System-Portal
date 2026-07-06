@@ -7,6 +7,7 @@ import { StatCard } from '@/components/shared/stat-card'
 import { CaseCard } from '@/components/shared/case-card'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
+import { NewCases } from '@/modules/engineer/new-cases'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Ticket, Clock, CheckCircle, AlertTriangle } from 'lucide-react'
 import type { Case, Client } from '@/types'
@@ -49,6 +50,9 @@ export default function EngineerDashboard() {
         <StatCard title="Pending Client" value={pendingClient.length} icon={AlertTriangle} iconColor="text-amber-500" loading={isLoading} />
         <StatCard title="Resolved" value={resolved.length} icon={CheckCircle} iconColor="text-emerald-500" loading={isLoading} />
       </div>
+
+      {/* Freshly routed, unassigned cases the engineer can request to take */}
+      <NewCases clientsMap={clientsMap} />
 
       <div>
         <h2 className="text-base font-semibold mb-3">Active Cases ({open.length})</h2>

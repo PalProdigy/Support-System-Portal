@@ -297,24 +297,94 @@ export interface RCA {
   created_at: string
 }
 
+// ── Knowledge Base ────────────────────────────────────────────────────────────
+// Article lifecycle: draft → in_review → (changes_requested → draft →) approved
+// → published → archived. Legacy values 'pending'/'rejected' are migrated to
+// 'in_review'/'changes_requested' by the data layer on read.
+export type KBArticleStatus =
+  | 'draft'
+  | 'in_review'
+  | 'changes_requested'
+  | 'approved'
+  | 'published'
+  | 'archived'
+
+// One workflow transition — every status change is tracked.
+export interface KBStatusEvent {
+  from: KBArticleStatus | null
+  to: KBArticleStatus
+  by: string
+  by_name?: string
+  at: string
+  note?: string          // e.g. the reviewer's "changes requested" note
+}
+
+// Full content snapshot taken BEFORE an edit is applied; enables compare/restore.
+export interface KBArticleVersion {
+  version: number
+  title: string
+  description?: string
+  body: string           // markdown only — HTML is never stored
+  category?: string
+  subcategory?: string
+  tags: string[]
+  saved_at: string
+  saved_by: string
+  saved_by_name?: string
+}
+
 export interface KBArticle {
   id: string
+  slug?: string          // unique, SEO-friendly; server owns uniqueness
   title: string
-  body: string
+  description?: string   // short summary shown on cards / search / meta description
+  body: string           // markdown source — the single source of truth
+  category?: string
+  subcategory?: string
   solution_id?: string
   product_id?: string
   tags: string[]
-  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived'
+  status: KBArticleStatus
+  version?: number                  // current version number (starts at 1)
+  versions?: KBArticleVersion[]     // previous snapshots, oldest → newest
+  status_history?: KBStatusEvent[]
   author_id: string
   author_name?: string
   author_role?: Role
+  reviewer_id?: string   // last TL/TH who acted on the review
+  reviewer_name?: string
   published_at?: string
-  published_by?: string        // user id of the Technical Head who approved
+  published_by?: string        // user id of the reviewer who published
   rejected_by?: string
-  rejection_reason?: string
+  rejection_reason?: string    // the active "changes requested" note
   created_at: string
   updated_at: string
   comments?: ThreadComment[]
+}
+
+// ── Solution Articles (in-house Knowledge Base) ──────────────────────────────
+// Long-form markdown articles authored in the portal (Hashnode-like writing
+// experience, our own storage). The database stores ONLY markdown — rendered
+// HTML is never persisted; the viewer renders `content` dynamically.
+export type SolutionArticleStatus = 'draft' | 'published'
+
+export interface SolutionArticle {
+  id: string
+  title: string
+  slug: string                 // unique, URL-safe; server owns uniqueness
+  description: string          // short summary shown on cards / meta
+  content: string              // Markdown source (GFM) — the single source of truth
+  category?: string
+  tags: string[]
+  cover_image_url?: string
+  status: SolutionArticleStatus // always 'published' today; enables drafts later
+  created_by: string           // user id
+  created_by_name?: string
+  created_by_role?: Role
+  updated_by?: string
+  updated_by_name?: string
+  created_at: string
+  updated_at: string
 }
 
 export interface Feedback {
@@ -411,6 +481,21 @@ export interface EngineerChangeRequest {
   resolved_by?: string            // TL/TH who approved or rejected
   new_engineer_id?: string        // set when approved
   created_at: string
+  resolved_at?: string
+}
+
+// A support engineer's request to grab (self-assign) a newly routed case.
+// Creating one does NOT assign the case — the TL/TH sees the requesting
+// engineer's name on the case card with Accept/Reject; approving assigns the
+// case to that engineer and auto-rejects competing claims for the same case.
+export interface CaseClaimRequest {
+  id: string
+  case_id: string
+  engineer_id: string
+  engineer_name?: string          // denormalized for card display
+  status: 'pending' | 'approved' | 'rejected'
+  created_at: string
+  resolved_by?: string            // TL/TH who decided
   resolved_at?: string
 }
 

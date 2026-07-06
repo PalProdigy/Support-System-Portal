@@ -1,0 +1,47 @@
+[
+  {
+    "id": "sa1",
+    "title": "Integrating the NHQ REST API: Authentication, Pagination and Webhooks",
+    "slug": "integrating-the-nhq-rest-api",
+    "description": "A practical, end-to-end guide to authenticating against the NHQ platform API, paginating large result sets and reacting to events with webhooks.",
+    "content": "Our REST API is the backbone of every NHQ integration. This guide walks through the three things every integration needs: **authentication**, **pagination** and **webhooks**.\n\n## Authentication\n\nAll requests are authenticated with a bearer token. Tokens are issued per environment and never expire silently — you get a `token.expiring` webhook 7 days before rotation.\n\n```bash\ncurl -H \"Authorization: Bearer $NHQ_API_TOKEN\" \\\n  https://api.nhq.example.com/v1/cases\n```\n\n> **Never** commit tokens to source control. Use your platform's secret manager and rotate quarterly.\n\n### Token scopes\n\n| Scope | Grants |\n| --- | --- |\n| `cases:read` | List and read support cases |\n| `cases:write` | Create and update cases |\n| `webhooks:manage` | Register and remove webhook endpoints |\n\n## Pagination\n\nList endpoints return at most 100 items. Use cursor pagination — it is stable under concurrent writes, unlike page numbers.\n\n```ts\nasync function listAllCases(token: string) {\n  const items = []\n  let cursor: string | undefined\n  do {\n    const url = new URL('https://api.nhq.example.com/v1/cases')\n    if (cursor) url.searchParams.set('cursor', cursor)\n    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })\n    const page = await res.json()\n    items.push(...page.items)\n    cursor = page.next_cursor\n  } while (cursor)\n  return items\n}\n```\n\n## Webhooks\n\nRegister an HTTPS endpoint and we will POST signed JSON events to it.\n\n1. Register the endpoint with `POST /v1/webhooks`\n2. Verify the `X-NHQ-Signature` header (HMAC-SHA256)\n3. Respond `2xx` within 10 seconds — otherwise we retry with exponential backoff\n\nGo-live checklist:\n\n- [x] Store the signing secret outside source control\n- [x] Verify signatures before parsing the body\n- [ ] Handle duplicate deliveries idempotently\n- [ ] Alert on sustained delivery failures\n\n---\n\nQuestions? Open a support case with the tag `api-integration` and the platform team will pick it up within one business day.",
+    "category": "Integration",
+    "tags": ["api", "webhooks", "getting-started"],
+    "status": "published",
+    "created_by": "u2",
+    "created_by_name": "Sadia Islam",
+    "created_by_role": "team_lead",
+    "created_at": "2026-05-12T09:30:00.000Z",
+    "updated_at": "2026-05-12T09:30:00.000Z"
+  },
+  {
+    "id": "sa2",
+    "title": "Troubleshooting Data Sync Failures in the Analytics Pipeline",
+    "slug": "troubleshooting-data-sync-failures",
+    "description": "How to diagnose the four most common causes of nightly sync failures — schema drift, credential expiry, quota exhaustion and network partitions.",
+    "content": "When the nightly analytics sync fails, the dashboard shows *stale data* and clients notice within hours. This runbook covers the four most common root causes, in the order you should check them.\n\n## 1. Schema drift\n\nThe most frequent culprit. A source system added or renamed a column and the sync job rejects the batch.\n\n```sql\n-- Compare live schema against the registered contract\nSELECT column_name, data_type\nFROM information_schema.columns\nWHERE table_name = 'orders'\nORDER BY ordinal_position;\n```\n\nIf the schema changed, update the contract file and re-run the job with `--allow-additive`.\n\n## 2. Credential expiry\n\nCheck the connector logs for `401` or `invalid_grant`:\n\n```bash\ngrep -E \"401|invalid_grant\" /var/log/nhq/sync-*.log | tail -20\n```\n\nService-account keys rotate every 90 days. The fix is a one-liner:\n\n```bash\nnhq-cli connections refresh --id analytics-prod\n```\n\n## 3. Quota exhaustion\n\n> Warehouse quotas are shared across all clients on the same tier. A single runaway backfill can starve the nightly window.\n\nSymptoms and remedies:\n\n| Symptom | Likely cause | Remedy |\n| --- | --- | --- |\n| Job queued > 30 min | Slot contention | Reschedule backfills off-peak |\n| `RESOURCE_EXHAUSTED` | Daily byte quota hit | Request a temporary quota raise |\n| Partial tables | Killed mid-write | Re-run with `--from-checkpoint` |\n\n## 4. Network partitions\n\nRare, but the hardest to spot: the job *hangs* instead of failing. Set an explicit timeout and let the scheduler retry:\n\n```yaml\nsync:\n  timeout_minutes: 45\n  retries: 2\n  retry_backoff: exponential\n```\n\n---\n\nEscalate to the **Data & Analytics** team if none of the above resolves the failure — include the job id and the last 100 log lines in the case.",
+    "category": "Data & Analytics",
+    "tags": ["troubleshooting", "data-sync", "runbook"],
+    "status": "published",
+    "created_by": "u6",
+    "created_by_name": "Rafi Uddin",
+    "created_by_role": "support_engineer",
+    "created_at": "2026-06-02T14:05:00.000Z",
+    "updated_at": "2026-06-10T08:20:00.000Z"
+  },
+  {
+    "id": "sa3",
+    "title": "CRM Rollout Playbook: From Sandbox to Go-Live in Four Weeks",
+    "slug": "crm-rollout-playbook",
+    "description": "The standard four-week rollout plan we use for every CRM implementation — milestones, owner matrix and the go-live gate checklist.",
+    "content": "Every successful CRM rollout we have delivered follows the same four-week shape. This playbook makes that shape explicit so nothing depends on tribal knowledge.\n\n## Week-by-week plan\n\n### Week 1 — Sandbox and data audit\n\n- Provision the client sandbox\n- Run the data quality audit (`nhq-cli crm audit --sandbox`)\n- Agree the field mapping with the client's ops lead\n\n### Week 2 — Migration dry run\n\nRun the full migration against the sandbox and measure:\n\n| Metric | Target |\n| --- | --- |\n| Record match rate | ≥ 99.5% |\n| Dedup collisions | < 0.1% |\n| Dry-run duration | < 4 hours |\n\n### Week 3 — UAT and training\n\n> UAT is not a demo. The client's own team must complete their daily workflows in the sandbox without our help before we schedule go-live.\n\n### Week 4 — Go-live\n\nGo-live happens on a **Tuesday morning** — never a Friday. The gate checklist:\n\n- [ ] Dry-run migration signed off\n- [ ] UAT sign-off from the client sponsor\n- [ ] Rollback plan rehearsed\n- [ ] Support rota staffed for the first 72 hours\n\n## Roles\n\n| Role | Owns |\n| --- | --- |\n| Account Manager | Client communication, sign-offs |\n| Team Lead | Migration execution, gate decision |\n| Support Engineer | Post-go-live triage |\n\n---\n\n*Template project plans live in the shared drive under `playbooks/crm-rollout/`. Copy, don't edit in place.*",
+    "category": "CRM",
+    "tags": ["playbook", "crm", "onboarding"],
+    "status": "published",
+    "created_by": "u3",
+    "created_by_name": "Mehedi Hasan",
+    "created_by_role": "team_lead",
+    "created_at": "2026-06-20T11:00:00.000Z",
+    "updated_at": "2026-06-20T11:00:00.000Z"
+  }
+]

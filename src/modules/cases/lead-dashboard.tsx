@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -12,12 +11,12 @@ import { ErrorState } from '@/components/shared/error-state'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { toast } from '@/hooks/use-toast'
+import { CaseApprovalQueue } from '@/modules/shared/case-approval-queue'
 import { cn, slaPercent, slaRemainingMs, formatDuration, PRIORITY_COLORS, PRIORITY_LABELS } from '@/lib/utils'
 import {
   Ticket, AlertTriangle, CheckCircle, Users, PlusCircle, Inbox, ClipboardCheck,
   ArrowRight, LayoutList, BarChart3, Bell, UserCheck, Clock, Gauge, Star,
-  TimerReset, ShieldCheck, UserCog, ExternalLink, TrendingUp,
+  TimerReset, UserCog, TrendingUp,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, Feedback, User } from '@/types'
@@ -25,22 +24,10 @@ import type { Case, Client, Feedback, User } from '@/types'
 const OPEN_EXCLUDE = ['closed', 'resolved', 'pending_closure']
 const DONE_STATUSES = ['resolved', 'pending_closure', 'closed']
 
-// Re-render on an interval so approval-window countdowns tick down live.
-function useNow(intervalMs = 30_000): number {
-  const [now, setNow] = useState(() => Date.now())
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), intervalMs)
-    return () => clearInterval(id)
-  }, [intervalMs])
-  return now
-}
-
 export default function LeadDashboard() {
   const session = useSession()
   const dp = getDataProvider()
-  const qc = useQueryClient()
   const router = useRouter()
-  const now = useNow()
   const scope = { userId: session.userId, role: session.role }
 
   const { data: casesData, isLoading, error, refetch } = useQuery({
@@ -53,16 +40,6 @@ export default function LeadDashboard() {
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
   const { data: feedback } = useQuery({ queryKey: ['feedback', 'lead'], queryFn: () => dp.listFeedback(scope) })
   const { data: notifications } = useQuery({ queryKey: ['notifications', session.userId], queryFn: () => dp.listNotifications(session.userId) })
-
-  const acceptApproval = useMutation({
-    mutationFn: (caseId: string) => dp.acceptCaseApproval(caseId, scope),
-    onSuccess: (updated) => {
-      qc.invalidateQueries({ queryKey: ['cases'] })
-      qc.invalidateQueries({ queryKey: ['notifications'] })
-      toast({ title: 'Case accepted', description: updated.reference_no, variant: 'success' })
-    },
-    onError: (e) => toast({ title: String(e), variant: 'destructive' }),
-  })
 
   const cases = casesData?.items ?? []
   const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
@@ -79,10 +56,14 @@ export default function LeadDashboard() {
   const pendingClosure = cases.filter((c) => c.status === 'pending_closure')
   const engineerChanges = cases.filter((c) => c.has_pending_engineer_change)
 
-  // Cases routed to THIS lead awaiting acceptance inside the 30-minute window.
-  const approvals = cases
-    .filter((c) => c.approval_status === 'pending' && c.approval_user_id === session.userId)
-    .sort((a, b) => new Date(a.approval_deadline ?? 0).getTime() - new Date(b.approval_deadline ?? 0).getTime())
+  // Cases routed to THIS lead awaiting assignment inside the 30-minute window.
+  const approvals = cases.filter(
+    (c) => c.approval_status === 'pending' && c.approval_user_id === session.userId && !c.assignee_id
+  )
+  // Window expired (escalated to the Technical Head) and still unassigned.
+  const overdueApprovals = cases.filter(
+    (c) => c.approval_status === 'escalated' && !c.assignee_id && c.approval_team_id === myUser?.team_id
+  )
 
   // SLA risk among open cases.
   const breached = open.filter((c) => slaRemainingMs(c.sla_due_at) <= 0)
@@ -148,52 +129,22 @@ export default function LeadDashboard() {
         <StatLink href="/cases"><StatCard title="Total Resolved" value={doneCases.length} icon={CheckCircle} iconColor="text-emerald-500" loading={isLoading} /></StatLink>
         <StatLink href="/lead?tab=queue"><StatCard title="Queue" value={unassigned.length} icon={Inbox} iconColor="text-violet-500" loading={isLoading} /></StatLink>
         <StatLink href="/lead"><StatCard title="Open" value={open.length} icon={LayoutList} iconColor="text-blue-500" loading={isLoading} /></StatLink>
-        <StatLink href="#approvals"><StatCard title="Awaiting Approval" value={approvals.length} icon={TimerReset} iconColor={approvals.length ? 'text-red-500' : 'text-muted-foreground'} loading={isLoading} /></StatLink>
+        <StatLink href="#approvals"><StatCard title="Awaiting Approval" value={approvals.length + overdueApprovals.length} icon={TimerReset} iconColor={approvals.length + overdueApprovals.length ? 'text-red-500' : 'text-muted-foreground'} loading={isLoading} /></StatLink>
         <StatLink href="#sla"><StatCard title="SLA At-Risk" value={breached.length + atRisk.length} icon={Gauge} iconColor={breached.length ? 'text-red-500' : 'text-amber-500'} loading={isLoading} /></StatLink>
         <StatLink href="/lead?tab=closure"><StatCard title="Pending Closure" value={pendingClosure.length} icon={ClipboardCheck} iconColor="text-emerald-500" loading={isLoading} /></StatLink>
       </div>
 
       {/* Action Required — only shown when there's something to act on */}
-      {(approvals.length > 0 || slaRisk.length > 0) && (
+      {(approvals.length > 0 || overdueApprovals.length > 0 || slaRisk.length > 0) && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Approval window */}
+          {/* Approval window: new cases (0–30 min) + overdue/time-exceeded queue */}
           <div id="approvals" className="rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/40 dark:bg-red-950/10 p-4">
             <div className="flex items-center gap-2 mb-3">
               <TimerReset className="h-4 w-4 text-red-500" />
               <h2 className="text-sm font-semibold">Awaiting Your Approval</h2>
-              <span className="text-[11px] text-muted-foreground">Accept within the 30-min window or it escalates to the Technical Head</span>
+              <span className="text-[11px] text-muted-foreground">Assign within the 30-min window or it escalates to the Technical Head</span>
             </div>
-            {approvals.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-2">Nothing awaiting approval right now.</p>
-            ) : (
-              <div className="space-y-2.5">
-                {approvals.map((c) => {
-                  const remaining = c.approval_deadline ? new Date(c.approval_deadline).getTime() - now : null
-                  const urgent = remaining != null && remaining < 5 * 60_000
-                  return (
-                    <div key={c.id} className="rounded-lg border bg-card p-3 flex items-center gap-3">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-[11px] text-muted-foreground">{c.reference_no}</span>
-                          <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[c.priority])}>{PRIORITY_LABELS[c.priority]}</span>
-                        </div>
-                        <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
-                        <p className={cn('text-[11px] mt-0.5 inline-flex items-center gap-1', urgent ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-muted-foreground')}>
-                          <Clock className="h-3 w-3" />
-                          {remaining == null ? 'No deadline' : remaining <= 0 ? 'Deadline passed' : `${formatDuration(remaining)} left`}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => router.push(`/cases/${c.id}`)}><ExternalLink className="h-3.5 w-3.5" /></Button>
-                        <Button size="sm" disabled={acceptApproval.isPending} onClick={() => acceptApproval.mutate(c.id)}>
-                          <ShieldCheck className="h-3.5 w-3.5" /> Accept
-                        </Button>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
+            <CaseApprovalQueue cases={cases} users={users ?? []} teamId={myUser?.team_id} />
           </div>
 
           {/* SLA risk */}

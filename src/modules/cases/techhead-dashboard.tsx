@@ -12,11 +12,12 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { CaseApprovalQueue } from '@/modules/shared/case-approval-queue'
 import { cn, formatDateTime } from '@/lib/utils'
 import {
   Ticket, AlertTriangle, CheckCircle, CheckCircle2, Clock, Users, Gauge,
   ShieldCheck, ArrowLeftRight, UserPlus, BookOpen, Star, ChevronRight,
-  Building2, Lightbulb, Package, Shield, TrendingDown, RotateCcw,
+  Building2, Lightbulb, Package, Shield, TrendingDown, RotateCcw, TimerReset,
 } from 'lucide-react'
 import type { Case, User, Client, AuditLog, EngineerMetrics, Feedback, KBArticle, Notification, Team, CaseTransferRequest, TeamMemberRequest } from '@/types'
 
@@ -77,7 +78,7 @@ export default function TechHeadDashboard() {
   const { data: notifications } = useQuery<Notification[]>({ queryKey: ['notifications', session.userId], queryFn: () => dp.listNotifications(session.userId) })
   const { data: transferReqs } = useQuery<CaseTransferRequest[]>({ queryKey: ['case-transfer-requests', 'pending'], queryFn: () => dp.listAllPendingCaseTransferRequests() })
   const { data: memberReqs } = useQuery<TeamMemberRequest[]>({ queryKey: ['team-member-requests', 'pending'], queryFn: () => dp.listAllPendingTeamMemberRequests() })
-  const { data: pendingKB } = useQuery<KBArticle[]>({ queryKey: ['kb', 'pending'], queryFn: () => dp.listKBArticles({ status: 'pending' }, scope) })
+  const { data: pendingKB } = useQuery<KBArticle[]>({ queryKey: ['kb', 'in_review'], queryFn: () => dp.listKBArticles({ status: 'in_review' }, scope) })
   const { data: feedback } = useQuery<Feedback[]>({ queryKey: ['feedback', session.userId], queryFn: () => dp.listFeedback(scope) })
 
   const cases = useMemo(() => casesData?.items ?? [], [casesData])
@@ -86,6 +87,15 @@ export default function TechHeadDashboard() {
 
   const openCases = useMemo(() => cases.filter((c) => !['closed', 'resolved'].includes(c.status)), [cases])
   const escalated = useMemo(() => cases.filter((c) => c.is_escalated || c.status === 'escalated'), [cases])
+  // Routing-approval queue: cases pending directly with the TH (no team owns
+  // the service) plus overdue ones no team lead assigned within 30 minutes.
+  const approvalQueueCount = useMemo(
+    () => cases.filter((c) =>
+      !c.assignee_id &&
+      (c.approval_status === 'escalated' || (c.approval_status === 'pending' && c.approval_user_id === session.userId))
+    ).length,
+    [cases, session.userId]
+  )
   const critical = useMemo(() => cases.filter((c) => c.priority === 'critical' && !['closed', 'resolved'].includes(c.status)), [cases])
 
   // Top KPI metrics. Capture "now" once at mount (lazy state initializer keeps
@@ -239,6 +249,20 @@ export default function TechHeadDashboard() {
           </div>
         )}
       </div>
+
+      {/* Routing approval queue — new cases + overdue team-lead windows */}
+      {approvalQueueCount > 0 && (
+        <div className="rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/40 dark:bg-red-950/10 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <TimerReset className="h-4 w-4 text-red-500" />
+            <h3 className="text-sm font-semibold text-foreground">Case Assignment Queue</h3>
+            <span className="text-[11px] text-muted-foreground">
+              Unassigned cases — including team-lead windows that ran past 30 minutes
+            </span>
+          </div>
+          <CaseApprovalQueue cases={cases} users={users ?? []} />
+        </div>
+      )}
 
       {/* Main grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

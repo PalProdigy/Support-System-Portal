@@ -16,6 +16,8 @@ const TYPE_LABELS: Record<string, string> = {
   case_assigned: 'Case assigned',
   case_reassigned: 'Case reassigned',
   case_escalated: 'Case escalated',
+  case_approval_escalated: 'Approval window expired — escalated to Technical Head',
+  case_claim_requested: 'Engineer requested a case',
   client_replied: 'Client replied',
 }
 
@@ -71,7 +73,7 @@ export function ActivityFeed() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['notifications'] }),
   })
 
-  const teamTypes = new Set(['new_case', 'case_pending_approval', 'case_assigned', 'case_reassigned', 'case_escalated', 'client_replied'])
+  const teamTypes = new Set(['new_case', 'case_pending_approval', 'case_assigned', 'case_reassigned', 'case_escalated', 'case_approval_escalated', 'case_claim_requested', 'client_replied'])
   const teamNotifs = (notifications ?? []).filter((n) => teamTypes.has(n.type))
   const unread = teamNotifs.filter((n) => !n.read_at).length
 

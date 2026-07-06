@@ -46,15 +46,21 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <SLAEngineProvider>
-      <div className="flex h-screen overflow-hidden bg-background">
+      {/* print: hide the app chrome and unlock the scroll containers so the
+          full page content (e.g. a KB article) prints, not just one viewport */}
+      <div className="flex h-screen overflow-hidden bg-background print:h-auto print:overflow-visible">
 
-        <Sidebar
-          userName={currentUser?.name ?? 'User'}
-          userRole={session.role}
-        />
-        <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-          <Topbar userName={currentUser?.name ?? 'User'} />
-          <main className="flex-1 overflow-y-auto">
+        <div className="contents print:hidden">
+          <Sidebar
+            userName={currentUser?.name ?? 'User'}
+            userRole={session.role}
+          />
+        </div>
+        <div className="flex flex-1 flex-col overflow-hidden min-w-0 print:overflow-visible">
+          <div className="contents print:hidden">
+            <Topbar userName={currentUser?.name ?? 'User'} />
+          </div>
+          <main className="flex-1 overflow-y-auto print:overflow-visible">
             {children}
           </main>
         </div>

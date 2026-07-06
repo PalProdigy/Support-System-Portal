@@ -42,7 +42,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Team Leads', href: '/team-lead', icon: Users, roles: ['technical_head'] },
   { label: 'Sales Executives', href: '/sales-executive', icon: Briefcase, roles: ['technical_head'] },
   { label: 'Teams', href: '/teams', icon: Headset, roles: ['team_lead', 'technical_head'] },
-  { label: 'Solutions', href: '/solutions', icon: Lightbulb, roles: ['team_lead', 'technical_head','support_engineer'] },
+  { label: 'Solutions', href: '/solutions', icon: Lightbulb, roles: ['team_lead', 'technical_head', 'support_engineer', 'sales_executive'] },
   { label: 'Products', href: '/products', icon: Package, roles: ['sales_executive', 'client', 'technical_head'] },
   { label: 'Knowledge Base', href: '/knowledge-base', icon: BookOpen, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive', 'client'] },
   { label: 'Reporting', href: '/reporting', icon: BarChart3, roles: ['team_lead', 'technical_head', 'sales_executive'] },

@@ -1,15 +1,17 @@
 'use client'
 
-import type { DataProvider, ListScope, CaseFilters, Paginated } from '../provider'
+import type { DataProvider, ListScope, CaseFilters, KBArticleFilters, Paginated, SolutionArticleFilters, CreateSolutionArticleInput } from '../provider'
 import type {
   User, Client, Solution, SolutionComment, ThreadComment, ClientSolution, Team, Product, Role,
-  SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
+  SLARule, Case, CaseComment, Attachment, RCA, KBArticle, KBArticleStatus, KBArticleVersion,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
   EngineerMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
-  ClientInfoReason, EngineerChangeRequest,
+  ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
+  SolutionArticle,
 } from '@/types'
+import { slugify } from '@/lib/markdown/utils'
 import { canAccess, requireAccess, canCreateSubCase } from '@/lib/rbac'
 import { CLIENT_INFO_REASON_LABELS } from '@/lib/utils'
 import { dispatchToChannels } from '@/lib/notifications/dispatcher'
@@ -30,11 +32,13 @@ import seedFeedback from '@/data/seed/feedback.json'
 import seedNotifications from '@/data/seed/notifications.json'
 import seedAuditLogs from '@/data/seed/audit_logs.json'
 import seedProspects from '@/data/seed/prospects.json'
+import seedSolutionArticles from '@/data/seed/solution_articles.json'
 
 const STORAGE_KEYS = {
   users: 'nhq_users',
   clients: 'nhq_clients',
   solutions: 'nhq_solutions',
+  solutionArticles: 'nhq_solution_articles',
   clientSolutions: 'nhq_client_solutions',
   teams: 'nhq_teams',
   products: 'nhq_products',
@@ -53,6 +57,7 @@ const STORAGE_KEYS = {
   teamMemberRequests: 'nhq_team_member_requests',
   caseTransferRequests: 'nhq_case_transfer_requests',
   engineerChangeRequests: 'nhq_engineer_change_requests',
+  caseClaims: 'nhq_case_claims',
   seeded: 'nhq_seeded',
 }
 
@@ -83,7 +88,7 @@ function save<T>(key: string, data: T[]): void {
   localStorage.setItem(key, JSON.stringify(data))
 }
 
-const SEED_VERSION = '11' // bump when seed schema changes
+const SEED_VERSION = '14' // bump when seed schema changes
 
 function ensureSeeded(): void {
   if (typeof window === 'undefined') return
@@ -94,6 +99,7 @@ function ensureSeeded(): void {
   save(STORAGE_KEYS.users, seedUsers)
   save(STORAGE_KEYS.teams, seedTeams)
   save(STORAGE_KEYS.solutions, seedSolutions)
+  save(STORAGE_KEYS.solutionArticles, seedSolutionArticles)
   save(STORAGE_KEYS.products, seedProducts)
   save(STORAGE_KEYS.clients, seedClients)
   save(STORAGE_KEYS.clientSolutions, seedClientSolutions)
@@ -308,6 +314,79 @@ class MockDataProvider implements DataProvider {
         return { ...c, likes: [...likes], dislikes: [...dislikes] }
       }),
     }))
+  }
+
+  // ── Solution Articles (in-house Knowledge Base) ────────────────────────────
+  // Storage holds markdown only; slugs are unique and owned by the data layer
+  // (the future backend does the same server-side).
+  private uniqueArticleSlug(base: string, excludeId?: string): string {
+    const articles = load<SolutionArticle>(STORAGE_KEYS.solutionArticles)
+    const taken = new Set(articles.filter((a) => a.id !== excludeId).map((a) => a.slug))
+    const root = slugify(base)
+    if (!taken.has(root)) return root
+    let n = 2
+    while (taken.has(`${root}-${n}`)) n++
+    return `${root}-${n}`
+  }
+
+  async listSolutionArticles(filters: SolutionArticleFilters = {}): Promise<SolutionArticle[]> {
+    let articles = load<SolutionArticle>(STORAGE_KEYS.solutionArticles)
+    if (filters.status) articles = articles.filter((a) => a.status === filters.status)
+    if (filters.category) articles = articles.filter((a) => a.category === filters.category)
+    if (filters.tag) articles = articles.filter((a) => a.tags.includes(filters.tag!))
+    if (filters.search) {
+      const q = filters.search.toLowerCase()
+      articles = articles.filter((a) =>
+        a.title.toLowerCase().includes(q) ||
+        a.description.toLowerCase().includes(q) ||
+        a.tags.some((t) => t.toLowerCase().includes(q)) ||
+        a.content.toLowerCase().includes(q)
+      )
+    }
+    // Newest first — matches how the backend will order the list endpoint.
+    articles.sort((a, b) => b.created_at.localeCompare(a.created_at))
+    return delay(articles)
+  }
+
+  async getSolutionArticle(id: string): Promise<SolutionArticle | null> {
+    return delay(load<SolutionArticle>(STORAGE_KEYS.solutionArticles).find((a) => a.id === id) ?? null)
+  }
+
+  async getSolutionArticleBySlug(slug: string): Promise<SolutionArticle | null> {
+    return delay(load<SolutionArticle>(STORAGE_KEYS.solutionArticles).find((a) => a.slug === slug) ?? null)
+  }
+
+  async createSolutionArticle(input: CreateSolutionArticleInput): Promise<SolutionArticle> {
+    const articles = load<SolutionArticle>(STORAGE_KEYS.solutionArticles)
+    const article: SolutionArticle = {
+      ...input,
+      id: genId(),
+      slug: this.uniqueArticleSlug(input.slug?.trim() || input.title),
+      created_at: now(),
+      updated_at: now(),
+    }
+    save(STORAGE_KEYS.solutionArticles, [...articles, article])
+    return delay(article)
+  }
+
+  async updateSolutionArticle(id: string, patch: Partial<SolutionArticle>): Promise<SolutionArticle> {
+    const articles = load<SolutionArticle>(STORAGE_KEYS.solutionArticles)
+    const idx = articles.findIndex((a) => a.id === id)
+    if (idx === -1) throw new Error(`Solution article ${id} not found`)
+    // Slug stays stable on title edits (links keep working); if an explicit
+    // slug change is requested it is re-uniquified against the other articles.
+    const slug = patch.slug !== undefined && patch.slug !== articles[idx].slug
+      ? this.uniqueArticleSlug(patch.slug, id)
+      : articles[idx].slug
+    articles[idx] = { ...articles[idx], ...patch, slug, id, updated_at: now() }
+    save(STORAGE_KEYS.solutionArticles, articles)
+    return delay(articles[idx])
+  }
+
+  async deleteSolutionArticle(id: string): Promise<void> {
+    const articles = load<SolutionArticle>(STORAGE_KEYS.solutionArticles).filter((a) => a.id !== id)
+    save(STORAGE_KEYS.solutionArticles, articles)
+    return delay(undefined)
   }
 
   // ── Client Solutions ───────────────────────────────────────────────────────
@@ -561,8 +640,16 @@ class MockDataProvider implements DataProvider {
     if (idx === -1) throw new Error(`Case ${caseId} not found`)
     const old = cases[idx]
     const isReassigning = !!old.assignee_id && old.assignee_id !== assigneeId
-    const newStatus = old.status === 'triaged' ? 'assigned' : old.status
-    cases[idx] = { ...old, assignee_id: assigneeId, status: newStatus }
+    const newStatus = old.status === 'triaged' || old.status === 'new' ? 'assigned' : old.status
+    // Assignment settles the routing approval: the case leaves both the
+    // team-lead 30-minute window and the overdue (escalated) queue.
+    const settlesApproval = old.approval_status === 'pending' || old.approval_status === 'escalated'
+    cases[idx] = {
+      ...old,
+      assignee_id: assigneeId,
+      status: newStatus,
+      ...(settlesApproval && { approval_status: 'accepted' as const, approval_user_id: scope.userId, approval_deadline: undefined }),
+    }
     save(STORAGE_KEYS.cases, cases)
 
     await this.writeAuditLog({
@@ -571,12 +658,53 @@ class MockDataProvider implements DataProvider {
       after: { assignee_id: assigneeId, status: newStatus },
     })
 
+    const users = load<User>(STORAGE_KEYS.users)
+    const assigneeName = users.find((u) => u.id === assigneeId)?.name ?? assigneeId
+
     await this.createNotification({
       user_id: assigneeId, channel: 'in_app',
       type: isReassigning ? 'case_reassigned' : 'case_assigned',
       payload: { case_id: caseId, reference_no: old.reference_no, title: old.title },
       sent_at: now(),
     })
+
+    // Keep the routed team's lead in the loop when someone else (e.g. the
+    // Technical Head after the window expired) assigns the case.
+    const teamRec = load<Team>(STORAGE_KEYS.teams).find((t) => t.id === (old.approval_team_id ?? old.team_id))
+    if (teamRec?.lead_user_id && teamRec.lead_user_id !== scope.userId) {
+      await this.createNotification({
+        user_id: teamRec.lead_user_id, channel: 'in_app', type: 'case_assigned',
+        payload: {
+          case_id: caseId, reference_no: old.reference_no, title: old.title,
+          assignee_id: assigneeId, assignee_name: assigneeName,
+          message: `Case ${old.reference_no} assigned to ${assigneeName}`,
+        },
+        sent_at: now(),
+      })
+    }
+
+    // Settle claim requests for this case: the assigned engineer's pending
+    // claim becomes approved; competing pending claims are rejected + notified.
+    const claims = load<CaseClaimRequest>(STORAGE_KEYS.caseClaims)
+    let claimsTouched = false
+    for (let i = 0; i < claims.length; i++) {
+      const cl = claims[i]
+      if (cl.case_id !== caseId || cl.status !== 'pending') continue
+      const approved = cl.engineer_id === assigneeId
+      claims[i] = { ...cl, status: approved ? 'approved' : 'rejected', resolved_by: scope.userId, resolved_at: now() }
+      claimsTouched = true
+      if (!approved) {
+        await this.createNotification({
+          user_id: cl.engineer_id, channel: 'in_app', type: 'case_claim_rejected',
+          payload: {
+            case_id: caseId, reference_no: old.reference_no, title: old.title,
+            message: `Your request for case ${old.reference_no} was declined — it was assigned to ${assigneeName}`,
+          },
+          sent_at: now(),
+        })
+      }
+    }
+    if (claimsTouched) save(STORAGE_KEYS.caseClaims, claims)
 
     return delay(cases[idx])
   }
@@ -797,6 +925,118 @@ class MockDataProvider implements DataProvider {
       before: { approval_status: old.approval_status }, after: { approval_status: 'accepted' },
     })
     return delay(cases[idx])
+  }
+
+  // ── Case claim requests (support engineer "grabs" a new case) ───────────────
+  // New unassigned cases are visible to engineers on the routed team; an
+  // engineer's Accept sends a claim request that the TL/TH approves or rejects.
+  async listClaimableCases(scope: ListScope): Promise<Case[]> {
+    await this.sweepCaseApprovals()
+    if (scope.role !== 'support_engineer') return delay([])
+    const me = load<User>(STORAGE_KEYS.users).find((u) => u.id === scope.userId)
+    const cases = load<Case>(STORAGE_KEYS.cases).filter((c) =>
+      !c.parent_case_id &&
+      !c.assignee_id &&
+      (c.approval_status === 'pending' || c.approval_status === 'escalated') &&
+      (!me?.team_id || (c.approval_team_id ?? c.team_id) === me.team_id)
+    )
+    // Soonest-ending approval window first, mirroring the TL queue.
+    cases.sort((a, b) =>
+      new Date(a.approval_deadline ?? a.created_at).getTime() - new Date(b.approval_deadline ?? b.created_at).getTime()
+    )
+    return delay(cases)
+  }
+
+  async listCaseClaimRequests(filters: { case_id?: string; engineer_id?: string; status?: CaseClaimRequest['status'] } = {}): Promise<CaseClaimRequest[]> {
+    let claims = load<CaseClaimRequest>(STORAGE_KEYS.caseClaims)
+    if (filters.case_id) claims = claims.filter((c) => c.case_id === filters.case_id)
+    if (filters.engineer_id) claims = claims.filter((c) => c.engineer_id === filters.engineer_id)
+    if (filters.status) claims = claims.filter((c) => c.status === filters.status)
+    claims.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+    return delay(claims)
+  }
+
+  async requestCaseClaim(caseId: string, scope: ListScope): Promise<CaseClaimRequest> {
+    if (scope.role !== 'support_engineer') throw new Error('Only a Support Engineer can request to take a case')
+    const caseRec = load<Case>(STORAGE_KEYS.cases).find((c) => c.id === caseId)
+    if (!caseRec) throw new Error(`Case ${caseId} not found`)
+    if (caseRec.assignee_id) throw new Error('This case has already been assigned')
+
+    const claims = load<CaseClaimRequest>(STORAGE_KEYS.caseClaims)
+    const existing = claims.find((c) => c.case_id === caseId && c.engineer_id === scope.userId && c.status === 'pending')
+    if (existing) return delay(existing) // idempotent — double-click safe
+
+    const me = load<User>(STORAGE_KEYS.users).find((u) => u.id === scope.userId)
+    const claim: CaseClaimRequest = {
+      id: genId(),
+      case_id: caseId,
+      engineer_id: scope.userId,
+      engineer_name: me?.name,
+      status: 'pending',
+      created_at: now(),
+    }
+    save(STORAGE_KEYS.caseClaims, [...claims, claim])
+
+    await this.writeAuditLog({
+      actor_id: scope.userId, action: 'create', entity_type: 'case_claim', entity_id: claim.id,
+      after: { case_id: caseId, reference_no: caseRec.reference_no, engineer_id: scope.userId },
+    })
+
+    // Notify the routed team's lead and all Technical Heads for a decision.
+    const users = load<User>(STORAGE_KEYS.users)
+    const teamRec = load<Team>(STORAGE_KEYS.teams).find((t) => t.id === (caseRec.approval_team_id ?? caseRec.team_id))
+    const recipients = new Set<string>()
+    if (teamRec?.lead_user_id) recipients.add(teamRec.lead_user_id)
+    users.filter((u) => u.role === 'technical_head' && u.is_active).forEach((u) => recipients.add(u.id))
+    await Promise.all([...recipients].map((uid) =>
+      this.createNotification({
+        user_id: uid, channel: 'in_app', type: 'case_claim_requested',
+        payload: {
+          case_id: caseId, reference_no: caseRec.reference_no, title: caseRec.title,
+          engineer_id: scope.userId, engineer_name: me?.name,
+          message: `${me?.name ?? 'An engineer'} wants to take case ${caseRec.reference_no} "${caseRec.title}"`,
+        },
+        sent_at: now(),
+      })
+    ))
+
+    return delay(claim)
+  }
+
+  async resolveCaseClaim(requestId: string, decision: 'approved' | 'rejected', scope: ListScope): Promise<CaseClaimRequest> {
+    if (scope.role !== 'team_lead' && scope.role !== 'technical_head') {
+      throw new Error('Only a Team Lead or Technical Head can decide claim requests')
+    }
+    const claims = load<CaseClaimRequest>(STORAGE_KEYS.caseClaims)
+    const idx = claims.findIndex((c) => c.id === requestId)
+    if (idx === -1) throw new Error(`Claim request ${requestId} not found`)
+    const claim = claims[idx]
+    if (claim.status !== 'pending') return delay(claim)
+
+    if (decision === 'approved') {
+      // assignCase settles everything: assignee, status, approval state,
+      // this claim (→ approved), competing claims (→ rejected) + notifications.
+      await this.assignCase(claim.case_id, claim.engineer_id, scope)
+      const updated = load<CaseClaimRequest>(STORAGE_KEYS.caseClaims).find((c) => c.id === requestId)
+      return delay(updated ?? { ...claim, status: 'approved', resolved_by: scope.userId, resolved_at: now() })
+    }
+
+    claims[idx] = { ...claim, status: 'rejected', resolved_by: scope.userId, resolved_at: now() }
+    save(STORAGE_KEYS.caseClaims, claims)
+    const caseRec = load<Case>(STORAGE_KEYS.cases).find((c) => c.id === claim.case_id)
+    await this.writeAuditLog({
+      actor_id: scope.userId, action: 'update', entity_type: 'case_claim', entity_id: requestId,
+      before: { status: 'pending' }, after: { status: 'rejected' },
+    })
+    await this.createNotification({
+      user_id: claim.engineer_id, channel: 'in_app', type: 'case_claim_rejected',
+      payload: {
+        case_id: claim.case_id, reference_no: caseRec?.reference_no, title: caseRec?.title,
+        message: `Your request for case ${caseRec?.reference_no ?? claim.case_id} was declined`,
+      },
+      sent_at: now(),
+    })
+    return delay(claims[idx])
   }
 
   async grantClosure(caseId: string, scope: ListScope): Promise<Case> {
@@ -1211,91 +1451,273 @@ class MockDataProvider implements DataProvider {
   }
 
   // ── KB Articles ────────────────────────────────────────────────────────────
-  async listKBArticles(filters: { status?: string; search?: string } = {}, scope?: ListScope): Promise<KBArticle[]> {
-    let articles = load<KBArticle>(STORAGE_KEYS.kbArticles)
-    // Visibility enforcement (backend-style): published is public; authors see their
-    // own submissions; a Technical Head sees everything.
+  // ── Knowledge Base ───────────────────────────────────────────────────────────
+  // Reviewer roles for the KB workflow ("Technical Lead" in the spec maps to
+  // team_lead; technical_head is the admin with full access).
+  private static readonly KB_REVIEWER_ROLES: Role[] = ['team_lead', 'technical_head']
+
+  // Loads KB articles, migrating legacy records in place: old status values
+  // ('pending' → 'in_review', 'rejected' → 'changes_requested') and missing
+  // slug/version fields from before the workflow existed.
+  private loadKB(): KBArticle[] {
+    const raw = load<Omit<KBArticle, 'status'> & { status: KBArticleStatus | 'pending' | 'rejected' }>(STORAGE_KEYS.kbArticles)
+    let migrated = false
+    const articles = raw.map((a) => {
+      const status: KBArticleStatus =
+        a.status === 'pending' ? 'in_review' : a.status === 'rejected' ? 'changes_requested' : a.status
+      if (status !== a.status || !a.slug || !a.version) {
+        migrated = true
+        return { ...a, status, slug: a.slug ?? this.uniqueKBSlug(a.title, raw, a.id), version: a.version ?? 1 }
+      }
+      return a as KBArticle
+    })
+    if (migrated) save(STORAGE_KEYS.kbArticles, articles)
+    return articles
+  }
+
+  private uniqueKBSlug(title: string, articles: Pick<KBArticle, 'id' | 'slug'>[], excludeId?: string): string {
+    const base = slugify(title)
+    let candidate = base
+    let n = 2
+    while (articles.some((a) => a.id !== excludeId && a.slug === candidate)) candidate = `${base}-${n++}`
+    return candidate
+  }
+
+  private async notifyKB(userIds: string[], type: string, article: KBArticle, message: string): Promise<void> {
+    await Promise.all([...new Set(userIds)].map((uid) =>
+      this.createNotification({
+        user_id: uid, channel: 'in_app', type,
+        payload: { article_id: article.id, slug: article.slug, title: article.title, message },
+        sent_at: now(),
+      })
+    ))
+  }
+
+  private kbReviewerIds(): string[] {
+    return load<User>(STORAGE_KEYS.users)
+      .filter((u) => u.is_active && MockDataProvider.KB_REVIEWER_ROLES.includes(u.role))
+      .map((u) => u.id)
+  }
+
+  // Applies a workflow transition: mutates status, appends status_history,
+  // stamps the reviewer on review actions, and writes an audit log entry.
+  private async kbTransition(
+    id: string,
+    to: KBArticleStatus,
+    actor: ListScope,
+    opts: { note?: string; extra?: Partial<KBArticle> } = {},
+  ): Promise<KBArticle> {
+    const actorName = load<User>(STORAGE_KEYS.users).find((u) => u.id === actor.userId)?.name
+    const updated = await this.mutateKBArticle(id, (a) => ({
+      ...a,
+      ...opts.extra,
+      status: to,
+      status_history: [
+        ...(a.status_history ?? []),
+        { from: a.status, to, by: actor.userId, by_name: actorName, at: now(), note: opts.note },
+      ],
+    }))
+    await this.writeAuditLog({
+      actor_id: actor.userId, action: 'status_change', entity_type: 'kb_article', entity_id: id,
+      before: { status: updated.status_history?.at(-1)?.from ?? null }, after: { status: to, note: opts.note ?? null },
+    })
+    return updated
+  }
+
+  private requireKBReviewer(actor: ListScope, action: string): void {
+    if (!MockDataProvider.KB_REVIEWER_ROLES.includes(actor.role)) {
+      throw new Error(`Only a Team Lead or Technical Head can ${action}`)
+    }
+  }
+
+  async listKBArticles(filters: KBArticleFilters = {}, scope?: ListScope): Promise<KBArticle[]> {
+    let articles = this.loadKB()
+    // Visibility enforcement (backend-style): published is public; authors see
+    // their own articles in any status; reviewers (TL/TH) see everything.
     if (scope) {
-      articles = articles.filter(
-        (a) => a.status === 'published' || a.author_id === scope.userId || scope.role === 'technical_head',
-      )
+      const reviewer = MockDataProvider.KB_REVIEWER_ROLES.includes(scope.role)
+      articles = articles.filter((a) => reviewer || a.status === 'published' || a.author_id === scope.userId)
     }
     if (filters.status) articles = articles.filter((a) => a.status === filters.status)
+    if (filters.category) articles = articles.filter((a) => a.category === filters.category)
+    if (filters.tag) articles = articles.filter((a) => a.tags.includes(filters.tag!))
     if (filters.search) {
       const terms = filters.search.toLowerCase().split(/\s+/).filter(Boolean)
       articles = articles.filter((a) => {
-        const haystack = `${a.title} ${a.body} ${a.tags.join(' ')}`.toLowerCase()
-        return terms.some((t) => haystack.includes(t))
+        const haystack = [a.title, a.description, a.body, a.tags.join(' '), a.category, a.subcategory, a.author_name]
+          .filter(Boolean).join(' ').toLowerCase()
+        return terms.every((t) => haystack.includes(t))
       })
     }
     return delay(articles)
   }
 
   async getKBArticle(id: string): Promise<KBArticle | null> {
-    return delay(load<KBArticle>(STORAGE_KEYS.kbArticles).find((a) => a.id === id) ?? null)
+    return delay(this.loadKB().find((a) => a.id === id) ?? null)
   }
 
   async createKBArticle(input: Omit<KBArticle, 'id' | 'created_at' | 'updated_at'>): Promise<KBArticle> {
-    const articles = load<KBArticle>(STORAGE_KEYS.kbArticles)
-    const article: KBArticle = { ...input, id: genId(), created_at: now(), updated_at: now() }
+    const articles = this.loadKB()
+    const article: KBArticle = {
+      version: 1,
+      ...input,
+      slug: input.slug ?? this.uniqueKBSlug(input.title, articles),
+      id: genId(),
+      created_at: now(),
+      updated_at: now(),
+      status_history: input.status_history ?? [
+        { from: null, to: input.status, by: input.author_id, by_name: input.author_name, at: now() },
+      ],
+    }
     save(STORAGE_KEYS.kbArticles, [...articles, article])
+    await this.writeAuditLog({
+      actor_id: input.author_id, action: 'create', entity_type: 'kb_article', entity_id: article.id,
+      after: { title: article.title, status: article.status },
+    })
     return delay(article)
   }
 
-  async updateKBArticle(id: string, patch: Partial<KBArticle>): Promise<KBArticle> {
-    const articles = load<KBArticle>(STORAGE_KEYS.kbArticles)
+  private static readonly KB_CONTENT_FIELDS = ['title', 'description', 'body', 'category', 'subcategory', 'tags'] as const
+  private static readonly KB_MAX_VERSIONS = 20
+
+  async updateKBArticle(id: string, patch: Partial<KBArticle>, actor?: ListScope): Promise<KBArticle> {
+    const articles = this.loadKB()
     const idx = articles.findIndex((a) => a.id === id)
     if (idx === -1) throw new Error(`KB Article ${id} not found`)
-    articles[idx] = { ...articles[idx], ...patch, updated_at: now() }
+    const prev = articles[idx]
+
+    // Content change? Snapshot the previous state so it can be compared/restored.
+    const contentChanged = MockDataProvider.KB_CONTENT_FIELDS.some(
+      (f) => f in patch && JSON.stringify(patch[f]) !== JSON.stringify(prev[f]),
+    )
+    let versionFields: Partial<KBArticle> = {}
+    if (contentChanged) {
+      const savedBy = actor?.userId ?? prev.author_id
+      const savedByName = load<User>(STORAGE_KEYS.users).find((u) => u.id === savedBy)?.name
+      const snapshot: KBArticleVersion = {
+        version: prev.version ?? 1,
+        title: prev.title, description: prev.description, body: prev.body,
+        category: prev.category, subcategory: prev.subcategory, tags: prev.tags,
+        saved_at: prev.updated_at, saved_by: savedBy, saved_by_name: savedByName,
+      }
+      versionFields = {
+        version: (prev.version ?? 1) + 1,
+        versions: [...(prev.versions ?? []), snapshot].slice(-MockDataProvider.KB_MAX_VERSIONS),
+      }
+    }
+
+    // Keep the slug in sync with the title until the article has been published
+    // once — after that the URL is stable for SEO / shared links.
+    const slugFields =
+      patch.title && patch.title !== prev.title && !prev.published_at
+        ? { slug: this.uniqueKBSlug(patch.title, articles, id) }
+        : {}
+
+    articles[idx] = { ...prev, ...patch, ...versionFields, ...slugFields, updated_at: now() }
     save(STORAGE_KEYS.kbArticles, articles)
     return delay(articles[idx])
   }
 
   async deleteKBArticle(id: string): Promise<void> {
-    const articles = load<KBArticle>(STORAGE_KEYS.kbArticles).filter((a) => a.id !== id)
+    const articles = this.loadKB().filter((a) => a.id !== id)
     save(STORAGE_KEYS.kbArticles, articles)
     return delay(undefined)
   }
 
-  // ── KB submission & approval workflow ────────────────────────────────────────
+  // ── KB review workflow ───────────────────────────────────────────────────────
+  // Create + submit in one step (legacy path kept for API compatibility).
   async submitKBArticle(input: { title: string; body: string; tags: string[]; author_id: string; author_name?: string; author_role?: Role }): Promise<KBArticle> {
-    const articles = load<KBArticle>(STORAGE_KEYS.kbArticles)
-    const article: KBArticle = {
-      id: genId(),
-      title: input.title,
-      body: input.body,
-      tags: input.tags,
-      status: 'pending',
-      author_id: input.author_id,
-      author_name: input.author_name,
-      author_role: input.author_role,
-      created_at: now(),
-      updated_at: now(),
+    const article = await this.createKBArticle({
+      ...input,
+      status: 'in_review',
+    } as Omit<KBArticle, 'id' | 'created_at' | 'updated_at'>)
+    await this.notifyKB(this.kbReviewerIds(), 'kb_submitted', article,
+      `${input.author_name ?? 'An engineer'} submitted "${article.title}" for review`)
+    return article
+  }
+
+  async submitKBArticleForReview(id: string, actor: ListScope): Promise<KBArticle> {
+    const article = this.loadKB().find((a) => a.id === id)
+    if (!article) throw new Error(`KB Article ${id} not found`)
+    if (article.author_id !== actor.userId && actor.role !== 'technical_head') {
+      throw new Error('Only the author can submit this article for review')
     }
-    save(STORAGE_KEYS.kbArticles, [...articles, article])
-    return delay(article)
+    if (!['draft', 'changes_requested'].includes(article.status)) {
+      throw new Error(`Cannot submit an article that is ${article.status.replace('_', ' ')}`)
+    }
+    const updated = await this.kbTransition(id, 'in_review', actor, {
+      extra: { rejection_reason: undefined, rejected_by: undefined },
+    })
+    await this.notifyKB(this.kbReviewerIds(), 'kb_submitted', updated,
+      `${updated.author_name ?? 'An engineer'} submitted "${updated.title}" for review`)
+    return updated
+  }
+
+  async approveKBArticle(id: string, actor: ListScope): Promise<KBArticle> {
+    this.requireKBReviewer(actor, 'approve articles')
+    const reviewerName = load<User>(STORAGE_KEYS.users).find((u) => u.id === actor.userId)?.name
+    const updated = await this.kbTransition(id, 'approved', actor, {
+      extra: { reviewer_id: actor.userId, reviewer_name: reviewerName },
+    })
+    await this.notifyKB([updated.author_id], 'kb_approved', updated,
+      `"${updated.title}" was approved — it can now be published`)
+    return updated
   }
 
   async publishKBArticle(id: string, actor: ListScope): Promise<KBArticle> {
-    if (actor.role !== 'technical_head') throw new Error('Only the Technical Head can publish articles')
-    return this.mutateKBArticle(id, (a) => ({
-      ...a,
-      status: 'published',
-      published_at: now(),
-      published_by: actor.userId,
-      rejected_by: undefined,
-      rejection_reason: undefined,
-    }))
+    this.requireKBReviewer(actor, 'publish articles')
+    const reviewerName = load<User>(STORAGE_KEYS.users).find((u) => u.id === actor.userId)?.name
+    const updated = await this.kbTransition(id, 'published', actor, {
+      extra: {
+        published_at: now(), published_by: actor.userId,
+        reviewer_id: actor.userId, reviewer_name: reviewerName,
+        rejected_by: undefined, rejection_reason: undefined,
+      },
+    })
+    await this.notifyKB([updated.author_id], 'kb_published', updated,
+      `"${updated.title}" is now live in the Knowledge Base`)
+    return updated
   }
 
+  // "Request changes" — sends the article back to the author with a note.
   async rejectKBArticle(id: string, actor: ListScope, reason?: string): Promise<KBArticle> {
-    if (actor.role !== 'technical_head') throw new Error('Only the Technical Head can reject articles')
-    return this.mutateKBArticle(id, (a) => ({
-      ...a,
-      status: 'rejected',
-      rejected_by: actor.userId,
-      rejection_reason: reason,
-    }))
+    this.requireKBReviewer(actor, 'request changes')
+    const reviewerName = load<User>(STORAGE_KEYS.users).find((u) => u.id === actor.userId)?.name
+    const updated = await this.kbTransition(id, 'changes_requested', actor, {
+      note: reason,
+      extra: { rejected_by: actor.userId, rejection_reason: reason, reviewer_id: actor.userId, reviewer_name: reviewerName },
+    })
+    await this.notifyKB([updated.author_id], 'kb_changes_requested', updated,
+      `Changes requested on "${updated.title}"${reason ? ` — ${reason}` : ''}`)
+    return updated
+  }
+
+  async archiveKBArticle(id: string, actor: ListScope): Promise<KBArticle> {
+    this.requireKBReviewer(actor, 'archive articles')
+    const updated = await this.kbTransition(id, 'archived', actor)
+    await this.notifyKB([updated.author_id], 'kb_archived', updated, `"${updated.title}" was archived`)
+    return updated
+  }
+
+  async restoreKBArticle(id: string, actor: ListScope): Promise<KBArticle> {
+    if (actor.role !== 'technical_head') throw new Error('Only the Technical Head can restore archived articles')
+    return this.kbTransition(id, 'draft', actor)
+  }
+
+  async restoreKBVersion(id: string, version: number, actor: ListScope): Promise<KBArticle> {
+    const article = this.loadKB().find((a) => a.id === id)
+    if (!article) throw new Error(`KB Article ${id} not found`)
+    const isReviewer = MockDataProvider.KB_REVIEWER_ROLES.includes(actor.role)
+    if (article.author_id !== actor.userId && !isReviewer) {
+      throw new Error('Only the author or a reviewer can restore versions')
+    }
+    const snapshot = (article.versions ?? []).find((v) => v.version === version)
+    if (!snapshot) throw new Error(`Version ${version} not found`)
+    // Restoring is just another edit — the current state gets snapshotted too.
+    return this.updateKBArticle(id, {
+      title: snapshot.title, description: snapshot.description, body: snapshot.body,
+      category: snapshot.category, subcategory: snapshot.subcategory, tags: snapshot.tags,
+    }, actor)
   }
 
   // ── KB comments ────────────────────────────────────────────────────────────
