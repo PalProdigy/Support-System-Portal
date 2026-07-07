@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { EmptyState } from '@/components/shared/empty-state'
 import { toast } from '@/hooks/use-toast'
 import {
-  Package, PlusCircle, Pencil, Search, ArrowLeft, ArrowRight,
+  Package, PlusCircle, Pencil, Search, ArrowLeft, ArrowRight, Loader2,
   ShieldCheck, Network, ShieldAlert, ScanSearch, DatabaseBackup, Cloud, Server, Layers,
   type LucideIcon,
 } from 'lucide-react'
@@ -70,6 +70,8 @@ export default function ProductsPage() {
   const scope = { userId: session.userId, role: session.role }
 
   const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [viewing, setViewing] = useState<Product | null>(null)
   const [showCreate, setShowCreate] = useState(false)
@@ -82,12 +84,20 @@ export default function ProductsPage() {
   // Managers see inactive products too; everyone else only sees the live catalog.
   const visible = useMemo(() => (products ?? []).filter((p) => canManage || p.is_active), [products, canManage])
 
-  const searching = search.trim().length > 0
+  const searching = query.trim().length > 0
   const searchResults = useMemo(() => {
     if (!searching) return []
-    const q = search.toLowerCase()
+    const q = query.toLowerCase()
     return visible.filter((p) => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || (p.category ?? '').toLowerCase().includes(q))
-  }, [visible, search, searching])
+  }, [visible, query, searching])
+
+  async function runSearch() {
+    if (isSearching) return
+    setIsSearching(true)
+    await new Promise((resolve) => setTimeout(resolve, 450))
+    setQuery(search)
+    setIsSearching(false)
+  }
 
   const categories = useMemo(() => {
     const byName = new Map<string, Product[]>()
@@ -173,16 +183,24 @@ export default function ProductsPage() {
             <Package className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products Category</h1>
             <p className="text-sm text-muted-foreground">Browse NHQ's product and solution portfolio · {visible.length} {visible.length === 1 ? 'product' : 'products'}</p>
           </div>
         </div>
-        {canManage && <Button onClick={() => setShowCreate(true)}><PlusCircle className="h-4 w-4" /> Add Product</Button>}
+        {canManage && <Button onClick={() => setShowCreate(true)}><PlusCircle className="h-4 w-4 text-white" /> <span className="text-white">Add Category</span></Button>}
       </div>
-
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-        <Input className="pl-9" placeholder="Search products…" value={search} onChange={(e) => setSearch(e.target.value)} />
+      <div className="flex max-w-md items-center gap-2">
+        <Input
+          placeholder="Search Category…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && runSearch()}
+          className="focus-visible:ring-1 focus-visible:ring-[#3B82F6] "
+        />
+        <Button type="button" variant="outline" className="shrink-0 bg-[#3B82F6] hover:bg-[#326ED3]" onClick={runSearch} disabled={isSearching}>
+          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+          Search
+        </Button>
       </div>
 
       {isLoading ? (
