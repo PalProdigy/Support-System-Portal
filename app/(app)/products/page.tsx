@@ -189,17 +189,21 @@ export default function ProductsPage() {
         </div>
         {canManage && <Button onClick={() => setShowCreate(true)}><PlusCircle className="h-4 w-4 text-white" /> <span className="text-white">Add Category</span></Button>}
       </div>
+
       <div className="flex max-w-md items-center gap-2">
-        <Input
-          placeholder="Search Category…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && runSearch()}
-          className="focus-visible:ring-1 focus-visible:ring-[#3B82F6] "
-        />
-        <Button type="button" variant="outline" className="shrink-0 bg-[#3B82F6] hover:bg-[#326ED3]" onClick={runSearch} disabled={isSearching}>
-          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-          Search
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            className="pl-9"
+            placeholder="Search products…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && runSearch()}
+          />
+        </div>
+        <Button type="button" onClick={runSearch} disabled={isSearching} className="shrink-0">
+          {isSearching ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : <Search className="h-4 w-4 text-white" />}
+          <span className="text-white">Search</span>
         </Button>
       </div>
 
