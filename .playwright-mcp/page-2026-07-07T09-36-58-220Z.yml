@@ -1,0 +1,447 @@
+- generic [active] [ref=f6e1]:
+  - generic [ref=f6e41]:
+    - complementary [ref=f6e43]:
+      - link "Logo" [ref=f6e45] [cursor=pointer]:
+        - /url: /dashboard
+        - img "Logo" [ref=f6e47]
+      - navigation [ref=f6e48]:
+        - link "Dashboard" [ref=f6e49] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=f6e50]
+          - generic [ref=f6e55]: Dashboard
+        - link "Cases" [ref=f6e56] [cursor=pointer]:
+          - /url: /cases
+          - img [ref=f6e57]
+          - generic [ref=f6e59]: Cases
+        - link "TH Hub" [ref=f6e60] [cursor=pointer]:
+          - /url: /technical-head
+          - img [ref=f6e61]
+          - generic [ref=f6e63]: TH Hub
+        - link "Clients" [ref=f6e64] [cursor=pointer]:
+          - /url: /clients
+          - img [ref=f6e65]
+          - generic [ref=f6e69]: Clients
+        - link "Support Engineers" [ref=f6e70] [cursor=pointer]:
+          - /url: /support-engineer
+          - img [ref=f6e71]
+          - generic [ref=f6e73]: Support Engineers
+        - link "Team Leads" [ref=f6e74] [cursor=pointer]:
+          - /url: /team-lead
+          - img [ref=f6e75]
+          - generic [ref=f6e80]: Team Leads
+        - link "Sales Executives" [ref=f6e81] [cursor=pointer]:
+          - /url: /sales-executive
+          - img [ref=f6e82]
+          - generic [ref=f6e85]: Sales Executives
+        - link "Teams" [ref=f6e86] [cursor=pointer]:
+          - /url: /teams
+          - img [ref=f6e87]
+          - generic [ref=f6e90]: Teams
+        - link "Solutions" [ref=f6e91] [cursor=pointer]:
+          - /url: /solutions
+          - img [ref=f6e92]
+          - generic [ref=f6e94]: Solutions
+        - link "Products" [ref=f6e95] [cursor=pointer]:
+          - /url: /products
+          - img [ref=f6e96]
+          - generic [ref=f6e100]: Products
+        - link "Knowledge Base" [ref=f6e101] [cursor=pointer]:
+          - /url: /knowledge-base
+          - img [ref=f6e102]
+          - generic [ref=f6e104]: Knowledge Base
+        - link "Reporting" [ref=f6e105] [cursor=pointer]:
+          - /url: /reporting
+          - img [ref=f6e106]
+          - generic [ref=f6e108]: Reporting
+        - link "Feedback" [ref=f6e109] [cursor=pointer]:
+          - /url: /feedback
+          - img [ref=f6e110]
+          - generic [ref=f6e112]: Feedback
+        - link "SLA Rules" [ref=f6e113] [cursor=pointer]:
+          - /url: /sla-rules
+          - img [ref=f6e114]
+          - generic [ref=f6e116]: SLA Rules
+        - link "Audit Log" [ref=f6e117] [cursor=pointer]:
+          - /url: /audit-log
+          - img [ref=f6e118]
+          - generic [ref=f6e120]: Audit Log
+        - link "Notifications" [ref=f6e121] [cursor=pointer]:
+          - /url: /notifications
+          - img [ref=f6e122]
+          - generic [ref=f6e125]: Notifications
+        - link "Settings" [ref=f6e126] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=f6e127]
+          - generic [ref=f6e130]: Settings
+      - generic [ref=f6e132]:
+        - generic [ref=f6e134]: AR
+        - generic [ref=f6e135]:
+          - paragraph [ref=f6e136]: Arif Rahman
+          - paragraph [ref=f6e137]: Technical Head
+      - button "Collapse sidebar" [ref=f6e138]:
+        - img [ref=f6e139]
+    - generic [ref=f6e141]:
+      - banner [ref=f6e143]:
+        - generic [ref=f6e145]:
+          - img [ref=f6e146]
+          - textbox "Search cases… (press Enter)" [ref=f6e149]
+        - generic [ref=f6e150]:
+          - button "Toggle theme" [ref=f6e151]:
+            - img
+          - button "Notifications" [ref=f6e152]:
+            - img
+            - generic [ref=f6e153]: 9+
+          - button "AR Arif Rahman Technical Head" [ref=f6e154]:
+            - generic [ref=f6e156]: AR
+            - generic [ref=f6e157]:
+              - paragraph [ref=f6e158]: Arif Rahman
+              - paragraph [ref=f6e159]: Technical Head
+            - img
+      - main [ref=f6e160]:
+        - generic [ref=f6e161]:
+          - generic [ref=f6e162]:
+            - generic [ref=f6e163]:
+              - heading "Overview" [level=1] [ref=f6e164]
+              - paragraph [ref=f6e165]:
+                - text: All cases · all teams · full visibility
+                - generic [ref=f6e166]:
+                  - img [ref=f6e167]
+                  - text: 6 escalated
+                - generic [ref=f6e169]:
+                  - img [ref=f6e170]
+                  - text: 1 need approval
+                - generic [ref=f6e173]: 15 SLA alerts
+            - link "Open TH Hub" [ref=f6e174] [cursor=pointer]:
+              - /url: /technical-head
+              - text: Open TH Hub
+              - img [ref=f6e175]
+          - generic [ref=f6e177]:
+            - generic [ref=f6e179]:
+              - generic [ref=f6e180]:
+                - paragraph [ref=f6e181]: Open Cases
+                - paragraph [ref=f6e182]: "12"
+              - img [ref=f6e184]
+            - generic [ref=f6e187]:
+              - generic [ref=f6e188]:
+                - paragraph [ref=f6e189]: Last Month Successful
+                - paragraph [ref=f6e190]: "0"
+              - img [ref=f6e192]
+            - generic [ref=f6e196]:
+              - generic [ref=f6e197]:
+                - paragraph [ref=f6e198]: Last 3 Months Due
+                - paragraph [ref=f6e199]: "0"
+              - img [ref=f6e201]
+            - generic [ref=f6e204]:
+              - generic [ref=f6e205]:
+                - paragraph [ref=f6e206]: Reopened Cases
+                - paragraph [ref=f6e207]: "0"
+              - img [ref=f6e209]
+            - generic [ref=f6e213]:
+              - generic [ref=f6e214]:
+                - paragraph [ref=f6e215]: SLA Compliance
+                - paragraph [ref=f6e216]: 67%
+              - img [ref=f6e218]
+            - generic [ref=f6e222]:
+              - generic [ref=f6e223]:
+                - paragraph [ref=f6e224]: Pending Approvals
+                - paragraph [ref=f6e225]: "14"
+              - img [ref=f6e227]
+          - generic [ref=f6e230]:
+            - generic [ref=f6e231]:
+              - img [ref=f6e232]
+              - heading "Needs your attention" [level=3] [ref=f6e235]
+              - generic [ref=f6e236]: 14 pending
+            - generic [ref=f6e237]:
+              - link "Critical resolutions awaiting approval 1" [ref=f6e238] [cursor=pointer]:
+                - /url: /technical-head?tab=approvals
+                - img [ref=f6e240]
+                - generic [ref=f6e243]: Critical resolutions awaiting approval
+                - generic [ref=f6e244]: "1"
+              - link "Escalations awaiting response 6" [ref=f6e245] [cursor=pointer]:
+                - /url: /technical-head?tab=escalations
+                - img [ref=f6e247]
+                - generic [ref=f6e249]: Escalations awaiting response
+                - generic [ref=f6e250]: "6"
+              - link "Case transfer requests" [ref=f6e251] [cursor=pointer]:
+                - /url: /teams
+                - img [ref=f6e253]
+                - generic [ref=f6e256]: Case transfer requests
+                - img [ref=f6e257]
+              - link "Team member requests" [ref=f6e260] [cursor=pointer]:
+                - /url: /teams
+                - img [ref=f6e262]
+                - generic [ref=f6e265]: Team member requests
+                - img [ref=f6e266]
+              - link "KB articles pending publish 1" [ref=f6e269] [cursor=pointer]:
+                - /url: /knowledge-base
+                - img [ref=f6e271]
+                - generic [ref=f6e273]: KB articles pending publish
+                - generic [ref=f6e274]: "1"
+              - link "Feedback pending review 6" [ref=f6e275] [cursor=pointer]:
+                - /url: /feedback
+                - img [ref=f6e277]
+                - generic [ref=f6e279]: Feedback pending review
+                - generic [ref=f6e280]: "6"
+          - generic [ref=f6e281]:
+            - generic [ref=f6e283]:
+              - generic [ref=f6e284]:
+                - tablist [ref=f6e285]:
+                  - tab "Open (12)" [selected] [ref=f6e286]
+                  - tab "Escalated (6)" [ref=f6e287]
+                  - tab "Critical (2)" [ref=f6e288]
+                - link "View all cases" [ref=f6e289] [cursor=pointer]:
+                  - /url: /cases
+                  - text: View all cases
+                  - img [ref=f6e290]
+              - tabpanel "Open (12)" [ref=f6e292]:
+                - generic [ref=f6e296]:
+                  - link "NHQ-2024-0013 Escalated Medium Escalated Analytics report export to Excel failing Delta Trade Ltd. · 22 Jun 2024, 16:00 Overdue" [ref=f6e297] [cursor=pointer]:
+                    - /url: /cases/case13
+                    - generic [ref=f6e298]:
+                      - generic [ref=f6e299]:
+                        - generic [ref=f6e300]:
+                          - generic [ref=f6e301]: NHQ-2024-0013
+                          - generic [ref=f6e302]:
+                            - img [ref=f6e303]
+                            - text: Escalated
+                        - generic [ref=f6e305]:
+                          - generic [ref=f6e306]: Medium
+                          - generic [ref=f6e308]: Escalated
+                      - paragraph [ref=f6e309]: Analytics report export to Excel failing
+                      - generic [ref=f6e310]:
+                        - generic [ref=f6e311]:
+                          - generic [ref=f6e312]: Delta Trade Ltd.
+                          - generic [ref=f6e313]: ·
+                          - generic [ref=f6e314]: 22 Jun 2024, 16:00
+                        - generic [ref=f6e318]: Overdue
+                  - link "NHQ-2024-0010 High In Progress API rate limit errors in ERP connector Acme Corporation Ltd. · Rafi Uddin · 22 Jun 2024, 15:30 Overdue" [ref=f6e319] [cursor=pointer]:
+                    - /url: /cases/case10
+                    - generic [ref=f6e320]:
+                      - generic [ref=f6e321]:
+                        - generic [ref=f6e323]: NHQ-2024-0010
+                        - generic [ref=f6e324]:
+                          - generic [ref=f6e325]: High
+                          - generic [ref=f6e327]: In Progress
+                      - paragraph [ref=f6e328]: API rate limit errors in ERP connector
+                      - generic [ref=f6e329]:
+                        - generic [ref=f6e330]:
+                          - generic [ref=f6e331]: Acme Corporation Ltd.
+                          - generic [ref=f6e332]: ·
+                          - generic [ref=f6e333]: Rafi Uddin
+                          - generic [ref=f6e334]: ·
+                          - generic [ref=f6e335]: 22 Jun 2024, 15:30
+                        - generic [ref=f6e339]: Overdue
+                  - link "NHQ-2024-0008 Escalated Medium Escalated Dashboard showing stale data after refresh Delta Trade Ltd. · 22 Jun 2024, 15:00 Overdue" [ref=f6e340] [cursor=pointer]:
+                    - /url: /cases/case8
+                    - generic [ref=f6e341]:
+                      - generic [ref=f6e342]:
+                        - generic [ref=f6e343]:
+                          - generic [ref=f6e344]: NHQ-2024-0008
+                          - generic [ref=f6e345]:
+                            - img [ref=f6e346]
+                            - text: Escalated
+                        - generic [ref=f6e348]:
+                          - generic [ref=f6e349]: Medium
+                          - generic [ref=f6e351]: Escalated
+                      - paragraph [ref=f6e352]: Dashboard showing stale data after refresh
+                      - generic [ref=f6e353]:
+                        - generic [ref=f6e354]:
+                          - generic [ref=f6e355]: Delta Trade Ltd.
+                          - generic [ref=f6e356]: ·
+                          - generic [ref=f6e357]: 22 Jun 2024, 15:00
+                        - generic [ref=f6e361]: Overdue
+                  - link "NHQ-2024-0012 Escalated Critical Escalated Purchase order PDF not generating Delta Trade Ltd. · Imran Khan · 22 Jun 2024, 14:30 Overdue" [ref=f6e362] [cursor=pointer]:
+                    - /url: /cases/case12
+                    - generic [ref=f6e363]:
+                      - generic [ref=f6e364]:
+                        - generic [ref=f6e365]:
+                          - generic [ref=f6e366]: NHQ-2024-0012
+                          - generic [ref=f6e367]:
+                            - img [ref=f6e368]
+                            - text: Escalated
+                        - generic [ref=f6e370]:
+                          - generic [ref=f6e371]: Critical
+                          - generic [ref=f6e373]: Escalated
+                      - paragraph [ref=f6e374]: Purchase order PDF not generating
+                      - generic [ref=f6e375]:
+                        - generic [ref=f6e376]:
+                          - generic [ref=f6e377]: Delta Trade Ltd.
+                          - generic [ref=f6e378]: ·
+                          - generic [ref=f6e379]: Imran Khan
+                          - generic [ref=f6e380]: ·
+                          - generic [ref=f6e381]: 22 Jun 2024, 14:30
+                        - generic [ref=f6e385]: Overdue
+                  - 'link "NHQ-2024-0004 Escalated Low Escalated Request: Add custom field to lead form TechWave Solutions · 22 Jun 2024, 14:00 Overdue" [ref=f6e386] [cursor=pointer]':
+                    - /url: /cases/case4
+                    - generic [ref=f6e387]:
+                      - generic [ref=f6e388]:
+                        - generic [ref=f6e389]:
+                          - generic [ref=f6e390]: NHQ-2024-0004
+                          - generic [ref=f6e391]:
+                            - img [ref=f6e392]
+                            - text: Escalated
+                        - generic [ref=f6e394]:
+                          - generic [ref=f6e395]: Low
+                          - generic [ref=f6e397]: Escalated
+                      - paragraph [ref=f6e398]: "Request: Add custom field to lead form"
+                      - generic [ref=f6e399]:
+                        - generic [ref=f6e400]:
+                          - generic [ref=f6e401]: TechWave Solutions
+                          - generic [ref=f6e402]: ·
+                          - generic [ref=f6e403]: 22 Jun 2024, 14:00
+                        - generic [ref=f6e407]: Overdue
+                  - link "NHQ-2024-0014 Escalated High Escalated Mobile app crashes on product scan Acme Corporation Ltd. · 22 Jun 2024, 13:30 Overdue" [ref=f6e408] [cursor=pointer]:
+                    - /url: /cases/case14
+                    - generic [ref=f6e409]:
+                      - generic [ref=f6e410]:
+                        - generic [ref=f6e411]:
+                          - generic [ref=f6e412]: NHQ-2024-0014
+                          - generic [ref=f6e413]:
+                            - img [ref=f6e414]
+                            - text: Escalated
+                        - generic [ref=f6e416]:
+                          - generic [ref=f6e417]: High
+                          - generic [ref=f6e419]: Escalated
+                      - paragraph [ref=f6e420]: Mobile app crashes on product scan
+                      - generic [ref=f6e421]:
+                        - generic [ref=f6e422]:
+                          - generic [ref=f6e423]: Acme Corporation Ltd.
+                          - generic [ref=f6e424]: ·
+                          - generic [ref=f6e425]: 22 Jun 2024, 13:30
+                        - generic [ref=f6e429]: Overdue
+                  - 'link "NHQ-2024-0001 Escalated Critical In Progress ERP sync failing for Acme warehouse #3 Acme Corporation Ltd. · Rafi Uddin · 22 Jun 2024, 13:00 Overdue" [ref=f6e430] [cursor=pointer]':
+                    - /url: /cases/case1
+                    - generic [ref=f6e431]:
+                      - generic [ref=f6e432]:
+                        - generic [ref=f6e433]:
+                          - generic [ref=f6e434]: NHQ-2024-0001
+                          - generic [ref=f6e435]:
+                            - img [ref=f6e436]
+                            - text: Escalated
+                        - generic [ref=f6e438]:
+                          - generic [ref=f6e439]: Critical
+                          - generic [ref=f6e441]: In Progress
+                      - paragraph [ref=f6e442]: "ERP sync failing for Acme warehouse #3"
+                      - generic [ref=f6e443]:
+                        - generic [ref=f6e444]:
+                          - generic [ref=f6e445]: Acme Corporation Ltd.
+                          - generic [ref=f6e446]: ·
+                          - generic [ref=f6e447]: Rafi Uddin
+                          - generic [ref=f6e448]: ·
+                          - generic [ref=f6e449]: 22 Jun 2024, 13:00
+                        - generic [ref=f6e453]: Overdue
+                  - link "NHQ-2024-0007 High Triaged Data import from legacy system failing Delta Trade Ltd. · Imran Khan · 22 Jun 2024, 12:00 Overdue" [ref=f6e454] [cursor=pointer]:
+                    - /url: /cases/case7
+                    - generic [ref=f6e455]:
+                      - generic [ref=f6e456]:
+                        - generic [ref=f6e458]: NHQ-2024-0007
+                        - generic [ref=f6e459]:
+                          - generic [ref=f6e460]: High
+                          - generic [ref=f6e462]: Triaged
+                      - paragraph [ref=f6e463]: Data import from legacy system failing
+                      - generic [ref=f6e464]:
+                        - generic [ref=f6e465]:
+                          - generic [ref=f6e466]: Delta Trade Ltd.
+                          - generic [ref=f6e467]: ·
+                          - generic [ref=f6e468]: Imran Khan
+                          - generic [ref=f6e469]: ·
+                          - generic [ref=f6e470]: 22 Jun 2024, 12:00
+                        - generic [ref=f6e474]: Overdue
+                  - link "View 4 more" [ref=f6e475] [cursor=pointer]:
+                    - /url: /cases
+            - generic [ref=f6e476]:
+              - generic [ref=f6e477]:
+                - generic [ref=f6e478]:
+                  - img [ref=f6e479]
+                  - heading "SLA & Performance" [level=3] [ref=f6e482]
+                  - link "Performance" [ref=f6e483] [cursor=pointer]:
+                    - /url: /technical-head?tab=performance
+                    - text: Performance
+                    - img [ref=f6e484]
+                - generic [ref=f6e486]:
+                  - generic [ref=f6e487]:
+                    - paragraph [ref=f6e488]: Avg SLA
+                    - paragraph [ref=f6e489]: 67%
+                  - generic [ref=f6e490]:
+                    - paragraph [ref=f6e491]: Breached
+                    - paragraph [ref=f6e492]: "11"
+                - generic [ref=f6e493]:
+                  - generic [ref=f6e494]: 0 at risk
+                  - generic [ref=f6e495]: ·
+                  - generic [ref=f6e496]: 4 auto-escalated
+                - generic [ref=f6e497]:
+                  - paragraph [ref=f6e498]:
+                    - img [ref=f6e499]
+                    - text: Lowest SLA compliance
+                  - generic [ref=f6e502]:
+                    - generic [ref=f6e503]: Imran Khan
+                    - generic [ref=f6e504]: 0%
+                  - generic [ref=f6e505]:
+                    - generic [ref=f6e506]: Farzana Begum
+                    - generic [ref=f6e507]: 100%
+                  - generic [ref=f6e508]:
+                    - generic [ref=f6e509]: Rafi Uddin
+                    - generic [ref=f6e510]: 100%
+              - generic [ref=f6e511]:
+                - generic [ref=f6e512]:
+                  - img [ref=f6e513]
+                  - heading "Team Workload (2)" [level=3] [ref=f6e518]
+                  - link "Workload" [ref=f6e519] [cursor=pointer]:
+                    - /url: /technical-head?tab=workload
+                    - text: Workload
+                    - img [ref=f6e520]
+                - generic [ref=f6e522]:
+                  - generic [ref=f6e524]:
+                    - generic [ref=f6e525]: Beta Support Team
+                    - generic [ref=f6e526]: 7 open
+                  - generic [ref=f6e530]:
+                    - generic [ref=f6e531]: Alpha Support Team
+                    - generic [ref=f6e532]: 5 open
+              - generic [ref=f6e535]:
+                - generic [ref=f6e536]:
+                  - img [ref=f6e537]
+                  - heading "Recent Activity" [level=3] [ref=f6e540]
+                  - link "Audit log" [ref=f6e541] [cursor=pointer]:
+                    - /url: /audit-log
+                    - text: Audit log
+                    - img [ref=f6e542]
+                - generic [ref=f6e544]:
+                  - generic [ref=f6e545]:
+                    - generic [ref=f6e546]: 07 Jul 2026
+                    - generic [ref=f6e547]: escalate case case8
+                  - generic [ref=f6e548]:
+                    - generic [ref=f6e549]: 07 Jul 2026
+                    - generic [ref=f6e550]: escalate case case13
+                  - generic [ref=f6e551]:
+                    - generic [ref=f6e552]: 07 Jul 2026
+                    - generic [ref=f6e553]: escalate case case14
+                  - generic [ref=f6e554]:
+                    - generic [ref=f6e555]: 07 Jul 2026
+                    - generic [ref=f6e556]: escalate case case4
+                  - generic [ref=f6e557]:
+                    - generic [ref=f6e558]: 22 Jun 2024
+                    - generic [ref=f6e559]: status change case case1
+                  - generic [ref=f6e560]:
+                    - generic [ref=f6e561]: 22 Jun 2024
+                    - generic [ref=f6e562]: assign case case1
+          - generic [ref=f6e564]:
+            - img [ref=f6e565]
+            - heading "Last 12 Months — Case Summary" [level=3] [ref=f6e567]
+            - generic [ref=f6e568]:
+              - generic [ref=f6e569]:
+                - text: Opened
+                - generic [ref=f6e571]: "0"
+              - generic [ref=f6e572]:
+                - text: Solved
+                - generic [ref=f6e574]: "0"
+              - generic [ref=f6e575]:
+                - text: Reopened
+                - generic [ref=f6e577]: "0"
+              - generic [ref=f6e578]:
+                - text: Escalated
+                - generic [ref=f6e580]: "0"
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f6e36] [cursor=pointer]:
+    - img [ref=f6e37]
+  - alert [ref=f6e40]

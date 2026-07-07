@@ -1,0 +1,166 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6]:
+    - complementary [ref=e8]:
+      - link "Logo" [ref=e10] [cursor=pointer]:
+        - /url: /dashboard
+        - img "Logo" [ref=e12]
+      - navigation [ref=e13]:
+        - link "Dashboard" [ref=e14] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e15]
+          - generic [ref=e20]: Dashboard
+        - link "Cases" [ref=e21] [cursor=pointer]:
+          - /url: /cases
+          - img [ref=e22]
+          - generic [ref=e24]: Cases
+        - link "TH Hub" [ref=e25] [cursor=pointer]:
+          - /url: /technical-head
+          - img [ref=e26]
+          - generic [ref=e28]: TH Hub
+        - link "Clients" [ref=e29] [cursor=pointer]:
+          - /url: /clients
+          - img [ref=e30]
+          - generic [ref=e34]: Clients
+        - link "Support Engineers" [ref=e35] [cursor=pointer]:
+          - /url: /support-engineer
+          - img [ref=e36]
+          - generic [ref=e38]: Support Engineers
+        - link "Team Leads" [ref=e39] [cursor=pointer]:
+          - /url: /team-lead
+          - img [ref=e40]
+          - generic [ref=e45]: Team Leads
+        - link "Sales Executives" [ref=e46] [cursor=pointer]:
+          - /url: /sales-executive
+          - img [ref=e47]
+          - generic [ref=e50]: Sales Executives
+        - link "Teams" [ref=e51] [cursor=pointer]:
+          - /url: /teams
+          - img [ref=e52]
+          - generic [ref=e55]: Teams
+        - link "Solutions" [ref=e56] [cursor=pointer]:
+          - /url: /solutions
+          - img [ref=e57]
+          - generic [ref=e59]: Solutions
+        - link "Products" [ref=e60] [cursor=pointer]:
+          - /url: /products
+          - img [ref=e61]
+          - generic [ref=e65]: Products
+        - link "Knowledge Base" [ref=e66] [cursor=pointer]:
+          - /url: /knowledge-base
+          - img [ref=e67]
+          - generic [ref=e69]: Knowledge Base
+        - link "Reporting" [ref=e70] [cursor=pointer]:
+          - /url: /reporting
+          - img [ref=e71]
+          - generic [ref=e73]: Reporting
+        - link "Feedback" [ref=e74] [cursor=pointer]:
+          - /url: /feedback
+          - img [ref=e75]
+          - generic [ref=e77]: Feedback
+        - link "SLA Rules" [ref=e78] [cursor=pointer]:
+          - /url: /sla-rules
+          - img [ref=e79]
+          - generic [ref=e81]: SLA Rules
+        - link "Audit Log" [ref=e82] [cursor=pointer]:
+          - /url: /audit-log
+          - img [ref=e83]
+          - generic [ref=e85]: Audit Log
+        - link "Notifications" [ref=e86] [cursor=pointer]:
+          - /url: /notifications
+          - img [ref=e87]
+          - generic [ref=e90]: Notifications
+        - link "Settings" [ref=e91] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e92]
+          - generic [ref=e95]: Settings
+      - generic [ref=e97]:
+        - generic [ref=e99]: AR
+        - generic [ref=e100]:
+          - paragraph [ref=e101]: Arif Rahman
+          - paragraph [ref=e102]: Technical Head
+      - button "Collapse sidebar" [ref=e103]:
+        - img [ref=e104]
+    - generic [ref=e106]:
+      - banner [ref=e108]:
+        - generic [ref=e110]:
+          - img [ref=e111]
+          - textbox "Search cases… (press Enter)" [ref=e114]
+        - generic [ref=e115]:
+          - button "Toggle theme" [ref=e116]:
+            - img
+          - button "Notifications" [ref=e117]:
+            - img
+            - generic [ref=e118]: 9+
+          - button "AR Arif Rahman Technical Head" [ref=e119]:
+            - generic [ref=e121]: AR
+            - generic [ref=e122]:
+              - paragraph [ref=e123]: Arif Rahman
+              - paragraph [ref=e124]: Technical Head
+            - img
+      - main [ref=e125]:
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - img [ref=e130]
+              - generic [ref=e134]:
+                - heading "Products" [level=1] [ref=e135]
+                - paragraph [ref=e136]: Browse NHQ's product and solution portfolio · 12 products
+            - button "Add Product" [ref=e137]:
+              - img
+              - text: Add Product
+          - generic [ref=e138]:
+            - img [ref=e139]
+            - textbox "Search products…" [ref=e142]
+          - generic [ref=e143]:
+            - button "All categories" [ref=e266]:
+              - img [ref=e267]
+              - text: All categories
+            - generic [ref=e269]:
+              - generic [ref=e270]: NG
+              - heading "Network & Gateway Security" [level=2] [ref=e271]
+              - generic [ref=e272]: 3 products
+            - generic [ref=e273]:
+              - button "Network & Gateway Security Palo Alto Networks NGFW Next-generation firewalls delivering application-aware traffic control, intrusion prevention, and threat prevention at the network gateway. Details" [ref=e274] [cursor=pointer]:
+                - generic [ref=e275]:
+                  - img [ref=e279]
+                  - generic [ref=e284]: Network & Gateway Security
+                - generic [ref=e285]:
+                  - generic [ref=e286]:
+                    - paragraph [ref=e287]: Palo Alto Networks NGFW
+                    - button [ref=e288]:
+                      - img [ref=e289]
+                  - paragraph [ref=e292]: Next-generation firewalls delivering application-aware traffic control, intrusion prevention, and threat prevention at the network gateway.
+                  - generic [ref=e293]:
+                    - generic [ref=e294]: Details
+                    - img [ref=e295]
+              - button "Network & Gateway Security Forcepoint Web Security & DLP Secure web gateway and data loss prevention protecting users and sensitive data across web, cloud, and email channels. Details" [ref=e297] [cursor=pointer]:
+                - generic [ref=e298]:
+                  - img [ref=e302]
+                  - generic [ref=e307]: Network & Gateway Security
+                - generic [ref=e308]:
+                  - generic [ref=e309]:
+                    - paragraph [ref=e310]: Forcepoint Web Security & DLP
+                    - button [ref=e311]:
+                      - img [ref=e312]
+                  - paragraph [ref=e315]: Secure web gateway and data loss prevention protecting users and sensitive data across web, cloud, and email channels.
+                  - generic [ref=e316]:
+                    - generic [ref=e317]: Details
+                    - img [ref=e318]
+              - button "Network & Gateway Security Secure64 DNS Security Hardened, purpose-built DNS infrastructure that resists DDoS, cache-poisoning, and amplification attacks. Details" [ref=e320] [cursor=pointer]:
+                - generic [ref=e321]:
+                  - img [ref=e325]
+                  - generic [ref=e330]: Network & Gateway Security
+                - generic [ref=e331]:
+                  - generic [ref=e332]:
+                    - paragraph [ref=e333]: Secure64 DNS Security
+                    - button [ref=e334]:
+                      - img [ref=e335]
+                  - paragraph [ref=e338]: Hardened, purpose-built DNS infrastructure that resists DDoS, cache-poisoning, and amplification attacks.
+                  - generic [ref=e339]:
+                    - generic [ref=e340]: Details
+                    - img [ref=e341]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e261] [cursor=pointer]:
+    - img [ref=e262]
+  - alert [ref=e265]
