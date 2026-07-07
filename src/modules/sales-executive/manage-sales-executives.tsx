@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
 import { ROLE_LABELS } from '@/lib/rbac'
-import { PlusCircle, Search, Briefcase, Pencil, Mail } from 'lucide-react'
+import { PlusCircle, Search, Briefcase, Mail } from 'lucide-react'
 import type { User, Role } from '@/types'
 import { useRouter } from 'next/navigation'
 
@@ -30,7 +30,6 @@ export function ManageSalesExecutives() {
   const router = useRouter()
 
   const [search, setSearch] = useState('')
-  const [editUser, setEditUser] = useState<User | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', is_active: true })
 
@@ -41,7 +40,6 @@ export function ManageSalesExecutives() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] })
       toast({ title: 'Sales Executive updated', variant: 'success' })
-      setEditUser(null)
     },
     onError: () => toast({ title: 'Update failed', variant: 'destructive' }),
   })
@@ -97,7 +95,6 @@ export function ManageSalesExecutives() {
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Role</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Contact Email</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
-                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -112,7 +109,7 @@ export function ManageSalesExecutives() {
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <UserAvatar name={u.name} size="sm" />
+                      <UserAvatar name={u.name} avatarUrl={u.avatar} size="sm" />
                       <p className="font-medium">{u.name}</p>
                     </div>
                   </td>
@@ -132,50 +129,12 @@ export function ManageSalesExecutives() {
                       aria-label="Active"
                     />
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => { e.stopPropagation(); setEditUser(u) }}
-                      aria-label="Edit"
-                    >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-
-      {/* Edit Dialog */}
-      <Dialog open={!!editUser} onOpenChange={(o) => !o && setEditUser(null)}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Edit Sales Executive</DialogTitle></DialogHeader>
-          {editUser && (
-            <div className="space-y-3">
-              <div className="space-y-1.5">
-                <Label>Name</Label>
-                <Input value={editUser.name} onChange={(e) => setEditUser({ ...editUser, name: e.target.value })} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Email</Label>
-                <Input value={editUser.email} onChange={(e) => setEditUser({ ...editUser, email: e.target.value })} />
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditUser(null)}>Cancel</Button>
-            <Button
-              disabled={updateMutation.isPending}
-              onClick={() => editUser && updateMutation.mutate({ id: editUser.id, patch: { name: editUser.name, email: editUser.email } })}
-            >
-              {updateMutation.isPending ? 'Saving...' : 'Save'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Create Dialog */}
       <Dialog open={showCreate} onOpenChange={(o) => { setShowCreate(o); if (!o) setForm({ name: '', email: '', is_active: true }) }}>

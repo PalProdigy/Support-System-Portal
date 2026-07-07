@@ -13,13 +13,11 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
-import { ROLE_LABELS } from '@/lib/rbac'
-import { PlusCircle, Search, Users, Pencil } from 'lucide-react'
+import { PlusCircle, Search, Users } from 'lucide-react'
 import type { User, Role, CertificationLevel } from '@/types'
 import { canAccess } from '@/lib/rbac'
 import { useRouter } from 'next/navigation'
 
-const ROLES: Role[] = ['client', 'sales_executive', 'support_engineer', 'team_lead', 'technical_head']
 const CERT_LEVELS: CertificationLevel[] = ['L1', 'L2', 'L3', 'L4', 'L5']
 
 export default function SupportEngineersPage() {
@@ -43,7 +41,6 @@ function SupportEngineersContent() {
   const scope = { userId: session.userId, role: session.role }
 
   const [search, setSearch] = useState('')
-  const [editUser, setEditUser] = useState<User | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState<{
     name: string
@@ -61,12 +58,6 @@ function SupportEngineersContent() {
   })
 
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
-
-  const updateMutation = useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<User> }) => dp.updateUser(id, patch),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['users'] }); toast({ title: 'User updated', variant: 'success' }); setEditUser(null) },
-    onError: () => toast({ title: 'Update failed', variant: 'destructive' }),
-  })
 
   const createMutation = useMutation({
     mutationFn: () => dp.createUser({ ...form }),
@@ -111,7 +102,6 @@ function SupportEngineersContent() {
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Team</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Certification</th>
-                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -126,7 +116,7 @@ function SupportEngineersContent() {
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <UserAvatar name={u.name} size="sm" />
+                      <UserAvatar name={u.name} avatarUrl={u.avatar} size="sm" />
                       <div>
                         <p className="font-medium">{u.name}</p>
                         <p className="text-xs text-muted-foreground">{u.email}</p>
@@ -146,89 +136,12 @@ function SupportEngineersContent() {
                       ? <Badge variant="outline" className="text-xs font-mono">{u.certification_level}</Badge>
                       : <span className="text-muted-foreground">—</span>}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => { e.stopPropagation(); setEditUser(u) }}
-                      aria-label="Edit"
-                    >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-
-      {/* Edit Dialog */}
-      <Dialog open={!!editUser} onOpenChange={(o) => !o && setEditUser(null)}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Edit User</DialogTitle></DialogHeader>
-          {editUser && (
-            <div className="space-y-3">
-              <div className="space-y-1.5">
-                <Label>Name</Label>
-                <Input value={editUser.name} onChange={(e) => setEditUser({ ...editUser, name: e.target.value })} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Email</Label>
-                <Input value={editUser.email} onChange={(e) => setEditUser({ ...editUser, email: e.target.value })} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Role</Label>
-                <Select value={editUser.role} onValueChange={(v) => setEditUser({ ...editUser, role: v as Role })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{ROLES.map((r) => <SelectItem key={r} value={r}>{ROLE_LABELS[r]}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1.5">
-                <Label>Team</Label>
-                <Select value={editUser.team_id ?? 'none'} onValueChange={(v) => setEditUser({ ...editUser, team_id: v === 'none' ? undefined : v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No Team</SelectItem>
-                    {(teams ?? []).map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label>Years of Experience</Label>
-                  <Input
-                    type="number"
-                    min={0}
-                    value={editUser.years_of_experience ?? ''}
-                    onChange={(e) => setEditUser({ ...editUser, years_of_experience: e.target.value === '' ? undefined : Number(e.target.value) })}
-                    placeholder="e.g. 5"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label>Certification</Label>
-                  <Select
-                    value={editUser.certification_level ?? 'none'}
-                    onValueChange={(v) => setEditUser({ ...editUser, certification_level: v === 'none' ? undefined : v as CertificationLevel })}
-                  >
-                    <SelectTrigger><SelectValue placeholder="None" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      {CERT_LEVELS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditUser(null)}>Cancel</Button>
-            <Button disabled={updateMutation.isPending} onClick={() => editUser && updateMutation.mutate({ id: editUser.id, patch: editUser })}>
-              {updateMutation.isPending ? 'Saving...' : 'Save'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Create Dialog */}
       <Dialog open={showCreate} onOpenChange={(o) => { setShowCreate(o); if (!o) setForm({ name: '', email: '', role: TARGET_ROLE, is_active: true }) }}>

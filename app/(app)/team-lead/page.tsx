@@ -8,14 +8,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
 import { ROLE_LABELS } from '@/lib/rbac'
-import { PlusCircle, Search, Users, Pencil } from 'lucide-react'
+import { PlusCircle, Search, Users } from 'lucide-react'
 import type { User, Role } from '@/types'
 import { useRouter } from 'next/navigation'
 
@@ -41,7 +40,6 @@ function TeamLeadContent() {
   const router = useRouter()
 
   const [search, setSearch] = useState('')
-  const [editUser, setEditUser] = useState<User | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', is_active: true })
 
@@ -53,7 +51,6 @@ function TeamLeadContent() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] })
       toast({ title: 'Team Lead updated', variant: 'success' })
-      setEditUser(null)
     },
     onError: () => toast({ title: 'Update failed', variant: 'destructive' }),
   })
@@ -114,7 +111,6 @@ function TeamLeadContent() {
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Role</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Team Led</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
-                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -131,7 +127,7 @@ function TeamLeadContent() {
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <UserAvatar name={u.name} size="sm" />
+                        <UserAvatar name={u.name} avatarUrl={u.avatar} size="sm" />
                         <div>
                           <p className="font-medium">{u.name}</p>
                           <p className="text-xs text-muted-foreground">{u.email}</p>
@@ -158,16 +154,6 @@ function TeamLeadContent() {
                         aria-label="Active"
                       />
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => { e.stopPropagation(); setEditUser(u) }}
-                        aria-label="Edit"
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                    </td>
                   </tr>
                 )
               })}
@@ -175,52 +161,6 @@ function TeamLeadContent() {
           </table>
         </div>
       )}
-
-      {/* Edit Dialog */}
-      <Dialog open={!!editUser} onOpenChange={(o) => !o && setEditUser(null)}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Edit Team Lead</DialogTitle></DialogHeader>
-          {editUser && (
-            <div className="space-y-3">
-              <div className="space-y-1.5">
-                <Label>Name</Label>
-                <Input value={editUser.name} onChange={(e) => setEditUser({ ...editUser, name: e.target.value })} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Email</Label>
-                <Input value={editUser.email} onChange={(e) => setEditUser({ ...editUser, email: e.target.value })} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Team Led</Label>
-                <Select
-                  value={leadTeamMap[editUser.id]?.id ?? 'none'}
-                  disabled
-                >
-                  <SelectTrigger className="opacity-60">
-                    <SelectValue placeholder="Managed via Teams page" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">No team</SelectItem>
-                    {(teams ?? []).map((t) => (
-                      <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-[11px] text-muted-foreground">Team assignment is managed from the Teams page.</p>
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditUser(null)}>Cancel</Button>
-            <Button
-              disabled={updateMutation.isPending}
-              onClick={() => editUser && updateMutation.mutate({ id: editUser.id, patch: { name: editUser.name, email: editUser.email } })}
-            >
-              {updateMutation.isPending ? 'Saving...' : 'Save'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Create Dialog */}
       <Dialog open={showCreate} onOpenChange={(o) => { setShowCreate(o); if (!o) setForm({ name: '', email: '', is_active: true }) }}>

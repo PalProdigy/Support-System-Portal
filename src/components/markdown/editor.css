@@ -45,6 +45,19 @@
 }
 
 /*
+ * Compact variant (form-embedded editors): starts 4 text rows tall, grows
+ * with content up to 6 rows, then scrolls inside itself. Rows are
+ * font-size (1rem) × line-height (1.75); vertical padding (2rem) on top.
+ * Two-class selector outranks the base + mobile rules above.
+ */
+.nhq-editor.nhq-editor-compact .mdxeditor-root-contenteditable > div[contenteditable='true'] {
+  min-height: calc(4 * 1.75rem + 2rem);
+  max-height: calc(6 * 1.75rem + 2rem);
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+
+/*
  * WYSIWYG typography for the editing surface. Tailwind's preflight resets
  * heading sizes and list markers globally; MDXEditor relies on browser
  * defaults, so we restore an article-like look that mirrors MarkdownViewer.

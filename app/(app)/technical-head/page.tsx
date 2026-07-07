@@ -1,11 +1,11 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter, useSearchParams } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { ShieldAlert, LayoutList, AlertTriangle, ShieldCheck, BarChart3, TrendingUp } from 'lucide-react'
 
@@ -98,8 +98,22 @@ function THHeader() {
   )
 }
 
-export default function THHubPage() {
-  const [tab, setTab] = useState<Tab>('overview')
+const TAB_KEYS = TABS.map((t) => t.key)
+
+function isTab(value: string | null): value is Tab {
+  return value != null && (TAB_KEYS as string[]).includes(value)
+}
+
+function THHubContent() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  // Deep-linkable tabs: /technical-head?tab=approvals opens Critical Approval, etc.
+  const tabParam = searchParams.get('tab')
+  const tab: Tab = isTab(tabParam) ? tabParam : 'overview'
+
+  const selectTab = (key: Tab) => {
+    router.replace(`/technical-head?tab=${key}`, { scroll: false })
+  }
 
   return (
     <div className="space-y-6 p-6">
@@ -111,7 +125,7 @@ export default function THHubPage() {
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
-            onClick={() => setTab(key)}
+            onClick={() => selectTab(key)}
             className={cn(
               'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors whitespace-nowrap',
               tab === key
@@ -133,5 +147,14 @@ export default function THHubPage() {
         {tab === 'performance'  && <PerformanceOverview />}
       </Suspense>
     </div>
+  )
+}
+
+export default function THHubPage() {
+  // useSearchParams must live under a Suspense boundary.
+  return (
+    <Suspense fallback={<div className="p-6"><ListSkeleton /></div>}>
+      <THHubContent />
+    </Suspense>
   )
 }

@@ -150,8 +150,8 @@ export default function TechHeadDashboard() {
 
   // Action center
   const actionItems: { label: string; count: number; icon: React.ComponentType<{ className?: string }>; href: string; tone: Tone }[] = [
-    { label: 'Critical resolutions awaiting approval', count: criticalPendingApproval.length, icon: ShieldCheck, href: '/technical-head', tone: 'red' },
-    { label: 'Escalations awaiting response', count: escalated.length, icon: AlertTriangle, href: '/technical-head', tone: 'red' },
+    { label: 'Critical resolutions awaiting approval', count: criticalPendingApproval.length, icon: ShieldCheck, href: '/technical-head?tab=approvals', tone: 'red' },
+    { label: 'Escalations awaiting response', count: escalated.length, icon: AlertTriangle, href: '/technical-head?tab=escalations', tone: 'red' },
     { label: 'Case transfer requests', count: transferReqs?.length ?? 0, icon: ArrowLeftRight, href: '/teams', tone: 'amber' },
     { label: 'Team member requests', count: memberReqs?.length ?? 0, icon: UserPlus, href: '/teams', tone: 'amber' },
     { label: 'KB articles pending publish', count: pendingKB?.length ?? 0, icon: BookOpen, href: '/knowledge-base', tone: 'violet' },
@@ -206,11 +206,11 @@ export default function TechHeadDashboard() {
       {/* KPI row */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <StatCard title="Open Cases" value={openCases.length} icon={Ticket} loading={casesLoading} />
-        <StatCard title="Last Month Successful" value={lastMonthSuccessful} subtitle="cases closed · 30d" icon={CheckCircle} iconColor="text-emerald-500" loading={casesLoading} />
-        <StatCard title="Last 3 Months Due" value={last3MonthsDue} subtitle="SLA overdue · 90d" icon={AlertTriangle} iconColor="text-red-500" loading={casesLoading} />
-        <StatCard title="Reopened Cases" value={reopenedCount} subtitle="from closed cases" icon={RotateCcw} iconColor="text-amber-500" loading={casesLoading} />
-        <StatCard title="SLA Compliance" value={avgSLA != null ? `${avgSLA}%` : '—'} subtitle="avg across engineers" icon={Gauge} iconColor={avgSLA != null && avgSLA < 70 ? 'text-red-500' : 'text-emerald-500'} />
-        <StatCard title="Pending Approvals" value={totalPending} subtitle="needs your action" icon={ShieldCheck} iconColor={totalPending > 0 ? 'text-amber-500' : 'text-emerald-500'} />
+        <StatCard title="Last Month Successful" value={lastMonthSuccessful} icon={CheckCircle} iconColor="text-emerald-500" loading={casesLoading} />
+        <StatCard title="Last 3 Months Due" value={last3MonthsDue} icon={AlertTriangle} iconColor="text-red-500" loading={casesLoading} />
+        <StatCard title="Reopened Cases" value={reopenedCount} icon={RotateCcw} iconColor="text-amber-500" loading={casesLoading} />
+        <StatCard title="SLA Compliance" value={avgSLA != null ? `${avgSLA}%` : '—'} icon={Gauge} iconColor={avgSLA != null && avgSLA < 70 ? 'text-red-500' : 'text-emerald-500'} />
+        <StatCard title="Pending Approvals" value={totalPending} icon={ShieldCheck} iconColor={totalPending > 0 ? 'text-amber-500' : 'text-emerald-500'} />
       </div>
 
       {/* Action Center */}
@@ -315,7 +315,7 @@ export default function TechHeadDashboard() {
         {/* Side panels */}
         <div className="space-y-4">
           {/* SLA & performance */}
-          <Panel title="SLA & Performance" icon={Gauge} action={{ label: 'Performance', href: '/technical-head' }}>
+          <Panel title="SLA & Performance" icon={Gauge} action={{ label: 'Performance', href: '/technical-head?tab=performance' }}>
             <div className="grid grid-cols-2 gap-2 mb-3">
               <div className="rounded-lg border p-2.5">
                 <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Avg SLA</p>
@@ -356,7 +356,7 @@ export default function TechHeadDashboard() {
           </Panel>
 
           {/* Team workload */}
-          <Panel title={`Team Workload (${workload.length})`} icon={Users} action={{ label: 'Workload', href: '/technical-head' }}>
+          <Panel title={`Team Workload (${workload.length})`} icon={Users} action={{ label: 'Workload', href: '/technical-head?tab=workload' }}>
             {workload.length === 0 ? (
               <EmptyState size="sm" icon={Users} title="No teams" />
             ) : (

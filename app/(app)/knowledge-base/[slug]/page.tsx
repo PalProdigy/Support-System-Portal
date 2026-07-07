@@ -18,7 +18,7 @@ import { CommentThread } from '@/components/shared/comment-thread'
 import { TableOfContents } from '@/modules/kb/toc'
 import { VersionHistory } from '@/modules/kb/version-history'
 import { KBStatusBadge } from '@/modules/kb/status-badge'
-import { canReviewKB, isKBAdmin } from '@/modules/kb/constants'
+import { canReviewKB, canWriteKB, isKBAdmin } from '@/modules/kb/constants'
 import { extractHeadings, estimateReadingTimeMinutes, slugify } from '@/lib/markdown/utils'
 import { formatDate } from '@/lib/utils'
 import {
@@ -183,8 +183,9 @@ export default function KBArticlePage({ params }: { params: Promise<{ slug: stri
   const isAuthor = article.author_id === session.userId
   const reviewer = canReviewKB(session.role)
   const admin = isKBAdmin(session.role)
-  const canEdit = isAuthor || reviewer
-  const canRestoreVersions = isAuthor || reviewer
+  // Any staff member can edit any article; clients stay read-only.
+  const canEdit = canWriteKB(session.role)
+  const canRestoreVersions = canEdit
 
   return (
     <div className="p-4 lg:p-6 max-w-6xl mx-auto">

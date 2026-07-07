@@ -18,7 +18,7 @@ import { TagInput } from '@/components/shared/tag-input'
 import { MarkdownViewer } from '@/components/markdown/markdown-viewer'
 import { MarkdownGuide } from '@/components/markdown/markdown-guide'
 import { countWords, estimateReadingTimeMinutes, excerptFromMarkdown } from '@/lib/markdown/utils'
-import { KB_CATEGORIES, canReviewKB, canWriteKB } from './constants'
+import { KB_CATEGORIES, canWriteKB } from './constants'
 import { KBStatusBadge } from './status-badge'
 import { cn } from '@/lib/utils'
 import {
@@ -105,15 +105,8 @@ export function KBEditor({ slug }: KBEditorProps) {
     )
   }
 
-  if (isEdit && existing && existing.author_id !== session.userId && !canReviewKB(session.role)) {
-    return (
-      <EditorBlockedState
-        title="You can't edit this article"
-        message="Only the author or a reviewer (Team Lead / Technical Head) can edit an article."
-        onBack={() => router.push(`/knowledge-base/${existing.slug}`)}
-      />
-    )
-  }
+  // Any staff member can edit any article (clients are blocked by the
+  // canWriteKB guard above); every save is versioned with who saved it.
 
   // key ensures a fresh form when navigating between different articles.
   return <KBForm key={existing?.id ?? 'new'} article={existing ?? undefined} />
@@ -223,6 +216,10 @@ function KBForm({ article }: { article?: KBArticle }) {
 
   const showEditor = view !== 'preview'
   const showPreview = view !== 'write'
+  // Split view pins the right column to the form column's height (same
+  // absolute-inset structure as the Create Solution page); in write/preview
+  // modes the columns flow normally.
+  const split = showEditor && showPreview
   const canSubmit = !isEdit || ['draft', 'changes_requested'].includes(article.status)
 
   return (
@@ -302,30 +299,39 @@ function KBForm({ article }: { article?: KBArticle }) {
         </div>
       )}
 
+      {/* ── Two-column layout: meta + editor left, preview + guide right ────── */}
+      <div className={cn('grid gap-4', showPreview && 'lg:grid-cols-2', split ? 'lg:items-stretch' : 'items-start')}>
+      <div className="min-w-0 space-y-4">
       {/* ── Article meta ────────────────────────────────────────────────────── */}
       <div className="rounded-xl border bg-card p-6 space-y-3">
-        <textarea
-          ref={titleRef}
-          rows={1}
-          value={title}
-          onChange={(e) => { setTitle(e.target.value.replace(/\n/g, ' ')); setDirty(true) }}
-          placeholder="Article title…"
-          aria-label="Article title"
-          className="w-full resize-none overflow-hidden bg-transparent text-3xl font-bold leading-tight tracking-tight outline-none placeholder:text-muted-foreground/50"
-        />
-        <textarea
-          ref={descriptionRef}
-          rows={1}
-          value={description}
-          onChange={(e) => { setDescription(e.target.value.replace(/\n/g, ' ')); setDirty(true) }}
-          placeholder="Short description — shown on cards, search results and as the meta description…"
-          aria-label="Article description"
-          className="w-full resize-none overflow-hidden bg-transparent text-base text-muted-foreground outline-none placeholder:text-muted-foreground/50"
-        />
+        <div className="space-y-1.5">
+          <Label htmlFor="kb-title">Title <span className="text-destructive">*</span></Label>
+          <textarea
+            id="kb-title"
+            ref={titleRef}
+            rows={1}
+            value={title}
+            onChange={(e) => { setTitle(e.target.value.replace(/\n/g, ' ')); setDirty(true) }}
+            placeholder="Article title…"
+            className="w-full resize-none overflow-hidden bg-transparent text-3xl font-bold leading-tight tracking-tight outline-none placeholder:text-muted-foreground/50"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="kb-description">Short description <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
+          <textarea
+            id="kb-description"
+            ref={descriptionRef}
+            rows={1}
+            value={description}
+            onChange={(e) => { setDescription(e.target.value.replace(/\n/g, ' ')); setDirty(true) }}
+            placeholder="Short description — shown on cards, search results and as the meta description…"
+            className="w-full resize-none overflow-hidden bg-transparent text-base text-muted-foreground outline-none placeholder:text-muted-foreground/50"
+          />
+        </div>
 
         <div className="grid gap-3 sm:grid-cols-3 pt-1">
           <div className="space-y-1.5">
-            <Label>Category</Label>
+            <Label>Category <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
             <Select value={category} onValueChange={(v) => { setCategory(v); setDirty(true) }}>
               <SelectTrigger aria-label="Article category">
                 <SelectValue placeholder="Select a category" />
@@ -345,34 +351,43 @@ function KBForm({ article }: { article?: KBArticle }) {
             />
           </div>
           <div className="space-y-1.5">
-            <Label>Tags</Label>
+            <Label>Tags <span className="text-xs text-muted-foreground font-normal">(optional)</span></Label>
             <TagInput value={tags} onChange={(t) => { setTags(t); setDirty(true) }} />
           </div>
         </div>
       </div>
 
-      {/* ── Editor / live preview / guide ───────────────────────────────────── */}
-      <div className={cn('grid gap-4 items-start', showEditor && showPreview && 'lg:grid-cols-2')}>
+      {/* ── Editor ──────────────────────────────────────────────────────────── */}
         {showEditor && (
-          <div className="rounded-xl border bg-card overflow-hidden min-w-0">
-            <MarkdownEditor
-              markdown={content}
-              onChange={handleContentChange}
-              autoFocus={!isEdit}
-            />
+          <div className="space-y-1.5">
+            <Label>Content <span className="text-destructive">*</span></Label>
+            <div className="rounded-xl border bg-card overflow-hidden min-w-0">
+              <MarkdownEditor
+                markdown={content}
+                onChange={handleContentChange}
+                autoFocus={!isEdit}
+                className="nhq-editor-compact"
+              />
+            </div>
           </div>
         )}
+      </div>
 
-        <div className={cn('min-w-0 space-y-4', !showPreview && 'lg:col-span-1')}>
+        {/* ── Right column: live preview + markdown manual. In split view it is
+            pinned to the form column's exact height (absolute inset in a
+            stretched cell) so both columns share the same bottom edge; the
+            preview and the manual scroll inside themselves. ─────────────────── */}
+        <div className={cn('min-w-0', split && 'lg:relative')}>
+        <div className={cn('min-w-0 space-y-4', split && 'lg:absolute lg:inset-0 lg:flex lg:flex-col lg:gap-4 lg:space-y-0')}>
           {showPreview && (
-            <div className="rounded-xl border bg-card min-w-0">
+            <div className={cn('rounded-xl border bg-card min-w-0', split && 'lg:flex lg:flex-col lg:min-h-0 lg:shrink-0 lg:max-h-[55%]')}>
               <div className="flex items-center justify-between border-b px-4 py-2.5">
                 <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   <Eye className="h-3.5 w-3.5" /> Live preview
                 </span>
                 <span className="text-[11px] text-muted-foreground">rendered exactly as published</span>
               </div>
-              <div className="p-5 sm:p-6">
+              <div className={cn('p-5 sm:p-6', split && 'lg:flex-1 lg:min-h-0 lg:overflow-y-auto')}>
                 {deferredContent.trim() ? (
                   <MarkdownViewer content={deferredContent} />
                 ) : (
@@ -385,6 +400,7 @@ function KBForm({ article }: { article?: KBArticle }) {
           )}
           {/* Markdown manual: what to type to get each feature */}
           <MarkdownGuide />
+        </div>
         </div>
       </div>
     </div>

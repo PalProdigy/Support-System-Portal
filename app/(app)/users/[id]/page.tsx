@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { formatDateTime, formatDuration } from '@/lib/utils'
 import {
-  ArrowLeft, Mail, Calendar, Pencil, Ticket, CheckCircle2,
+  ArrowLeft, Mail, Calendar, Ticket, CheckCircle2,
   AlertTriangle, Clock, Star, TrendingUp, ArrowRightLeft,
   ExternalLink, MessageSquare,
 } from 'lucide-react'
@@ -167,8 +167,6 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
     { name: 'SLA Breached', value: slaBreachedCases.length, color: '#f59e0b' },
   ].filter((d) => d.value > 0), [resolvedCases, openCases, escalatedCases, slaBreachedCases])
 
-  const canEdit = ['team_lead', 'technical_head'].includes(session.role)
-
   if (loadingUser) return <PageSkeleton onBack={() => router.back()} />
   if (!user) return (
     <div className="p-6">
@@ -190,15 +188,10 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* Profile header */}
       <div className="rounded-xl border bg-card p-6 flex items-start gap-5 flex-wrap">
-        <UserAvatar name={user.name} size="lg" />
+        <UserAvatar name={user.name} avatarUrl={user.avatar} size="lg" />
         <div className="flex-1 min-w-0 space-y-2">
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-            {canEdit && (
-              <Button size="sm" variant="outline" onClick={() => router.push(`/users?edit=${user.id}`)}>
-                <Pencil className="h-3.5 w-3.5" /> Edit
-              </Button>
-            )}
           </div>
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <Mail className="h-3.5 w-3.5 shrink-0" />
