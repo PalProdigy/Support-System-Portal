@@ -3,9 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Bell, Search, Sun, Moon, LogOut, User, ChevronDown } from 'lucide-react'
+import { Bell, Sun, Moon, LogOut, User, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { useAuth } from '@/lib/auth/context'
@@ -28,7 +27,6 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
   const qc = useQueryClient()
   const [dark, setDark] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     const stored = localStorage.getItem('nhq_theme')
@@ -68,26 +66,7 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
   }
 
   return (
-    <header className="flex h-14 items-center justify-between border-b bg-card px-4 gap-4 shrink-0">
-      {/* Search */}
-      <div className="flex-1 max-w-md">
-        <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search cases… (press Enter)"
-            className="pl-9 h-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && searchQuery.trim()) {
-                router.push(`/cases?search=${encodeURIComponent(searchQuery.trim())}`)
-                setSearchQuery('')
-              }
-            }}
-          />
-        </div>
-      </div>
-
+    <header className="flex h-14 items-center justify-end border-b bg-card px-4 gap-4 shrink-0">
       <div className="flex items-center gap-1">
         {/* Theme toggle */}
         <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">

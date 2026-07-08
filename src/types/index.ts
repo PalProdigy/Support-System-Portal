@@ -188,6 +188,7 @@ export interface Product {
   category: string
   is_active: boolean
   created_at: string
+  image_url?: string   // base64 data URL uploaded from the Add/Edit Product form
 }
 
 export interface SLARule {
