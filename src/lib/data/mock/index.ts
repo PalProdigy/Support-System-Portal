@@ -490,7 +490,9 @@ class MockDataProvider implements DataProvider {
       const myClients = clients.filter((c) => c.user_id === scope.userId).map((c) => c.id)
       cases = cases.filter((c) => myClients.includes(c.client_id))
     } else if (scope.role === 'support_engineer') {
-      cases = cases.filter((c) => c.assignee_id === scope.userId)
+      // Primary assignee, or folded in as a co-assignee (e.g. assigned to one
+      // of the case's sub tasks without being the case's main assignee).
+      cases = cases.filter((c) => c.assignee_id === scope.userId || (c.co_assignee_ids ?? []).includes(scope.userId))
     } else if (scope.role === 'team_lead') {
       const user = load<User>(STORAGE_KEYS.users).find((u) => u.id === scope.userId)
       if (user?.team_id) cases = cases.filter((c) => c.team_id === user.team_id)
@@ -1274,8 +1276,9 @@ class MockDataProvider implements DataProvider {
       throw new Error(`Permission denied: ${scope.role} cannot create sub-cases`)
     }
     const cases = load<Case>(STORAGE_KEYS.cases)
-    const parent = cases.find((c) => c.id === parentCaseId)
-    if (!parent) throw new Error(`Parent case ${parentCaseId} not found`)
+    const parentIdx = cases.findIndex((c) => c.id === parentCaseId)
+    if (parentIdx === -1) throw new Error(`Parent case ${parentCaseId} not found`)
+    const parent = cases[parentIdx]
 
     const seq = String(cases.length + 1).padStart(4, '0')
     const year = new Date().getFullYear()
@@ -1302,11 +1305,46 @@ class MockDataProvider implements DataProvider {
       time_intervals: [],
       timer_status: 'not_started',
     }
-    save(STORAGE_KEYS.cases, [...cases, subCase])
+
+    // Engineers assigned to the sub task (single or multiple, all optional)
+    // who aren't already on the parent case are folded in as co-assignees —
+    // this is what makes the parent case show up in their case list even
+    // though they were never the case's primary assignee.
+    const subCaseEngineerIds = [...new Set(
+      [subCase.assignee_id, ...(subCase.co_assignee_ids ?? [])].filter((id): id is string => Boolean(id))
+    )]
+    const parentEngineerIds = new Set(
+      [parent.assignee_id, ...(parent.co_assignee_ids ?? [])].filter((id): id is string => Boolean(id))
+    )
+    const newToParent = subCaseEngineerIds.filter((id) => !parentEngineerIds.has(id))
+
+    const nextCases = [...cases]
+    if (newToParent.length) {
+      nextCases[parentIdx] = { ...parent, co_assignee_ids: [...(parent.co_assignee_ids ?? []), ...newToParent] }
+    }
+    nextCases.push(subCase)
+    save(STORAGE_KEYS.cases, nextCases)
+
     await this.writeAuditLog({
       actor_id: scope.userId, action: 'create', entity_type: 'case', entity_id: subCase.id,
       after: { reference_no: subCase.reference_no, parent_case_id: parentCaseId, title: subCase.title },
     })
+
+    // Notify every engineer assigned to the sub task (there may be none).
+    await Promise.all(subCaseEngineerIds.map((uid) => {
+      const isNewToCase = newToParent.includes(uid)
+      return this.createNotification({
+        user_id: uid, channel: 'in_app', type: 'subcase_assigned',
+        payload: {
+          case_id: subCase.id, reference_no: subCase.reference_no, title: subCase.title,
+          parent_case_id: parentCaseId, parent_reference_no: parent.reference_no,
+          message: `You were assigned to sub task ${subCase.reference_no} "${subCase.title}" under case ${parent.reference_no}`
+            + (isNewToCase ? ' — you now have access to the full case' : ''),
+        },
+        sent_at: now(),
+      })
+    }))
+
     return delay(subCase)
   }
 
