@@ -180,8 +180,8 @@ export function ClosureQueue() {
                   <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => router.push(`/cases/${c.id}`)}>
                     <ExternalLink className="h-3.5 w-3.5" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground" title="Reopen" onClick={() => setReopeningCase(c)}>
-                    <RotateCcw className="h-3.5 w-3.5" />
+                  <Button variant="ghost" size="sm" className="h-7 text-muted-foreground" onClick={() => setReopeningCase(c)}>
+                    <RotateCcw className="h-3.5 w-3.5" /> Re-open
                   </Button>
                 </div>
               </div>

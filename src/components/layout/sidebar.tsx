@@ -85,7 +85,7 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
       )}
     >
       {/* Logo */}
-      <div className={cn('flex h-14 items-center border-b px-0', collapsed && 'justify-center px-1')}>
+    <div className={cn('flex h-14 items-center border-b px-0', collapsed && 'justify-center px-1')}>
         {!collapsed ? (
           <Link href="/dashboard" className="flex items-center gap-2">
             <span className="text-primary font-bold text-lg">

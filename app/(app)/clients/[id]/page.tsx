@@ -13,14 +13,8 @@ import { Badge } from '@/components/ui/badge'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Building2, Phone, Ticket, CheckCircle2, AlertTriangle, Clock, Loader2 } from 'lucide-react'
 import type { Case, ClientSolution, Solution } from '@/types'
-import { formatDateTime, cn } from '@/lib/utils'
+import { formatDateTime } from '@/lib/utils'
 import { PreSalesNotesPanel } from '@/modules/sales-executive/pre-sales-notes'
-
-const STATUS_COLORS: Record<string, { badge: string; label: string }> = {
-  active: { badge: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400', label: 'Active' },
-  at_risk: { badge: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400', label: 'At Risk' },
-  churned: { badge: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400', label: 'Churned' },
-}
 
 export default function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -71,9 +65,6 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
   const escalatedCases = cases.filter((c: Case) => c.is_escalated && !['closed'].includes(c.status))
   const resolvedCases = cases.filter((c: Case) => ['resolved', 'closed', 'pending_closure'].includes(c.status))
 
-  const status = client.account_status || 'active'
-  const statusConfig = STATUS_COLORS[status] || STATUS_COLORS.active
-
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <Button variant="ghost" size="sm" onClick={() => router.back()}>
@@ -100,14 +91,11 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
               <p className="text-xs text-muted-foreground mt-2">Client since {formatDateTime(client.created_at)}</p>
             </div>
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <Badge className={cn('text-sm', statusConfig.badge)}>
-              {statusConfig.label}
-            </Badge>
-            {client.account_tier && (
+          {client.account_tier && (
+            <div className="flex flex-col items-end gap-2">
               <Badge variant="outline" className="text-xs capitalize">{client.account_tier}</Badge>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         {client.industry && (
           <p className="text-sm text-muted-foreground">Industry: <span className="font-medium text-foreground">{client.industry}</span></p>

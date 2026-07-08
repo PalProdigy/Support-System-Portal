@@ -9,20 +9,18 @@ import {
   cn, formatDate, formatDuration, slaRemainingMs,
   PRIORITY_COLORS, PRIORITY_LABELS, STATUS_COLORS, STATUS_LABELS,
 } from '@/lib/utils'
-import { Input } from '@/components/ui/input'
-import { ExternalLink, Search, AlertTriangle, Clock, Users } from 'lucide-react'
+import { ExternalLink, AlertTriangle, Clock, Users } from 'lucide-react'
 import type { Case, Team, Client, User } from '@/types'
 import type { CaseStatus, Priority } from '@/types'
 
 const ALL = 'all'
 
-export function OverviewBoard() {
+export function OverviewBoard({ query = '' }: { query?: string }) {
   const session = useSession()
   const dp = getDataProvider()
   const scope = { userId: session.userId, role: session.role }
   const router = useRouter()
 
-  const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState(ALL)
   const [filterPriority, setFilterPriority] = useState(ALL)
   const [filterTeam, setFilterTeam] = useState(ALL)
@@ -51,18 +49,12 @@ export function OverviewBoard() {
 
   const filtered = useMemo(() => {
     let out = allCases
-    if (search)           out = out.filter((c) => c.title.toLowerCase().includes(search.toLowerCase()) || c.reference_no.toLowerCase().includes(search.toLowerCase()))
+    if (query)            out = out.filter((c) => c.title.toLowerCase().includes(query.toLowerCase()) || c.reference_no.toLowerCase().includes(query.toLowerCase()))
     if (filterStatus   !== ALL) out = out.filter((c) => c.status   === filterStatus)
     if (filterPriority !== ALL) out = out.filter((c) => c.priority === filterPriority)
     if (filterTeam     !== ALL) out = out.filter((c) => c.team_id  === filterTeam)
     return out
-  }, [allCases, search, filterStatus, filterPriority, filterTeam])
-
-  // Summary stats
-  const openCount     = allCases.filter((c) => !['closed'].includes(c.status)).length
-  const escalated     = allCases.filter((c) => c.is_escalated).length
-  const breached      = allCases.filter((c) => !['closed', 'resolved', 'pending_closure'].includes(c.status) && slaRemainingMs(c.sla_due_at) < 0).length
-  const criticalOpen  = allCases.filter((c) => c.priority === 'critical' && !['closed'].includes(c.status)).length
+  }, [allCases, query, filterStatus, filterPriority, filterTeam])
 
   const STATUSES: CaseStatus[] = ['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated', 'resolved', 'pending_closure', 'closed']
   const PRIORITIES: Priority[] = ['critical', 'high', 'medium', 'low']
@@ -73,32 +65,8 @@ export function OverviewBoard() {
 
   return (
     <div className="space-y-5">
-      {/* KPI strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: 'Open Cases',    value: openCount,    color: 'text-foreground' },
-          { label: 'Escalated',     value: escalated,    color: 'text-red-600 dark:text-red-400' },
-          { label: 'SLA Breached',  value: breached,     color: 'text-amber-600 dark:text-amber-400' },
-          { label: 'Critical Open', value: criticalOpen, color: 'text-red-700 dark:text-red-300' },
-        ].map(({ label, value, color }) => (
-          <div key={label} className="rounded-xl border bg-card p-3 space-y-1">
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">{label}</p>
-            <p className={cn('text-3xl font-bold tabular-nums', color)}>{value}</p>
-          </div>
-        ))}
-      </div>
-
       {/* Filters */}
       <div className="flex flex-wrap gap-2 items-center">
-        <div className="relative flex-1 min-w-[160px]">
-          <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            className="pl-8 h-8 text-sm"
-            placeholder="Search cases…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
         <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="h-8 rounded-md border bg-background text-sm px-2 text-foreground">
           <option value={ALL}>All Status</option>
           {STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
