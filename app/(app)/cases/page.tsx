@@ -8,11 +8,12 @@ import { useSession } from '@/lib/auth/context'
 import { CaseCard } from '@/components/shared/case-card'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
+import { StatCard } from '@/components/shared/stat-card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { PlusCircle, Search, Ticket, RotateCcw } from 'lucide-react'
+import { PlusCircle, Search, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, User } from '@/types'
 import { STATUS_LABELS, PRIORITY_LABELS, slaRemainingMs, slaPercent } from '@/lib/utils'
@@ -63,8 +64,23 @@ export default function CasesPage() {
     queryFn: () => dp.listUsers(),
   })
 
+  // Unfiltered snapshot of every case in scope, used for the overview cards
+  // above — independent of the current search/filter/pagination state.
+  const { data: statsData, isLoading: statsLoading } = useQuery({
+    queryKey: ['cases', 'stats', scope],
+    queryFn: () => dp.listCases(scope, { pageSize: 1000, top_level_only: true }),
+  })
+
   const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
   const usersMap = Object.fromEntries((users ?? []).map((u: User) => [u.id, u]))
+
+  const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
+  const allCases = statsData?.items ?? []
+  const totalCount = statsData?.total ?? 0
+  const activeCount = allCases.filter((c) => ACTIVE_STATUSES.has(c.status)).length
+  const escalatedCount = allCases.filter((c) => c.is_escalated || c.status === 'escalated').length
+  const reopenedCount = allCases.filter((c) => !!c.reopened_from_case_id).length
+  const slaBreachedCount = allCases.filter((c) => slaRemainingMs(c.sla_due_at) <= 0).length
 
   let cases = data?.items ?? []
   const total = data?.total ?? 0
@@ -82,7 +98,6 @@ export default function CasesPage() {
 
   const totalPages = Math.ceil(total / 15)
 
-  const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
   const showGrouped = status === 'all' && !search && slaFilter === 'all'
   const activeCases = cases.filter(c => ACTIVE_STATUSES.has(c.status))
   const previousCases = cases.filter(c => !ACTIVE_STATUSES.has(c.status))
@@ -115,6 +130,15 @@ export default function CasesPage() {
             New Case
           </Button>
         )}
+      </div>
+
+      {/* Overview */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <StatCard title="Total Cases" value={totalCount} icon={Ticket} loading={statsLoading} />
+        <StatCard title="Active Cases" value={activeCount} icon={Activity} iconColor="text-sky-500" loading={statsLoading} />
+        <StatCard title="Escalated" value={escalatedCount} icon={AlertTriangle} iconColor="text-red-500" loading={statsLoading} />
+        <StatCard title="Reopened" value={reopenedCount} icon={RotateCcw} iconColor="text-amber-500" loading={statsLoading} />
+        <StatCard title="SLA Breached" value={slaBreachedCount} icon={ShieldAlert} iconColor={slaBreachedCount > 0 ? 'text-red-500' : 'text-emerald-500'} loading={statsLoading} />
       </div>
 
       {/* Filters */}

@@ -16,6 +16,7 @@ import { accentVars, getCategoryMeta } from '@/lib/products-shared'
 import type { Product } from '@/types'
 
 const IMG_MAX = 2 * 1024 * 1024 // 2 MB, kept small so it persists comfortably in local storage
+const MAX_IMAGES = 5
 
 function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -45,14 +46,28 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
 
   const [name, setName] = useState(product?.name ?? '')
   const [description, setDescription] = useState(product?.description ?? '')
-  const [image, setImage] = useState(product?.image_url ?? '')
+  const [images, setImages] = useState<string[]>(product?.image_urls ?? [])
   const [dragOver, setDragOver] = useState(false)
 
-  async function onPickImage(file?: File) {
-    if (!file) return
-    if (!file.type.startsWith('image/')) { toast({ title: 'Please choose an image file', variant: 'destructive' }); return }
-    if (file.size > IMG_MAX) { toast({ title: `Image exceeds ${formatBytes(IMG_MAX)}`, variant: 'destructive' }); return }
-    setImage(await fileToDataUrl(file))
+  async function onPickImages(fileList?: FileList | File[] | null) {
+    if (!fileList || fileList.length === 0) return
+    const files = Array.from(fileList)
+    const remaining = MAX_IMAGES - images.length
+    if (remaining <= 0) { toast({ title: `You can upload up to ${MAX_IMAGES} images`, variant: 'destructive' }); return }
+
+    const accepted: string[] = []
+    for (const file of files) {
+      if (accepted.length >= remaining) break
+      if (!file.type.startsWith('image/')) { toast({ title: 'Please choose an image file', variant: 'destructive' }); continue }
+      if (file.size > IMG_MAX) { toast({ title: `Image exceeds ${formatBytes(IMG_MAX)}`, variant: 'destructive' }); continue }
+      accepted.push(await fileToDataUrl(file))
+    }
+    if (files.length > remaining) toast({ title: `Only ${remaining} more image${remaining === 1 ? '' : 's'} could be added`, description: `Products can have up to ${MAX_IMAGES} images.`, variant: 'destructive' })
+    if (accepted.length) setImages((prev) => [...prev, ...accepted])
+  }
+
+  function removeImage(index: number) {
+    setImages((prev) => prev.filter((_, i) => i !== index))
   }
 
   const saveMutation = useMutation({
@@ -60,14 +75,14 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
       ? dp.updateProduct(product.id, {
           name: name.trim(),
           description: description.trim(),
-          image_url: image || undefined,
+          image_urls: images.length ? images : undefined,
         })
       : dp.createProduct({
           name: name.trim(),
           description: description.trim(),
           category,
           is_active: true,
-          image_url: image || undefined,
+          image_urls: images.length ? images : undefined,
         }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['products'] })
@@ -101,40 +116,52 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
 
           {/* Image upload */}
           <div className="space-y-1.5">
-            <Label>Product Image</Label>
-            {image ? (
-              <div className="group relative h-40 w-full overflow-hidden rounded-xl border border-border" style={accentVars(meta)}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={image} alt="Product preview" className="h-full w-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/0 opacity-0 transition-all group-hover:bg-black/40 group-hover:opacity-100">
-                  <Button type="button" size="sm" variant="secondary" onClick={() => fileRef.current?.click()}>Change</Button>
-                  <Button type="button" size="sm" variant="destructive" onClick={() => setImage('')}>
-                    <X className="h-3.5 w-3.5" /> Remove
-                  </Button>
-                </div>
+            <div className="flex items-center justify-between">
+              <Label>Product Images</Label>
+              <span className="text-xs text-muted-foreground">{images.length}/{MAX_IMAGES}</span>
+            </div>
+
+            {images.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+                {images.map((src, index) => (
+                  <div key={index} className="group relative aspect-square overflow-hidden rounded-lg border border-border" style={accentVars(meta)}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt={`Product preview ${index + 1}`} className="h-full w-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
               </div>
-            ) : (
+            )}
+
+            {images.length < MAX_IMAGES && (
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
                 onDragLeave={() => setDragOver(false)}
-                onDrop={(e) => { e.preventDefault(); setDragOver(false); onPickImage(e.dataTransfer.files?.[0]) }}
-                className={`flex h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed transition-colors ${dragOver ? 'border-primary bg-primary/5' : 'border-border bg-muted/30 hover:border-primary/50 hover:bg-muted/50'}`}
+                onDrop={(e) => { e.preventDefault(); setDragOver(false); onPickImages(e.dataTransfer.files) }}
+                className={`flex h-28 w-full flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed transition-colors ${dragOver ? 'border-primary bg-primary/5' : 'border-border bg-muted/30 hover:border-primary/50 hover:bg-muted/50'}`}
               >
-                <div className="rounded-full bg-primary/10 p-2.5">
-                  <ImagePlus className="h-5 w-5 text-primary" />
+                <div className="rounded-full bg-primary/10 p-2">
+                  <ImagePlus className="h-4 w-4 text-primary" />
                 </div>
                 <p className="text-sm font-medium text-foreground">Click to upload or drag and drop</p>
-                <p className="text-xs text-muted-foreground">PNG or JPG, up to {formatBytes(IMG_MAX)}</p>
+                <p className="text-xs text-muted-foreground">Up to {MAX_IMAGES} images · PNG or JPG, {formatBytes(IMG_MAX)} each</p>
               </button>
             )}
             <input
               ref={fileRef}
               type="file"
               accept="image/*"
+              multiple
               className="sr-only"
-              onChange={(e) => onPickImage(e.target.files?.[0] ?? undefined)}
+              onChange={(e) => { onPickImages(e.target.files); e.target.value = '' }}
             />
           </div>
 

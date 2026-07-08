@@ -10,16 +10,15 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
-import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared/empty-state'
 import { toast } from '@/hooks/use-toast'
-import { Package, PlusCircle, Pencil, Search, ArrowRight, Loader2 } from 'lucide-react'
+import { Package, PlusCircle, Search, ArrowRight, Loader2 } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
 import type { Product } from '@/types'
-import { getCategoryMeta, ProductCard } from '@/lib/products-shared'
+import { getCategoryMeta } from '@/lib/products-shared'
 
-export default function ProductsPage() {
+export default function ProductCategoriesPage() {
   const session = useSession()
   const router = useRouter()
   const dp = getDataProvider()
@@ -29,9 +28,7 @@ export default function ProductsPage() {
   const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
-  const [viewing, setViewing] = useState<Product | null>(null)
   const [showCreate, setShowCreate] = useState(false)
-  const [editing, setEditing] = useState<Product | null>(null)
   const [form, setForm] = useState({ name: '', description: '', category: '', is_active: true })
 
   const { data: products, isLoading } = useQuery({ queryKey: ['products'], queryFn: () => dp.listProducts() })
@@ -39,21 +36,6 @@ export default function ProductsPage() {
 
   // Managers see inactive products too; everyone else only sees the live catalog.
   const visible = useMemo(() => (products ?? []).filter((p) => canManage || p.is_active), [products, canManage])
-
-  const searching = query.trim().length > 0
-  const searchResults = useMemo(() => {
-    if (!searching) return []
-    const q = query.toLowerCase()
-    return visible.filter((p) => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || (p.category ?? '').toLowerCase().includes(q))
-  }, [visible, query, searching])
-
-  async function runSearch() {
-    if (isSearching) return
-    setIsSearching(true)
-    await new Promise((resolve) => setTimeout(resolve, 450))
-    setQuery(search)
-    setIsSearching(false)
-  }
 
   const categories = useMemo(() => {
     const byName = new Map<string, Product[]>()
@@ -64,22 +46,28 @@ export default function ProductsPage() {
     return [...byName.entries()].map(([name, items]) => ({ name, items, meta: getCategoryMeta(name) }))
   }, [visible])
 
+  const searching = query.trim().length > 0
+  const searchResults = useMemo(() => {
+    if (!searching) return []
+    const q = query.toLowerCase()
+    return categories.filter((c) => c.name.toLowerCase().includes(q))
+  }, [categories, query, searching])
+
+  const displayedCategories = searching ? searchResults : categories
+
+  async function runSearch() {
+    if (isSearching) return
+    setIsSearching(true)
+    await new Promise((resolve) => setTimeout(resolve, 450))
+    setQuery(search)
+    setIsSearching(false)
+  }
+
   const createMutation = useMutation({
     mutationFn: () => dp.createProduct(form),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); toast({ title: 'Product created', variant: 'success' }); setShowCreate(false); setForm({ name: '', description: '', category: '', is_active: true }) },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); toast({ title: 'Category created', variant: 'success' }); setShowCreate(false); setForm({ name: '', description: '', category: '', is_active: true }) },
     onError: () => toast({ title: 'Failed', variant: 'destructive' }),
   })
-
-  const updateMutation = useMutation({
-    mutationFn: (p: Product) => dp.updateProduct(p.id, p),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); toast({ title: 'Product updated', variant: 'success' }); setEditing(null) },
-    onError: () => toast({ title: 'Failed', variant: 'destructive' }),
-  })
-
-  function startEdit(e: React.MouseEvent | React.KeyboardEvent, p: Product) {
-    e.stopPropagation()
-    setEditing({ ...p })
-  }
 
   function openCategory(name: string) {
     router.push(`/products/${encodeURIComponent(name)}`)
@@ -93,8 +81,8 @@ export default function ProductsPage() {
             <Package className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products Category</h1>
-            <p className="text-sm text-muted-foreground">Browse NHQ's product and solution portfolio · {visible.length} {visible.length === 1 ? 'product' : 'products'}</p>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Category</h1>
+            <p className="text-sm text-muted-foreground">Browse NHQ's product portfolio by category · {categories.length} {categories.length === 1 ? 'category' : 'categories'}</p>
           </div>
         </div>
         {canManage && <Button onClick={() => setShowCreate(true)}><PlusCircle className="h-4 w-4 text-white" /> <span className="text-white">Add Category</span></Button>}
@@ -105,7 +93,7 @@ export default function ProductsPage() {
           <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="pl-9"
-            placeholder="Search products…"
+            placeholder="Search category…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && runSearch()}
@@ -119,21 +107,15 @@ export default function ProductsPage() {
 
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{[...Array(6)].map((_, i) => <div key={i} className="h-36 animate-pulse rounded-2xl bg-muted" />)}</div>
-      ) : searching ? (
-        searchResults.length === 0 ? (
-          <EmptyState icon={Package} title="No products found" description="Try a different search term." />
+      ) : displayedCategories.length === 0 ? (
+        searching ? (
+          <EmptyState icon={Package} title="No categories found" description="Try a different search term." />
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {searchResults.map((product) => (
-              <ProductCard key={product.id} product={product} meta={getCategoryMeta(product.category || 'Other')} canManage={canManage} onView={setViewing} onEdit={startEdit} />
-            ))}
-          </div>
+          <EmptyState icon={Package} title="No categories found" description="No product categories are available yet." />
         )
-      ) : visible.length === 0 ? (
-        <EmptyState icon={Package} title="No products found" description="No products are available yet." />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {categories.map(({ name, items, meta }) => {
+          {displayedCategories.map(({ name, items, meta }) => {
             const Icon = meta.icon
             return (
               <button
@@ -166,39 +148,13 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {/* Product detail dialog */}
-      <Dialog open={!!viewing} onOpenChange={(o) => !o && setViewing(null)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <div className="rounded-lg bg-primary/10 p-1.5">
-                <Package className="h-4 w-4 text-primary" />
-              </div>
-              {viewing?.name}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3">
-            {viewing?.category && <Badge variant="secondary">{viewing.category}</Badge>}
-            <p className="text-sm text-foreground leading-relaxed">{viewing?.description}</p>
-          </div>
-          <DialogFooter>
-            {canManage && viewing && (
-              <Button variant="outline" size="sm" onClick={() => { setEditing({ ...viewing }); setViewing(null) }}>
-                <Pencil className="h-3.5 w-3.5" /> Edit
-              </Button>
-            )}
-            <Button variant="outline" size="sm" onClick={() => setViewing(null)}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       {/* Create dialog (managers only) */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Add Product</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Add Category</DialogTitle></DialogHeader>
           <div className="space-y-3">
-            <div className="space-y-1.5"><Label>Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-            <div className="space-y-1.5"><Label>Category</Label><Input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="e.g. Endpoint & Server Security" /></div>
+            <div className="space-y-1.5"><Label>Category Name</Label><Input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="e.g. Endpoint & Server Security" /></div>
+            <div className="space-y-1.5"><Label>Product Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
             <div className="space-y-1.5"><Label>Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></div>
             <div className="flex items-center gap-2"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /><Label>Active</Label></div>
           </div>
@@ -208,25 +164,6 @@ export default function ProductsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {/* Edit dialog (managers only) */}
-      {editing && (
-        <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-          <DialogContent>
-            <DialogHeader><DialogTitle>Edit Product</DialogTitle></DialogHeader>
-            <div className="space-y-3">
-              <div className="space-y-1.5"><Label>Name</Label><Input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} /></div>
-              <div className="space-y-1.5"><Label>Category</Label><Input value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} /></div>
-              <div className="space-y-1.5"><Label>Description</Label><Textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} /></div>
-              <div className="flex items-center gap-2"><Switch checked={editing.is_active} onCheckedChange={(v) => setEditing({ ...editing, is_active: v })} /><Label>Active</Label></div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
-              <Button disabled={updateMutation.isPending} onClick={() => updateMutation.mutate(editing)}>{updateMutation.isPending ? 'Saving...' : 'Save'}</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
     </div>
   )
 }

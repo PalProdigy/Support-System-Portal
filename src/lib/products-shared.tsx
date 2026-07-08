@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { Pencil, ArrowRight, Package, ShieldCheck, Network, ShieldAlert, ScanSearch, DatabaseBackup, Cloud, Server, Layers, type LucideIcon } from 'lucide-react'
+import { Pencil, ArrowRight, Package, ShieldCheck, Network, ShieldAlert, ScanSearch, DatabaseBackup, Cloud, Server, Layers, Images, type LucideIcon } from 'lucide-react'
 import type { Product } from '@/types'
 
 export type CategoryStyle = { color: string; tint: string; shade: string }
@@ -58,6 +58,8 @@ export function ProductCard({
   onEdit: (e: React.MouseEvent | React.KeyboardEvent, product: Product) => void
 }) {
   const Icon = meta.icon
+  const images = product.image_urls ?? []
+  const cover = images[0]
   return (
     <div
       role="button"
@@ -69,12 +71,12 @@ export function ProductCard({
     >
       <div
         className="relative flex h-28 items-center justify-center overflow-hidden"
-        style={product.image_url ? undefined : { background: `linear-gradient(135deg, ${meta.color} 0%, ${meta.shade} 100%)` }}
+        style={cover ? undefined : { background: `linear-gradient(135deg, ${meta.color} 0%, ${meta.shade} 100%)` }}
       >
-        {product.image_url ? (
+        {cover ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
+            <img src={cover} alt={product.name} className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/10" />
           </>
         ) : (
@@ -89,6 +91,11 @@ export function ProductCard({
         <span className="absolute left-4 top-3 text-[11px] font-semibold tracking-wide text-white/90 drop-shadow">{product.category || 'Other'}</span>
         {canManage && !product.is_active && (
           <span className="absolute right-3.5 top-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[11px] font-semibold text-red-600">Inactive</span>
+        )}
+        {images.length > 1 && (
+          <span className="absolute bottom-2.5 right-3 inline-flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
+            <Images className="h-3 w-3" /> {images.length}
+          </span>
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2.5 p-5">
