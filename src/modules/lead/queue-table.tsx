@@ -10,7 +10,7 @@ import {
   cn, formatDate, slaRemainingMs, formatDuration,
   PRIORITY_COLORS, PRIORITY_LABELS, STATUS_COLORS, STATUS_LABELS,
 } from '@/lib/utils'
-import { Search, ArrowUpDown, UserCheck, AlertTriangle, ExternalLink } from 'lucide-react'
+import { Search, ArrowUpDown, UserCheck, AlertTriangle, ExternalLink, Loader2 } from 'lucide-react'
 import type { Case, User } from '@/types'
 import type { CaseStatus, Priority } from '@/types'
 
@@ -30,6 +30,8 @@ interface Props {
 export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate }: Props) {
   const router = useRouter()
   const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const [statusFilter, setStatusFilter] = useState<CaseStatus | 'all'>('all')
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'all'>('all')
   const [assigneeFilter, setAssigneeFilter] = useState<string>('all')
@@ -42,6 +44,12 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
     else { setSortKey(key); setSortDir('asc') }
   }
 
+  function runSearch() {
+    setIsSearching(true)
+    setQuery(search)
+    setTimeout(() => setIsSearching(false), 300)
+  }
+
   const filtered = useMemo(() => {
     let list = [...cases]
     if (statusFilter !== 'all') list = list.filter((c) => c.status === statusFilter)
@@ -50,8 +58,8 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
       if (assigneeFilter === 'unassigned') list = list.filter((c) => !c.assignee_id)
       else list = list.filter((c) => c.assignee_id === assigneeFilter)
     }
-    if (search) {
-      const q = search.toLowerCase()
+    if (query) {
+      const q = query.toLowerCase()
       list = list.filter((c) => c.title.toLowerCase().includes(q) || c.reference_no.toLowerCase().includes(q))
     }
     list.sort((a, b) => {
@@ -64,7 +72,7 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
       return sortDir === 'asc' ? cmp : -cmp
     })
     return list
-  }, [cases, statusFilter, priorityFilter, assigneeFilter, search, sortKey, sortDir])
+  }, [cases, statusFilter, priorityFilter, assigneeFilter, query, sortKey, sortDir])
 
   function Th({ label, sk }: { label: string; sk: SortKey }) {
     const active = sortKey === sk
@@ -87,8 +95,17 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[180px] max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input className="pl-9 h-8 text-sm" placeholder="Search ref# or title…" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Input
+            className="pl-9 h-8 text-sm"
+            placeholder="Search ref# or title…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
+          />
         </div>
+        <Button size="sm" className="h-8" onClick={runSearch} disabled={isSearching} aria-label="Search">
+          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
+        </Button>
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as CaseStatus | 'all')}>
           <SelectTrigger className="h-8 w-36 text-sm"><SelectValue placeholder="All statuses" /></SelectTrigger>
           <SelectContent>

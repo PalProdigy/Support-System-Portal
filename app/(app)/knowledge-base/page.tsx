@@ -17,7 +17,7 @@ import { canReviewKB, canWriteKB, KB_CATEGORIES } from '@/modules/kb/constants'
 import { estimateReadingTimeMinutes, slugify } from '@/lib/markdown/utils'
 import { cn, formatDate } from '@/lib/utils'
 import {
-  BookOpen, ClipboardList, Clock, FolderOpen, MessageCircle, PenLine, PlusCircle,
+  BookOpen, ClipboardList, Clock, FolderOpen, Loader2, MessageCircle, PenLine, PlusCircle,
   Search, Tag, User as UserIcon, X,
 } from 'lucide-react'
 import type { KBArticle } from '@/types'
@@ -38,6 +38,8 @@ function KnowledgeBaseIndex() {
   const scope = { userId: session.userId, role: session.role }
 
   const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const [shelf, setShelf] = useState<Shelf>('browse')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
@@ -45,9 +47,15 @@ function KnowledgeBaseIndex() {
   const writer = canWriteKB(session.role)
   const reviewer = canReviewKB(session.role)
 
+  const runSearch = () => {
+    setIsSearching(true)
+    setQuery(search)
+    setTimeout(() => setIsSearching(false), 300)
+  }
+
   const { data: articles, isLoading } = useQuery({
-    queryKey: ['kb', 'index', session.userId, search],
-    queryFn: () => dp.listKBArticles({ search: search || undefined }, scope),
+    queryKey: ['kb', 'index', session.userId, query],
+    queryFn: () => dp.listKBArticles({ search: query || undefined }, scope),
   })
 
   const all = useMemo(() => articles ?? [], [articles])
@@ -95,15 +103,21 @@ function KnowledgeBaseIndex() {
             </Button>
           )}
         </div>
-        <div className="relative max-w-2xl">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by title, content, tags, category or author…"
-            className="pl-10 h-11 text-base bg-background"
-            aria-label="Search articles"
-          />
+        <div className="flex max-w-2xl items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
+              placeholder="Search by title, content, tags, category or author…"
+              className="pl-10 h-11 text-base bg-background"
+              aria-label="Search articles"
+            />
+          </div>
+          <Button className="h-11 shrink-0" onClick={runSearch} disabled={isSearching} aria-label="Search">
+            {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
+          </Button>
         </div>
       </div>
 
@@ -154,7 +168,7 @@ function KnowledgeBaseIndex() {
           icon={shelf === 'review' ? ClipboardList : BookOpen}
           title={shelf === 'review' ? 'Nothing to review' : 'No articles found'}
           description={
-            search || category || tag
+            query || category || tag
               ? 'Try different keywords or clear the filters.'
               : shelf === 'mine'
                 ? 'Write your first article — click "New Article" to get started.'

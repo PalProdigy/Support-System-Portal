@@ -6,7 +6,7 @@
 'use client'
 
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -69,6 +69,7 @@ interface SidebarProps {
 
 export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false)
+  const [isDark, setIsDark] = useState(false)
   const pathname = usePathname()
   const { session } = useAuth()
   const role = userRole ?? session?.role
@@ -76,6 +77,16 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
   const visibleItems = NAV_ITEMS.filter(
     (item) => !item.roles || (role && item.roles.includes(role))
   )
+
+  // The theme toggle (in Topbar) flips a `dark` class on <html> — watch it
+  // here too so the logo swaps live, without needing a shared theme context.
+  useEffect(() => {
+    const root = document.documentElement
+    setIsDark(root.classList.contains('dark'))
+    const observer = new MutationObserver(() => setIsDark(root.classList.contains('dark')))
+    observer.observe(root, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <aside
@@ -85,20 +96,103 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
       )}
     >
       {/* Logo */}
-    <div className={cn('flex h-14 items-center border-b px-0', collapsed && 'justify-center px-1')}>
-        {!collapsed ? (
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <span className="text-primary font-bold text-lg">
-              <img src="/Gnvbo01 (1).svg" alt="Logo" className="w-auto h-20" />
-            </span>
-          </Link>
-        ) : (
-          <Link href="/dashboard">
-            <span className="text-primary font-bold text-lg">
-              <img src="/Gnvbo01 (1).svg" alt="Logo" className="w-auto h-18" />
-            </span>
-          </Link>
-        )}
+      <div className={cn('flex h-14 items-center overflow-hidden border-b', collapsed ? 'justify-center px-2' : 'px-4')}>
+        <Link href="/dashboard" className="flex max-w-full items-center justify-center">
+          <svg
+              className="h-14 w-auto"
+              viewBox="0 0 320 140"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* NH text */}
+            <text
+                x="15"
+                y="85"
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="900"
+                fontSize="62"
+                fill={isDark ? '#FFFFFF' : '#111111'}
+                letterSpacing="-2px"
+            >
+              NH
+            </text>
+
+            {/* Distributions text */}
+            <text
+                x="13"
+                y="118"
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="800"
+                fontStyle="italic"
+                fontSize="21"
+                fill="#D32F2F"
+                letterSpacing="4px"
+            >
+              DISTRIBUTIONS
+            </text>
+
+            {/* 3D sphere with concentric grey orbital rings */}
+            {/* Ring 1 */}
+            <ellipse
+                cx="150"
+                cy="60"
+                rx="50"
+                ry="22"
+                transform="rotate(-28, 150, 60)"
+                stroke="#9E9E9E"
+                strokeWidth="2.5"
+                strokeDasharray="4 2"
+            />
+            {/* Ring 2 */}
+            <ellipse
+                cx="150"
+                cy="60"
+                rx="68"
+                ry="30"
+                transform="rotate(-28, 150, 60)"
+                stroke="#757575"
+                strokeWidth="3.2"
+            />
+            {/* Ring 3 */}
+            <ellipse
+                cx="150"
+                cy="60"
+                rx="86"
+                ry="38"
+                transform="rotate(-28, 150, 60)"
+                stroke="#BDBDBD"
+                strokeWidth="1.8"
+            />
+
+            {/* Red Glossy Sphere */}
+            <circle cx="145" cy="65" r="30" fill="url(#sphereGradient)" filter="url(#sphereShadow)" />
+
+            {/* Red Swooping Orbit Arc */}
+            <path
+                d="M 125 65 C 125 50, 170 50, 175 70 C 180 90, 190 110, 190 130"
+                stroke="#D32F2F"
+                strokeWidth="4"
+                transform="translate(0, 0)"
+                strokeLinecap="round"
+                fill="none"
+            />
+
+            {/* Definitions for Gradients and Shadows */}
+            <defs>
+              {/* Radial gradient for the red glossy 3D ball */}
+              <radialGradient id="sphereGradient" cx="35%" cy="30%" r="70%">
+                <stop offset="0%" stopColor="#FF8A80" />
+                <stop offset="35%" stopColor="#E53935" />
+                <stop offset="85%" stopColor="#B71C1C" />
+                <stop offset="100%" stopColor="#7F0000" />
+              </radialGradient>
+              {/* Soft drop shadow for the sphere */}
+              <filter id="sphereShadow" x="95" y="25" width="100" height="100" filterUnits="userSpaceOnUse">
+                <feDropShadow dx="1" dy="4" stdDeviation="4" floodColor="#000000" floodOpacity="0.18" />
+              </filter>
+            </defs>
+          </svg>
+        </Link>
       </div>
 
       {/* Nav */}

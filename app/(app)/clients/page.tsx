@@ -8,7 +8,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Building2, PlusCircle, Phone, Search, RotateCcw, ChevronRight } from 'lucide-react'
+import { Building2, PlusCircle, Phone, Search, RotateCcw, ChevronRight, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Client, ClientSolution } from '@/types'
 import { formatDate, cn } from '@/lib/utils'
@@ -125,6 +125,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
 
   const [draft, setDraft] = useState('')
   const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
 
   // Client-solution links carry the date a client engaged a solution; we use the
   // most recent of these (falling back to last_activity_at / created_at) as the
@@ -162,7 +163,11 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     return [...filtered].sort((a, b) => recencyOf(b).localeCompare(recencyOf(a)))
   }, [clients, query, recentByClient])
 
-  const runSearch = () => setQuery(draft)
+  const runSearch = () => {
+    setIsSearching(true)
+    setQuery(draft)
+    setTimeout(() => setIsSearching(false), 300)
+  }
   const resetSearch = () => { setDraft(''); setQuery('') }
 
   const COLS = ['Company / Organization', 'Client Name', 'Client ID', 'Industry', 'Tier', 'Status', 'Recent Activity', '']
@@ -195,8 +200,8 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
             onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
           />
         </div>
-        <Button onClick={runSearch}>
-          <Search className="h-4 w-4" /> Search
+        <Button onClick={runSearch} disabled={isSearching}>
+          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" /> Search</>}
         </Button>
         {query && (
           <Button variant="outline" onClick={resetSearch}>

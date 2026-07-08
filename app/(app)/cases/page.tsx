@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { PlusCircle, Search, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert } from 'lucide-react'
+import { PlusCircle, Search, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, User } from '@/types'
 import { STATUS_LABELS, PRIORITY_LABELS, slaRemainingMs, slaPercent } from '@/lib/utils'
@@ -41,7 +41,7 @@ export default function CasesPage() {
     setPage(1)
   }, [searchParams])
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ['cases', scope, search, status, priority, page],
     queryFn: () =>
       dp.listCases(scope, {
@@ -152,6 +152,9 @@ export default function CasesPage() {
             onChange={(e) => { setSearch(e.target.value); setPage(1) }}
           />
         </div>
+        <Button onClick={() => refetch()} disabled={isFetching} aria-label="Search">
+          {isFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
+        </Button>
         <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Status" />

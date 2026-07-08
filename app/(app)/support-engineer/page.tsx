@@ -13,7 +13,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
-import { PlusCircle, Search, Users } from 'lucide-react'
+import { PlusCircle, Search, Users, Loader2 } from 'lucide-react'
 import type { User, Role, CertificationLevel } from '@/types'
 import { canAccess } from '@/lib/rbac'
 import { useRouter } from 'next/navigation'
@@ -41,6 +41,8 @@ function SupportEngineersContent() {
   const scope = { userId: session.userId, role: session.role }
 
   const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState<{
     name: string
@@ -51,6 +53,12 @@ function SupportEngineersContent() {
     certification_level?: CertificationLevel
   }>({ name: '', email: '', role: 'support_engineer', is_active: true })
   const TARGET_ROLE: Role = 'support_engineer'
+
+  const runSearch = () => {
+    setIsSearching(true)
+    setQuery(search)
+    setTimeout(() => setIsSearching(false), 300)
+  }
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['users'],
@@ -67,7 +75,7 @@ function SupportEngineersContent() {
 
   const filtered = (users ?? []).filter((u: User) =>
     u.role === TARGET_ROLE &&
-    (u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase()))
+    (u.name.toLowerCase().includes(query.toLowerCase()) || u.email.toLowerCase().includes(query.toLowerCase()))
   )
 
   const teamsMap = Object.fromEntries((teams ?? []).map((t) => [t.id, t]))
@@ -84,9 +92,20 @@ function SupportEngineersContent() {
         </Button>
       </div>
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search users..." className="pl-9" value={search} onChange={(e) => setSearch(e.target.value)} />
+      <div className="flex gap-2 max-w-md">
+        <div className="relative flex-1">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search users..."
+            className="pl-9"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
+          />
+        </div>
+        <Button onClick={runSearch} disabled={isSearching} aria-label="Search">
+          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
+        </Button>
       </div>
 
       {isLoading ? (

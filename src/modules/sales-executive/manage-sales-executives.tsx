@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
 import { ROLE_LABELS } from '@/lib/rbac'
-import { PlusCircle, Search, Briefcase, Mail } from 'lucide-react'
+import { PlusCircle, Search, Briefcase, Mail, Loader2 } from 'lucide-react'
 import type { User, Role } from '@/types'
 import { useRouter } from 'next/navigation'
 
@@ -30,8 +30,16 @@ export function ManageSalesExecutives() {
   const router = useRouter()
 
   const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', is_active: true })
+
+  const runSearch = () => {
+    setIsSearching(true)
+    setQuery(search)
+    setTimeout(() => setIsSearching(false), 300)
+  }
 
   const { data: users, isLoading } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
 
@@ -57,30 +65,33 @@ export function ManageSalesExecutives() {
 
   const filtered = (users ?? []).filter((u: User) =>
     u.role === TARGET_ROLE &&
-    (u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase()))
+    (u.name.toLowerCase().includes(query.toLowerCase()) || u.email.toLowerCase().includes(query.toLowerCase()))
   )
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-base font-semibold">Sales Executive Accounts</h2>
-          <p className="text-sm text-muted-foreground">{filtered.length} account managers</p>
+        <div className="flex gap-2 max-w-md">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+                placeholder="Search account managers..."
+                className="pl-9"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
+            />
+          </div>
+          <Button onClick={runSearch} disabled={isSearching} aria-label="Search">
+            {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
+          </Button>
         </div>
         <Button onClick={() => setShowCreate(true)}>
           <PlusCircle className="h-4 w-4" /> Add Sales Executive
         </Button>
       </div>
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search account managers..."
-          className="pl-9"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+
 
       {isLoading ? (
         <div className="space-y-2">{[...Array(4)].map((_, i) => <div key={i} className="h-16 rounded-xl bg-muted animate-pulse" />)}</div>

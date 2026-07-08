@@ -7,8 +7,9 @@ import { useSession } from '@/lib/auth/context'
 import { PreSalesNotesPanel } from './pre-sales-notes'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { MessageSquare, Search } from 'lucide-react'
+import { MessageSquare, Search, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import type { Client } from '@/types'
 
 export function NotesHub() {
@@ -18,6 +19,14 @@ export function NotesHub() {
 
   const [selectedClientId, setSelectedClientId] = useState<string>('')
   const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
+
+  const runSearch = () => {
+    setIsSearching(true)
+    setQuery(search)
+    setTimeout(() => setIsSearching(false), 300)
+  }
 
   const { data: clients = [] } = useQuery({
     queryKey: ['clients', session.userId],
@@ -25,8 +34,8 @@ export function NotesHub() {
   })
 
   const filteredClients = clients.filter((c: Client) =>
-    c.company_name.toLowerCase().includes(search.toLowerCase()) ||
-    c.contact_person.toLowerCase().includes(search.toLowerCase())
+    c.company_name.toLowerCase().includes(query.toLowerCase()) ||
+    c.contact_person.toLowerCase().includes(query.toLowerCase())
   )
 
   const selectedClient = clients.find((c: Client) => c.id === selectedClientId)
@@ -41,8 +50,12 @@ export function NotesHub() {
             className="pl-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
           />
         </div>
+        <Button onClick={runSearch} disabled={isSearching} aria-label="Search">
+          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
+        </Button>
         <Select value={selectedClientId} onValueChange={setSelectedClientId}>
           <SelectTrigger className="w-full sm:w-64">
             <SelectValue placeholder="Select a client" />

@@ -71,12 +71,7 @@ export default function SalesExecutiveHubPage() {
               </TabsTrigger>
             </>
           )}
-          {isTH && (
-            <TabsTrigger value="manage" className="flex-1">
-              <Briefcase className="h-3.5 w-3.5" />
-              Sales Executives
-            </TabsTrigger>
-          )}
+
         </TabsList>
 
         {isAM && (
