@@ -170,7 +170,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
   }
   const resetSearch = () => { setDraft(''); setQuery('') }
 
-  const COLS = ['Company / Organization', 'Client Name', 'Client ID', 'Industry', 'Tier', 'Status', 'Recent Activity', '']
+  const COLS = ['Company / Organization', 'Client Name', 'Client ID', 'Industry', 'Tier', 'Recent Activity', '']
 
   return (
     <div className="p-6 space-y-4">
@@ -232,8 +232,6 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                 <tr><td colSpan={COLS.length} className="text-center py-8 text-muted-foreground text-sm">No clients match your search</td></tr>
               )}
               {ordered.map((c) => {
-                const status = c.account_status || 'active'
-                const statusConfig = STATUS_COLORS[status] || STATUS_COLORS.active
                 return (
                   <tr
                     key={c.id}
@@ -252,11 +250,6 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                     <td className="px-3 py-2.5 font-mono text-xs text-muted-foreground whitespace-nowrap">{c.id}</td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{c.industry ?? '—'}</td>
                     <td className="px-3 py-2.5 text-xs whitespace-nowrap capitalize">{c.account_tier ?? '—'}</td>
-                    <td className="px-3 py-2.5 whitespace-nowrap">
-                      <span className={cn('text-xs font-medium px-2 py-0.5 rounded-full', statusConfig.badge)}>
-                        {statusConfig.label}
-                      </span>
-                    </td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
                     <td className="px-3 py-2.5">
                       <ChevronRight className="h-4 w-4 text-muted-foreground" />

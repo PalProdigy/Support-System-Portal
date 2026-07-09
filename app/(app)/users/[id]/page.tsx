@@ -204,9 +204,6 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
           <div className="flex flex-wrap gap-2 pt-1">
             <Badge variant="secondary">{ROLE_LABELS[user.role]}</Badge>
             {teamName && <Badge variant="outline">{teamName}</Badge>}
-            <Badge variant={user.is_active ? 'default' : 'destructive'}>
-              {user.is_active ? 'Active' : 'Inactive'}
-            </Badge>
           </div>
         </div>
       </div>

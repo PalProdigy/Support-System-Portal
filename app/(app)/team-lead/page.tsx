@@ -7,7 +7,6 @@ import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
@@ -53,15 +52,6 @@ function TeamLeadContent() {
 
   const { data: users, isLoading } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
-
-  const updateMutation = useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<User> }) => dp.updateUser(id, patch),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['users'] })
-      toast({ title: 'Team Lead updated', variant: 'success' })
-    },
-    onError: () => toast({ title: 'Update failed', variant: 'destructive' }),
-  })
 
   const createMutation = useMutation({
     mutationFn: () => dp.createUser({ name: form.name, email: form.email, role: TARGET_ROLE, is_active: form.is_active }),
@@ -124,7 +114,6 @@ function TeamLeadContent() {
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Team Lead</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Role</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Team Led</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -160,13 +149,6 @@ function TeamLeadContent() {
                           )}
                         </span>
                       ) : '—'}
-                    </td>
-                    <td className="px-4 py-3">
-                      <Switch
-                        checked={u.is_active}
-                        onCheckedChange={(checked) => updateMutation.mutate({ id: u.id, patch: { is_active: checked } })}
-                        aria-label="Active"
-                      />
                     </td>
                   </tr>
                 )

@@ -132,53 +132,67 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
             </text>
 
             {/* 3D sphere with concentric grey orbital rings */}
-            {/* Ring 1 */}
-            <ellipse
-                cx="150"
-                cy="60"
-                rx="50"
-                ry="22"
-                transform="rotate(-28, 150, 60)"
-                stroke="#9E9E9E"
-                strokeWidth="2.5"
-                strokeDasharray="4 2"
-            />
-            {/* Ring 2 */}
-            <ellipse
-                cx="150"
-                cy="60"
-                rx="68"
-                ry="30"
-                transform="rotate(-28, 150, 60)"
-                stroke="#757575"
-                strokeWidth="3.2"
-            />
-            {/* Ring 3 */}
-            <ellipse
-                cx="150"
-                cy="60"
-                rx="86"
-                ry="38"
-                transform="rotate(-28, 150, 60)"
-                stroke="#BDBDBD"
-                strokeWidth="1.8"
-            />
+            <g clipPath="url(#ringsClip)">
+              {/* Ring 1 */}
+              <ellipse
+                  cx="150"
+                  cy="60"
+                  rx="38"
+                  ry="17"
+                  transform="rotate(-28, 150, 60)"
+                  stroke="#9E9E9E"
+                  strokeWidth="2.5"
+                  strokeDasharray="4 2"
+              />
+              {/* Ring 2 */}
+              <ellipse
+                  cx="150"
+                  cy="60"
+                  rx="52"
+                  ry="23"
+                  transform="rotate(-28, 150, 60)"
+                  stroke="#757575"
+                  strokeWidth="3.2"
+              />
+              {/* Ring 3 */}
+              <ellipse
+                  cx="150"
+                  cy="60"
+                  rx="66"
+                  ry="29"
+                  transform="rotate(-28, 150, 60)"
+                  stroke="#BDBDBD"
+                  strokeWidth="1.8"
+              />
+            </g>
 
             {/* Red Glossy Sphere */}
             <circle cx="145" cy="65" r="30" fill="url(#sphereGradient)" filter="url(#sphereShadow)" />
 
-            {/* Red Swooping Orbit Arc */}
+            {/* White portion of the Swooping Orbit Arc (on the red sphere) */}
             <path
-                d="M 125 65 C 125 50, 170 50, 175 70 C 180 90, 190 110, 190 130"
+                d="M 125 65 C 125 50, 168 50, 172 68"
+                stroke="#FFFFFF"
+                strokeWidth="4"
+                strokeLinecap="round"
+                fill="none"
+            />
+
+            {/* Red portion of the Swooping Orbit Arc (outside the red sphere) */}
+            <path
+                d="M 171 67 C 176 85, 190 110, 190 130"
                 stroke="#D32F2F"
                 strokeWidth="4"
-                transform="translate(0, 0)"
                 strokeLinecap="round"
                 fill="none"
             />
 
             {/* Definitions for Gradients and Shadows */}
             <defs>
+              {/* Clip path to remove the downside (bottom-left) of the grey orbital rings */}
+              <clipPath id="ringsClip">
+                <polygon points="80,0 320,0 320,110 135,110 135,55 80,55" />
+              </clipPath>
               {/* Radial gradient for the red glossy 3D ball */}
               <radialGradient id="sphereGradient" cx="35%" cy="30%" r="70%">
                 <stop offset="0%" stopColor="#FF8A80" />

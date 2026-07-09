@@ -6,16 +6,16 @@ import { getDataProvider } from '@/lib/data'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
-import { ROLE_LABELS } from '@/lib/rbac'
-import { PlusCircle, Search, Briefcase, Mail, Loader2 } from 'lucide-react'
-import type { User, Role } from '@/types'
+import { PlusCircle, Search, Briefcase, Mail, Clock, Loader2, Eye, IdCard, Building2, Ticket, CalendarDays } from 'lucide-react'
+import type { User, Role, Client, Case } from '@/types'
 import { useRouter } from 'next/navigation'
+import { formatDate } from '@/lib/utils'
+import { isOpen } from '@/modules/profile/case-stats'
+import { useSession } from '@/lib/auth/context'
 
 const TARGET_ROLE: Role = 'sales_executive'
 
@@ -28,6 +28,7 @@ export function ManageSalesExecutives() {
   const dp = getDataProvider()
   const qc = useQueryClient()
   const router = useRouter()
+  const session = useSession()
 
   const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
@@ -43,14 +44,11 @@ export function ManageSalesExecutives() {
 
   const { data: users, isLoading } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
 
-  const updateMutation = useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: Partial<User> }) => dp.updateUser(id, patch),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['users'] })
-      toast({ title: 'Sales Executive updated', variant: 'success' })
-    },
-    onError: () => toast({ title: 'Update failed', variant: 'destructive' }),
-  })
+  // Technical Head sees every client/case, used below to derive per-sales-executive
+  // "Assigned Clients" and "Open Cases" counts without a query per row.
+  const scope = { userId: session.userId, role: 'technical_head' as Role }
+  const { data: clients } = useQuery({ queryKey: ['clients', 'th-all'], queryFn: () => dp.listClients(scope) })
+  const { data: casesPage } = useQuery({ queryKey: ['cases', 'th-all'], queryFn: () => dp.listCases(scope, { pageSize: 500 }) })
 
   const createMutation = useMutation({
     mutationFn: () => dp.createUser({ name: form.name, email: form.email, role: TARGET_ROLE, is_active: form.is_active }),
@@ -67,6 +65,15 @@ export function ManageSalesExecutives() {
     u.role === TARGET_ROLE &&
     (u.name.toLowerCase().includes(query.toLowerCase()) || u.email.toLowerCase().includes(query.toLowerCase()))
   )
+
+  const clientList: Client[] = clients ?? []
+  const cases: Case[] = casesPage?.items ?? []
+
+  const assignedClientsFor = (userId: string) => clientList.filter((c) => c.created_by === userId)
+  const openCasesFor = (userId: string) => {
+    const clientIds = new Set(assignedClientsFor(userId).map((c) => c.id))
+    return cases.filter((c) => clientIds.has(c.client_id) && isOpen(c)).length
+  }
 
   return (
     <div className="space-y-4">
@@ -103,9 +110,13 @@ export function ManageSalesExecutives() {
             <thead className="bg-muted/50 border-b">
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Sales Executive</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Role</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Contact Email</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Employee ID</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell">Contact Email</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Assigned Clients</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Open Cases</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Joined Date</th>
+                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -124,21 +135,50 @@ export function ManageSalesExecutives() {
                       <p className="font-medium">{u.name}</p>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <Badge variant="secondary" className="text-xs">{ROLE_LABELS[u.role]}</Badge>
-                  </td>
                   <td className="px-4 py-3 hidden md:table-cell text-muted-foreground text-xs">
+                    <span className="flex items-center gap-1">
+                      <IdCard className="h-3 w-3 shrink-0" />
+                      {u.employee_id ?? '—'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 hidden lg:table-cell text-muted-foreground text-xs">
                     <span className="flex items-center gap-1">
                       <Mail className="h-3 w-3 shrink-0" />
                       {u.email}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <Switch
-                      checked={u.is_active}
-                      onCheckedChange={(checked) => updateMutation.mutate({ id: u.id, patch: { is_active: checked } })}
-                      aria-label="Active"
-                    />
+                  <td className="px-4 py-3 text-muted-foreground text-xs">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3 shrink-0" />
+                      {u.years_of_experience != null ? `${u.years_of_experience} yr${u.years_of_experience === 1 ? '' : 's'}` : '—'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground text-xs">
+                    <span className="flex items-center gap-1">
+                      <Building2 className="h-3 w-3 shrink-0" />
+                      {assignedClientsFor(u.id).length}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground text-xs">
+                    <span className="flex items-center gap-1">
+                      <Ticket className="h-3 w-3 shrink-0" />
+                      {openCasesFor(u.id)}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 hidden md:table-cell text-muted-foreground text-xs">
+                    <span className="flex items-center gap-1">
+                      <CalendarDays className="h-3 w-3 shrink-0" />
+                      {formatDate(u.created_at)}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => router.push(`/users/${u.id}`)}
+                    >
+                      <Eye className="h-3.5 w-3.5" /> View
+                    </Button>
                   </td>
                 </tr>
               ))}
