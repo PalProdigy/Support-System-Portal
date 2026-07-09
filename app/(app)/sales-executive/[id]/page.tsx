@@ -4,8 +4,8 @@ import { use } from 'react'
 import dynamic from 'next/dynamic'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const UserDetail = dynamic(
-  () => import('@/modules/users/user-detail').then((m) => m.UserDetail),
+const SalesExecutiveDetail = dynamic(
+  () => import('@/modules/profile/sales-executive-detail').then((m) => m.SalesExecutiveDetail),
   {
     loading: () => (
       <div className="p-6 max-w-6xl mx-auto space-y-6">
@@ -20,5 +20,5 @@ const UserDetail = dynamic(
 
 export default function SalesExecutiveDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  return <UserDetail id={id} />
+  return <SalesExecutiveDetail id={id} />
 }
