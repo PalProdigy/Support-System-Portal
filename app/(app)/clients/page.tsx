@@ -10,7 +10,7 @@ import { SearchInput } from '@/components/ui/search-input'
 import { Badge } from '@/components/ui/badge'
 import { Building2, PlusCircle, Phone, Eye } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import type { Client, ClientSolution } from '@/types'
+import type { Client, ClientSolution, Case } from '@/types'
 import { formatDate, cn } from '@/lib/utils'
 import { CreateClientDialog } from '@/modules/sales-executive/create-client-dialog'
 
@@ -133,6 +133,12 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     queryFn: () => dp.listClientSolutions(),
   })
 
+  // Query cases to count total cases per client
+  const { data: casesData } = useQuery({
+    queryKey: ['cases', 'all'],
+    queryFn: () => dp.listCases({ userId: 'system', role: 'technical_head' }, { pageSize: 500 }),
+  })
+
   const recentByClient = useMemo(() => {
     const map: Record<string, string> = {}
     for (const cs of (clientSolutions ?? []) as ClientSolution[]) {
@@ -142,6 +148,19 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     }
     return map
   }, [clientSolutions])
+
+  // Count total cases per client
+  const casesByClient = useMemo(() => {
+    const map: Record<string, number> = {}
+    const cases = (casesData?.items ?? []) as Case[]
+    for (const c of cases) {
+      if (!map[c.client_id]) {
+        map[c.client_id] = 0
+      }
+      map[c.client_id]++
+    }
+    return map
+  }, [casesData])
 
   const recencyOf = (c: Client) => {
     const dates = [recentByClient[c.id], c.last_activity_at, c.created_at].filter(Boolean) as string[]
@@ -160,7 +179,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     return [...filtered].sort((a, b) => recencyOf(b).localeCompare(recencyOf(a)))
   }, [clients, query, recentByClient])
 
-  const COLS = ['Company / Organization', 'Representative Name', 'Recent Activity', '']
+  const COLS = ['Company / Organization', 'Representative Name', 'Recent Activity', 'Total Case', '']
 
   return (
     <div className="p-6 space-y-4">
@@ -210,7 +229,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                       key={i}
                       className={`text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground ${
                         isActionCol
-                          ? 'sticky right-0 bg-muted/30 w-24 text-right'
+                          ? 'sticky right-0 w-24 text-right'
                           : 'whitespace-nowrap'
                       }`}
                     >
@@ -228,7 +247,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                 return (
                   <tr
                     key={c.id}
-                    className="border-b last:border-0 hover:bg-accent/20 transition-colors cursor-pointer"
+                    className="border-b last:border-0 hover:bg-accent/20 transition-colors cursor-pointer group"
                     onClick={() => router.push(`/clients/${c.id}`)}
                   >
                     <td className="px-3 py-2.5 max-w-[240px]">
@@ -241,7 +260,8 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                     </td>
                     <td className="px-3 py-2.5 whitespace-nowrap">{c.contact_person}</td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
-                    <td className="px-3 py-2.5 sticky right-0 bg-card/95 w-24 text-right">
+                    <td className="px-3 py-2.5 whitespace-nowrap text-center font-medium">{casesByClient[c.id] ?? 0}</td>
+                    <td className="px-3 py-2.5 sticky right-0 bg-card/95 group-hover:bg-accent/20 transition-colors w-24 text-right">
                       <Button
                         variant="outline"
                         size="sm"
