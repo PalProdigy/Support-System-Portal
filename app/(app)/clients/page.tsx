@@ -8,7 +8,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
 import { Badge } from '@/components/ui/badge'
-import { Building2, PlusCircle, Phone, ChevronRight } from 'lucide-react'
+import { Building2, PlusCircle, Phone, Eye } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Client, ClientSolution } from '@/types'
 import { formatDate, cn } from '@/lib/utils'
@@ -153,7 +153,6 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     const filtered = q
       ? clients.filter((c) =>
           c.contact_person?.toLowerCase().includes(q) ||
-          c.id.toLowerCase().includes(q) ||
           c.company_name?.toLowerCase().includes(q)
         )
       : clients
@@ -161,7 +160,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     return [...filtered].sort((a, b) => recencyOf(b).localeCompare(recencyOf(a)))
   }, [clients, query, recentByClient])
 
-  const COLS = ['Company / Organization', 'Client Name', 'Client ID', 'Industry', 'Tier', 'Recent Activity', '']
+  const COLS = ['Company / Organization', 'Representative Name', 'Recent Activity', '']
 
   return (
     <div className="p-6 space-y-4">
@@ -180,10 +179,10 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
           </div>
         </div>
 
-        {/* Search — searches Client Name, Client ID, Company / Organization */}
+        {/* Search — searches Client Name or Company / Organization */}
         <SearchInput
           containerClassName="w-full max-w-xs"
-          placeholder="Search by Client Name, Client ID, or Company / Organization…"
+          placeholder="Search by Client Name or Company / Organization…"
           value={query}
           onChange={setQuery}
           aria-label="Search clients"
@@ -204,9 +203,21 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/30">
-                {COLS.map((h, i) => (
-                  <th key={i} className="text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground whitespace-nowrap">{h}</th>
-                ))}
+                {COLS.map((h, i) => {
+                  const isActionCol = i === COLS.length - 1
+                  return (
+                    <th
+                      key={i}
+                      className={`text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground ${
+                        isActionCol
+                          ? 'sticky right-0 bg-muted/30 w-24 text-right'
+                          : 'whitespace-nowrap'
+                      }`}
+                    >
+                      {h}
+                    </th>
+                  )
+                })}
               </tr>
             </thead>
             <tbody>
@@ -229,12 +240,15 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                       </div>
                     </td>
                     <td className="px-3 py-2.5 whitespace-nowrap">{c.contact_person}</td>
-                    <td className="px-3 py-2.5 font-mono text-xs text-muted-foreground whitespace-nowrap">{c.id}</td>
-                    <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{c.industry ?? '—'}</td>
-                    <td className="px-3 py-2.5 text-xs whitespace-nowrap capitalize">{c.account_tier ?? '—'}</td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
-                    <td className="px-3 py-2.5">
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    <td className="px-3 py-2.5 sticky right-0 bg-card/95 w-24 text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push(`/clients/${c.id}`)}
+                      >
+                        <Eye className="h-3.5 w-3.5" /> View
+                      </Button>
                     </td>
                   </tr>
                 )

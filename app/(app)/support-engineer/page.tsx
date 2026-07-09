@@ -14,7 +14,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
-import { PlusCircle, Users } from 'lucide-react'
+import { PlusCircle, Users, Eye } from 'lucide-react'
 import type { User, Role, CertificationLevel } from '@/types'
 import { canAccess } from '@/lib/rbac'
 import { useRouter } from 'next/navigation'
@@ -107,6 +107,7 @@ function SupportEngineersContent() {
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Team</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Certification</th>
+                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -140,6 +141,15 @@ function SupportEngineersContent() {
                     {u.certification_level
                       ? <Badge variant="outline" className="text-xs font-mono">{u.certification_level}</Badge>
                       : <span className="text-muted-foreground">—</span>}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => router.push(`/users/${u.id}`)}
+                    >
+                      <Eye className="h-3.5 w-3.5" /> View
+                    </Button>
                   </td>
                 </tr>
               ))}
