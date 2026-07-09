@@ -8,7 +8,7 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { EmptyState } from '@/components/shared/empty-state'
@@ -17,8 +17,8 @@ import { canReviewKB, canWriteKB, KB_CATEGORIES } from '@/modules/kb/constants'
 import { estimateReadingTimeMinutes, slugify } from '@/lib/markdown/utils'
 import { cn, formatDate } from '@/lib/utils'
 import {
-  BookOpen, ClipboardList, Clock, FolderOpen, Loader2, MessageCircle, PenLine, PlusCircle,
-  Search, Tag, User as UserIcon, X,
+  BookOpen, ClipboardList, Clock, FolderOpen, MessageCircle, PenLine, PlusCircle,
+  Tag, User as UserIcon, X,
 } from 'lucide-react'
 import type { KBArticle } from '@/types'
 
@@ -37,9 +37,7 @@ function KnowledgeBaseIndex() {
   const searchParams = useSearchParams()
   const scope = { userId: session.userId, role: session.role }
 
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [shelf, setShelf] = useState<Shelf>('browse')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
@@ -47,13 +45,7 @@ function KnowledgeBaseIndex() {
   const writer = canWriteKB(session.role)
   const reviewer = canReviewKB(session.role)
 
-  const runSearch = () => {
-    setIsSearching(true)
-    setQuery(search)
-    setTimeout(() => setIsSearching(false), 300)
-  }
-
-  const { data: articles, isLoading } = useQuery({
+  const { data: articles, isLoading, isFetching } = useQuery({
     queryKey: ['kb', 'index', session.userId, query],
     queryFn: () => dp.listKBArticles({ search: query || undefined }, scope),
   })
@@ -103,21 +95,18 @@ function KnowledgeBaseIndex() {
             </Button>
           )}
         </div>
-        <div className="flex max-w-2xl items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-              placeholder="Search by title, content, tags, category or author…"
-              className="pl-10 h-11 text-base bg-background"
-              aria-label="Search articles"
-            />
-          </div>
-          <Button className="h-11 shrink-0" onClick={runSearch} disabled={isSearching} aria-label="Search">
-            {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
-          </Button>
+        <div className="max-w-2xl">
+          <SearchInput
+            value={query}
+            onChange={setQuery}
+            debounceMs={350}
+            loading={isFetching}
+            placeholder="Search by title, content, tags, category or author…"
+            className="h-11 text-base bg-background"
+            aria-label="Search articles"
+            resultCount={visible.length}
+            resultLabel="article"
+          />
         </div>
       </div>
 
@@ -166,7 +155,7 @@ function KnowledgeBaseIndex() {
       ) : visible.length === 0 ? (
         <EmptyState
           icon={shelf === 'review' ? ClipboardList : BookOpen}
-          title={shelf === 'review' ? 'Nothing to review' : 'No articles found'}
+          title={query ? `No results found for "${query}"` : shelf === 'review' ? 'Nothing to review' : 'No articles found'}
           description={
             query || category || tag
               ? 'Try different keywords or clear the filters.'

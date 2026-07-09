@@ -4,25 +4,17 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Package, Search, Loader2 } from 'lucide-react'
+import { Package } from 'lucide-react'
 import type { Product } from '@/types'
 
 export function ProductCatalog() {
   const dp = getDataProvider()
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [viewing, setViewing] = useState<Product | null>(null)
-
-  const runSearch = () => {
-    setIsSearching(true)
-    setQuery(search)
-    setTimeout(() => setIsSearching(false), 300)
-  }
 
   const { data: products, isLoading } = useQuery({
     queryKey: ['products'],
@@ -47,24 +39,19 @@ export function ProductCatalog() {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex max-w-lg items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input
-              className="pl-9"
-              placeholder="Search products…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-            />
-          </div>
-          <Button onClick={runSearch} disabled={isSearching} aria-label="Search">
-            {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
-          </Button>
+        <div className="max-w-lg">
+          <SearchInput
+            placeholder="Search products…"
+            value={query}
+            onChange={setQuery}
+            aria-label="Search products"
+            resultCount={filtered.length}
+            resultLabel="product"
+          />
         </div>
 
         {filtered.length === 0 ? (
-          <EmptyState icon={Package} title="No products found" description="Try a different search term." />
+          <EmptyState icon={Package} title={query ? `No results found for "${query}"` : 'No products found'} description="Try a different search term." />
         ) : (
           <div className="space-y-6">
             {(query ? [undefined] : categories).map((cat) => {

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { AssignDialog } from './assign-dialog'
@@ -10,7 +10,7 @@ import {
   cn, formatDate, slaRemainingMs, formatDuration,
   PRIORITY_COLORS, PRIORITY_LABELS, STATUS_COLORS, STATUS_LABELS,
 } from '@/lib/utils'
-import { Search, ArrowUpDown, UserCheck, AlertTriangle, ExternalLink, Loader2 } from 'lucide-react'
+import { ArrowUpDown, UserCheck, AlertTriangle, ExternalLink } from 'lucide-react'
 import type { Case, User } from '@/types'
 import type { CaseStatus, Priority } from '@/types'
 
@@ -29,9 +29,7 @@ interface Props {
 
 export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate }: Props) {
   const router = useRouter()
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [statusFilter, setStatusFilter] = useState<CaseStatus | 'all'>('all')
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'all'>('all')
   const [assigneeFilter, setAssigneeFilter] = useState<string>('all')
@@ -42,12 +40,6 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
   function toggleSort(key: SortKey) {
     if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
     else { setSortKey(key); setSortDir('asc') }
-  }
-
-  function runSearch() {
-    setIsSearching(true)
-    setQuery(search)
-    setTimeout(() => setIsSearching(false), 300)
   }
 
   const filtered = useMemo(() => {
@@ -93,19 +85,16 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
     <div className="space-y-3">
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="relative flex-1 min-w-[180px] max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            className="pl-9 h-8 text-sm"
-            placeholder="Search ref# or title…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-          />
-        </div>
-        <Button size="sm" className="h-8" onClick={runSearch} disabled={isSearching} aria-label="Search">
-          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
-        </Button>
+        <SearchInput
+          containerClassName="flex-1 min-w-[180px] max-w-xs"
+          className="h-8 text-sm"
+          placeholder="Search ref# or title…"
+          value={query}
+          onChange={setQuery}
+          aria-label="Search cases"
+          resultCount={filtered.length}
+          resultLabel="case"
+        />
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as CaseStatus | 'all')}>
           <SelectTrigger className="h-8 w-36 text-sm"><SelectValue placeholder="All statuses" /></SelectTrigger>
           <SelectContent>
@@ -154,7 +143,7 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
           </thead>
           <tbody className="divide-y">
             {filtered.length === 0 && (
-              <tr><td colSpan={8} className="px-3 py-8 text-center text-sm text-muted-foreground">No matching cases</td></tr>
+              <tr><td colSpan={8} className="px-3 py-8 text-center text-sm text-muted-foreground">{query ? `No results found for "${query}"` : 'No matching cases'}</td></tr>
             )}
             {filtered.map((c) => {
               const remaining = slaRemainingMs(c.sla_due_at)

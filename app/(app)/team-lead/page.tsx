@@ -6,14 +6,14 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Label } from '@/components/ui/label'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
-import { ROLE_LABELS } from '@/lib/rbac'
-import { PlusCircle, Search, Users, Loader2 } from 'lucide-react'
+import { PlusCircle, Users, Clock, Eye } from 'lucide-react'
 import type { User, Role } from '@/types'
 import { useRouter } from 'next/navigation'
 
@@ -38,17 +38,9 @@ function TeamLeadContent() {
   const qc = useQueryClient()
   const router = useRouter()
 
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', is_active: true })
-
-  const runSearch = () => {
-    setIsSearching(true)
-    setQuery(search)
-    setTimeout(() => setIsSearching(false), 300)
-  }
 
   const { data: users, isLoading } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
@@ -76,44 +68,41 @@ function TeamLeadContent() {
 
   return (
     <div className="p-6 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold">Team Leads</h1>
           <p className="text-sm text-muted-foreground">{filtered.length} module leads</p>
         </div>
-        <Button onClick={() => setShowCreate(true)}>
-          <PlusCircle className="h-4 w-4" /> Add Team Lead
-        </Button>
-      </div>
-
-      <div className="flex gap-2 max-w-md">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
+        <div className="flex items-center gap-2">
+          <SearchInput
+            containerClassName="w-full max-w-xs"
             placeholder="Search module leads..."
-            className="pl-9"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
+            value={query}
+            onChange={setQuery}
+            aria-label="Search module leads"
+            resultCount={filtered.length}
+            resultLabel="module lead"
           />
+          <Button onClick={() => setShowCreate(true)}>
+            <PlusCircle className="h-4 w-4" /> Add Team Lead
+          </Button>
         </div>
-        <Button onClick={runSearch} disabled={isSearching} aria-label="Search">
-          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
-        </Button>
       </div>
 
       {isLoading ? (
         <div className="space-y-2">{[...Array(4)].map((_, i) => <div key={i} className="h-16 rounded-xl bg-muted animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
-        <EmptyState icon={Users} title="No module leads found" />
+        <EmptyState icon={Users} title={query ? `No results found for "${query}"` : 'No module leads found'} />
       ) : (
         <div className="rounded-xl border overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-muted/50 border-b">
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Team Lead</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Role</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Team Led</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Certification</th>
+                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y">
@@ -132,13 +121,10 @@ function TeamLeadContent() {
                       <div className="flex items-center gap-2">
                         <UserAvatar name={u.name} avatarUrl={u.avatar} size="sm" />
                         <div>
-                          <p className="font-medium">{u.name}</p>
+                          <p className="font-medium">{u.employee_id || u.id}</p>
                           <p className="text-xs text-muted-foreground">{u.email}</p>
                         </div>
                       </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge variant="secondary" className="text-xs">{ROLE_LABELS[u.role]}</Badge>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell text-muted-foreground text-xs">
                       {teamLed ? (
@@ -149,6 +135,26 @@ function TeamLeadContent() {
                           )}
                         </span>
                       ) : '—'}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3 shrink-0" />
+                        {u.years_of_experience != null ? `${u.years_of_experience} yr${u.years_of_experience === 1 ? '' : 's'}` : '—'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {u.certification_level
+                        ? <Badge variant="outline" className="text-xs font-mono">{u.certification_level}</Badge>
+                        : <span className="text-muted-foreground text-xs">—</span>}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push(`/users/${u.id}`)}
+                      >
+                        <Eye className="h-3.5 w-3.5" /> View
+                      </Button>
                     </td>
                   </tr>
                 )

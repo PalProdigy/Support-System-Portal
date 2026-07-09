@@ -4,25 +4,17 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { BookOpen, Search, Tag, Clock, Loader2 } from 'lucide-react'
+import { BookOpen, Tag, Clock } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import type { KBArticle } from '@/types'
 
 export function KBBrowse() {
   const dp = getDataProvider()
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [reading, setReading] = useState<KBArticle | null>(null)
-
-  const runSearch = () => {
-    setIsSearching(true)
-    setQuery(search)
-    setTimeout(() => setIsSearching(false), 300)
-  }
 
   const { data: articles, isLoading } = useQuery({
     queryKey: ['kb-articles', 'published'],
@@ -48,26 +40,21 @@ export function KBBrowse() {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex max-w-lg items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input
-              className="pl-9"
-              placeholder="Search articles, tags…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-            />
-          </div>
-          <Button onClick={runSearch} disabled={isSearching} aria-label="Search">
-            {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
-          </Button>
+        <div className="max-w-lg">
+          <SearchInput
+            placeholder="Search articles, tags…"
+            value={query}
+            onChange={setQuery}
+            aria-label="Search articles"
+            resultCount={filtered.length}
+            resultLabel="article"
+          />
         </div>
 
         {filtered.length === 0 ? (
           <EmptyState
             icon={BookOpen}
-            title={query ? 'No matching articles' : 'No articles published yet'}
+            title={query ? `No results found for "${query}"` : 'No articles published yet'}
             description={query ? 'Try different keywords.' : 'Check back soon for guides and documentation.'}
           />
         ) : (

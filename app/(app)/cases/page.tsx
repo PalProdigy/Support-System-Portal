@@ -10,10 +10,10 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
 import { StatCard } from '@/components/shared/stat-card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { PlusCircle, Search, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert, Loader2 } from 'lucide-react'
+import { PlusCircle, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, User } from '@/types'
 import { STATUS_LABELS, PRIORITY_LABELS, slaRemainingMs, slaPercent } from '@/lib/utils'
@@ -143,18 +143,18 @@ export default function CasesPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search by title or reference..."
-            className="pl-9"
-            value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-          />
-        </div>
-        <Button onClick={() => refetch()} disabled={isFetching} aria-label="Search">
-          {isFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
-        </Button>
+        <SearchInput
+          containerClassName="flex-1 min-w-48"
+          className="h-9"
+          placeholder="Search by title or reference..."
+          value={search}
+          onChange={(v) => { setSearch(v); setPage(1) }}
+          debounceMs={350}
+          loading={isFetching}
+          aria-label="Search cases"
+          resultCount={total}
+          resultLabel="case"
+        />
         <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Status" />
@@ -203,7 +203,7 @@ export default function CasesPage() {
       ) : cases.length === 0 ? (
         <EmptyState
           icon={Ticket}
-          title="No cases found"
+          title={search ? `No results found for "${search}"` : 'No cases found'}
           description={hasFilters ? 'Try adjusting your filters.' : 'No cases yet.'}
         />
       ) : showGrouped ? (

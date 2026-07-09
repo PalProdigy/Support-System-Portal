@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
+import { SearchInput } from '@/components/ui/search-input'
 import {
   cn, formatDate, formatDuration, slaRemainingMs,
   PRIORITY_COLORS, PRIORITY_LABELS, STATUS_COLORS, STATUS_LABELS,
@@ -15,12 +16,13 @@ import type { CaseStatus, Priority } from '@/types'
 
 const ALL = 'all'
 
-export function OverviewBoard({ query = '' }: { query?: string }) {
+export function OverviewBoard() {
   const session = useSession()
   const dp = getDataProvider()
   const scope = { userId: session.userId, role: session.role }
   const router = useRouter()
 
+  const [query, setQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState(ALL)
   const [filterPriority, setFilterPriority] = useState(ALL)
   const [filterTeam, setFilterTeam] = useState(ALL)
@@ -67,19 +69,30 @@ export function OverviewBoard({ query = '' }: { query?: string }) {
     <div className="space-y-5">
       {/* Filters */}
       <div className="flex flex-wrap gap-2 items-center">
-        <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="h-8 rounded-md border bg-background text-sm px-2 text-foreground">
-          <option value={ALL}>All Status</option>
-          {STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
-        </select>
-        <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="h-8 rounded-md border bg-background text-sm px-2 text-foreground">
-          <option value={ALL}>All Priority</option>
-          {PRIORITIES.map((p) => <option key={p} value={p}>{PRIORITY_LABELS[p]}</option>)}
-        </select>
-        <select value={filterTeam} onChange={(e) => setFilterTeam(e.target.value)} className="h-8 rounded-md border bg-background text-sm px-2 text-foreground">
-          <option value={ALL}>All Teams</option>
-          {(teams ?? []).map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-        </select>
-        <span className="text-xs text-muted-foreground ml-auto">{filtered.length} of {allCases.length}</span>
+        <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 flex-1 min-w-[520px]">
+          <SearchInput
+            className="h-8 text-sm"
+            placeholder="Search cases…"
+            value={query}
+            onChange={setQuery}
+            aria-label="Search cases"
+            resultCount={filtered.length}
+            resultLabel="case"
+          />
+          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="h-8 rounded-md border bg-background text-sm px-2 text-foreground min-w-0">
+            <option value={ALL}>All Status</option>
+            {STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
+          </select>
+          <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} className="h-8 rounded-md border bg-background text-sm px-2 text-foreground min-w-0">
+            <option value={ALL}>All Priority</option>
+            {PRIORITIES.map((p) => <option key={p} value={p}>{PRIORITY_LABELS[p]}</option>)}
+          </select>
+          <select value={filterTeam} onChange={(e) => setFilterTeam(e.target.value)} className="h-8 rounded-md border bg-background text-sm px-2 text-foreground min-w-0">
+            <option value={ALL}>All Teams</option>
+            {(teams ?? []).map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+          </select>
+        </div>
+        <span className="text-xs text-muted-foreground shrink-0">{filtered.length} of {allCases.length}</span>
       </div>
 
       {/* Case table */}

@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { useSession } from '@/lib/auth/context'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { SearchInput } from '@/components/ui/search-input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Shield, TrendingUp, ShieldAlert, MessageSquare, Briefcase } from 'lucide-react'
@@ -34,6 +35,8 @@ export default function SalesExecutiveHubPage() {
   const isAM = session.role === 'sales_executive'
 
   const [tab, setTab] = useState(isTH && !isAM ? 'manage' : 'pipeline')
+  const [query, setQuery] = useState('')
+  const [resultCount, setResultCount] = useState(0)
 
   if (!isAM && !isTH) {
     return <EmptyState icon={Shield} title="Access Denied" description="This section is for Sales Executives." />
@@ -51,28 +54,37 @@ export default function SalesExecutiveHubPage() {
               : 'Administer Sales Executive accounts and review pipeline health.'}
           </p>
         </div>
+        {isTH && (
+          <div className="max-w-md w-full">
+            <SearchInput
+              placeholder="Search account managers..."
+              value={query}
+              onChange={setQuery}
+              aria-label="Search account managers"
+              resultCount={resultCount}
+              resultLabel="account manager"
+            />
+          </div>
+        )}
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="w-full">
-          {isAM && (
-            <>
-              <TabsTrigger value="pipeline" className="flex-1">
-                <TrendingUp className="h-3.5 w-3.5" />
-                Pipeline
-              </TabsTrigger>
-              <TabsTrigger value="notes" className="flex-1">
-                <MessageSquare className="h-3.5 w-3.5" />
-                Notes
-              </TabsTrigger>
-              <TabsTrigger value="sla" className="flex-1">
-                <ShieldAlert className="h-3.5 w-3.5" />
-                SLA Monitor
-              </TabsTrigger>
-            </>
-          )}
-
-        </TabsList>
+        {isAM && (
+          <TabsList className="w-full">
+            <TabsTrigger value="pipeline" className="flex-1">
+              <TrendingUp className="h-3.5 w-3.5" />
+              Pipeline
+            </TabsTrigger>
+            <TabsTrigger value="notes" className="flex-1">
+              <MessageSquare className="h-3.5 w-3.5" />
+              Notes
+            </TabsTrigger>
+            <TabsTrigger value="sla" className="flex-1">
+              <ShieldAlert className="h-3.5 w-3.5" />
+              SLA Monitor
+            </TabsTrigger>
+          </TabsList>
+        )}
 
         {isAM && (
           <>
@@ -99,7 +111,7 @@ export default function SalesExecutiveHubPage() {
         {isTH && (
           <TabsContent value="manage" className="mt-5">
             <Suspense fallback={null}>
-              <ManageSalesExecutives />
+              <ManageSalesExecutives query={query} onResultCountChange={setResultCount} />
             </Suspense>
           </TabsContent>
         )}

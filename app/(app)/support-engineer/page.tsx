@@ -6,6 +6,7 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UserAvatar } from '@/components/shared/user-avatar'
@@ -13,7 +14,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
-import { PlusCircle, Search, Users, Loader2 } from 'lucide-react'
+import { PlusCircle, Users } from 'lucide-react'
 import type { User, Role, CertificationLevel } from '@/types'
 import { canAccess } from '@/lib/rbac'
 import { useRouter } from 'next/navigation'
@@ -40,9 +41,7 @@ function SupportEngineersContent() {
   const router = useRouter()
   const scope = { userId: session.userId, role: session.role }
 
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState<{
     name: string
@@ -53,12 +52,6 @@ function SupportEngineersContent() {
     certification_level?: CertificationLevel
   }>({ name: '', email: '', role: 'support_engineer', is_active: true })
   const TARGET_ROLE: Role = 'support_engineer'
-
-  const runSearch = () => {
-    setIsSearching(true)
-    setQuery(search)
-    setTimeout(() => setIsSearching(false), 300)
-  }
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['users'],
@@ -82,36 +75,29 @@ function SupportEngineersContent() {
 
   return (
     <div className="p-6 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold">Support Engineers</h1>
           <p className="text-sm text-muted-foreground">{filtered.length} engineers</p>
         </div>
-        <Button onClick={() => setShowCreate(true)}>
+        <SearchInput
+          containerClassName="w-full max-w-xs"
+          placeholder="Search users..."
+          value={query}
+          onChange={setQuery}
+          aria-label="Search support engineers"
+          resultCount={filtered.length}
+          resultLabel="engineer"
+        />
+        <Button onClick={() => setShowCreate(true)} className="hidden">
           <PlusCircle className="h-4 w-4" /> Add Engineer
-        </Button>
-      </div>
-
-      <div className="flex gap-2 max-w-md">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search users..."
-            className="pl-9"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-          />
-        </div>
-        <Button onClick={runSearch} disabled={isSearching} aria-label="Search">
-          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
         </Button>
       </div>
 
       {isLoading ? (
         <div className="space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="h-16 rounded-xl bg-muted animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
-        <EmptyState icon={Users} title="No support engineers found" />
+        <EmptyState icon={Users} title={query ? `No results found for "${query}"` : 'No support engineers found'} />
       ) : (
         <div className="rounded-xl border overflow-hidden">
           <table className="w-full text-sm">

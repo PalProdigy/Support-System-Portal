@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Ticket, Search, Clock, PlusCircle, Loader2 } from 'lucide-react'
+import { Ticket, Clock, PlusCircle } from 'lucide-react'
 import { cn, slaRemainingMs, formatDuration, formatDate, PRIORITY_COLORS, PRIORITY_LABELS, CLIENT_STATUS_LABELS, STATUS_COLORS } from '@/lib/utils'
 import type { CaseStatus, Priority } from '@/types'
 
@@ -21,17 +21,9 @@ export function MyCases() {
   const scope = { userId: session.userId, role: session.role }
   const router = useRouter()
 
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [statusFilter, setStatusFilter] = useState<CaseStatus | 'all'>(ALL)
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'all'>(ALL)
-
-  const runSearch = () => {
-    setIsSearching(true)
-    setQuery(search)
-    setTimeout(() => setIsSearching(false), 300)
-  }
 
   const { data: casesPage, isLoading } = useQuery({
     queryKey: ['cases', session.userId],
@@ -65,19 +57,16 @@ export function MyCases() {
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="relative flex-1 min-w-[180px] max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            className="pl-9 h-8 text-sm"
-            placeholder="Search cases…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-          />
-        </div>
-        <Button size="sm" className="h-8" onClick={runSearch} disabled={isSearching} aria-label="Search">
-          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" />Search</>}
-        </Button>
+        <SearchInput
+          containerClassName="flex-1 min-w-[180px] max-w-xs"
+          className="h-8 text-sm"
+          placeholder="Search cases…"
+          value={query}
+          onChange={setQuery}
+          aria-label="Search cases"
+          resultCount={cases.length}
+          resultLabel="case"
+        />
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as CaseStatus | 'all')}>
           <SelectTrigger className="h-8 w-40 text-sm">
             <SelectValue placeholder="All statuses" />
@@ -108,7 +97,7 @@ export function MyCases() {
       {cases.length === 0 ? (
         <EmptyState
           icon={Ticket}
-          title={query || statusFilter !== ALL || priorityFilter !== ALL ? 'No matching cases' : 'No cases yet'}
+          title={query ? `No results found for "${query}"` : statusFilter !== ALL || priorityFilter !== ALL ? 'No matching cases' : 'No cases yet'}
           description={query || statusFilter !== ALL || priorityFilter !== ALL ? 'Try adjusting your filters.' : 'Submit a case from the My Portal page to get started.'}
         />
       ) : (

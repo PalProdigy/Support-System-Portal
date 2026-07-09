@@ -6,9 +6,9 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Badge } from '@/components/ui/badge'
-import { Building2, PlusCircle, Phone, Search, RotateCcw, ChevronRight, Loader2 } from 'lucide-react'
+import { Building2, PlusCircle, Phone, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Client, ClientSolution } from '@/types'
 import { formatDate, cn } from '@/lib/utils'
@@ -116,16 +116,14 @@ export default function ClientsPage() {
  *  - Ordered by the most recent engagement (product / service / solution taken),
  *    so the currently-active clients appear at the top and older ones below.
  *  - Search by Client Name (contact person), Client ID, or Company / Organization
- *    name — applied only when the Search button is pressed (or Enter).
+ *    name — filters live as you type (debounced), or immediately on Enter.
  *  - Total client count shown at the top; a row click opens the client detail.
  */
 function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: boolean }) {
   const dp = getDataProvider()
   const router = useRouter()
 
-  const [draft, setDraft] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
 
   // Client-solution links carry the date a client engaged a solution; we use the
   // most recent of these (falling back to last_activity_at / created_at) as the
@@ -163,51 +161,35 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     return [...filtered].sort((a, b) => recencyOf(b).localeCompare(recencyOf(a)))
   }, [clients, query, recentByClient])
 
-  const runSearch = () => {
-    setIsSearching(true)
-    setQuery(draft)
-    setTimeout(() => setIsSearching(false), 300)
-  }
-  const resetSearch = () => { setDraft(''); setQuery('') }
-
   const COLS = ['Company / Organization', 'Client Name', 'Client ID', 'Industry', 'Tier', 'Recent Activity', '']
 
   return (
     <div className="p-6 space-y-4">
       {/* Header + total count */}
-      <div className="flex items-center gap-3">
-        <div className="rounded-xl bg-primary/10 p-2.5">
-          <Building2 className="h-5 w-5 text-primary" />
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl bg-primary/10 p-2.5">
+            <Building2 className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">Clients</h1>
+            <p className="text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground tabular-nums">{clients.length}</span> total
+              {query && <> · {ordered.length} match “{query}”</>}
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold">Clients</h1>
-          <p className="text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground tabular-nums">{clients.length}</span> total
-            {query && <> · {ordered.length} match “{query}”</>}
-          </p>
-        </div>
-      </div>
 
-      {/* Search section — searches Client Name, Client ID, Company / Organization */}
-      <div className="flex flex-wrap gap-2 items-center">
-        <div className="relative flex-1 min-w-[220px]">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="pl-9"
-            placeholder="Search by Client Name, Client ID, or Company / Organization…"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-          />
-        </div>
-        <Button onClick={runSearch} disabled={isSearching}>
-          {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Search className="h-4 w-4" /> Search</>}
-        </Button>
-        {query && (
-          <Button variant="outline" onClick={resetSearch}>
-            <RotateCcw className="h-4 w-4" /> Reset
-          </Button>
-        )}
+        {/* Search — searches Client Name, Client ID, Company / Organization */}
+        <SearchInput
+          containerClassName="w-full max-w-xs"
+          placeholder="Search by Client Name, Client ID, or Company / Organization…"
+          value={query}
+          onChange={setQuery}
+          aria-label="Search clients"
+          resultCount={ordered.length}
+          resultLabel="client"
+        />
       </div>
 
       {/* Table */}
@@ -229,7 +211,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
             </thead>
             <tbody>
               {ordered.length === 0 && (
-                <tr><td colSpan={COLS.length} className="text-center py-8 text-muted-foreground text-sm">No clients match your search</td></tr>
+                <tr><td colSpan={COLS.length} className="text-center py-8 text-muted-foreground text-sm">{query ? `No results found for "${query}"` : 'No clients match your search'}</td></tr>
               )}
               {ordered.map((c) => {
                 return (

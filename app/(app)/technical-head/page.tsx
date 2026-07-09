@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import { getDataProvider } from '@/lib/data'
@@ -8,11 +8,9 @@ import { useSession } from '@/lib/auth/context'
 import { redirect, useRouter, useSearchParams } from 'next/navigation'
 import { cn, slaRemainingMs } from '@/lib/utils'
 import { StatCard } from '@/components/shared/stat-card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import {
   ShieldAlert, LayoutList, AlertTriangle, ShieldCheck, BarChart3, TrendingUp,
-  Ticket, UserX, Gauge, Search, Loader2,
+  Ticket, UserX, Gauge,
 } from 'lucide-react'
 import type { EngineerMetrics } from '@/types'
 
@@ -60,15 +58,7 @@ function Guard() {
 // One KPI card per hub tab (plus SLA Breached as a cross-cutting urgency
 // signal) so the snapshot is visible no matter which tab is active, and each
 // card jumps straight to the tab it summarizes.
-function THHeader({
-  tab, search, onSearchChange, isSearching, onSearch,
-}: {
-  tab: Tab
-  search: string
-  onSearchChange: (value: string) => void
-  isSearching: boolean
-  onSearch: () => void
-}) {
+function THHeader() {
   const session = useSession()
   const dp = getDataProvider()
   const scope = { userId: session.userId, role: session.role }
@@ -105,35 +95,14 @@ function THHeader({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-red-100 dark:bg-red-900/30 p-2.5">
-            <ShieldAlert className="h-5 w-5 text-red-600 dark:text-red-400" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">TH Hub</h1>
-            <p className="text-sm text-muted-foreground">Technical Head oversight — all teams</p>
-          </div>
+      <div className="flex items-center gap-3">
+        <div className="rounded-xl bg-red-100 dark:bg-red-900/30 p-2.5">
+          <ShieldAlert className="h-5 w-5 text-red-600 dark:text-red-400" />
         </div>
-
-        {tab === 'overview' && (
-          <div className="flex items-center gap-2">
-            <div className="relative w-56">
-              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
-              <Input
-                className="pl-8 h-8 text-sm"
-                placeholder="Search cases…"
-                value={search}
-                onChange={(e) => onSearchChange(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && onSearch()}
-              />
-            </div>
-            <Button type="button" size="sm" onClick={onSearch} disabled={isSearching} className="h-8 shrink-0">
-              {isSearching ? <Loader2 className="h-3.5 w-3.5 animate-spin text-white" /> : <Search className="h-3.5 w-3.5 text-white" />}
-              <span className="text-white">Search</span>
-            </Button>
-          </div>
-        )}
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">TH Hub</h1>
+          <p className="text-sm text-muted-foreground">Technical Head oversight — all teams</p>
+        </div>
       </div>
     </div>
   )
@@ -156,22 +125,10 @@ function THHubContent() {
     router.replace(`/technical-head?tab=${key}`, { scroll: false })
   }
 
-  const [search, setSearch] = useState('')
-  const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
-
-  async function runSearch() {
-    if (isSearching) return
-    setIsSearching(true)
-    await new Promise((resolve) => setTimeout(resolve, 450))
-    setQuery(search)
-    setIsSearching(false)
-  }
-
   return (
     <div className="space-y-6 p-6">
       <Guard />
-      <THHeader tab={tab} search={search} onSearchChange={setSearch} isSearching={isSearching} onSearch={runSearch} />
+      <THHeader />
 
       {/* Tabs */}
       <div className="flex items-center gap-1 border-b flex-wrap">
@@ -193,7 +150,7 @@ function THHubContent() {
       </div>
 
       <Suspense fallback={<ListSkeleton />}>
-        {tab === 'overview'     && <OverviewBoard query={query} />}
+        {tab === 'overview'     && <OverviewBoard />}
         {tab === 'escalations'  && <EscalationQueue />}
         {tab === 'approvals'    && <CriticalApprovalQueue />}
         {tab === 'workload'     && <WorkloadCharts />}

@@ -7,13 +7,14 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared/empty-state'
 import { toast } from '@/hooks/use-toast'
-import { Package, PlusCircle, Search, ArrowRight, Loader2 } from 'lucide-react'
+import { Package, PlusCircle, ArrowRight } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
 import type { Product } from '@/types'
 import { getCategoryMeta } from '@/lib/products-shared'
@@ -25,9 +26,7 @@ export default function ProductCategoriesPage() {
   const qc = useQueryClient()
   const scope = { userId: session.userId, role: session.role }
 
-  const [search, setSearch] = useState('')
   const [query, setQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState({ name: '', description: '', category: '', is_active: true })
 
@@ -55,14 +54,6 @@ export default function ProductCategoriesPage() {
 
   const displayedCategories = searching ? searchResults : categories
 
-  async function runSearch() {
-    if (isSearching) return
-    setIsSearching(true)
-    await new Promise((resolve) => setTimeout(resolve, 450))
-    setQuery(search)
-    setIsSearching(false)
-  }
-
   const createMutation = useMutation({
     mutationFn: () => dp.createProduct(form),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); toast({ title: 'Category created', variant: 'success' }); setShowCreate(false); setForm({ name: '', description: '', category: '', is_active: true }) },
@@ -88,28 +79,22 @@ export default function ProductCategoriesPage() {
         {canManage && <Button onClick={() => setShowCreate(true)}><PlusCircle className="h-4 w-4 text-white" /> <span className="text-white">Add Category</span></Button>}
       </div>
 
-      <div className="flex max-w-md items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            className="pl-9"
-            placeholder="Search category…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && runSearch()}
-          />
-        </div>
-        <Button type="button" onClick={runSearch} disabled={isSearching} className="shrink-0">
-          {isSearching ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : <Search className="h-4 w-4 text-white" />}
-          <span className="text-white">Search</span>
-        </Button>
+      <div className="max-w-md">
+        <SearchInput
+          placeholder="Search category…"
+          value={query}
+          onChange={setQuery}
+          aria-label="Search categories"
+          resultCount={searching ? searchResults.length : undefined}
+          resultLabel="category"
+        />
       </div>
 
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{[...Array(6)].map((_, i) => <div key={i} className="h-36 animate-pulse rounded-2xl bg-muted" />)}</div>
       ) : displayedCategories.length === 0 ? (
         searching ? (
-          <EmptyState icon={Package} title="No categories found" description="Try a different search term." />
+          <EmptyState icon={Package} title={`No results found for "${query}"`} description="Try a different search term." />
         ) : (
           <EmptyState icon={Package} title="No categories found" description="No product categories are available yet." />
         )
