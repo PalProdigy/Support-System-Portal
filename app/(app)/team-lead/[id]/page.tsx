@@ -18,7 +18,7 @@ const UserDetail = dynamic(
   }
 )
 
-export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function TeamLeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   return <UserDetail id={id} />
 }

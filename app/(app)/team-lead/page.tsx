@@ -114,7 +114,7 @@ function TeamLeadContent() {
                     className="hover:bg-muted/30 transition-colors cursor-pointer"
                     onClick={(e) => {
                       if ((e.target as HTMLElement).closest('button,input[type=checkbox]')) return
-                      router.push(`/users/${u.id}`)
+                      router.push(`/team-lead/${u.id}`)
                     }}
                   >
                     <td className="px-4 py-3">
@@ -151,7 +151,7 @@ function TeamLeadContent() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => router.push(`/users/${u.id}`)}
+                        onClick={() => router.push(`/team-lead/${u.id}`)}
                       >
                         <Eye className="h-3.5 w-3.5" /> View
                       </Button>

@@ -260,7 +260,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                     </td>
                     <td className="px-3 py-2.5 whitespace-nowrap">{c.contact_person}</td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
-                    <td className="px-3 py-2.5 whitespace-nowrap text-center font-medium">{casesByClient[c.id] ?? 0}</td>
+                    <td className="px-3 py-2.5 whitespace-nowrap font-medium">{casesByClient[c.id] ?? 0}</td>
                     <td className="px-3 py-2.5 sticky right-0 bg-card/95 group-hover:bg-accent/20 transition-colors w-24 text-right">
                       <Button
                         variant="outline"
