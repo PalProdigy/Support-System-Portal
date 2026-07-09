@@ -111,7 +111,7 @@ export function ManageSalesExecutives({ query, onResultCountChange }: ManageSale
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <UserAvatar name={u.name} avatarUrl={u.avatar} size="sm" />
+                     <UserAvatar name={u.name} avatarUrl={u.avatar} userId={u.id} size="sm" border={false} shadow={false} />
                       <div>
                         <p className="font-medium">{u.name}</p>
                         <p className="text-xs text-muted-foreground flex items-center gap-1">

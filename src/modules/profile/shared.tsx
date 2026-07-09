@@ -13,7 +13,7 @@ import type { User } from '@/types'
 export function ProfileHeader({ user, badges }: { user: User; badges?: ReactNode }) {
   return (
     <div className="rounded-xl border bg-card p-6 flex items-start gap-5 flex-wrap">
-      <UserAvatar name={user.name} size="lg" />
+      <UserAvatar name={user.name} avatarUrl={user.avatar} userId={user.id} size="lg" border shadow />
       <div className="flex-1 min-w-0 space-y-2">
         <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground">

@@ -3,6 +3,7 @@
 import { useState, useRef, type KeyboardEvent } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
+import { UserAvatar } from '@/components/shared/user-avatar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -140,17 +141,14 @@ export function EditProfileDialog({ user, open, onOpenChange }: {
           {/* Picture + Name */}
           <div className="flex items-center gap-4">
             <div className="relative">
-              <Avatar className="h-20 w-20">
-                {avatar && <AvatarImage src={avatar} alt={name} />}
-                <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">{getInitials(name)}</AvatarFallback>
-              </Avatar>
+              <UserAvatar name={name} avatarUrl={avatar} userId={user.id} size="xl" border shadow />
               <button
                 type="button"
                 onClick={() => avatarRef.current?.click()}
-                className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground shadow ring-2 ring-background hover:opacity-90"
+                className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg ring-2 ring-background hover:opacity-90 transition-opacity"
                 title="Change picture"
               >
-                <Camera className="h-3.5 w-3.5" />
+                <Camera className="h-4 w-4" />
               </button>
               <input ref={avatarRef} type="file" accept="image/*" className="sr-only" onChange={(e) => onAvatarPick(e.target.files?.[0] ?? undefined)} />
             </div>

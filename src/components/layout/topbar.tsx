@@ -123,7 +123,7 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 px-2">
-              <UserAvatar name={userName} size="sm" />
+              <UserAvatar name={userName} userId={session?.userId} size="sm" border={false} shadow={false} />
               <div className="hidden md:block text-left">
                 <p className="text-xs font-medium leading-none">{userName}</p>
                 {session?.role && <p className="text-[10px] text-muted-foreground mt-0.5">{ROLE_LABELS[session.role]}</p>}

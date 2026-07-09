@@ -194,7 +194,7 @@ export function PreSalesNotesPanel({ clientId }: PreSalesNotesPanelProps) {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <UserAvatar name={note.author_name} size="sm" />
+                    <UserAvatar name={note.author_name} userId={note.author_id} size="sm" border={false} shadow={false} />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium">{note.author_name}</p>
                       <p className="text-[10px] text-muted-foreground">{formatDateTime(note.created_at)}</p>

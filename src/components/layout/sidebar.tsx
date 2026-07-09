@@ -242,7 +242,7 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
           <Separator />
           <div className="p-3">
             <div className="flex items-center gap-2.5 rounded-lg px-2 py-2">
-              <UserAvatar name={userName} size="sm" />
+              <UserAvatar name={userName} userId={session?.userId} size="sm" border={false} shadow={false} />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-foreground truncate">{userName}</p>
                 {role && <p className="text-[10px] text-muted-foreground">{ROLE_LABELS[role]}</p>}

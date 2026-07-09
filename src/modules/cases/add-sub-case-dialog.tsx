@@ -111,7 +111,7 @@ export function AddSubCaseDialog({
                 <div className="space-y-1.5 rounded-lg border bg-muted/30 p-2">
                   {selectedEngineers.map((eng) => (
                     <div key={eng.id} className="flex items-center gap-2">
-                      <UserAvatar name={eng.name} size="sm" />
+                      <UserAvatar name={eng.name} avatarUrl={eng.avatar} userId={eng.id} size="sm" border={false} shadow={false} />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{eng.name}</p>
                         <p className="text-[10px] text-muted-foreground">{ROLE_LABELS[eng.role] ?? eng.role}</p>
