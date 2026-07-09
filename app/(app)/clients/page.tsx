@@ -182,7 +182,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
         {/* Search — searches Client Name or Company / Organization */}
         <SearchInput
           containerClassName="w-full max-w-xs"
-          placeholder="Search by Client Name or Company / Organization…"
+          placeholder="Search Client Name…"
           value={query}
           onChange={setQuery}
           aria-label="Search clients"

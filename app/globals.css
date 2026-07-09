@@ -115,3 +115,15 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-thumb-hover);
 }
+
+/* Global text selection styles */
+::selection {
+  color: #3B82F6;
+  background-color: #081632;
+}
+
+/* Mozilla Firefox support */
+::-moz-selection {
+  color: #3B82F6;
+  background-color: #081632;
+}
