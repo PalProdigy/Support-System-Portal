@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { InfoCard, StatTile } from './shared'
 import { EditProfileDialog } from './edit-profile-dialog'
+import { useSession } from '@/lib/auth/context'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { getInitials, formatDate } from '@/lib/utils'
 import {
@@ -67,7 +68,9 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
   stats: StatItem[]
   summaryTitle?: string
 }) {
+  const session = useSession()
   const [editOpen, setEditOpen] = useState(false)
+  const canEdit = session.userId === user.id
 
   const designation = user.designation ?? ROLE_LABELS[user.role]
   const department = user.department === 'sales' ? 'Sales'
@@ -101,9 +104,11 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
                 </div>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
-              <Pencil className="h-3.5 w-3.5" /> Edit Profile
-            </Button>
+            {canEdit && (
+              <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
+                <Pencil className="h-3.5 w-3.5" /> Edit Profile
+              </Button>
+            )}
           </div>
 
           {/* Meta strip */}
@@ -244,7 +249,7 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
       </div>
 
       {/* Mounted only while open so the editor always seeds from the latest data. */}
-      {editOpen && <EditProfileDialog user={user} open onOpenChange={setEditOpen} />}
+      {canEdit && editOpen && <EditProfileDialog user={user} open onOpenChange={setEditOpen} />}
     </>
   )
 }

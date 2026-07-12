@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import {
@@ -17,20 +17,24 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { formatDateTime, formatDuration } from '@/lib/utils'
 import {
   ArrowLeft, Mail, Calendar, Ticket, CheckCircle2,
   AlertTriangle, Clock, Star, TrendingUp, ArrowRightLeft,
-  ExternalLink, MessageSquare,
+  ExternalLink, MessageSquare, Eye,
 } from 'lucide-react'
 import type { Case, Feedback, AuditLog } from '@/types'
+import { SupportEngineerProfile } from '@/modules/profile/support-engineer-profile'
+import { TeamLeadProfile } from '@/modules/profile/team-lead-profile'
 
 export function UserDetail({ id }: { id: string }) {
   const session = useSession()
   const dp = getDataProvider()
   const router = useRouter()
   const scope = { userId: session.userId, role: session.role }
+  const [showProfile, setShowProfile] = useState(false)
 
   const { data: users, isLoading: loadingUser } = useQuery({
     queryKey: ['users'],
@@ -189,8 +193,13 @@ export function UserDetail({ id }: { id: string }) {
       <div className="rounded-xl border bg-card p-6 flex items-start gap-5 flex-wrap">
         <UserAvatar name={user.name} avatarUrl={user.avatar} size="lg" />
         <div className="flex-1 min-w-0 space-y-2">
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-start justify-between gap-3 flex-wrap">
             <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
+            {(user.role === 'support_engineer' || user.role === 'team_lead') && (
+              <Button variant="outline" size="sm" onClick={() => setShowProfile(true)}>
+                <Eye className="h-3.5 w-3.5" /> View
+              </Button>
+            )}
           </div>
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <Mail className="h-3.5 w-3.5 shrink-0" />
@@ -508,6 +517,20 @@ export function UserDetail({ id }: { id: string }) {
             </TabsContent>
           </Tabs>
         </>
+      )}
+
+      {/* Full profile modal — mounted only while open so it always fetches fresh data */}
+      {showProfile && (user.role === 'support_engineer' || user.role === 'team_lead') && (
+        <Dialog open onOpenChange={setShowProfile}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{user.role === 'team_lead' ? 'Team Lead Profile' : 'Support Engineer Profile'}</DialogTitle>
+            </DialogHeader>
+            {user.role === 'team_lead'
+              ? <TeamLeadProfile user={user} teamName={teamName} />
+              : <SupportEngineerProfile user={user} teamName={teamName} />}
+          </DialogContent>
+        </Dialog>
       )}
     </div>
   )
