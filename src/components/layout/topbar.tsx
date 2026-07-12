@@ -66,7 +66,7 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
   }
 
   return (
-    <header className="flex h-14 items-center justify-end border-b bg-card px-4 gap-4 shrink-0">
+<header className="absolute inset-x-0 top-0 z-20 flex h-14 items-center justify-end  bg-card/70 px-4 gap-4 backdrop-blur-md backdrop-saturate-150 supports-[backdrop-filter]:bg-card/60 shadow-sm print:static">
     <div className="flex items-center gap-1">
         {/* Theme toggle */}
         <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">

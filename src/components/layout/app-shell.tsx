@@ -56,11 +56,11 @@ export function AppShell({ children }: AppShellProps) {
             userRole={session.role}
           />
         </div>
-        <div className="flex flex-1 flex-col overflow-hidden min-w-0 print:overflow-visible">
+        <div className="relative flex-1 overflow-hidden min-w-0 print:overflow-visible">
           <div className="contents print:hidden">
             <Topbar userName={currentUser?.name ?? 'User'} />
           </div>
-          <main className="flex-1 overflow-y-auto print:overflow-visible">
+          <main className="absolute inset-0 overflow-y-auto pt-14 print:static print:overflow-visible print:pt-0">
             {children}
           </main>
         </div>

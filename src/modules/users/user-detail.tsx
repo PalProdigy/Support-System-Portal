@@ -270,7 +270,7 @@ export function UserDetail({ id }: { id: string }) {
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       {/* Back */}
       <Button variant="ghost" size="sm" onClick={() => router.back()}>
-        <ArrowLeft className="h-4 w-4" /> Back to Users
+        <ArrowLeft className="h-4 w-4" /> Back
       </Button>
 
       {/* Profile header */}

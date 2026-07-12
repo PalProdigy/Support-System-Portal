@@ -6,7 +6,7 @@
 'use client'
 
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -84,9 +84,21 @@ interface SidebarProps {
 export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [isDark, setIsDark] = useState(false)
+  const [navScrolling, setNavScrolling] = useState(false)
+  const navScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pathname = usePathname()
   const { session } = useAuth()
   const role = userRole ?? session?.role
+
+  const handleNavScroll = () => {
+    setNavScrolling(true)
+    if (navScrollTimeout.current) clearTimeout(navScrollTimeout.current)
+    navScrollTimeout.current = setTimeout(() => setNavScrolling(false), 800)
+  }
+
+  useEffect(() => () => {
+    if (navScrollTimeout.current) clearTimeout(navScrollTimeout.current)
+  }, [])
 
   const visibleItems = NAV_ITEMS.filter(
     (item) => !item.roles || (role && item.roles.includes(role))
@@ -105,12 +117,12 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'relative flex flex-col h-full border-r bg-card transition-all duration-300 shrink-0',
+        'relative flex flex-col h-full  bg-card transition-all duration-300 shrink-0',
         collapsed ? 'w-16' : 'w-60'
       )}
     >
       {/* Logo */}
-      <div className={cn('flex h-14 items-center overflow-hidden border-b', collapsed ? 'justify-center px-2' : 'px-4')}>
+      <div className={cn('flex h-14 items-center  overflow-hidden ', collapsed ? 'justify-center px-2' : 'px-4')}>
         <Link href="/dashboard" className="flex max-w-full items-center justify-center">
           <svg
               className="h-14 w-auto"
@@ -224,7 +236,11 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
+      <nav
+        className="flex-1 overflow-y-auto border-r scrollbar-auto-hide py-3 px-2 space-y-0.5"
+        onScroll={handleNavScroll}
+        data-scrolling={navScrolling}
+      >
         {visibleItems.map((item) => {
           // Exact match for root-level portals to avoid /client matching /clients
           const isActive = item.href === '/client'
@@ -250,30 +266,40 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
         })}
       </nav>
 
-      {/* User */}
-      {!collapsed && (
-        <>
-          <Separator />
-          <div className="p-3">
-            <div className="flex items-center gap-2.5 rounded-lg px-2 py-2">
+      {/* Footer: user info + collapse toggle (bottom-left) */}
+      <Separator />
+      <div className="p-3">
+        {!collapsed ? (
+          <div className="flex items-center gap-2">
+            <div className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-2 py-2">
               <UserAvatar name={userName} userId={session?.userId} size="sm" border={false} shadow={false} />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-foreground truncate">{userName}</p>
                 {role && <p className="text-[10px] text-muted-foreground">{ROLE_LABELS[role]}</p>}
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => setCollapsed(true)}
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border bg-background hover:bg-accent transition-colors"
+              aria-label="Collapse sidebar"
+              title="Collapse sidebar"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+            </button>
           </div>
-        </>
-      )}
-
-      {/* Collapse toggle */}
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-[60px] flex h-6 w-6 items-center justify-center rounded-full border bg-background shadow-sm hover:bg-accent transition-colors z-10"
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-      >
-        {collapsed ? <ChevronRight className="h-3 w-3" /> : <ChevronLeft className="h-3 w-3" />}
-      </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setCollapsed(false)}
+            className="mx-auto flex h-7 w-7 items-center justify-center rounded-md border bg-background hover:bg-accent transition-colors"
+            aria-label="Expand sidebar"
+            title="Expand sidebar"
+          >
+            <ChevronRight className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
     </aside>
   )
 }
