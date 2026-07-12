@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { PlusCircle, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert } from 'lucide-react'
+import { PlusCircle, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert, CheckCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, User } from '@/types'
 import { STATUS_LABELS, PRIORITY_LABELS, slaRemainingMs, slaPercent } from '@/lib/utils'
@@ -75,9 +75,11 @@ export default function CasesPage() {
   const usersMap = Object.fromEntries((users ?? []).map((u: User) => [u.id, u]))
 
   const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
+  const DONE_STATUSES = new Set(['resolved', 'pending_closure', 'closed'])
   const allCases = statsData?.items ?? []
   const totalCount = statsData?.total ?? 0
   const activeCount = allCases.filter((c) => ACTIVE_STATUSES.has(c.status)).length
+  const resolvedCount = allCases.filter((c) => DONE_STATUSES.has(c.status)).length
   const escalatedCount = allCases.filter((c) => c.is_escalated || c.status === 'escalated').length
   const reopenedCount = allCases.filter((c) => !!c.reopened_from_case_id).length
   const slaBreachedCount = allCases.filter((c) => slaRemainingMs(c.sla_due_at) <= 0).length
@@ -108,6 +110,9 @@ export default function CasesPage() {
 
   const canCreate = ['client', 'technical_head'].includes(session.role)
   const hasFilters = search || status !== 'all' || priority !== 'all' || slaFilter !== 'all'
+  // Resolved-count card: a team lead's cases are already scoped to their own team,
+  // and a technical head's cases are unscoped (everyone) — both sums are unfiltered totals.
+  const showResolvedCard = ['team_lead', 'technical_head'].includes(session.role)
 
   return (
     <div className="p-6 space-y-4">
@@ -133,8 +138,11 @@ export default function CasesPage() {
       </div>
 
       {/* Overview */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className={`grid grid-cols-2 sm:grid-cols-3 gap-4 ${showResolvedCard ? 'lg:grid-cols-6' : 'lg:grid-cols-5'}`}>
         <StatCard title="Total Cases" value={totalCount} icon={Ticket} loading={statsLoading} />
+        {showResolvedCard && (
+          <StatCard title="Total Resolved" value={resolvedCount} icon={CheckCircle} iconColor="text-emerald-500" loading={statsLoading} />
+        )}
         <StatCard title="Active Cases" value={activeCount} icon={Activity} iconColor="text-sky-500" loading={statsLoading} />
         <StatCard title="Escalated" value={escalatedCount} icon={AlertTriangle} iconColor="text-red-500" loading={statsLoading} />
         <StatCard title="Reopened" value={reopenedCount} icon={RotateCcw} iconColor="text-amber-500" loading={statsLoading} />

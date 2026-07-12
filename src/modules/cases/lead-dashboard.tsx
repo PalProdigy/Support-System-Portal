@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts'
 import Link from 'next/link'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -16,20 +16,20 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
+import { UserAvatar } from '@/components/shared/user-avatar'
 import { CaseApprovalQueue } from '@/modules/shared/case-approval-queue'
 import { toast } from '@/hooks/use-toast'
 import { cn, slaPercent, slaRemainingMs, formatDuration, PRIORITY_COLORS, PRIORITY_LABELS } from '@/lib/utils'
 import {
   Ticket, AlertTriangle, CheckCircle, Users, PlusCircle, Inbox, ClipboardCheck,
   ArrowRight, LayoutList, BarChart3, Bell, UserCheck, Clock, Gauge, Star,
-  TimerReset, UserCog, TrendingUp, Sparkles, ExternalLink, UserPlus, Check,
+  TimerReset, UserCog, TrendingUp, Sparkles, ExternalLink, UserPlus, Check, X, Plus,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, Feedback, Priority, User } from '@/types'
 
 const OPEN_EXCLUDE = ['closed', 'resolved', 'pending_closure']
 const DONE_STATUSES = ['resolved', 'pending_closure', 'closed']
-const MEMBER_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16']
 
 export default function LeadDashboard() {
   const session = useSession()
@@ -106,17 +106,25 @@ export default function LeadDashboard() {
     .sort((a, b) => b.open - a.open)
   const maxLoad = Math.max(...workload.map((w) => w.open), 1)
 
-  // Team contribution — share of ALL cases (not just open) each active engineer has been assigned.
-  const memberContribution = workload.map(({ eng }, i) => ({
-    name: eng.name,
-    value: cases.filter((c) => c.assignee_id === eng.id).length,
-    color: MEMBER_COLORS[i % MEMBER_COLORS.length],
-  }))
-  const engineerIds = new Set(workload.map((w) => w.eng.id))
-  const unassignedContribution = cases.filter((c) => !c.assignee_id || !engineerIds.has(c.assignee_id)).length
-  const contributionData = [
-    ...memberContribution,
-    ...(unassignedContribution > 0 ? [{ name: 'Unassigned', value: unassignedContribution, color: '#94a3b8' }] : []),
+  // My contribution — the lead's own case load (primary or co-assignee), broken down by outcome.
+  const myCases = cases.filter(
+    (c) => c.assignee_id === session.userId || (c.co_assignee_ids ?? []).includes(session.userId)
+  )
+  const myBucketOf = (c: Case): 'solved' | 'escalated' | 'pending_closure' | 'open' => {
+    if (c.status === 'escalated' || c.is_escalated) return 'escalated'
+    if (c.status === 'resolved' || c.status === 'closed') return 'solved'
+    if (c.status === 'pending_closure') return 'pending_closure'
+    return 'open'
+  }
+  const myBucketCounts = myCases.reduce(
+    (acc, c) => { acc[myBucketOf(c)]++; return acc },
+    { solved: 0, open: 0, pending_closure: 0, escalated: 0 } as Record<'solved' | 'escalated' | 'pending_closure' | 'open', number>
+  )
+  const myContributionData = [
+    { key: 'solved' as const, name: 'Solved', value: myBucketCounts.solved, color: '#10b981', icon: CheckCircle },
+    { key: 'open' as const, name: 'Open', value: myBucketCounts.open, color: '#2563eb', icon: LayoutList },
+    { key: 'pending_closure' as const, name: 'Pending Closure', value: myBucketCounts.pending_closure, color: '#f59e0b', icon: ClipboardCheck },
+    { key: 'escalated' as const, name: 'Escalated', value: myBucketCounts.escalated, color: '#dc2626', icon: AlertTriangle },
   ].filter((d) => d.value > 0)
 
   // Demo approval card — real (but illustrative) prerequisites for creating
@@ -156,9 +164,8 @@ export default function LeadDashboard() {
       </div>
 
       {/* KPIs — each deep-links into the relevant workspace, laid out in a single responsive row */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         <StatLink href="/cases"><StatCard title="Total Cases" value={cases.length} icon={Ticket} loading={isLoading} /></StatLink>
-        <StatLink href="/cases"><StatCard title="Total Resolved" value={doneCases.length} icon={CheckCircle} iconColor="text-emerald-500" loading={isLoading} /></StatLink>
         <StatLink href="/lead"><StatCard title="Open" value={open.length} icon={LayoutList} iconColor="text-blue-500" loading={isLoading} /></StatLink>
         <StatLink href="#approvals"><StatCard title="Awaiting Approval" value={approvals.length + overdueApprovals.length} icon={TimerReset} iconColor={approvals.length + overdueApprovals.length ? 'text-red-500' : 'text-muted-foreground'} loading={isLoading} /></StatLink>
         <StatLink href="#sla"><StatCard title="SLA At-Risk" value={breached.length + atRisk.length} icon={Gauge} iconColor={breached.length ? 'text-red-500' : 'text-amber-500'} loading={isLoading} /></StatLink>
@@ -222,6 +229,68 @@ export default function LeadDashboard() {
         </div>
       </div>
 
+      {/* My Contribution — full-width donut of the lead's own case load, by outcome */}
+      <div className="rounded-xl border bg-card p-5">
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-2">
+            <UserCheck className="h-4 w-4 text-muted-foreground" />
+            <h3 className="text-sm font-semibold">My Contribution</h3>
+          </div>
+          {myTeam && <span className="text-[11px] text-muted-foreground">{myTeam.name}</span>}
+        </div>
+        <p className="text-[11px] text-muted-foreground mb-4">Cases you personally own, by outcome</p>
+        {myContributionData.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <div className="rounded-full bg-muted p-3 mb-2">
+              <Inbox className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <p className="text-sm font-medium text-foreground">No cases assigned to you yet</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Cases you take on will show up here.</p>
+          </div>
+        ) : (
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="relative shrink-0" style={{ width: 220, height: 220 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={myContributionData} cx="50%" cy="50%" innerRadius={68} outerRadius={100} paddingAngle={3} stroke="none" dataKey="value">
+                    {myContributionData.map((entry) => <Cell key={entry.key} fill={entry.color} />)}
+                  </Pie>
+                  <RechartsTooltip
+                    formatter={(value, name) => {
+                      const n = Number(value)
+                      return [`${n} case${n !== 1 ? 's' : ''} (${((n / myCases.length) * 100).toFixed(0)}%)`, name]
+                    }}
+                    contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-3xl font-bold text-foreground tabular-nums leading-none">{myCases.length}</span>
+                <span className="text-[11px] text-muted-foreground mt-1">My Cases</span>
+              </div>
+            </div>
+            <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {myContributionData.map((entry) => {
+                const pct = myCases.length > 0 ? Math.round((entry.value / myCases.length) * 100) : 0
+                const Icon = entry.icon
+                return (
+                  <div key={entry.key} className="flex items-center gap-3 rounded-lg border bg-muted/30 p-3">
+                    <div className="h-9 w-9 rounded-full flex items-center justify-center shrink-0" style={{ background: `${entry.color}1a` }}>
+                      <Icon className="h-4 w-4" style={{ color: entry.color }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] text-muted-foreground truncate">{entry.name}</p>
+                      <p className="text-lg font-bold text-foreground tabular-nums leading-none">{entry.value}</p>
+                    </div>
+                    <span className="text-xs font-semibold text-muted-foreground shrink-0">{pct}%</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Needs Attention — action-focused queue */}
         <div className="lg:col-span-2">
@@ -272,44 +341,6 @@ export default function LeadDashboard() {
               <PerfTile icon={<Star className="h-3.5 w-3.5 text-amber-400" />} label="Avg Rating" value={avgRating != null ? `${avgRating.toFixed(1)}/5` : '—'} />
               <PerfTile icon={<CheckCircle className="h-3.5 w-3.5 text-emerald-500" />} label="Resolved" value={String(doneCases.length)} />
             </div>
-          </div>
-
-          {/* Team contribution — donut of all-time case share per engineer */}
-          <div className="rounded-xl border bg-card p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-semibold">Team Contribution</h3>
-            </div>
-            <p className="text-[11px] text-muted-foreground mb-1">Share of all cases handled by each member</p>
-            {contributionData.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-6 text-center">No cases handled yet.</p>
-            ) : (
-              <ResponsiveContainer width="100%" height={240}>
-                <PieChart>
-                  <Pie data={contributionData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={2} dataKey="value">
-                    {contributionData.map((entry, index) => {
-                      const eng = workload[index]?.eng
-                      return (
-                        <Cell
-                          key={index}
-                          fill={entry.color}
-                          className={eng ? 'cursor-pointer' : undefined}
-                          onClick={eng ? () => router.push(`/engineer/${eng.id}`) : undefined}
-                        />
-                      )
-                    })}
-                  </Pie>
-                  <RechartsTooltip
-                    formatter={(value, name) => {
-                      const n = Number(value)
-                      return [`${n} case${n !== 1 ? 's' : ''} (${((n / cases.length) * 100).toFixed(0)}%)`, name]
-                    }}
-                    contentStyle={{ fontSize: 12 }}
-                  />
-                  <Legend iconSize={9} wrapperStyle={{ fontSize: 10 }} />
-                </PieChart>
-              </ResponsiveContainer>
-            )}
           </div>
 
           {/* Team workload snapshot */}
@@ -419,12 +450,16 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
 
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [assignOpen, setAssignOpen] = useState(false)
-  const [engineerId, setEngineerId] = useState('')
-  const [assignedTo, setAssignedTo] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [assignedNames, setAssignedNames] = useState<string[] | null>(null)
+
+  const addEngineer = (uid: string) => setSelectedIds((prev) => [...prev, uid])
+  const removeEngineer = (uid: string) => setSelectedIds((prev) => prev.filter((id) => id !== uid))
 
   const assignMutation = useMutation({
     mutationFn: async () => {
       if (!clientId || !solutionId || !teamId) throw new Error('Missing client, solution or team for the demo case')
+      const [primaryId, ...coIds] = selectedIds
       const created = await dp.createCase({
         title: DEMO_CASE.title,
         description: DEMO_CASE.description,
@@ -438,13 +473,21 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
         escalation_level: 0,
         is_escalated: false,
       }, scope)
-      return dp.assignCase(created.id, engineerId, scope)
+      const assigned = await dp.assignCase(created.id, primaryId, scope)
+      if (coIds.length > 0) {
+        return dp.updateCase(created.id, { co_assignee_ids: coIds }, scope)
+      }
+      return assigned
     },
     onSuccess: (updated) => {
       qc.invalidateQueries({ queryKey: ['cases'] })
-      const engineerName = engineers.find((e) => e.id === engineerId)?.name ?? engineerId
-      toast({ title: 'Case assigned', description: `${updated.reference_no} → ${engineerName}`, variant: 'success' })
-      setAssignedTo(engineerName)
+      const names = selectedIds.map((id) => engineers.find((e) => e.id === id)?.name ?? id)
+      toast({
+        title: 'Case assigned',
+        description: `${updated.reference_no} → ${names.join(', ')}`,
+        variant: 'success',
+      })
+      setAssignedNames(names)
       setAssignOpen(false)
     },
     onError: () => toast({ title: 'Failed to assign demo case', variant: 'destructive' }),
@@ -471,9 +514,9 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
             <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="View demo case details" onClick={() => setDetailsOpen(true)}>
               <ExternalLink className="h-3.5 w-3.5" />
             </Button>
-            {assignedTo ? (
+            {assignedNames ? (
               <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 px-1">
-                <Check className="h-3.5 w-3.5" /> Assigned to {assignedTo}
+                <Check className="h-3.5 w-3.5" /> Assigned to {assignedNames.join(', ')}
               </span>
             ) : (
               <Button size="sm" className="text-white bg-emerald-600 hover:bg-emerald-700" onClick={() => setAssignOpen(true)}>
@@ -509,8 +552,8 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
         </DialogContent>
       </Dialog>
 
-      {/* Assign — creates and assigns a real case on confirm */}
-      <Dialog open={assignOpen} onOpenChange={(o) => { setAssignOpen(o); if (!o) setEngineerId('') }}>
+      {/* Assign — select one or more engineers, then creates and assigns a real case on confirm */}
+      <Dialog open={assignOpen} onOpenChange={(o) => { setAssignOpen(o); if (!o) setSelectedIds([]) }}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -522,25 +565,59 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
               <span className="font-mono text-xs text-muted-foreground">{DEMO_CASE.reference_no}</span>
               <p className="font-medium mt-0.5 line-clamp-2">{DEMO_CASE.title}</p>
             </div>
+
             <div className="space-y-1.5">
-              <Label>Engineer <span className="text-destructive">*</span></Label>
-              <Select value={engineerId} onValueChange={setEngineerId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select an engineer…" />
-                </SelectTrigger>
-                <SelectContent>
-                  {engineers.filter((e) => e.is_active).map((e) => (
-                    <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label>
+                Engineers <span className="text-destructive">*</span>
+                {selectedIds.length > 0 && <span className="text-muted-foreground font-normal"> ({selectedIds.length})</span>}
+              </Label>
+
+              {selectedIds.length > 0 && (
+                <div className="space-y-1.5">
+                  {selectedIds.map((uid) => {
+                    const eng = engineers.find((e) => e.id === uid)
+                    if (!eng) return null
+                    return (
+                      <div key={uid} className="flex items-center gap-2 rounded-lg border bg-card px-2.5 py-1.5">
+                        <UserAvatar name={eng.name} size="sm" />
+                        <span className="flex-1 min-w-0 text-sm font-medium truncate">{eng.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeEngineer(uid)}
+                          className="h-5 w-5 shrink-0 rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                          aria-label={`Remove ${eng.name}`}
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+
+              {engineers.filter((e) => e.is_active && !selectedIds.includes(e.id)).length > 0 && (
+                <Select value="" onValueChange={addEngineer}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        <Plus className="h-3.5 w-3.5" /> Add engineer…
+                      </span>
+                    } />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {engineers.filter((e) => e.is_active && !selectedIds.includes(e.id)).map((e) => (
+                      <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAssignOpen(false)}>Cancel</Button>
             <Button
               onClick={() => assignMutation.mutate()}
-              disabled={!engineerId || !clientId || !solutionId || !teamId || assignMutation.isPending}
+              disabled={selectedIds.length === 0 || !clientId || !solutionId || !teamId || assignMutation.isPending}
             >
               {assignMutation.isPending ? 'Assigning…' : 'Assign'}
             </Button>
