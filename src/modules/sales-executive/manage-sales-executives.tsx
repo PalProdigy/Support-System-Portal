@@ -94,8 +94,8 @@ export function ManageSalesExecutives({ query, onResultCountChange }: ManageSale
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Sales Executive</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Assigned Clients</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Open Cases</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Joined Date</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Joined Date</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -133,16 +133,16 @@ export function ManageSalesExecutives({ query, onResultCountChange }: ManageSale
                       {openCasesFor(u.id)}
                     </span>
                   </td>
-                  <td className="px-4 py-3 hidden md:table-cell text-muted-foreground text-xs">
-                    <span className="flex items-center gap-1">
-                      <CalendarDays className="h-3 w-3 shrink-0" />
-                      {formatDate(u.created_at)}
-                    </span>
-                  </td>
                   <td className="px-4 py-3 text-muted-foreground text-xs">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3 shrink-0" />
                       {u.years_of_experience != null ? `${u.years_of_experience} yr${u.years_of_experience === 1 ? '' : 's'}` : '—'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 hidden md:table-cell text-muted-foreground text-xs">
+                    <span className="flex items-center gap-1">
+                      <CalendarDays className="h-3 w-3 shrink-0" />
+                      {formatDate(u.created_at)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">

@@ -23,7 +23,7 @@ import { cn, formatDateTime, formatDuration } from '@/lib/utils'
 import {
   ArrowLeft, Mail, Calendar, Ticket, CheckCircle2,
   AlertTriangle, Clock, Star, TrendingUp, ArrowRightLeft,
-  ExternalLink, MessageSquare, Eye, Award,
+  ExternalLink, MessageSquare, Eye, Award, Users,
 } from 'lucide-react'
 import type { Case, Feedback, AuditLog, CertificationLevel } from '@/types'
 import { SupportEngineerProfile } from '@/modules/profile/support-engineer-profile'
@@ -58,6 +58,10 @@ export function UserDetail({ id }: { id: string }) {
 
   const isEngineer = user ? ['support_engineer', 'team_lead', 'technical_head'].includes(user.role) : false
 
+  // The team this user leads (if they're a team lead) — used to roll up
+  // team-wide case activity alongside their own individually-assigned cases.
+  const ledTeam = user?.role === 'team_lead' ? (teams ?? []).find((t) => t.lead_user_id === user.id) : undefined
+
   const { data: clients } = useQuery({
     queryKey: ['clients', session.userId],
     queryFn: () => dp.listClients(scope),
@@ -74,6 +78,12 @@ export function UserDetail({ id }: { id: string }) {
     queryKey: ['cases-by-engineer', id],
     queryFn: () => dp.listCases(scope, { assignee_id: id, pageSize: 500 }),
     enabled: isEngineer,
+  })
+
+  const { data: teamCasesPage } = useQuery({
+    queryKey: ['cases-by-team', ledTeam?.id],
+    queryFn: () => dp.listCases(scope, { team_id: ledTeam!.id, pageSize: 500 }),
+    enabled: !!ledTeam,
   })
 
   const { data: allFeedback } = useQuery({
@@ -177,6 +187,72 @@ export function UserDetail({ id }: { id: string }) {
     { name: 'Escalated', value: escalatedCases.length, color: '#ef4444' },
     { name: 'SLA Breached', value: slaBreachedCases.length, color: '#f59e0b' },
   ].filter((d) => d.value > 0), [resolvedCases, openCases, escalatedCases, slaBreachedCases])
+
+  // ── Team-wide rollup (team lead's own cases + every case owned by their team) ──
+  const teamCases: Case[] = teamCasesPage?.items ?? []
+
+  const combinedCases: Case[] = useMemo(() => {
+    const map = new Map<string, Case>()
+    for (const c of cases) map.set(c.id, c)
+    for (const c of teamCases) map.set(c.id, c)
+    return Array.from(map.values())
+  }, [cases, teamCases])
+
+  const combinedResolvedCases = useMemo(
+    () => combinedCases.filter((c) => ['resolved', 'pending_closure', 'closed'].includes(c.status)),
+    [combinedCases]
+  )
+  const combinedOpenCases = useMemo(
+    () => combinedCases.filter((c) => !['resolved', 'pending_closure', 'closed'].includes(c.status)),
+    [combinedCases]
+  )
+  const combinedEscalatedCases = useMemo(
+    () => combinedCases.filter((c) => c.is_escalated || c.status === 'escalated'),
+    [combinedCases]
+  )
+  const combinedSlaBreachedCases = useMemo(
+    () => combinedCases.filter((c) => {
+      if (!c.sla_due_at) return false
+      const due = new Date(c.sla_due_at).getTime()
+      return c.resolved_at
+        ? new Date(c.resolved_at).getTime() > due
+        : Date.now() > due
+    }),
+    [combinedCases]
+  )
+
+  // Success rate: share of all team-handled cases that were resolved.
+  const teamSuccessRatePct = combinedCases.length > 0
+    ? (combinedResolvedCases.length / combinedCases.length) * 100
+    : null
+
+  const teamMonthlyData = useMemo(() => {
+    const now = new Date()
+    return Array.from({ length: 6 }, (_, i) => {
+      const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1)
+      const monthIdx = d.getMonth()
+      const year = d.getFullYear()
+      return {
+        name: d.toLocaleString('default', { month: 'short' }),
+        Resolved: combinedResolvedCases.filter((c) => {
+          if (!c.resolved_at) return false
+          const rd = new Date(c.resolved_at)
+          return rd.getMonth() === monthIdx && rd.getFullYear() === year
+        }).length,
+        Escalated: combinedEscalatedCases.filter((c) => {
+          const rd = new Date(c.created_at)
+          return rd.getMonth() === monthIdx && rd.getFullYear() === year
+        }).length,
+      }
+    })
+  }, [combinedResolvedCases, combinedEscalatedCases])
+
+  const teamPieData = useMemo(() => [
+    { name: 'Resolved', value: combinedResolvedCases.length, color: '#10b981' },
+    { name: 'Open', value: Math.max(combinedOpenCases.length - combinedEscalatedCases.length, 0), color: '#3b82f6' },
+    { name: 'Escalated', value: combinedEscalatedCases.length, color: '#ef4444' },
+    { name: 'SLA Breached', value: combinedSlaBreachedCases.length, color: '#f59e0b' },
+  ].filter((d) => d.value > 0), [combinedResolvedCases, combinedOpenCases, combinedEscalatedCases, combinedSlaBreachedCases])
 
   if (loadingUser) return <PageSkeleton onBack={() => router.back()} />
   if (!user) return (
@@ -347,6 +423,93 @@ export function UserDetail({ id }: { id: string }) {
                   </BarChart>
                 </ResponsiveContainer>
               </div>
+            </div>
+          )}
+
+          {/* Team-wide rollup — team lead's own cases + every case owned by their team */}
+          {user.role === 'team_lead' && ledTeam && (
+            <div className="space-y-4 pt-2">
+              <h2 className="text-base font-semibold flex items-center gap-2">
+                <Users className="h-4 w-4 text-muted-foreground" />
+                Team Performance — {ledTeam.name}
+              </h2>
+
+              {/* Success rate (line bar) across every case he and his team handled */}
+              {teamSuccessRatePct != null && (
+                <div className="rounded-xl border bg-card p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4 text-indigo-500" />
+                      <span className="text-sm font-semibold">Team Success Rate</span>
+                    </div>
+                    <span className={`text-sm font-bold ${
+                      teamSuccessRatePct >= 90 ? 'text-emerald-600'
+                      : teamSuccessRatePct >= 70 ? 'text-amber-600'
+                      : 'text-red-600'}`}>
+                      {teamSuccessRatePct.toFixed(0)}%
+                    </span>
+                  </div>
+                  <div className="h-3 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        teamSuccessRatePct >= 90 ? 'bg-emerald-500'
+                        : teamSuccessRatePct >= 70 ? 'bg-amber-500'
+                        : 'bg-red-500'}`}
+                      style={{ width: `${Math.min(teamSuccessRatePct, 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {combinedResolvedCases.length} resolved out of {combinedCases.length} case{combinedCases.length !== 1 ? 's' : ''} handled by him and his team
+                  </p>
+                </div>
+              )}
+
+              {combinedCases.length > 0 && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Pie: team case distribution */}
+                  <div className="rounded-xl border bg-card p-4 space-y-3">
+                    <p className="text-sm font-semibold">Case Distribution</p>
+                    {teamPieData.length > 0 ? (
+                      <ResponsiveContainer width="100%" height={220}>
+                        <PieChart>
+                          <Pie
+                            data={teamPieData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={55}
+                            outerRadius={85}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {teamPieData.map((entry, index) => (
+                              <Cell key={index} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip contentStyle={{ fontSize: 12 }} />
+                          <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <p className="text-sm text-muted-foreground text-center py-8">No case data</p>
+                    )}
+                  </div>
+
+                  {/* Bar: monthly team activity */}
+                  <div className="rounded-xl border bg-card p-4 space-y-3">
+                    <p className="text-sm font-semibold">Monthly Case Activity (last 6 months)</p>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <BarChart data={teamMonthlyData} barSize={14} barGap={4}>
+                        <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                        <YAxis allowDecimals={false} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
+                        <Tooltip contentStyle={{ fontSize: 12 }} />
+                        <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+                        <Bar dataKey="Resolved" fill="#10b981" radius={[3, 3, 0, 0]} />
+                        <Bar dataKey="Escalated" fill="#ef4444" radius={[3, 3, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

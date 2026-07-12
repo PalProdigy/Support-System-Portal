@@ -30,34 +30,48 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  // Staff + shared
+  // Main Navigation
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
-  { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
-  { label: 'AM Hub', href: '/sales-executive', icon: Briefcase, roles: ['sales_executive'] },
+
+// Workspaces
   { label: 'TH Hub', href: '/technical-head', icon: ShieldAlert, roles: ['technical_head'] },
   { label: 'Lead Hub', href: '/lead', icon: Users, roles: ['team_lead'] },
+  { label: 'AM Hub', href: '/sales-executive', icon: Briefcase, roles: ['sales_executive'] },
   { label: 'My Cases', href: '/engineer', icon: Wrench, roles: ['support_engineer'] },
-  { label: 'Clients', href: '/clients', icon: Building2, roles: ['sales_executive', 'team_lead', 'technical_head'] },
-  { label: 'Support Engineers', href: '/support-engineer', icon: Wrench, roles: ['technical_head'] },
-  { label: 'Team Leads', href: '/team-lead', icon: Users, roles: ['technical_head'] },
-  { label: 'Sales Executives', href: '/sales-executive', icon: Briefcase, roles: ['technical_head'] },
+
+// Case Management
+  { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
+
+// Team Management
   { label: 'Teams', href: '/teams', icon: Headset, roles: ['team_lead', 'technical_head'] },
-  { label: 'Solutions', href: '/solutions', icon: Lightbulb, roles: ['team_lead', 'technical_head', 'support_engineer', 'sales_executive'] },
+  { label: 'Team Leads', href: '/team-lead', icon: Users, roles: ['technical_head'] },
+  { label: 'Support Engineers', href: '/support-engineer', icon: Wrench, roles: ['technical_head'] },
+  { label: 'Sales Executives', href: '/sales-executive', icon: Briefcase, roles: ['technical_head'] },
+  { label: 'Clients', href: '/clients', icon: Building2, roles: ['sales_executive', 'team_lead', 'technical_head'] },
+
+// Resources
   { label: 'Products', href: '/products', icon: Package, roles: ['sales_executive', 'client', 'technical_head'] },
+  { label: 'Solutions', href: '/solutions', icon: Lightbulb, roles: ['team_lead', 'technical_head', 'support_engineer', 'sales_executive'] },
   { label: 'Knowledge Base', href: '/knowledge-base', icon: BookOpen, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive', 'client'] },
+
+// Analytics & Quality
   { label: 'Reporting', href: '/reporting', icon: BarChart3, roles: ['team_lead', 'technical_head', 'sales_executive'] },
   { label: 'Feedback', href: '/feedback', icon: Star, roles: ['team_lead', 'technical_head'] },
   { label: 'My Feedback', href: '/my-feedback', icon: Star, roles: ['support_engineer'] },
+
+// Administration
   { label: 'SLA Rules', href: '/sla-rules', icon: Shield, roles: ['technical_head'] },
   { label: 'Audit Log', href: '/audit-log', icon: Shield, roles: ['technical_head', 'team_lead'] },
   { label: 'Notifications', href: '/notifications', icon: Bell, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
   { label: 'Settings', href: '/settings', icon: Settings, roles: ['technical_head'] },
-  // Client portal
+
+// ==============================
+// Client Portal
+// ==============================
   { label: 'My Portal', href: '/client', icon: LayoutDashboard, roles: ['client'] },
   { label: 'My Cases', href: '/client/cases', icon: Ticket, roles: ['client'] },
   { label: 'Services', href: '/client/services', icon: LayoutGrid, roles: ['client'] },
   { label: 'Knowledge Base', href: '/client/kb', icon: BookOpen, roles: ['client'] },
-  // Scoped to feedback on the client's own cases (same /my-feedback route + FeedbackBoard `mine`)
   { label: 'My Feedback', href: '/my-feedback', icon: Star, roles: ['client'] },
   { label: 'Notifications', href: '/notifications', icon: Bell, roles: ['client'] },
 ]
