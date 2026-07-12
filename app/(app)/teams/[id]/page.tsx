@@ -3,6 +3,7 @@
 import { use, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList } from 'recharts'
 import type { ReactNode } from 'react'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -21,11 +22,13 @@ import { ROLE_LABELS } from '@/lib/rbac'
 import { formatDateTime, formatDuration } from '@/lib/utils'
 import {
   ArrowLeft, Headset, Users, CheckCircle2, Clock,
-  Star, AlertTriangle, Ticket, TrendingUp,
+  Star, AlertTriangle, Ticket, TrendingUp, TrendingDown, Minus,
   UserPlus, UserMinus, ArrowRightLeft, Plus, X,
   ClockIcon, CheckCircle, XCircle,
 } from 'lucide-react'
 import type { Case, User, EngineerMetrics, Team, TeamMemberRequest, CaseTransferRequest, Solution } from '@/types'
+
+const MEMBER_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16']
 
 export default function TeamDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -179,20 +182,6 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
     onError: () => toast({ title: 'Failed to update services', variant: 'destructive' }),
   })
 
-  // Mutation: toggle team active/inactive
-  const toggleStatusMutation = useMutation({
-    mutationFn: (isActive: boolean) => dp.updateTeam(id, { is_active: isActive }),
-    onSuccess: (updated) => {
-      qc.invalidateQueries({ queryKey: ['team', id] })
-      qc.invalidateQueries({ queryKey: ['teams'] })
-      toast({
-        title: updated.is_active ? 'Team activated' : 'Team deactivated',
-        variant: 'success',
-      })
-    },
-    onError: () => toast({ title: 'Failed to update team status', variant: 'destructive' }),
-  })
-
   // Mutation: transfer case to another team
   const transferMutation = useMutation({
     mutationFn: ({ caseId, targetTeamId }: { caseId: string; targetTeamId: string }) =>
@@ -244,6 +233,52 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
     new Date(c.resolved_at!).getTime() <= new Date(c.sla_due_at!).getTime()
   ).length
   const slaCompliancePct = slaCases.length > 0 ? (slaCompliantCount / slaCases.length) * 100 : null
+
+  // Success rate: share of all team-handled cases that ended up resolved.
+  const successRatePct = cases.length > 0 ? (resolvedCases.length / cases.length) * 100 : null
+
+  // Contribution: share of all team cases each member is the assignee on.
+  const memberContribution = members.map((m, i) => ({
+    name: m.name,
+    value: cases.filter((c) => c.assignee_id === m.id).length,
+    color: MEMBER_COLORS[i % MEMBER_COLORS.length],
+  }))
+  const unassignedCount = cases.filter(
+    (c) => !c.assignee_id || !members.some((m) => m.id === c.assignee_id)
+  ).length
+  const contributionData = [
+    ...memberContribution,
+    ...(unassignedCount > 0 ? [{ name: 'Unassigned', value: unassignedCount, color: '#94a3b8' }] : []),
+  ].filter((d) => d.value > 0)
+
+  // Monthly activity: cases this team actually resolved, by the month they were resolved (last 6 months).
+  // Anchored to the most recent activity in the data (rather than the real wall clock) so the
+  // window still lines up with seeded/demo data whose dates don't track the current date.
+  const monthlyActivityData = (() => {
+    const referenceDate = cases.length > 0
+      ? new Date(Math.max(...cases.map((c) => new Date(c.resolved_at ?? c.created_at).getTime())))
+      : new Date()
+    return Array.from({ length: 6 }, (_, i) => {
+      const d = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - (5 - i), 1)
+      const monthIdx = d.getMonth()
+      const year = d.getFullYear()
+      return {
+        name: d.toLocaleString('default', { month: 'short' }),
+        Resolved: resolvedCases.filter((c) => {
+          if (!c.resolved_at) return false
+          const rd = new Date(c.resolved_at)
+          return rd.getMonth() === monthIdx && rd.getFullYear() === year
+        }).length,
+      }
+    })
+  })()
+  const hasMonthlyActivity = monthlyActivityData.some((d) => d.Resolved > 0)
+  // Month-over-month change: latest tracked month vs the one right before it.
+  const currentMonth = monthlyActivityData[monthlyActivityData.length - 1]
+  const previousMonth = monthlyActivityData[monthlyActivityData.length - 2]
+  const momDelta = hasMonthlyActivity && currentMonth && previousMonth
+    ? currentMonth.Resolved - previousMonth.Resolved
+    : null
 
   const metricsMap = Object.fromEntries(
     (allMetrics ?? []).map((m: EngineerMetrics) => [m.engineer_id, m])
@@ -309,7 +344,7 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
             )}
             {isTH && (
               <button
-                className="text-[11px] text-primary hover:underline ml-1"
+                className="text-[11px] text-primary hover:underline ml-1 cursor-pointer"
                 onClick={() => { setEditServiceIds(team.solution_ids ?? []); setShowEditServices(true) }}
               >
                 Edit
@@ -335,28 +370,6 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
             <Button size="sm" variant="outline" onClick={() => setShowTransferCase(true)}>
               <ArrowRightLeft className="h-3.5 w-3.5" /> {isTH ? 'Transfer Case' : 'Transfer Request'}
             </Button>
-            {isTH && (
-              team.is_active === false ? (
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                  disabled={toggleStatusMutation.isPending}
-                  onClick={() => toggleStatusMutation.mutate(true)}
-                >
-                  Activate Team
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  disabled={toggleStatusMutation.isPending}
-                  onClick={() => toggleStatusMutation.mutate(false)}
-                >
-                  Deactivate Team
-                </Button>
-              )
-            )}
           </div>
         )}
       </div>
@@ -550,6 +563,119 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
           </div>
         </div>
       </div>
+
+      {/* Team success rate */}
+      {successRatePct != null && (
+        <div className="rounded-xl border bg-card p-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-indigo-500" />
+              <span className="text-sm font-semibold">Team Success Rate</span>
+            </div>
+            <span className={`text-sm font-bold ${
+              successRatePct >= 90 ? 'text-emerald-600'
+              : successRatePct >= 70 ? 'text-amber-600'
+              : 'text-red-600'}`}>
+              {successRatePct.toFixed(0)}%
+            </span>
+          </div>
+          <div className="h-3 rounded-full bg-muted overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${
+                successRatePct >= 90 ? 'bg-emerald-500'
+                : successRatePct >= 70 ? 'bg-amber-500'
+                : 'bg-red-500'}`}
+              style={{ width: `${Math.min(successRatePct, 100)}%` }}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {resolvedCases.length} resolved out of {cases.length} case{cases.length !== 1 ? 's' : ''} handled by this team
+          </p>
+        </div>
+      )}
+
+      {/* Team member contribution + monthly resolved activity */}
+      {(contributionData.length > 0 || hasMonthlyActivity) && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {contributionData.length > 0 && (
+            <div className="rounded-xl border bg-card p-4 space-y-3">
+              <div>
+                <p className="text-sm font-semibold">Team Contribution</p>
+                <p className="text-xs text-muted-foreground">Share of all cases handled by each member</p>
+              </div>
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart>
+                  <Pie
+                    data={contributionData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={65}
+                    outerRadius={100}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {contributionData.map((entry, index) => (
+                      <Cell key={index} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value, name) => {
+                      const n = Number(value)
+                      return [`${n} case${n !== 1 ? 's' : ''} (${((n / cases.length) * 100).toFixed(0)}%)`, name]
+                    }}
+                    contentStyle={{ fontSize: 12 }}
+                  />
+                  <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+
+          {hasMonthlyActivity && (
+            <div className="rounded-xl border bg-card p-4 space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold">Monthly Activity</p>
+                  <p className="text-xs text-muted-foreground">Cases resolved by this team (last 6 months)</p>
+                </div>
+                {momDelta != null && (
+                  <div className={`flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-semibold shrink-0 ${
+                    momDelta > 0 ? 'bg-emerald-500/10 text-emerald-600'
+                    : momDelta < 0 ? 'bg-red-500/10 text-red-600'
+                    : 'bg-muted text-muted-foreground'}`}>
+                    {momDelta > 0 ? <TrendingUp className="h-3 w-3" />
+                      : momDelta < 0 ? <TrendingDown className="h-3 w-3" />
+                      : <Minus className="h-3 w-3" />}
+                    {momDelta > 0 ? `+${momDelta}` : momDelta} vs last month
+                  </div>
+                )}
+              </div>
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={monthlyActivityData} barSize={26} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
+                  <Tooltip
+                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.5 }}
+                    formatter={(value) => {
+                      const n = Number(value)
+                      return [`${n} case${n !== 1 ? 's' : ''}`, 'Resolved']
+                    }}
+                    contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                  />
+                  <Bar dataKey="Resolved" fill="#10b981" radius={[6, 6, 0, 0]} maxBarSize={32}>
+                    <LabelList
+                      dataKey="Resolved"
+                      position="top"
+                      style={{ fontSize: 11, fontWeight: 600, fill: 'hsl(var(--muted-foreground))' }}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Members panel */}
@@ -815,7 +941,7 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
                   onClick={() => setEditServiceIds((prev) =>
                     prev.includes(s.id) ? prev.filter((id) => id !== s.id) : [...prev, s.id]
                   )}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors hover:bg-muted/50 ${selected ? 'bg-primary/5' : ''}`}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors cursor-pointer hover:bg-muted/50 ${selected ? 'bg-primary/5' : ''}`}
                 >
                   <div className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 transition-colors ${selected ? 'bg-primary border-primary' : 'border-muted-foreground/40'}`}>
                     {selected && <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
