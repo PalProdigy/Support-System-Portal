@@ -19,15 +19,23 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ROLE_LABELS } from '@/lib/rbac'
-import { formatDateTime, formatDuration } from '@/lib/utils'
+import { cn, formatDateTime, formatDuration } from '@/lib/utils'
 import {
   ArrowLeft, Mail, Calendar, Ticket, CheckCircle2,
   AlertTriangle, Clock, Star, TrendingUp, ArrowRightLeft,
-  ExternalLink, MessageSquare, Eye,
+  ExternalLink, MessageSquare, Eye, Award,
 } from 'lucide-react'
-import type { Case, Feedback, AuditLog } from '@/types'
+import type { Case, Feedback, AuditLog, CertificationLevel } from '@/types'
 import { SupportEngineerProfile } from '@/modules/profile/support-engineer-profile'
 import { TeamLeadProfile } from '@/modules/profile/team-lead-profile'
+
+const CERT_COLORS: Record<CertificationLevel, string> = {
+  L1: 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-600',
+  L2: 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/40 dark:text-blue-400 dark:border-blue-700',
+  L3: 'bg-violet-100 text-violet-700 border-violet-300 dark:bg-violet-900/40 dark:text-violet-400 dark:border-violet-700',
+  L4: 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700',
+  L5: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-400 dark:border-emerald-700',
+}
 
 export function UserDetail({ id }: { id: string }) {
   const session = useSession()
@@ -212,6 +220,14 @@ export function UserDetail({ id }: { id: string }) {
           <div className="flex flex-wrap gap-2 pt-1">
             <Badge variant="secondary">{ROLE_LABELS[user.role]}</Badge>
             {teamName && <Badge variant="outline">{teamName}</Badge>}
+            {user.certification_level && (
+              <Badge
+                variant="outline"
+                className={cn('font-mono font-bold gap-1', CERT_COLORS[user.certification_level])}
+              >
+                <Award className="h-3 w-3" /> {user.certification_level}
+              </Badge>
+            )}
           </div>
         </div>
       </div>

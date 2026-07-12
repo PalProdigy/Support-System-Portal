@@ -19,13 +19,11 @@ import type { User, AchievementType, CertificationLevel } from '@/types'
 
 // Colour tiers for the certification level badge (L1 junior → L5 expert).
 const CERT_LEVEL_COLORS: Record<CertificationLevel, string> = {
-  // solid fills so the badge stays highlighted and legible in both modes
-  // light mode                                          | dark mode
-  L1: 'border-transparent bg-slate-500 text-white   dark:bg-slate-600 dark:text-white',
-  L2: 'border-transparent bg-blue-600 text-white    dark:bg-blue-500 dark:text-white',
-  L3: 'border-transparent bg-emerald-600 text-white dark:bg-emerald-500 dark:text-white',
-  L4: 'border-transparent bg-violet-600 text-white  dark:bg-violet-500 dark:text-white',
-  L5: 'border-transparent bg-amber-500 text-white   dark:bg-amber-500 dark:text-white',
+  L1: 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-600',
+  L2: 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/40 dark:text-blue-400 dark:border-blue-700',
+  L3: 'bg-violet-100 text-violet-700 border-violet-300 dark:bg-violet-900/40 dark:text-violet-400 dark:border-violet-700',
+  L4: 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700',
+  L5: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-400 dark:border-emerald-700',
 }
 
 export interface StatItem {
