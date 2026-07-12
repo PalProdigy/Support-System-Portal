@@ -16,7 +16,6 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from '@/hooks/use-toast'
 import { PlusCircle, Users, Eye } from 'lucide-react'
 import type { User, Role, CertificationLevel } from '@/types'
-import { canAccess } from '@/lib/rbac'
 import { useRouter } from 'next/navigation'
 
 const CERT_LEVELS: CertificationLevel[] = ['L1', 'L2', 'L3', 'L4', 'L5']
@@ -24,9 +23,8 @@ const CERT_LEVELS: CertificationLevel[] = ['L1', 'L2', 'L3', 'L4', 'L5']
 export default function SupportEngineersPage() {
   const session = useSession()
   const router = useRouter()
-  const scope = { userId: session.userId, role: session.role }
 
-  if (!canAccess(scope, 'manage_users', 'user')) {
+  if (!['technical_head', 'team_lead'].includes(session.role)) {
     router.replace('/dashboard')
     return null
   }
@@ -39,7 +37,7 @@ function SupportEngineersContent() {
   const dp = getDataProvider()
   const qc = useQueryClient()
   const router = useRouter()
-  const scope = { userId: session.userId, role: session.role }
+  const isLead = session.role === 'team_lead'
 
   const [query, setQuery] = useState('')
   const [showCreate, setShowCreate] = useState(false)
@@ -66,8 +64,12 @@ function SupportEngineersContent() {
     onError: () => toast({ title: 'Create failed', variant: 'destructive' }),
   })
 
+  const myTeamId = isLead ? (users ?? []).find((u: User) => u.id === session.userId)?.team_id : undefined
+  const myTeam = isLead ? (teams ?? []).find((t) => t.id === myTeamId) : undefined
+
   const filtered = (users ?? []).filter((u: User) =>
     u.role === TARGET_ROLE &&
+    (!isLead || u.team_id === myTeamId) &&
     (u.name.toLowerCase().includes(query.toLowerCase()) || u.email.toLowerCase().includes(query.toLowerCase()))
   )
 
@@ -78,7 +80,10 @@ function SupportEngineersContent() {
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold">Support Engineers</h1>
-          <p className="text-sm text-muted-foreground">{filtered.length} engineers</p>
+          <p className="text-sm text-muted-foreground">
+            {isLead && (myTeam ? `${myTeam.name} · ` : 'Your team · ')}
+            {filtered.length} engineer{filtered.length !== 1 ? 's' : ''}
+          </p>
         </div>
         <SearchInput
           containerClassName="w-full max-w-xs"
