@@ -282,10 +282,6 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl font-bold text-foreground">{team.name}</h1>
-            {team.is_active === false
-              ? <Badge variant="secondary" className="text-[10px] h-5 px-2 bg-zinc-800 text-zinc-100 hover:bg-zinc-800">Inactive</Badge>
-              : <Badge variant="default" className="text-[10px] h-5 px-2 bg-emerald-500 hover:bg-emerald-500 text-white">Active</Badge>
-            }
           </div>
           {lead && (
             <div
@@ -596,9 +592,6 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
                         {m.id === team.lead_user_id && (
                           <Badge variant="default" className="text-[10px] h-4 px-1.5">Lead</Badge>
                         )}
-                        <Badge variant={m.is_active ? 'outline' : 'destructive'} className="text-[10px] h-4 px-1.5">
-                          {m.is_active ? 'Active' : 'Inactive'}
-                        </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5">{m.email}</p>
                       <p className="text-[11px] text-muted-foreground">{ROLE_LABELS[m.role]}</p>

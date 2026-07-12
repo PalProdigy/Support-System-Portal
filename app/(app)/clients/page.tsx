@@ -179,7 +179,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     return [...filtered].sort((a, b) => recencyOf(b).localeCompare(recencyOf(a)))
   }, [clients, query, recentByClient])
 
-  const COLS = ['Company / Organization', 'Representative Name', 'Recent Activity', 'Total Case', '']
+  const COLS = ['Company / Organization', 'Representative Name', 'Total Case', 'Recent Activity', '']
 
   return (
     <div className="p-6 space-y-4">
@@ -259,8 +259,8 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                       </div>
                     </td>
                     <td className="px-3 py-2.5 whitespace-nowrap">{c.contact_person}</td>
-                    <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
                     <td className="px-3 py-2.5 whitespace-nowrap font-medium">{casesByClient[c.id] ?? 0}</td>
+                    <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
                     <td className="px-3 py-2.5 sticky right-0 bg-card/95 group-hover:bg-accent/20 transition-colors w-24 text-right">
                       <Button
                         variant="outline"

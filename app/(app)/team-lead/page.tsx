@@ -1,19 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { SearchInput } from '@/components/ui/search-input'
-import { Label } from '@/components/ui/label'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
-import { toast } from '@/hooks/use-toast'
-import { PlusCircle, Users, Clock, Eye } from 'lucide-react'
+import { Users, Clock, Eye } from 'lucide-react'
 import type { User, Role } from '@/types'
 import { useRouter } from 'next/navigation'
 
@@ -35,26 +31,12 @@ export default function TeamLeadPage() {
 
 function TeamLeadContent() {
   const dp = getDataProvider()
-  const qc = useQueryClient()
   const router = useRouter()
 
   const [query, setQuery] = useState('')
-  const [showCreate, setShowCreate] = useState(false)
-  const [form, setForm] = useState({ name: '', email: '', is_active: true })
 
   const { data: users, isLoading } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
-
-  const createMutation = useMutation({
-    mutationFn: () => dp.createUser({ name: form.name, email: form.email, role: TARGET_ROLE, is_active: form.is_active }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['users'] })
-      toast({ title: 'Team Lead added', variant: 'success' })
-      setShowCreate(false)
-      setForm({ name: '', email: '', is_active: true })
-    },
-    onError: () => toast({ title: 'Create failed', variant: 'destructive' }),
-  })
 
   const filtered = (users ?? []).filter((u: User) =>
     u.role === TARGET_ROLE &&
@@ -83,9 +65,6 @@ function TeamLeadContent() {
             resultCount={filtered.length}
             resultLabel="module lead"
           />
-          <Button onClick={() => setShowCreate(true)}>
-            <PlusCircle className="h-4 w-4" /> Add Team Lead
-          </Button>
         </div>
       </div>
 
@@ -163,29 +142,6 @@ function TeamLeadContent() {
           </table>
         </div>
       )}
-
-      {/* Create Dialog */}
-      <Dialog open={showCreate} onOpenChange={(o) => { setShowCreate(o); if (!o) setForm({ name: '', email: '', is_active: true }) }}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Add Team Lead</DialogTitle></DialogHeader>
-          <div className="space-y-3">
-            <div className="space-y-1.5">
-              <Label>Name</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Full name" />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Email</Label>
-              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="email@company.com" />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button disabled={createMutation.isPending || !form.name || !form.email} onClick={() => createMutation.mutate()}>
-              {createMutation.isPending ? 'Creating...' : 'Add Team Lead'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

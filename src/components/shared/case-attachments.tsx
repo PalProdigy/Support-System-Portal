@@ -86,40 +86,6 @@ export function CaseAttachments({ caseId, canManage = true }: { caseId: string; 
         <Paperclip className="h-3.5 w-3.5" /> Attachments {list.length > 0 && `(${list.length})`}
       </h3>
 
-      {/* Upload zone */}
-      {canManage && (
-        <div
-          onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
-          onDragLeave={() => setDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault()
-            setDragging(false)
-            handleFiles(e.dataTransfer.files)
-          }}
-          onClick={() => inputRef.current?.click()}
-          className={cn(
-            'flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed p-4 cursor-pointer transition-colors text-center',
-            dragging ? 'border-primary bg-primary/5' : 'bg-muted/30 hover:bg-muted/50'
-          )}
-        >
-          <Upload className="h-5 w-5 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">Click to upload</span> or drag and drop
-          </p>
-          <p className="text-[10px] text-muted-foreground">
-            Images, PDF, documents, archives · up to {formatBytes(MAX_SIZE)}
-          </p>
-          <input
-            ref={inputRef}
-            type="file"
-            multiple
-            accept={ACCEPT}
-            className="sr-only"
-            onChange={(e) => handleFiles(e.target.files)}
-          />
-        </div>
-      )}
-
       {/* Attachment list */}
       {isLoading ? (
         <div className="space-y-2">{[...Array(2)].map((_, i) => <div key={i} className="h-12 rounded-lg bg-muted animate-pulse" />)}</div>
@@ -161,6 +127,40 @@ export function CaseAttachments({ caseId, canManage = true }: { caseId: string; 
             </li>
           ))}
         </ul>
+      )}
+
+      {/* Upload zone */}
+      {canManage && (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault()
+            setDragging(false)
+            handleFiles(e.dataTransfer.files)
+          }}
+          onClick={() => inputRef.current?.click()}
+          className={cn(
+            'flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed p-4 cursor-pointer transition-colors text-center',
+            dragging ? 'border-primary bg-primary/5' : 'bg-muted/30 hover:bg-muted/50'
+          )}
+        >
+          <Upload className="h-5 w-5 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">Click to upload</span> or drag and drop
+          </p>
+          <p className="text-[10px] text-muted-foreground">
+            Images, PDF, documents, archives · up to {formatBytes(MAX_SIZE)}
+          </p>
+          <input
+            ref={inputRef}
+            type="file"
+            multiple
+            accept={ACCEPT}
+            className="sr-only"
+            onChange={(e) => handleFiles(e.target.files)}
+          />
+        </div>
       )}
     </div>
   )
