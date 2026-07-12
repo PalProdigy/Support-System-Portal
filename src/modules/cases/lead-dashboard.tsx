@@ -1,6 +1,8 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts'
 import Link from 'next/link'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -11,18 +13,23 @@ import { ErrorState } from '@/components/shared/error-state'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
 import { CaseApprovalQueue } from '@/modules/shared/case-approval-queue'
+import { toast } from '@/hooks/use-toast'
 import { cn, slaPercent, slaRemainingMs, formatDuration, PRIORITY_COLORS, PRIORITY_LABELS } from '@/lib/utils'
 import {
   Ticket, AlertTriangle, CheckCircle, Users, PlusCircle, Inbox, ClipboardCheck,
   ArrowRight, LayoutList, BarChart3, Bell, UserCheck, Clock, Gauge, Star,
-  TimerReset, UserCog, TrendingUp,
+  TimerReset, UserCog, TrendingUp, Sparkles, ExternalLink, UserPlus, Check,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import type { Case, Client, Feedback, User } from '@/types'
+import type { Case, Client, Feedback, Priority, User } from '@/types'
 
 const OPEN_EXCLUDE = ['closed', 'resolved', 'pending_closure']
 const DONE_STATUSES = ['resolved', 'pending_closure', 'closed']
+const MEMBER_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16']
 
 export default function LeadDashboard() {
   const session = useSession()
@@ -40,6 +47,8 @@ export default function LeadDashboard() {
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
   const { data: feedback } = useQuery({ queryKey: ['feedback', 'lead'], queryFn: () => dp.listFeedback(scope) })
   const { data: notifications } = useQuery({ queryKey: ['notifications', session.userId], queryFn: () => dp.listNotifications(session.userId) })
+  const { data: solutions } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
+  const { data: slaRules } = useQuery({ queryKey: ['sla-rules'], queryFn: () => dp.listSLARules() })
 
   const cases = casesData?.items ?? []
   const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
@@ -97,6 +106,29 @@ export default function LeadDashboard() {
     .sort((a, b) => b.open - a.open)
   const maxLoad = Math.max(...workload.map((w) => w.open), 1)
 
+  // Team contribution — share of ALL cases (not just open) each active engineer has been assigned.
+  const memberContribution = workload.map(({ eng }, i) => ({
+    name: eng.name,
+    value: cases.filter((c) => c.assignee_id === eng.id).length,
+    color: MEMBER_COLORS[i % MEMBER_COLORS.length],
+  }))
+  const engineerIds = new Set(workload.map((w) => w.eng.id))
+  const unassignedContribution = cases.filter((c) => !c.assignee_id || !engineerIds.has(c.assignee_id)).length
+  const contributionData = [
+    ...memberContribution,
+    ...(unassignedContribution > 0 ? [{ name: 'Unassigned', value: unassignedContribution, color: '#94a3b8' }] : []),
+  ].filter((d) => d.value > 0)
+
+  // Demo approval card — real (but illustrative) prerequisites for creating
+  // and assigning a sample case: this team's engineers, plus any client/
+  // solution/SLA rule to satisfy Case's required fields.
+  const demoEngineers = workload.length > 0
+    ? workload.map((w) => w.eng)
+    : (users ?? []).filter((u) => u.role === 'support_engineer' && u.is_active)
+  const demoClientId = clients?.[0]?.id
+  const demoSolutionId = (solutions ?? []).find((s) => (myTeam?.solution_ids ?? []).includes(s.id))?.id ?? solutions?.[0]?.id
+  const demoSlaRuleId = (slaRules ?? []).find((r) => r.priority === 'high')?.id ?? slaRules?.[0]?.id
+
   const unreadCount = (notifications ?? []).filter(
     (n) => !n.read_at && ['new_case', 'case_pending_approval', 'case_escalated', 'client_replied'].includes(n.type)
   ).length
@@ -123,66 +155,72 @@ export default function LeadDashboard() {
         </div>
       </div>
 
-      {/* KPIs — each deep-links into the relevant workspace */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* KPIs — each deep-links into the relevant workspace, laid out in a single responsive row */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         <StatLink href="/cases"><StatCard title="Total Cases" value={cases.length} icon={Ticket} loading={isLoading} /></StatLink>
         <StatLink href="/cases"><StatCard title="Total Resolved" value={doneCases.length} icon={CheckCircle} iconColor="text-emerald-500" loading={isLoading} /></StatLink>
-        <StatLink href="/lead?tab=queue"><StatCard title="Queue" value={unassigned.length} icon={Inbox} iconColor="text-violet-500" loading={isLoading} /></StatLink>
         <StatLink href="/lead"><StatCard title="Open" value={open.length} icon={LayoutList} iconColor="text-blue-500" loading={isLoading} /></StatLink>
         <StatLink href="#approvals"><StatCard title="Awaiting Approval" value={approvals.length + overdueApprovals.length} icon={TimerReset} iconColor={approvals.length + overdueApprovals.length ? 'text-red-500' : 'text-muted-foreground'} loading={isLoading} /></StatLink>
         <StatLink href="#sla"><StatCard title="SLA At-Risk" value={breached.length + atRisk.length} icon={Gauge} iconColor={breached.length ? 'text-red-500' : 'text-amber-500'} loading={isLoading} /></StatLink>
         <StatLink href="/lead?tab=closure"><StatCard title="Pending Closure" value={pendingClosure.length} icon={ClipboardCheck} iconColor="text-emerald-500" loading={isLoading} /></StatLink>
       </div>
 
-      {/* Action Required — only shown when there's something to act on */}
-      {(approvals.length > 0 || overdueApprovals.length > 0 || slaRisk.length > 0) && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Approval window: new cases (0–30 min) + overdue/time-exceeded queue */}
-          <div id="approvals" className="rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/40 dark:bg-red-950/10 p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <TimerReset className="h-4 w-4 text-red-500" />
-              <h2 className="text-sm font-semibold">Awaiting Your Approval</h2>
-              <span className="text-[11px] text-muted-foreground">Assign within the 30-min window or it escalates to the Technical Head</span>
-            </div>
+      {/* Action Required */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Approval window: new cases (0–30 min) + overdue/time-exceeded queue */}
+        <div id="approvals" className="rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/40 dark:bg-red-950/10 p-4">
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
+            <TimerReset className="h-4 w-4 text-red-500 shrink-0" />
+            <h2 className="text-sm font-semibold">Awaiting Your Approval</h2>
+            <span className="text-[11px] text-muted-foreground">Assign within the 30-min window or it escalates to the Technical Head</span>
+          </div>
+          <div className="space-y-2.5">
+            <DemoApprovalCard
+              engineers={demoEngineers}
+              clientId={demoClientId}
+              solutionId={demoSolutionId}
+              teamId={myUser?.team_id}
+              slaRuleId={demoSlaRuleId}
+            />
             <CaseApprovalQueue cases={cases} users={users ?? []} teamId={myUser?.team_id} />
           </div>
-
-          {/* SLA risk */}
-          <div id="sla" className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/40 dark:bg-amber-950/10 p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Gauge className="h-4 w-4 text-amber-500" />
-              <h2 className="text-sm font-semibold">SLA Risk</h2>
-              <span className="text-[11px] text-muted-foreground">{breached.length} breached · {atRisk.length} at-risk</span>
-            </div>
-            {slaRisk.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-2">All open cases are comfortably within SLA.</p>
-            ) : (
-              <ScrollArea className="max-h-[220px] pr-2">
-                <div className="space-y-2">
-                  {slaRisk.slice(0, 8).map((c) => {
-                    const remaining = slaRemainingMs(c.sla_due_at)
-                    const over = remaining <= 0
-                    return (
-                      <Link key={c.id} href={`/cases/${c.id}`} className="flex items-center gap-3 rounded-lg border bg-card p-2.5 hover:bg-accent/40 transition-colors">
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-[11px] text-muted-foreground">{c.reference_no}</span>
-                            <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[c.priority])}>{PRIORITY_LABELS[c.priority]}</span>
-                          </div>
-                          <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
-                        </div>
-                        <span className={cn('text-[11px] font-semibold shrink-0', over ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400')}>
-                          {over ? 'Breached' : `${formatDuration(remaining)} left`}
-                        </span>
-                      </Link>
-                    )
-                  })}
-                </div>
-              </ScrollArea>
-            )}
-          </div>
         </div>
-      )}
+
+        {/* SLA risk */}
+        <div id="sla" className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50/40 dark:bg-amber-950/10 p-4">
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
+            <Gauge className="h-4 w-4 text-amber-500 shrink-0" />
+            <h2 className="text-sm font-semibold">SLA Risk</h2>
+            <span className="text-[11px] text-muted-foreground">{breached.length} breached · {atRisk.length} at-risk</span>
+          </div>
+          {slaRisk.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-2">All open cases are comfortably within SLA.</p>
+          ) : (
+            <ScrollArea className="max-h-[220px] pr-2">
+              <div className="space-y-2">
+                {slaRisk.slice(0, 8).map((c) => {
+                  const remaining = slaRemainingMs(c.sla_due_at)
+                  const over = remaining <= 0
+                  return (
+                    <Link key={c.id} href={`/cases/${c.id}`} className="flex items-center gap-3 rounded-lg border bg-card p-2.5 hover:bg-accent/40 transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[11px] text-muted-foreground">{c.reference_no}</span>
+                          <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[c.priority])}>{PRIORITY_LABELS[c.priority]}</span>
+                        </div>
+                        <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
+                      </div>
+                      <span className={cn('text-[11px] font-semibold shrink-0', over ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400')}>
+                        {over ? 'Breached' : `${formatDuration(remaining)} left`}
+                      </span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </ScrollArea>
+          )}
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Needs Attention — action-focused queue */}
@@ -234,6 +272,44 @@ export default function LeadDashboard() {
               <PerfTile icon={<Star className="h-3.5 w-3.5 text-amber-400" />} label="Avg Rating" value={avgRating != null ? `${avgRating.toFixed(1)}/5` : '—'} />
               <PerfTile icon={<CheckCircle className="h-3.5 w-3.5 text-emerald-500" />} label="Resolved" value={String(doneCases.length)} />
             </div>
+          </div>
+
+          {/* Team contribution — donut of all-time case share per engineer */}
+          <div className="rounded-xl border bg-card p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              <h3 className="text-sm font-semibold">Team Contribution</h3>
+            </div>
+            <p className="text-[11px] text-muted-foreground mb-1">Share of all cases handled by each member</p>
+            {contributionData.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-6 text-center">No cases handled yet.</p>
+            ) : (
+              <ResponsiveContainer width="100%" height={240}>
+                <PieChart>
+                  <Pie data={contributionData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={2} dataKey="value">
+                    {contributionData.map((entry, index) => {
+                      const eng = workload[index]?.eng
+                      return (
+                        <Cell
+                          key={index}
+                          fill={entry.color}
+                          className={eng ? 'cursor-pointer' : undefined}
+                          onClick={eng ? () => router.push(`/engineer/${eng.id}`) : undefined}
+                        />
+                      )
+                    })}
+                  </Pie>
+                  <RechartsTooltip
+                    formatter={(value, name) => {
+                      const n = Number(value)
+                      return [`${n} case${n !== 1 ? 's' : ''} (${((n / cases.length) * 100).toFixed(0)}%)`, name]
+                    }}
+                    contentStyle={{ fontSize: 12 }}
+                  />
+                  <Legend iconSize={9} wrapperStyle={{ fontSize: 10 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
           </div>
 
           {/* Team workload snapshot */}
@@ -315,6 +391,166 @@ function CaseList({ cases, clientsMap, usersMap, unassigned, empty }: {
   )
 }
 
+const DEMO_CASE = {
+  reference_no: 'NHQ-DEMO-0001',
+  title: 'Sample case — VPN connectivity issue',
+  description: 'Client reports intermittent VPN drops when connecting from the branch office network, roughly every 20 minutes, requiring a manual reconnect each time.',
+  priority: 'high' as Priority,
+}
+
+interface DemoApprovalCardProps {
+  engineers: User[]
+  clientId?: string
+  solutionId?: string
+  teamId?: string
+  slaRuleId?: string
+}
+
+// Sample row so the approval queue always previews its layout, even with zero
+// real approvals pending. The "view" button only opens a local preview modal —
+// it never navigates to a case route or reads from the database. Assigning,
+// however, is real: it creates and assigns an actual case, which then shows
+// up on the Cases page like any other.
+function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }: DemoApprovalCardProps) {
+  const session = useSession()
+  const dp = getDataProvider()
+  const qc = useQueryClient()
+  const scope = { userId: session.userId, role: session.role }
+
+  const [detailsOpen, setDetailsOpen] = useState(false)
+  const [assignOpen, setAssignOpen] = useState(false)
+  const [engineerId, setEngineerId] = useState('')
+  const [assignedTo, setAssignedTo] = useState<string | null>(null)
+
+  const assignMutation = useMutation({
+    mutationFn: async () => {
+      if (!clientId || !solutionId || !teamId) throw new Error('Missing client, solution or team for the demo case')
+      const created = await dp.createCase({
+        title: DEMO_CASE.title,
+        description: DEMO_CASE.description,
+        priority: DEMO_CASE.priority,
+        status: 'new',
+        client_id: clientId,
+        solution_id: solutionId,
+        team_id: teamId,
+        sla_rule_id: slaRuleId ?? '',
+        sla_due_at: new Date(Date.now() + 4 * 3_600_000).toISOString(),
+        escalation_level: 0,
+        is_escalated: false,
+      }, scope)
+      return dp.assignCase(created.id, engineerId, scope)
+    },
+    onSuccess: (updated) => {
+      qc.invalidateQueries({ queryKey: ['cases'] })
+      const engineerName = engineers.find((e) => e.id === engineerId)?.name ?? engineerId
+      toast({ title: 'Case assigned', description: `${updated.reference_no} → ${engineerName}`, variant: 'success' })
+      setAssignedTo(engineerName)
+      setAssignOpen(false)
+    },
+    onError: () => toast({ title: 'Failed to assign demo case', variant: 'destructive' }),
+  })
+
+  return (
+    <>
+      <div className="rounded-lg border border-dashed bg-card/60 p-3">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-mono text-[11px] text-muted-foreground">{DEMO_CASE.reference_no}</span>
+              <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[DEMO_CASE.priority])}>{PRIORITY_LABELS[DEMO_CASE.priority]}</span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary">
+                <Sparkles className="h-3 w-3" /> Demo
+              </span>
+            </div>
+            <p className="text-sm font-medium text-foreground truncate">{DEMO_CASE.title}</p>
+            <p className="text-[11px] mt-0.5 inline-flex items-center gap-1 text-muted-foreground">
+              <Clock className="h-3 w-3" /> 18m left
+            </p>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="View demo case details" onClick={() => setDetailsOpen(true)}>
+              <ExternalLink className="h-3.5 w-3.5" />
+            </Button>
+            {assignedTo ? (
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 px-1">
+                <Check className="h-3.5 w-3.5" /> Assigned to {assignedTo}
+              </span>
+            ) : (
+              <Button size="sm" className="text-white bg-emerald-600 hover:bg-emerald-700" onClick={() => setAssignOpen(true)}>
+                <UserPlus className="h-3.5 w-3.5" /> Assign
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* View details — a local-only preview, never a case route or DB read */}
+      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" /> Demo Case Preview
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-mono text-xs text-muted-foreground">{DEMO_CASE.reference_no}</span>
+              <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[DEMO_CASE.priority])}>{PRIORITY_LABELS[DEMO_CASE.priority]}</span>
+            </div>
+            <p className="text-sm font-semibold text-foreground">{DEMO_CASE.title}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{DEMO_CASE.description}</p>
+            <p className="text-xs text-muted-foreground border-t pt-2.5">
+              This is a sample preview only — it isn&apos;t linked to a real case record or route. Assigning it below creates a real case that will appear on the Cases page.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDetailsOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Assign — creates and assigns a real case on confirm */}
+      <Dialog open={assignOpen} onOpenChange={(o) => { setAssignOpen(o); if (!o) setEngineerId('') }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <UserCheck className="h-4 w-4" /> Assign Case
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-1">
+            <div className="rounded-lg bg-muted/40 px-3 py-2 text-sm">
+              <span className="font-mono text-xs text-muted-foreground">{DEMO_CASE.reference_no}</span>
+              <p className="font-medium mt-0.5 line-clamp-2">{DEMO_CASE.title}</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Engineer <span className="text-destructive">*</span></Label>
+              <Select value={engineerId} onValueChange={setEngineerId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select an engineer…" />
+                </SelectTrigger>
+                <SelectContent>
+                  {engineers.filter((e) => e.is_active).map((e) => (
+                    <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAssignOpen(false)}>Cancel</Button>
+            <Button
+              onClick={() => assignMutation.mutate()}
+              disabled={!engineerId || !clientId || !solutionId || !teamId || assignMutation.isPending}
+            >
+              {assignMutation.isPending ? 'Assigning…' : 'Assign'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
 function PerfTile({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="rounded-lg border bg-muted/30 p-3 space-y-1">
@@ -326,7 +562,7 @@ function PerfTile({ icon, label, value }: { icon: React.ReactNode; label: string
 
 function StatLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+    <Link href={href} className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
       {children}
     </Link>
   )

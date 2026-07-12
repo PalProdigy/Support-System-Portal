@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { useAuth } from '@/lib/auth/context'
 import { UserAvatar } from '@/components/shared/user-avatar'
-import { Separator } from '@/components/ui/separator'
 import {
   LayoutDashboard, Ticket, Users, Building2, Lightbulb, Package,
   BookOpen, Shield, Settings, BarChart3, Bell, ChevronLeft, ChevronRight,
@@ -267,8 +266,7 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
       </nav>
 
       {/* Footer: user info + collapse toggle (bottom-left) */}
-      <Separator />
-      <div className="p-3">
+      <div className="p-3 border-r">
         {!collapsed ? (
           <div className="flex items-center gap-2">
             <div className="flex flex-1 items-center gap-2.5 min-w-0 rounded-lg px-2 py-2">
