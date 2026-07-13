@@ -129,9 +129,8 @@ export function NewCases({ clientsMap }: { clientsMap: Record<string, Client> })
   return (
     <div className="rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/10 p-4">
       <div className="flex items-center gap-2 mb-3">
-        <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-        <h2 className="text-sm font-semibold">New Cases</h2>
-        <span className="text-[11px] text-muted-foreground">Unassigned cases routed to your team — send a grab request to your Team Lead</span>
+        {/*<Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />*/}
+        <h2 className="text-sm font-semibold">New Assignments</h2>
       </div>
 
       <div className="space-y-2.5">
@@ -140,12 +139,12 @@ export function NewCases({ clientsMap }: { clientsMap: Record<string, Client> })
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-mono text-[11px] text-muted-foreground">{DEMO_CASE.reference_no}</span>
-                <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[DEMO_CASE.priority])}>
-                  {PRIORITY_LABELS[DEMO_CASE.priority]}
-                </span>
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary">
-                  <Sparkles className="h-3 w-3" /> Demo
-                </span>
+                {/*<span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[DEMO_CASE.priority])}>*/}
+                {/*  {PRIORITY_LABELS[DEMO_CASE.priority]}*/}
+                {/*</span>*/}
+                {/*<span className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary">*/}
+                {/*  <Sparkles className="h-3 w-3" /> Demo*/}
+                {/*</span>*/}
               </div>
               <p className="text-sm font-medium text-foreground truncate">{DEMO_CASE.title}</p>
               <p className="text-[11px] mt-0.5 text-muted-foreground inline-flex items-center gap-1">

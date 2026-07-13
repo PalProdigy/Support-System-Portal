@@ -133,10 +133,10 @@ export default function EngineerDashboard() {
         </StatLink>
         <StatLink href="/engineer">
           <StatCard
-            title="SLA Compliance"
-            value={metrics ? `${metrics.sla_compliance_pct}%` : '--%'}
-            icon={Gauge}
-            iconColor={metrics ? (metrics.sla_compliance_pct >= 90 ? 'text-emerald-500' : metrics.sla_compliance_pct >= 70 ? 'text-amber-500' : 'text-red-500') : 'text-muted-foreground'}
+            title="Customer Satisfaction"
+            value={metrics?.satisfaction_score != null ? `${metrics.satisfaction_score}/5` : '—/5'}
+            icon={Star}
+            iconColor={metrics?.satisfaction_score != null ? (metrics.satisfaction_score >= 4 ? 'text-emerald-500' : metrics.satisfaction_score >= 3 ? 'text-amber-500' : 'text-red-500') : 'text-muted-foreground'}
             loading={metricsLoading}
           />
         </StatLink>
