@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { getDataProvider } from '@/lib/data'
@@ -12,17 +13,31 @@ import { NewCases } from '@/modules/engineer/new-cases'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import {
   cn, slaRemainingMs, slaPercent, formatDuration, PRIORITY_COLORS, PRIORITY_LABELS,
 } from '@/lib/utils'
 import {
   Ticket, LayoutList, CheckCircle, Gauge, Clock, Star,
-  Wrench, TrendingUp, ArrowRight, Bell, Lightbulb, BookOpen, Inbox,
+  Wrench, TrendingUp, ArrowRight, Inbox, Award, Briefcase,
 } from 'lucide-react'
-import type { Case, Client, EngineerMetrics } from '@/types'
+import type { Case, Client, EngineerMetrics, CertificationLevel } from '@/types'
 
 const OPEN_EXCLUDE = ['closed', 'resolved', 'pending_closure']
 const DONE_STATUSES = ['resolved', 'pending_closure', 'closed']
+
+// Colour tiers for the certification level badge (L1 junior → L5 expert) —
+// mirrors the palette used on the staff profile page for visual consistency.
+const CERT_COLORS: Record<CertificationLevel, string> = {
+  L1: 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-600',
+  L2: 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/40 dark:text-blue-400 dark:border-blue-700',
+  L3: 'bg-violet-100 text-violet-700 border-violet-300 dark:bg-violet-900/40 dark:text-violet-400 dark:border-violet-700',
+  L4: 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700',
+  L5: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-400 dark:border-emerald-700',
+}
+const CERT_LABELS: Record<CertificationLevel, string> = {
+  L1: 'Foundation', L2: 'Associate', L3: 'Professional', L4: 'Senior', L5: 'Expert',
+}
 
 export default function EngineerDashboard() {
   const session = useSession()
@@ -43,6 +58,7 @@ export default function EngineerDashboard() {
     queryFn: () => dp.getEngineerMetrics(session.userId, scope),
     staleTime: 30_000,
   })
+  const [nowMs] = useState(() => Date.now())
 
   const cases = casesData?.items ?? []
   const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
@@ -65,6 +81,15 @@ export default function EngineerDashboard() {
   const slaRisk = [...breached, ...atRisk].sort((a, b) => slaRemainingMs(a.sla_due_at) - slaRemainingMs(b.sla_due_at))
 
   const unreadCount = (notifications ?? []).filter((n) => !n.read_at).length
+
+  // Last month / last 3 months summary
+  const oneMonthAgoMs = nowMs - 30 * 24 * 3_600_000
+  const threeMonthsAgoMs = nowMs - 90 * 24 * 3_600_000
+  const solvedLastMonth = cases.filter((c) => c.resolved_at && new Date(c.resolved_at).getTime() >= oneMonthAgoMs).length
+  const dueLast3Months = cases.filter((c) => {
+    const dueMs = new Date(c.sla_due_at).getTime()
+    return dueMs >= threeMonthsAgoMs && dueMs <= nowMs
+  }).length
 
   if (error) return <ErrorState onRetry={refetch} />
 
@@ -97,11 +122,27 @@ export default function EngineerDashboard() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
         <StatLink href="/engineer"><StatCard title="Total Cases" value={cases.length} icon={Ticket} loading={isLoading} /></StatLink>
         <StatLink href="/engineer"><StatCard title="Open" value={open.length} icon={LayoutList} iconColor="text-blue-500" loading={isLoading} /></StatLink>
-        <StatLink href="#sla-risk"><StatCard title="SLA At-Risk" value={breached.length + atRisk.length} icon={Gauge} iconColor={breached.length ? 'text-red-500' : 'text-amber-500'} loading={isLoading} /></StatLink>
-        <StatLink href="/engineer"><StatCard title="Resolved" value={resolved.length} icon={CheckCircle} iconColor="text-emerald-500" loading={isLoading} /></StatLink>
+        <StatLink href="/engineer">
+          <StatCard title="Last Month — Solved" value={solvedLastMonth} icon={CheckCircle} iconColor="text-emerald-500" loading={isLoading} />
+        </StatLink>
+        <StatLink href="/engineer">
+          <StatCard title="Last 3 Months — Due" value={dueLast3Months} icon={Clock} iconColor="text-amber-500" loading={isLoading} />
+        </StatLink>
+        <StatLink href="/engineer">
+          <StatCard
+            title="SLA Compliance"
+            value={metrics ? `${metrics.sla_compliance_pct}%` : '--%'}
+            icon={Gauge}
+            iconColor={metrics ? (metrics.sla_compliance_pct >= 90 ? 'text-emerald-500' : metrics.sla_compliance_pct >= 70 ? 'text-amber-500' : 'text-red-500') : 'text-muted-foreground'}
+            loading={metricsLoading}
+          />
+        </StatLink>
+        <StatLink href="/profile"><CertificationCard level={myUser?.certification_level} years={myUser?.years_of_experience} /></StatLink>
+
+
       </div>
 
       {/* New cases available to claim */}
@@ -204,18 +245,6 @@ export default function EngineerDashboard() {
               </ScrollArea>
             )}
           </div>
-
-          {/* Quick actions */}
-          <div className="rounded-xl border bg-card p-4">
-            <h3 className="text-sm font-semibold mb-3">Quick Actions</h3>
-            <div className="space-y-1">
-              <QuickAction href="/engineer" icon={Wrench} label="Engineer Hub" />
-              <QuickAction href="/solutions" icon={Lightbulb} label="Solutions" />
-              <QuickAction href="/knowledge-base" icon={BookOpen} label="Knowledge Base" />
-              <QuickAction href="/my-feedback" icon={Star} label="My Feedback" />
-              <QuickAction href="/notifications" icon={Bell} label="Notifications" badge={unreadCount} />
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -255,15 +284,32 @@ function StatLink({ href, children }: { href: string; children: React.ReactNode 
   )
 }
 
-function QuickAction({ href, icon: Icon, label, badge }: { href: string; icon: React.ComponentType<{ className?: string }>; label: string; badge?: number }) {
+function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
   return (
-    <Link href={href} className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors">
-      <Icon className="h-4 w-4 shrink-0" />
-      <span className="flex-1">{label}</span>
-      {badge !== undefined && badge > 0 && (
-        <span className="inline-flex items-center justify-center rounded-full bg-primary/10 text-primary text-[10px] font-semibold h-5 min-w-5 px-1.5">{badge}</span>
-      )}
-      <ArrowRight className="h-3.5 w-3.5 opacity-50" />
-    </Link>
+    <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex h-full items-start justify-between gap-3">
+        <div className="flex-1 min-w-0 flex flex-col">
+          <p className="text-sm font-medium text-muted-foreground">Certification</p>
+          <div className="mt-1.5">
+            {level ? (
+              <Badge variant="outline" className={cn('font-mono font-bold gap-1', CERT_COLORS[level])}>
+                <Award className="h-3 w-3" /> {level}
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="gap-1 text-muted-foreground">
+                <Briefcase className="h-3 w-3" /> Uncertified
+              </Badge>
+            )}
+          </div>
+          <p className="mt-1.5 text-xs text-muted-foreground leading-snug">
+            {level ? CERT_LABELS[level] : 'Not yet certified'}
+            {years != null && ` · ${years} yr${years === 1 ? '' : 's'}`}
+          </p>
+        </div>
+        <div className="rounded-lg bg-primary/10 p-2.5 shrink-0">
+          <Award className="h-5 w-5 text-primary" />
+        </div>
+      </div>
+    </div>
   )
 }
