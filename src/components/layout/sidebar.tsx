@@ -43,6 +43,7 @@ const NAV_ITEMS: NavItem[] = [
 
 // Team Management
   { label: 'Teams', href: '/teams', icon: Headset, roles: ['team_lead', 'technical_head'] },
+  { label: 'Team', href: '/my-team', icon: Headset, roles: ['support_engineer'] },
   { label: 'Team Leads', href: '/team-lead', icon: Users, roles: ['technical_head'] },
   { label: 'Support Engineers', href: '/support-engineer', icon: Wrench, roles: ['technical_head', 'team_lead'] },
   { label: 'Sales Executives', href: '/sales-executive', icon: Briefcase, roles: ['technical_head'] },
