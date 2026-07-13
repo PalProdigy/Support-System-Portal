@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 interface NHQLoaderProps {
     /** Optional callback triggered when loading completes (if duration is set) */
@@ -8,22 +8,6 @@ interface NHQLoaderProps {
     /** Optional duration in milliseconds. If specified, the loader will auto-finish */
     duration?: number;
 }
-
-const STYLE_ID = 'nhq-loader-animations';
-const STYLE_CSS = `
-  @keyframes nhq-orbit-cw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @keyframes nhq-orbit-ccw { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
-  @keyframes nhq-shimmer { from { transform: translateX(-100%); } to { transform: translateX(220%); } }
-
-  .nhq-ring-1 { transform-origin: 100px 100px; animation: nhq-orbit-cw 16s linear infinite; }
-  .nhq-ring-2 { transform-origin: 100px 100px; animation: nhq-orbit-ccw 22s linear infinite; }
-  .nhq-ring-3 { transform-origin: 100px 100px; animation: nhq-orbit-cw 28s linear infinite; }
-  .nhq-shimmer { animation: nhq-shimmer 1.8s ease-in-out infinite; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .nhq-ring-1, .nhq-ring-2, .nhq-ring-3, .nhq-shimmer { animation: none; }
-  }
-`;
 
 // Real phases derived from actual progress — not a decorative loop — so the
 // label always tells the truth about how far along the load really is.
@@ -49,14 +33,6 @@ function phaseFor(progress: number): string {
  */
 export default function NHQLoader({ onComplete, duration }: NHQLoaderProps) {
     const [progress, setProgress] = useState(0);
-
-    useEffect(() => {
-        if (document.getElementById(STYLE_ID)) return;
-        const style = document.createElement('style');
-        style.id = STYLE_ID;
-        style.innerHTML = STYLE_CSS;
-        document.head.appendChild(style);
-    }, []);
 
     useEffect(() => {
         if (!duration) {
