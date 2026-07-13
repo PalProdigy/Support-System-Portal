@@ -13,41 +13,32 @@ import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { PlusCircle, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert, CheckCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import type { Case, Client, User } from '@/types'
+import { Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert } from 'lucide-react'
 import { STATUS_LABELS, PRIORITY_LABELS, slaRemainingMs, slaPercent } from '@/lib/utils'
-import type { CaseStatus, Priority } from '@/types'
+import type { Case, Client, User, CaseStatus, Priority } from '@/types'
 
-export default function CasesPage() {
-  const session = useSession()
-  const router = useRouter()
+const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
 
-  // Support engineers get a single, merged case workspace at /engineer
-  // ("My Cases") instead of this general Cases list.
-  useEffect(() => {
-    if (session.role === 'support_engineer') router.replace('/engineer')
-  }, [session.role, router])
-
-  if (session.role === 'support_engineer') return null
-
-  return <CasesPageContent />
-}
-
-function CasesPageContent() {
+/**
+ * "My Cases" — the support engineer's full case workspace. Merges what used
+ * to be split across /cases (search, filters, KPI overview, pagination) and
+ * the Engineer Hub's assigned-cases list into one organized view, scoped to
+ * this engineer's own cases (listCases already does that scoping for the
+ * support_engineer role).
+ */
+export function MyCases() {
   const session = useSession()
   const dp = getDataProvider()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const scope = { userId: session.userId, role: session.role }
 
   const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [status, setStatus] = useState<string>('all')
   const [priority, setPriority] = useState<string>('all')
-  const [slaFilter, setSLAFilter] = useState<string>('all')
+  const [slaFilter, setSLAFilter] = useState<string>(searchParams.get('sla') ?? 'all')
   const [page, setPage] = useState(1)
 
-  // Sync search state when URL ?search param changes (e.g. from topbar)
+  // Sync search state when the URL ?search param changes (e.g. from topbar)
   useEffect(() => {
     const q = searchParams.get('search') ?? ''
     const s = searchParams.get('sla') ?? 'all'
@@ -70,8 +61,8 @@ function CasesPageContent() {
   })
 
   const { data: clients } = useQuery({
-    queryKey: ['clients', session.userId],
-    queryFn: () => dp.listClients(scope),
+    queryKey: ['clients-all', session.userId],
+    queryFn: () => dp.listClients({ userId: session.userId, role: 'team_lead' }),
   })
 
   const { data: users } = useQuery({
@@ -89,12 +80,9 @@ function CasesPageContent() {
   const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
   const usersMap = Object.fromEntries((users ?? []).map((u: User) => [u.id, u]))
 
-  const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
-  const DONE_STATUSES = new Set(['resolved', 'pending_closure', 'closed'])
   const allCases = statsData?.items ?? []
   const totalCount = statsData?.total ?? 0
   const activeCount = allCases.filter((c) => ACTIVE_STATUSES.has(c.status)).length
-  const resolvedCount = allCases.filter((c) => DONE_STATUSES.has(c.status)).length
   const escalatedCount = allCases.filter((c) => c.is_escalated || c.status === 'escalated').length
   const reopenedCount = allCases.filter((c) => !!c.reopened_from_case_id).length
   const slaBreachedCount = allCases.filter((c) => slaRemainingMs(c.sla_due_at) <= 0).length
@@ -116,47 +104,17 @@ function CasesPageContent() {
   const totalPages = Math.ceil(total / 15)
 
   const showGrouped = status === 'all' && !search && slaFilter === 'all'
-  const activeCases = cases.filter(c => ACTIVE_STATUSES.has(c.status))
-  const previousCases = cases.filter(c => !ACTIVE_STATUSES.has(c.status))
-
-  if (error) return (
-    <div className="p-6"><ErrorState onRetry={refetch} /></div>
-  )
-
-  const canCreate = ['client', 'technical_head'].includes(session.role)
+  const activeCases = cases.filter((c) => ACTIVE_STATUSES.has(c.status))
+  const previousCases = cases.filter((c) => !ACTIVE_STATUSES.has(c.status))
   const hasFilters = search || status !== 'all' || priority !== 'all' || slaFilter !== 'all'
-  // Resolved-count card: a team lead's cases are already scoped to their own team,
-  // and a technical head's cases are unscoped (everyone) — both sums are unfiltered totals.
-  const showResolvedCard = ['team_lead', 'technical_head'].includes(session.role)
+
+  if (error) return <ErrorState onRetry={refetch} />
 
   return (
-    <div className="p-6 space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Cases</h1>
-          <p className="text-sm text-muted-foreground">
-            {session.role === 'team_lead' && 'Your team · '}
-            {session.role === 'technical_head' && 'All cases · '}
-            {session.role === 'client' && 'Your cases · '}
-            {session.role === 'sales_executive' && "Your clients' cases · "}
-            {total} total
-          </p>
-        </div>
-        {canCreate && (
-          <Button onClick={() => router.push('/cases/new')}>
-            <PlusCircle className="h-4 w-4" />
-            New Case
-          </Button>
-        )}
-      </div>
-
+    <div className="space-y-4">
       {/* Overview */}
-      <div className={`grid grid-cols-2 sm:grid-cols-3 gap-4 ${showResolvedCard ? 'lg:grid-cols-6' : 'lg:grid-cols-5'}`}>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         <StatCard title="Total Cases" value={totalCount} icon={Ticket} loading={statsLoading} />
-        {showResolvedCard && (
-          <StatCard title="Total Resolved" value={resolvedCount} icon={CheckCircle} iconColor="text-emerald-500" loading={statsLoading} />
-        )}
         <StatCard title="Active Cases" value={activeCount} icon={Activity} iconColor="text-sky-500" loading={statsLoading} />
         <StatCard title="Escalated" value={escalatedCount} icon={AlertTriangle} iconColor="text-red-500" loading={statsLoading} />
         <StatCard title="Reopened" value={reopenedCount} icon={RotateCcw} iconColor="text-amber-500" loading={statsLoading} />
@@ -225,29 +183,29 @@ function CasesPageContent() {
       ) : cases.length === 0 ? (
         <EmptyState
           icon={Ticket}
-          title={search ? `No results found for "${search}"` : 'No cases found'}
-          description={hasFilters ? 'Try adjusting your filters.' : 'No cases yet.'}
+          title={search ? `No results found for "${search}"` : 'No cases assigned to you'}
+          description={hasFilters ? 'Try adjusting your filters.' : 'Cases assigned to you will appear here.'}
         />
       ) : showGrouped ? (
         <div className="space-y-5">
           {activeCases.length > 0 && (
             <div className="space-y-3">
-              <p className="text-[11px] font-bold uppercase tracking-wider  text-green-600">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-green-600">
                 Active <span className="font-normal">· {activeCases.length}</span>
               </p>
               {activeCases.map((c: Case) => (
-                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/cases/${c.id}`} />
+                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/engineer/case/${c.id}`} />
               ))}
             </div>
           )}
           {previousCases.length > 0 && (
             <div className="space-y-3">
               {activeCases.length > 0 && <hr className="border-border" />}
-              <p className="text-[11px] font-bold uppercase tracking-wider text-blue-600 ">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
                 Closed / Resolved <span className="font-normal">· {previousCases.length}</span>
               </p>
               {previousCases.map((c: Case) => (
-                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/cases/${c.id}`} />
+                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/engineer/case/${c.id}`} />
               ))}
             </div>
           )}
@@ -260,7 +218,7 @@ function CasesPageContent() {
               case_={c}
               client={clientsMap[c.client_id]}
               assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined}
-              href={`/cases/${c.id}`}
+              href={`/engineer/case/${c.id}`}
             />
           ))}
         </div>
@@ -269,11 +227,11 @@ function CasesPageContent() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 pt-2">
-          <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(p => p - 1)}>
+          <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
             Previous
           </Button>
           <span className="text-sm text-muted-foreground">Page {page} of {totalPages}</span>
-          <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>
+          <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
             Next
           </Button>
         </div>

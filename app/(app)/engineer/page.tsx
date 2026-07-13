@@ -9,11 +9,24 @@ import { Wrench, ClipboardList, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 function ListSkeleton() {
-  return <div className="space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-20 rounded-xl bg-muted animate-pulse" />)}</div>
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {[...Array(5)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}
+      </div>
+      <div className="space-y-3">
+        {[...Array(3)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}
+      </div>
+    </div>
+  )
 }
 
-const AssignedCases = dynamic(
-  () => import('@/modules/engineer/assigned-cases').then((m) => m.AssignedCases),
+// "My Cases" — merges what used to be the separate /cases page (search,
+// filters, KPI overview, pagination) with this hub's assigned-cases list,
+// so a support engineer has one organized workspace instead of two
+// overlapping pages.
+const MyCases = dynamic(
+  () => import('@/modules/engineer/my-cases').then((m) => m.MyCases),
   { loading: () => <ListSkeleton /> }
 )
 const PerformanceDashboard = dynamic(
@@ -39,15 +52,15 @@ export default function EngineerHubPage() {
   const [tab, setTab] = useState<Tab>('cases')
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       <Guard />
       <div className="flex items-center gap-3">
         <div className="rounded-xl bg-primary/10 p-2.5">
           <Wrench className="h-5 w-5 text-primary" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Engineer Hub</h1>
-          <p className="text-sm text-muted-foreground">Your assigned cases and performance metrics</p>
+          <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
+          <p className="text-sm text-muted-foreground">Every case assigned to you, and how you're performing</p>
         </div>
       </div>
 
@@ -70,7 +83,7 @@ export default function EngineerHubPage() {
       </div>
 
       <Suspense fallback={<ListSkeleton />}>
-        {tab === 'cases'       && <AssignedCases />}
+        {tab === 'cases'       && <MyCases />}
         {tab === 'performance' && <PerformanceDashboard />}
       </Suspense>
     </div>

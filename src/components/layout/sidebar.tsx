@@ -39,7 +39,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'My Cases', href: '/engineer', icon: Wrench, roles: ['support_engineer'] },
 
 // Case Management
-  { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
+  { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead', 'sales_executive'] },
 
 // Team Management
   { label: 'Teams', href: '/teams', icon: Headset, roles: ['team_lead', 'technical_head'] },
