@@ -155,9 +155,10 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
                 <tr
                   key={c.id}
                   className={cn(
-                    'hover:bg-muted/30 transition-colors',
+                    'hover:bg-muted/30 transition-colors cursor-pointer',
                     c.is_escalated && 'bg-red-50/30 dark:bg-red-950/10',
                   )}
+                  onClick={() => router.push(`/cases/${c.id}`)}
                 >
                   <td className="px-3 py-2.5">
                     <span className="font-mono text-xs text-muted-foreground">{c.reference_no}</span>
@@ -192,7 +193,7 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
                       <span className="text-xs text-muted-foreground">{formatDate(c.sla_due_at)}</span>
                     )}
                   </td>
-                  <td className="px-3 py-2.5">
+                  <td className="px-3 py-2.5" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center gap-1">
                       <Button variant="ghost" size="icon" className="h-7 w-7" title="View case" onClick={() => router.push(`/cases/${c.id}`)}>
                         <ExternalLink className="h-3.5 w-3.5" />
