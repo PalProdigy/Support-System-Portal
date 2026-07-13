@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth/context'
+import NHQLoader from '@/components/NHQLoader/page'
 
 export default function RootPage() {
   const { session, isLoading } = useAuth()
@@ -14,5 +15,5 @@ export default function RootPage() {
     }
   }, [session, isLoading, router])
 
-  return null
+  return <NHQLoader />
 }

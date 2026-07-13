@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth/context'
 import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
-import { Skeleton } from '@/components/ui/skeleton'
+import NHQLoader from '@/components/NHQLoader/page'
 import { getDataProvider } from '@/lib/data'
 import { useState } from 'react'
 import type { User } from '@/types'
@@ -32,14 +32,7 @@ export function AppShell({ children }: AppShellProps) {
   }, [session])
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-4 w-24" />
-        </div>
-      </div>
-    )
+    return <NHQLoader />
   }
 
   if (!session) return null
