@@ -22,7 +22,7 @@ import { cn, slaPercent, slaRemainingMs, formatDuration, PRIORITY_COLORS, PRIORI
 import {
   Ticket, AlertTriangle, CheckCircle, Users, PlusCircle, Inbox, ClipboardCheck,
   ArrowRight, LayoutList, BarChart3, Bell, UserCheck, Clock, Gauge, Star,
-  TimerReset, UserCog, TrendingUp, Sparkles, ExternalLink, UserPlus, Check, X, Plus,
+  TimerReset, UserCog, TrendingUp, Sparkles, ExternalLink, UserPlus, Check, X, Plus, UserRound,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, Feedback, Priority, User } from '@/types'
@@ -368,14 +368,20 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
   const [assignOpen, setAssignOpen] = useState(false)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [assignedNames, setAssignedNames] = useState<string[] | null>(null)
+  const [claimDismissed, setClaimDismissed] = useState(false)
+
+  // Illustrative engineer "claim request" — mirrors the real flow where an
+  // engineer sends a Grab Request from their New Cases panel and the lead
+  // Accepts/Rejects it here, alongside direct Assign.
+  const claimEngineer = engineers.find((e) => e.is_active) ?? null
 
   const addEngineer = (uid: string) => setSelectedIds((prev) => [...prev, uid])
   const removeEngineer = (uid: string) => setSelectedIds((prev) => prev.filter((id) => id !== uid))
 
   const assignMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (engineerIds: string[]) => {
       if (!clientId || !solutionId || !teamId) throw new Error('Missing client, solution or team for the demo case')
-      const [primaryId, ...coIds] = selectedIds
+      const [primaryId, ...coIds] = engineerIds
       const created = await dp.createCase({
         title: DEMO_CASE.title,
         description: DEMO_CASE.description,
@@ -395,9 +401,9 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
       }
       return assigned
     },
-    onSuccess: (updated) => {
+    onSuccess: (updated, engineerIds) => {
       qc.invalidateQueries({ queryKey: ['cases'] })
-      const names = selectedIds.map((id) => engineers.find((e) => e.id === id)?.name ?? id)
+      const names = engineerIds.map((id) => engineers.find((e) => e.id === id)?.name ?? id)
       toast({
         title: 'Case assigned',
         description: `${updated.reference_no} → ${names.join(', ')}`,
@@ -405,9 +411,18 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
       })
       setAssignedNames(names)
       setAssignOpen(false)
+      setClaimDismissed(true)
     },
     onError: () => toast({ title: 'Failed to assign demo case', variant: 'destructive' }),
   })
+
+  const rejectClaim = () => {
+    setClaimDismissed(true)
+    toast({
+      title: 'Request declined',
+      description: `${claimEngineer?.name ?? 'The engineer'} was notified`,
+    })
+  }
 
   return (
     <>
@@ -441,6 +456,34 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
             )}
           </div>
         </div>
+
+        {/* Simulated engineer claim request — Accept assigns directly to them, Reject dismisses it */}
+        {claimEngineer && !assignedNames && !claimDismissed && (
+          <div className="mt-2.5 flex items-center gap-2 border-t pt-2.5">
+            <UserRound className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+            <p className="text-xs text-muted-foreground min-w-0 flex-1 truncate">
+              <span className="font-medium text-foreground">{claimEngineer.name}</span> wants to take this case
+              <span className="ml-1 inline-flex items-center gap-1 text-[10px] font-semibold text-primary"><Sparkles className="h-2.5 w-2.5" />Demo</span>
+            </p>
+            <Button
+              size="sm"
+              className="h-7 bg-emerald-600 hover:bg-emerald-700 text-white shrink-0"
+              disabled={assignMutation.isPending}
+              onClick={() => assignMutation.mutate([claimEngineer.id])}
+            >
+              <Check className="h-3.5 w-3.5" /> Accept
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 text-red-600 dark:text-red-400 border-red-300 dark:border-red-900 hover:bg-red-50 dark:hover:bg-red-950/40 shrink-0"
+              disabled={assignMutation.isPending}
+              onClick={rejectClaim}
+            >
+              <X className="h-3.5 w-3.5" /> Reject
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* View details — a local-only preview, never a case route or DB read */}
@@ -532,7 +575,7 @@ function DemoApprovalCard({ engineers, clientId, solutionId, teamId, slaRuleId }
           <DialogFooter>
             <Button variant="outline" onClick={() => setAssignOpen(false)}>Cancel</Button>
             <Button
-              onClick={() => assignMutation.mutate()}
+              onClick={() => assignMutation.mutate(selectedIds)}
               disabled={selectedIds.length === 0 || !clientId || !solutionId || !teamId || assignMutation.isPending}
             >
               {assignMutation.isPending ? 'Assigning…' : 'Assign'}
