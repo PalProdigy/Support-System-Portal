@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts'
 import Link from 'next/link'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -106,27 +105,6 @@ export default function LeadDashboard() {
     .sort((a, b) => b.open - a.open)
   const maxLoad = Math.max(...workload.map((w) => w.open), 1)
 
-  // My contribution — the lead's own case load (primary or co-assignee), broken down by outcome.
-  const myCases = cases.filter(
-    (c) => c.assignee_id === session.userId || (c.co_assignee_ids ?? []).includes(session.userId)
-  )
-  const myBucketOf = (c: Case): 'solved' | 'escalated' | 'pending_closure' | 'open' => {
-    if (c.status === 'escalated' || c.is_escalated) return 'escalated'
-    if (c.status === 'resolved' || c.status === 'closed') return 'solved'
-    if (c.status === 'pending_closure') return 'pending_closure'
-    return 'open'
-  }
-  const myBucketCounts = myCases.reduce(
-    (acc, c) => { acc[myBucketOf(c)]++; return acc },
-    { solved: 0, open: 0, pending_closure: 0, escalated: 0 } as Record<'solved' | 'escalated' | 'pending_closure' | 'open', number>
-  )
-  const myContributionData = [
-    { key: 'solved' as const, name: 'Solved', value: myBucketCounts.solved, color: '#10b981', icon: CheckCircle },
-    { key: 'open' as const, name: 'Open', value: myBucketCounts.open, color: '#2563eb', icon: LayoutList },
-    { key: 'pending_closure' as const, name: 'Pending Closure', value: myBucketCounts.pending_closure, color: '#f59e0b', icon: ClipboardCheck },
-    { key: 'escalated' as const, name: 'Escalated', value: myBucketCounts.escalated, color: '#dc2626', icon: AlertTriangle },
-  ].filter((d) => d.value > 0)
-
   // Demo approval card — real (but illustrative) prerequisites for creating
   // and assigning a sample case: this team's engineers, plus any client/
   // solution/SLA rule to satisfy Case's required fields.
@@ -227,68 +205,6 @@ export default function LeadDashboard() {
             </ScrollArea>
           )}
         </div>
-      </div>
-
-      {/* My Contribution — full-width donut of the lead's own case load, by outcome */}
-      <div className="rounded-xl border bg-card p-5">
-        <div className="flex items-center justify-between mb-1">
-          <div className="flex items-center gap-2">
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
-            <h3 className="text-sm font-semibold">My Contribution</h3>
-          </div>
-          {myTeam && <span className="text-[11px] text-muted-foreground">{myTeam.name}</span>}
-        </div>
-        <p className="text-[11px] text-muted-foreground mb-4">Cases you personally own, by outcome</p>
-        {myContributionData.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="rounded-full bg-muted p-3 mb-2">
-              <Inbox className="h-5 w-5 text-muted-foreground" />
-            </div>
-            <p className="text-sm font-medium text-foreground">No cases assigned to you yet</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Cases you take on will show up here.</p>
-          </div>
-        ) : (
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="relative shrink-0" style={{ width: 220, height: 220 }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={myContributionData} cx="50%" cy="50%" innerRadius={68} outerRadius={100} paddingAngle={3} stroke="none" dataKey="value">
-                    {myContributionData.map((entry) => <Cell key={entry.key} fill={entry.color} />)}
-                  </Pie>
-                  <RechartsTooltip
-                    formatter={(value, name) => {
-                      const n = Number(value)
-                      return [`${n} case${n !== 1 ? 's' : ''} (${((n / myCases.length) * 100).toFixed(0)}%)`, name]
-                    }}
-                    contentStyle={{ fontSize: 12, borderRadius: 8 }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-3xl font-bold text-foreground tabular-nums leading-none">{myCases.length}</span>
-                <span className="text-[11px] text-muted-foreground mt-1">My Cases</span>
-              </div>
-            </div>
-            <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {myContributionData.map((entry) => {
-                const pct = myCases.length > 0 ? Math.round((entry.value / myCases.length) * 100) : 0
-                const Icon = entry.icon
-                return (
-                  <div key={entry.key} className="flex items-center gap-3 rounded-lg border bg-muted/30 p-3">
-                    <div className="h-9 w-9 rounded-full flex items-center justify-center shrink-0" style={{ background: `${entry.color}1a` }}>
-                      <Icon className="h-4 w-4" style={{ color: entry.color }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[11px] text-muted-foreground truncate">{entry.name}</p>
-                      <p className="text-lg font-bold text-foreground tabular-nums leading-none">{entry.value}</p>
-                    </div>
-                    <span className="text-xs font-semibold text-muted-foreground shrink-0">{pct}%</span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
