@@ -1,0 +1,105 @@
+- generic [ref=e1]:
+  - generic [ref=e34]:
+    - complementary [ref=e36]:
+      - link [ref=e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e39]:
+          - generic [ref=e40]: NH
+          - generic [ref=e41]: DISTRIBUTIONS
+      - navigation [ref=e49]:
+        - link "Dashboard" [ref=e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Lead Hub" [ref=e57] [cursor=pointer]:
+          - /url: /lead
+        - link "Cases" [ref=e64] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=e68] [cursor=pointer]:
+          - /url: /teams
+        - link "Support Engineers" [ref=e73] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Clients" [ref=e77] [cursor=pointer]:
+          - /url: /clients
+        - link "Solutions" [ref=e83] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e87] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e91] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=e95] [cursor=pointer]:
+          - /url: /feedback
+        - link "Audit Log" [ref=e99] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=e103] [cursor=pointer]:
+          - /url: /notifications
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - generic "Sadia Islam" [ref=e111]:
+            - generic "Sadia Islam avatar" [ref=e113]: SI
+          - generic [ref=e114]:
+            - paragraph [ref=e115]: Sadia Islam
+            - paragraph [ref=e116]: Team Lead
+        - button "Collapse sidebar" [ref=e117]
+    - generic [ref=e120]:
+      - banner [ref=e122]:
+        - generic [ref=e123]:
+          - button "Toggle theme" [ref=e124] [cursor=pointer]
+          - button "Notifications" [ref=e125] [cursor=pointer]:
+            - generic [ref=e126]: "8"
+          - button "Sadia Islam avatar Sadia Islam Team Lead" [ref=e127] [cursor=pointer]:
+            - generic "Sadia Islam" [ref=e128]:
+              - generic "Sadia Islam avatar" [ref=e130]: SI
+            - generic [ref=e131]:
+              - paragraph [ref=e132]: Sadia Islam
+              - paragraph [ref=e133]: Team Lead
+      - main [ref=e134]:
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - heading "Feedback" [level=1] [ref=e138]
+              - paragraph [ref=e139]: 2 of 7 responses
+            - button "Search 1" [expanded] [ref=e362] [cursor=pointer]:
+              - text: Search
+              - generic [ref=e363]: "1"
+          - generic [ref=e142]:
+            - generic [ref=e172]:
+              - generic [ref=e173]:
+                - generic [ref=e174]: TechWave Solutions
+                - paragraph [ref=e187]: Good response time and the documentation provided was thorough. Would have appreciated a video walkthrough in addition to the written guide.
+                - generic [ref=e188]: 15 Jun 2024
+              - generic [ref=e190]:
+                - button "View Case" [ref=e191] [cursor=pointer]
+                - button "Review" [ref=e192] [cursor=pointer]
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]: TechWave Solutions
+                - paragraph [ref=e209]: The payroll error was very serious and could have caused legal issues for us. While the fix was correct, we feel the initial response time was too slow for a critical payroll issue.
+                - generic [ref=e210]:
+                  - generic [ref=e211]: Alpha Support Team
+                  - generic [ref=e212]: Farzana Begum
+                  - generic [ref=e213]: 21 Jun 2024
+              - generic [ref=e214]:
+                - button "View Case" [ref=e215] [cursor=pointer]
+                - button "Review" [ref=e216] [cursor=pointer]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e326] [cursor=pointer]
+  - alert [ref=e330]
+  - dialog [ref=e332]:
+    - generic [ref=e333]:
+      - paragraph [ref=e334]: Search feedback
+      - button "Clear" [ref=e364] [cursor=pointer]
+    - generic [ref=e335]:
+      - text: Team Name
+      - combobox [ref=e336]:
+        - generic: All Teams
+    - generic [ref=e339]:
+      - text: Support Engineer
+      - combobox [ref=e340]:
+        - generic: All Engineers
+    - generic [ref=e343]:
+      - text: Client Name
+      - combobox [active] [ref=e344]:
+        - generic: TechWave Solutions
+    - generic [ref=e347]:
+      - text: Date
+      - textbox [ref=e348]

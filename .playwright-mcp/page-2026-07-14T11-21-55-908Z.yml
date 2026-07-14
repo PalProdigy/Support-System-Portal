@@ -1,0 +1,186 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - link:
+            - /url: /dashboard
+            - img:
+              - generic: NH
+              - generic: DISTRIBUTIONS
+        - navigation:
+          - link:
+            - /url: /dashboard
+            - generic: Dashboard
+          - link:
+            - /url: /lead
+            - generic: Lead Hub
+          - link:
+            - /url: /cases
+            - generic: Cases
+          - link:
+            - /url: /teams
+            - generic: Teams
+          - link:
+            - /url: /support-engineer
+            - generic: Support Engineers
+          - link:
+            - /url: /clients
+            - generic: Clients
+          - link:
+            - /url: /solutions
+            - generic: Solutions
+          - link:
+            - /url: /knowledge-base
+            - generic: Knowledge Base
+          - link:
+            - /url: /reporting
+            - generic: Reporting
+          - link:
+            - /url: /feedback
+            - generic: Feedback
+          - link:
+            - /url: /audit-log
+            - generic: Audit Log
+          - link:
+            - /url: /notifications
+            - generic: Notifications
+        - generic:
+          - generic:
+            - generic:
+              - generic: SI
+              - generic:
+                - paragraph: Sadia Islam
+                - paragraph: Team Lead
+            - button
+    - generic:
+      - generic:
+        - banner:
+          - generic:
+            - button
+            - button:
+              - generic: "8"
+            - button:
+              - generic: SI
+              - generic:
+                - paragraph: Sadia Islam
+                - paragraph: Team Lead
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: Feedback
+              - paragraph: 7 responses
+            - generic:
+              - button [expanded]: Search
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Acme Corporation Ltd.
+                  - paragraph: The issue was resolved quickly once we connected with the support team. The engineer was very knowledgeable and walked us through the fix step by step. Very satisfied.
+                  - generic:
+                    - generic: Alpha Support Team
+                    - generic: Farzana Begum
+                    - generic: 10 Jun 2024
+                    - generic: Reviewed by Team Lead
+                - generic:
+                  - button: View Case
+                  - button: Review
+            - generic:
+              - generic:
+                - generic:
+                  - generic: TechWave Solutions
+                  - paragraph: Good response time and the documentation provided was thorough. Would have appreciated a video walkthrough in addition to the written guide.
+                  - generic: 15 Jun 2024
+                - generic:
+                  - button: View Case
+                  - button: Review
+            - generic:
+              - generic:
+                - generic:
+                  - generic: TechWave Solutions
+                  - paragraph: The payroll error was very serious and could have caused legal issues for us. While the fix was correct, we feel the initial response time was too slow for a critical payroll issue.
+                  - generic:
+                    - generic: Alpha Support Team
+                    - generic: Farzana Begum
+                    - generic: 21 Jun 2024
+                - generic:
+                  - button: View Case
+                  - button: Review
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Acme Corporation Ltd.
+                  - paragraph: The ERP sync issue for our warehouse was handled really well. The engineer kept us updated throughout and got the inventory counts back in line by end of day. Great work.
+                  - generic:
+                    - generic: Alpha Support Team
+                    - generic: Rafi Uddin
+                    - generic: 12 Jun 2024
+                    - generic: Reviewed by ML & TH
+                - generic:
+                  - button: View Case
+                  - button: Review
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Acme Corporation Ltd.
+                  - paragraph: Barcode scanner fix on the mobile app worked, but it took a couple of back-and-forth rounds to reproduce the Android 14 issue. Decent outcome overall.
+                  - generic:
+                    - generic: Alpha Support Team
+                    - generic: Rafi Uddin
+                    - generic: 18 Jun 2024
+                    - generic: Reviewed by Team Lead
+                - generic:
+                  - button: View Case
+                  - button: Review
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Acme Corporation Ltd.
+                  - paragraph: API rate-limit problem on the ERP connector was resolved and shipment confirmations are flowing on time again. Appreciated the clear explanation of the root cause.
+                  - generic:
+                    - generic: Alpha Support Team
+                    - generic: Rafi Uddin
+                    - generic: 24 Jun 2024
+                - generic:
+                  - button: View Case
+                  - button: Review
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Acme Corporation Ltd.
+                  - paragraph: Database recovery after the failed migration was stressful on our end. The fix was solid and no data was lost, though we'd have liked faster initial acknowledgement given how critical it was.
+                  - generic:
+                    - generic: Alpha Support Team
+                    - generic: Rafi Uddin
+                    - generic: 27 Jun 2024
+                - generic:
+                  - button: View Case
+                  - button: Review
+  - list
+  - button "Open Next.js Dev Tools" [ref=e326] [cursor=pointer]
+  - alert
+  - generic:
+    - dialog:
+      - generic:
+        - paragraph: Search feedback
+      - generic:
+        - text: Team Name
+        - combobox:
+          - generic: All Teams
+      - generic:
+        - text: Support Engineer
+        - combobox:
+          - generic: All Engineers
+      - generic:
+        - text: Client Name
+        - combobox [expanded]:
+          - generic: All Clients
+      - generic:
+        - text: Date
+        - textbox
+  - listbox [ref=e349]:
+    - option "All Clients" [active] [selected] [ref=e350]
+    - option "Acme Corporation Ltd." [ref=e356]
+    - option "TechWave Solutions" [ref=e359]

@@ -1,0 +1,139 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e34]:
+    - complementary [ref=e36]:
+      - link [ref=e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e39]:
+          - generic [ref=e40]: NH
+          - generic [ref=e41]: DISTRIBUTIONS
+      - navigation [ref=e49]:
+        - link "Dashboard" [ref=e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "AM Hub" [ref=e57] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "My Performance" [ref=e62] [cursor=pointer]:
+          - /url: /my-performance
+        - link "Cases" [ref=e67] [cursor=pointer]:
+          - /url: /cases
+        - link "Clients" [ref=e71] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=e77] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=e83] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e87] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e91] [cursor=pointer]:
+          - /url: /reporting
+        - link "Notifications" [ref=e95] [cursor=pointer]:
+          - /url: /notifications
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - generic "Tanvir Ahmed" [ref=e103]:
+            - generic "Tanvir Ahmed avatar" [ref=e105]: TA
+          - generic [ref=e106]:
+            - paragraph [ref=e107]: Tanvir Ahmed
+            - paragraph [ref=e108]: Sales Executive
+        - button "Collapse sidebar" [ref=e109]
+    - generic [ref=e112]:
+      - banner [ref=e114]:
+        - generic [ref=e115]:
+          - button "Toggle theme" [ref=e116] [cursor=pointer]
+          - button "Notifications" [ref=e117] [cursor=pointer]:
+            - generic [ref=e118]: 9+
+          - button "Tanvir Ahmed avatar Tanvir Ahmed Sales Executive" [ref=e119] [cursor=pointer]:
+            - generic "Tanvir Ahmed" [ref=e120]:
+              - generic "Tanvir Ahmed avatar" [ref=e122]: TA
+            - generic [ref=e123]:
+              - paragraph [ref=e124]: Tanvir Ahmed
+              - paragraph [ref=e125]: Sales Executive
+      - main [ref=e126]:
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - heading "Solutions" [level=1] [ref=e130]
+              - paragraph [ref=e131]: 5 products/services
+            - generic [ref=e132]:
+              - generic [ref=e133]:
+                - textbox "Search solutions" [ref=e134]:
+                  - /placeholder: Search solutions...
+                - generic [ref=e135]: 5 solutions found
+              - button "Add Solution" [ref=e136] [cursor=pointer]
+          - generic [ref=e137]:
+            - tablist [ref=e138]:
+              - tab "All" [selected] [ref=e139]
+              - tab "Integration" [ref=e140]
+              - tab "Data & Analytics" [ref=e141]
+              - tab "CRM" [ref=e142]
+              - tab "Operations" [ref=e143]
+              - tab "HR" [ref=e144]
+            - generic [ref=e145]:
+              - generic [ref=e146]:
+                - generic [ref=e151]:
+                  - paragraph [ref=e153]: ERP Integration Suite
+                  - paragraph [ref=e154]: Integration
+                  - paragraph [ref=e155]: End-to-end ERP integration with third-party platforms
+                  - generic [ref=e156]:
+                    - generic [ref=e157]: Unknown
+                    - generic [ref=e162]: 1/1/2024
+                  - generic [ref=e165]:
+                    - button "0" [ref=e166] [cursor=pointer]
+                    - button "0" [ref=e167] [cursor=pointer]
+                    - button "0" [ref=e168] [cursor=pointer]
+                - button "View" [ref=e170] [cursor=pointer]
+              - generic [ref=e171]:
+                - generic [ref=e176]:
+                  - paragraph [ref=e178]: Cloud Data Warehouse
+                  - paragraph [ref=e179]: Data & Analytics
+                  - paragraph [ref=e180]: Managed cloud data warehouse with BI dashboard
+                  - generic [ref=e181]:
+                    - generic [ref=e182]: Unknown
+                    - generic [ref=e187]: 1/1/2024
+                  - generic [ref=e190]:
+                    - button "0" [ref=e191] [cursor=pointer]
+                    - button "0" [ref=e192] [cursor=pointer]
+                    - button "0" [ref=e193] [cursor=pointer]
+                - button "View" [ref=e195] [cursor=pointer]
+              - generic [ref=e196]:
+                - generic [ref=e201]:
+                  - paragraph [ref=e203]: CRM Pro
+                  - paragraph [ref=e204]: CRM
+                  - paragraph [ref=e205]: Customer relationship management platform for SMEs
+                  - generic [ref=e206]:
+                    - generic [ref=e207]: Unknown
+                    - generic [ref=e212]: 1/1/2024
+                  - generic [ref=e215]:
+                    - button "0" [ref=e216] [cursor=pointer]
+                    - button "0" [ref=e217] [cursor=pointer]
+                    - button "0" [ref=e218] [cursor=pointer]
+                - button "View" [ref=e220] [cursor=pointer]
+              - generic [ref=e221]:
+                - generic [ref=e226]:
+                  - paragraph [ref=e228]: Inventory Management System
+                  - paragraph [ref=e229]: Operations
+                  - paragraph [ref=e230]: Real-time inventory tracking and warehouse management
+                  - generic [ref=e231]:
+                    - generic [ref=e232]: Unknown
+                    - generic [ref=e237]: 1/1/2024
+                  - generic [ref=e240]:
+                    - button "0" [ref=e241] [cursor=pointer]
+                    - button "0" [ref=e242] [cursor=pointer]
+                    - button "0" [ref=e243] [cursor=pointer]
+                - button "View" [ref=e245] [cursor=pointer]
+              - generic [ref=e246]:
+                - generic [ref=e251]:
+                  - paragraph [ref=e253]: HR & Payroll
+                  - paragraph [ref=e254]: HR
+                  - paragraph [ref=e255]: Human resources and payroll management solution
+                  - generic [ref=e256]:
+                    - generic [ref=e257]: Unknown
+                    - generic [ref=e262]: 1/1/2024
+                  - generic [ref=e265]:
+                    - button "0" [ref=e266] [cursor=pointer]
+                    - button "0" [ref=e267] [cursor=pointer]
+                    - button "0" [ref=e268] [cursor=pointer]
+                - button "View" [ref=e270] [cursor=pointer]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e276] [cursor=pointer]
+  - alert [ref=e280]

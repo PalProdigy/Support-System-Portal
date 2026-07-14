@@ -1,0 +1,88 @@
+- generic [ref=e1]:
+  - generic [ref=e34]:
+    - complementary [ref=e36]:
+      - link [ref=e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e39]:
+          - generic [ref=e40]: NH
+          - generic [ref=e41]: DISTRIBUTIONS
+      - navigation [ref=e49]:
+        - link "Dashboard" [ref=e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "AM Hub" [ref=e57] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "My Performance" [ref=e62] [cursor=pointer]:
+          - /url: /my-performance
+        - link "Cases" [ref=e67] [cursor=pointer]:
+          - /url: /cases
+        - link "Clients" [ref=e71] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=e77] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=e83] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e87] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e91] [cursor=pointer]:
+          - /url: /reporting
+        - link "Notifications" [ref=e95] [cursor=pointer]:
+          - /url: /notifications
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - generic "Tanvir Ahmed" [ref=e103]:
+            - generic "Tanvir Ahmed avatar" [ref=e105]: TA
+          - generic [ref=e106]:
+            - paragraph [ref=e107]: Tanvir Ahmed
+            - paragraph [ref=e108]: Sales Executive
+        - button "Collapse sidebar" [ref=e109]
+    - generic [ref=e112]:
+      - banner [ref=e114]:
+        - generic [ref=e115]:
+          - button "Toggle theme" [ref=e116] [cursor=pointer]
+          - button "Notifications" [ref=e117] [cursor=pointer]:
+            - generic [ref=e118]: 9+
+          - button "Tanvir Ahmed avatar Tanvir Ahmed Sales Executive" [ref=e119] [cursor=pointer]:
+            - generic "Tanvir Ahmed" [ref=e120]:
+              - generic "Tanvir Ahmed avatar" [ref=e122]: TA
+            - generic [ref=e123]:
+              - paragraph [ref=e124]: Tanvir Ahmed
+              - paragraph [ref=e125]: Sales Executive
+      - main [ref=e126]:
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - heading "Solutions" [level=1] [ref=e130]
+              - paragraph [ref=e131]: 5 products/services
+            - generic [ref=e132]:
+              - generic [ref=e133]:
+                - textbox "Search solutions" [active] [ref=e134]:
+                  - /placeholder: Search solutions...
+                  - text: crm
+                - button "Clear search" [ref=e281]
+                - generic [ref=e135]: 1 solution found
+              - button "Add Solution" [ref=e136] [cursor=pointer]
+          - generic [ref=e137]:
+            - tablist [ref=e138]:
+              - tab "All" [selected] [ref=e139]
+              - tab "Integration" [ref=e140]
+              - tab "Data & Analytics" [ref=e141]
+              - tab "CRM" [ref=e142]
+              - tab "Operations" [ref=e143]
+              - tab "HR" [ref=e144]
+            - generic [ref=e196]:
+              - generic [ref=e201]:
+                - paragraph [ref=e203]: CRM Pro
+                - paragraph [ref=e204]: CRM
+                - paragraph [ref=e205]: Customer relationship management platform for SMEs
+                - generic [ref=e206]:
+                  - generic [ref=e207]: Unknown
+                  - generic [ref=e212]: 1/1/2024
+                - generic [ref=e215]:
+                  - button "0" [ref=e216] [cursor=pointer]
+                  - button "0" [ref=e217] [cursor=pointer]
+                  - button "0" [ref=e218] [cursor=pointer]
+              - button "View" [ref=e220] [cursor=pointer]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e276] [cursor=pointer]
+  - alert [ref=e280]
