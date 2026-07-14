@@ -6,7 +6,7 @@ import type {
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle, KBArticleStatus, KBArticleVersion,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
-  EngineerMetrics, UserNotificationPrefs, NotificationChannel,
+  EngineerMetrics, SalesTarget, SalesExecutiveMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
   ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
   SolutionArticle,
@@ -33,6 +33,7 @@ import seedNotifications from '@/data/seed/notifications.json'
 import seedAuditLogs from '@/data/seed/audit_logs.json'
 import seedProspects from '@/data/seed/prospects.json'
 import seedSolutionArticles from '@/data/seed/solution_articles.json'
+import seedSalesTargets from '@/data/seed/sales_targets.json'
 
 const STORAGE_KEYS = {
   users: 'nhq_users',
@@ -52,6 +53,7 @@ const STORAGE_KEYS = {
   notifications: 'nhq_notifications',
   auditLogs: 'nhq_audit_logs',
   prospects: 'nhq_prospects',
+  salesTargets: 'nhq_sales_targets',
   slaEvents: 'nhq_sla_events',
   notifPrefs: 'nhq_notif_prefs',
   teamMemberRequests: 'nhq_team_member_requests',
@@ -88,7 +90,7 @@ function save<T>(key: string, data: T[]): void {
   localStorage.setItem(key, JSON.stringify(data))
 }
 
-const SEED_VERSION = '15' // bump when seed schema changes
+const SEED_VERSION = '16' // bump when seed schema changes
 
 function ensureSeeded(): void {
   if (typeof window === 'undefined') return
@@ -113,6 +115,7 @@ function ensureSeeded(): void {
   save(STORAGE_KEYS.notifications, seedNotifications)
   save(STORAGE_KEYS.auditLogs, seedAuditLogs)
   save(STORAGE_KEYS.prospects, seedProspects)
+  save(STORAGE_KEYS.salesTargets, seedSalesTargets)
   localStorage.setItem(STORAGE_KEYS.seeded, SEED_VERSION)
 }
 
@@ -2071,6 +2074,50 @@ class MockDataProvider implements DataProvider {
       engineers.map((u) => this.getEngineerMetrics(u.id, _scope))
     )
     return delay(metrics.sort((a, b) => b.total_resolved - a.total_resolved))
+  }
+
+  // ── Phase Final: Sales Executive performance ───────────────────────────────
+  async getSalesExecutiveMetrics(salesExecutiveId: string, _scope: ListScope): Promise<SalesExecutiveMetrics> {
+    const allProspects = load<Prospect>(STORAGE_KEYS.prospects)
+    const allTargets = load<SalesTarget>(STORAGE_KEYS.salesTargets)
+    const allClients = load<Client>(STORAGE_KEYS.clients)
+
+    const myProspects = allProspects.filter((p) => p.created_by === salesExecutiveId)
+    const closedWon = myProspects.filter((p) => p.stage === 'closed_won')
+    const closedLost = myProspects.filter((p) => p.stage === 'closed_lost')
+    const openProspects = myProspects.filter((p) => p.stage !== 'closed_won' && p.stage !== 'closed_lost')
+
+    const achievedAmount = closedWon.reduce((sum, p) => sum + (p.estimated_value ?? 0), 0)
+    const pipelineValue = openProspects.reduce((sum, p) => sum + (p.estimated_value ?? 0), 0)
+
+    // Most recently assigned target for this AM.
+    const target = allTargets
+      .filter((t) => t.sales_executive_id === salesExecutiveId)
+      .sort((a, b) => new Date(b.assigned_at).getTime() - new Date(a.assigned_at).getTime())[0] ?? null
+
+    const dealsWon = closedWon.length
+    const dealsLost = closedLost.length
+    const winRatePct = dealsWon + dealsLost > 0 ? Math.round((dealsWon / (dealsWon + dealsLost)) * 100) : null
+
+    const lastWon = [...closedWon].sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())[0]
+
+    return delay({
+      sales_executive_id: salesExecutiveId,
+      target,
+      achieved_amount: achievedAmount,
+      achievement_pct: target && target.target_amount > 0 ? Math.round((achievedAmount / target.target_amount) * 100) : null,
+      pipeline_value: pipelineValue,
+      active_prospects: openProspects.length,
+      deals_won: dealsWon,
+      deals_lost: dealsLost,
+      win_rate_pct: winRatePct,
+      // `created_by` is the actual account-ownership field this app scopes clients
+      // by (see listClients above) — `assigned_am` is unused elsewhere.
+      active_clients: allClients.filter((c) => c.created_by === salesExecutiveId).length,
+      last_deal: lastWon
+        ? { company_name: lastWon.company_name, value: lastWon.estimated_value ?? 0, closed_at: lastWon.updated_at }
+        : null,
+    })
   }
 
   // ── Phase Final: Notification preferences ─────────────────────────────────

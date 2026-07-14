@@ -1,0 +1,93 @@
+- generic [ref=f14e1]:
+  - generic [ref=f14e43]:
+    - complementary [ref=f14e45]:
+      - link [ref=f14e47] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f14e48]:
+          - generic [ref=f14e49]: NH
+          - generic [ref=f14e50]: DISTRIBUTIONS
+      - navigation [ref=f14e58]:
+        - link "Dashboard" [ref=f14e59] [cursor=pointer]:
+          - /url: /dashboard
+        - link "AM Hub" [ref=f14e66] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "My Performance" [ref=f14e71] [cursor=pointer]:
+          - /url: /my-performance
+        - link "Cases" [ref=f14e76] [cursor=pointer]:
+          - /url: /cases
+        - link "Clients" [ref=f14e80] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f14e86] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f14e92] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f14e96] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f14e100] [cursor=pointer]:
+          - /url: /reporting
+        - link "Notifications" [ref=f14e104] [cursor=pointer]:
+          - /url: /notifications
+      - generic [ref=f14e110]:
+        - generic [ref=f14e111]:
+          - generic "Tanvir Ahmed" [ref=f14e112]:
+            - generic "Tanvir Ahmed avatar" [ref=f14e114]: TA
+          - generic [ref=f14e115]:
+            - paragraph [ref=f14e116]: Tanvir Ahmed
+            - paragraph [ref=f14e117]: Sales Executive
+        - button "Collapse sidebar" [ref=f14e118]
+    - generic [ref=f14e121]:
+      - banner [ref=f14e123]:
+        - generic [ref=f14e124]:
+          - button "Toggle theme" [ref=f14e125] [cursor=pointer]
+          - button "Notifications" [ref=f14e126] [cursor=pointer]:
+            - generic [ref=f14e127]: 9+
+          - button "Tanvir Ahmed avatar Tanvir Ahmed Sales Executive" [ref=f14e128] [cursor=pointer]:
+            - generic "Tanvir Ahmed" [ref=f14e129]:
+              - generic "Tanvir Ahmed avatar" [ref=f14e131]: TA
+            - generic [ref=f14e132]:
+              - paragraph [ref=f14e133]: Tanvir Ahmed
+              - paragraph [ref=f14e134]: Sales Executive
+      - main [ref=f14e135]:
+        - generic [ref=f14e136]:
+          - generic [ref=f14e138]:
+            - heading "Cases" [level=1] [ref=f14e139]
+            - paragraph [ref=f14e140]: Your clients' cases · 0 total
+          - generic [ref=f14e141]:
+            - generic [ref=f14e144]:
+              - paragraph [ref=f14e145]: Total Cases
+              - paragraph [ref=f14e146]: "15"
+            - generic [ref=f14e152]:
+              - paragraph [ref=f14e153]: Active Cases
+              - paragraph [ref=f14e154]: "9"
+            - generic [ref=f14e160]:
+              - paragraph [ref=f14e161]: Escalated
+              - paragraph [ref=f14e162]: "5"
+            - generic [ref=f14e168]:
+              - paragraph [ref=f14e169]: Reopened
+              - paragraph [ref=f14e170]: "0"
+            - generic [ref=f14e177]:
+              - paragraph [ref=f14e178]: SLA Breached
+              - paragraph [ref=f14e179]: "15"
+          - generic [ref=f14e183]:
+            - generic [ref=f14e184]:
+              - textbox "Search cases" [active] [ref=f14e185]:
+                - /placeholder: Search by title or reference...
+                - text: erpzzzznotfound
+              - generic [ref=f14e186]: 0 cases found
+            - combobox [ref=f14e187]:
+              - generic: All Statuses
+            - combobox [ref=f14e190]:
+              - generic: All Priorities
+            - combobox [ref=f14e193]:
+              - generic: All SLA States
+            - button "Reset" [ref=f14e539] [cursor=pointer]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f14e622] [cursor=pointer]:
+    - generic [ref=f14e625]:
+      - text: Compiling
+      - generic [ref=f14e626]:
+        - generic [ref=f14e627]: .
+        - generic [ref=f14e628]: .
+        - generic [ref=f14e629]: .
+  - alert [ref=f14e536]

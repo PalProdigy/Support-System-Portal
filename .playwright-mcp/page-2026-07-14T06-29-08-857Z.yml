@@ -1,0 +1,360 @@
+- generic [active] [ref=f14e1]:
+  - generic [ref=f14e43]:
+    - complementary [ref=f14e45]:
+      - link [ref=f14e47] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f14e48]:
+          - generic [ref=f14e49]: NH
+          - generic [ref=f14e50]: DISTRIBUTIONS
+      - navigation [ref=f14e58]:
+        - link "Dashboard" [ref=f14e59] [cursor=pointer]:
+          - /url: /dashboard
+        - link "AM Hub" [ref=f14e66] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "My Performance" [ref=f14e71] [cursor=pointer]:
+          - /url: /my-performance
+        - link "Cases" [ref=f14e76] [cursor=pointer]:
+          - /url: /cases
+        - link "Clients" [ref=f14e80] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f14e86] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f14e92] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f14e96] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f14e100] [cursor=pointer]:
+          - /url: /reporting
+        - link "Notifications" [ref=f14e104] [cursor=pointer]:
+          - /url: /notifications
+      - generic [ref=f14e110]:
+        - generic [ref=f14e111]:
+          - generic "Tanvir Ahmed" [ref=f14e112]:
+            - generic "Tanvir Ahmed avatar" [ref=f14e114]: TA
+          - generic [ref=f14e115]:
+            - paragraph [ref=f14e116]: Tanvir Ahmed
+            - paragraph [ref=f14e117]: Sales Executive
+        - button "Collapse sidebar" [ref=f14e118]
+    - generic [ref=f14e121]:
+      - banner [ref=f14e123]:
+        - generic [ref=f14e124]:
+          - button "Toggle theme" [ref=f14e125] [cursor=pointer]
+          - button "Notifications" [ref=f14e126] [cursor=pointer]:
+            - generic [ref=f14e127]: 9+
+          - button "Tanvir Ahmed avatar Tanvir Ahmed Sales Executive" [ref=f14e128] [cursor=pointer]:
+            - generic "Tanvir Ahmed" [ref=f14e129]:
+              - generic "Tanvir Ahmed avatar" [ref=f14e131]: TA
+            - generic [ref=f14e132]:
+              - paragraph [ref=f14e133]: Tanvir Ahmed
+              - paragraph [ref=f14e134]: Sales Executive
+      - main [ref=f14e135]:
+        - generic [ref=f14e136]:
+          - generic [ref=f14e138]:
+            - heading "Cases" [level=1] [ref=f14e139]
+            - paragraph [ref=f14e140]: Your clients' cases · 15 total
+          - generic [ref=f14e141]:
+            - generic [ref=f14e144]:
+              - paragraph [ref=f14e145]: Total Cases
+              - paragraph [ref=f14e146]: "15"
+            - generic [ref=f14e152]:
+              - paragraph [ref=f14e153]: Active Cases
+              - paragraph [ref=f14e154]: "9"
+            - generic [ref=f14e160]:
+              - paragraph [ref=f14e161]: Escalated
+              - paragraph [ref=f14e162]: "5"
+            - generic [ref=f14e168]:
+              - paragraph [ref=f14e169]: Reopened
+              - paragraph [ref=f14e170]: "0"
+            - generic [ref=f14e177]:
+              - paragraph [ref=f14e178]: SLA Breached
+              - paragraph [ref=f14e179]: "15"
+          - generic [ref=f14e183]:
+            - generic [ref=f14e184]:
+              - textbox "Search cases" [ref=f14e185]:
+                - /placeholder: Search by title or reference...
+              - generic [ref=f14e186]: 15 cases found
+            - combobox [ref=f14e187]:
+              - generic: All Statuses
+            - combobox [ref=f14e190]:
+              - generic: All Priorities
+            - combobox [ref=f14e193]:
+              - generic: All SLA States
+          - generic [ref=f14e196]:
+            - generic [ref=f14e197]:
+              - paragraph [ref=f14e198]:
+                - text: Active
+                - generic [ref=f14e199]: · 9
+              - link "NHQ-2024-0013 Escalated Medium Escalated Analytics report export to Excel failing Delta Trade Ltd. · 22 Jun 2024, 16:00 Overdue" [ref=f14e200] [cursor=pointer]:
+                - /url: /cases/case13
+                - generic [ref=f14e201]:
+                  - generic [ref=f14e202]:
+                    - generic [ref=f14e203]:
+                      - generic [ref=f14e204]: NHQ-2024-0013
+                      - generic [ref=f14e205]: Escalated
+                    - generic [ref=f14e208]:
+                      - generic [ref=f14e209]: Medium
+                      - generic [ref=f14e211]: Escalated
+                  - paragraph [ref=f14e212]: Analytics report export to Excel failing
+                  - generic [ref=f14e213]:
+                    - generic [ref=f14e214]:
+                      - generic [ref=f14e215]: Delta Trade Ltd.
+                      - generic [ref=f14e216]: ·
+                      - generic [ref=f14e217]: 22 Jun 2024, 16:00
+                    - generic [ref=f14e218]: Overdue
+              - link "NHQ-2024-0010 High In Progress API rate limit errors in ERP connector Acme Corporation Ltd. · Rafi Uddin · 22 Jun 2024, 15:30 Overdue" [ref=f14e222] [cursor=pointer]:
+                - /url: /cases/case10
+                - generic [ref=f14e223]:
+                  - generic [ref=f14e224]:
+                    - generic [ref=f14e225]: NHQ-2024-0010
+                    - generic [ref=f14e227]:
+                      - generic [ref=f14e228]: High
+                      - generic [ref=f14e230]: In Progress
+                  - paragraph [ref=f14e231]: API rate limit errors in ERP connector
+                  - generic [ref=f14e232]:
+                    - generic [ref=f14e233]:
+                      - generic [ref=f14e234]: Acme Corporation Ltd.
+                      - generic [ref=f14e235]: ·
+                      - generic [ref=f14e236]: Rafi Uddin
+                      - generic [ref=f14e237]: ·
+                      - generic [ref=f14e238]: 22 Jun 2024, 15:30
+                    - generic [ref=f14e239]: Overdue
+              - link "NHQ-2024-0008 Escalated Medium Escalated Dashboard showing stale data after refresh Delta Trade Ltd. · 22 Jun 2024, 15:00 Overdue" [ref=f14e243] [cursor=pointer]:
+                - /url: /cases/case8
+                - generic [ref=f14e244]:
+                  - generic [ref=f14e245]:
+                    - generic [ref=f14e246]:
+                      - generic [ref=f14e247]: NHQ-2024-0008
+                      - generic [ref=f14e248]: Escalated
+                    - generic [ref=f14e251]:
+                      - generic [ref=f14e252]: Medium
+                      - generic [ref=f14e254]: Escalated
+                  - paragraph [ref=f14e255]: Dashboard showing stale data after refresh
+                  - generic [ref=f14e256]:
+                    - generic [ref=f14e257]:
+                      - generic [ref=f14e258]: Delta Trade Ltd.
+                      - generic [ref=f14e259]: ·
+                      - generic [ref=f14e260]: 22 Jun 2024, 15:00
+                    - generic [ref=f14e261]: Overdue
+              - link "NHQ-2024-0012 Escalated Critical Escalated Purchase order PDF not generating Delta Trade Ltd. · Imran Khan · 22 Jun 2024, 14:30 Overdue" [ref=f14e265] [cursor=pointer]:
+                - /url: /cases/case12
+                - generic [ref=f14e266]:
+                  - generic [ref=f14e267]:
+                    - generic [ref=f14e268]:
+                      - generic [ref=f14e269]: NHQ-2024-0012
+                      - generic [ref=f14e270]: Escalated
+                    - generic [ref=f14e273]:
+                      - generic [ref=f14e274]: Critical
+                      - generic [ref=f14e276]: Escalated
+                  - paragraph [ref=f14e277]: Purchase order PDF not generating
+                  - generic [ref=f14e278]:
+                    - generic [ref=f14e279]:
+                      - generic [ref=f14e280]: Delta Trade Ltd.
+                      - generic [ref=f14e281]: ·
+                      - generic [ref=f14e282]: Imran Khan
+                      - generic [ref=f14e283]: ·
+                      - generic [ref=f14e284]: 22 Jun 2024, 14:30
+                    - generic [ref=f14e285]: Overdue
+              - link "NHQ-2024-0014 Escalated High Escalated Mobile app crashes on product scan Acme Corporation Ltd. · 22 Jun 2024, 13:30 Overdue" [ref=f14e289] [cursor=pointer]:
+                - /url: /cases/case14
+                - generic [ref=f14e290]:
+                  - generic [ref=f14e291]:
+                    - generic [ref=f14e292]:
+                      - generic [ref=f14e293]: NHQ-2024-0014
+                      - generic [ref=f14e294]: Escalated
+                    - generic [ref=f14e297]:
+                      - generic [ref=f14e298]: High
+                      - generic [ref=f14e300]: Escalated
+                  - paragraph [ref=f14e301]: Mobile app crashes on product scan
+                  - generic [ref=f14e302]:
+                    - generic [ref=f14e303]:
+                      - generic [ref=f14e304]: Acme Corporation Ltd.
+                      - generic [ref=f14e305]: ·
+                      - generic [ref=f14e306]: 22 Jun 2024, 13:30
+                    - generic [ref=f14e307]: Overdue
+              - 'link "NHQ-2024-0001 Escalated Critical In Progress ERP sync failing for Acme warehouse #3 Acme Corporation Ltd. · Rafi Uddin · 22 Jun 2024, 13:00 Overdue" [ref=f14e311] [cursor=pointer]':
+                - /url: /cases/case1
+                - generic [ref=f14e312]:
+                  - generic [ref=f14e313]:
+                    - generic [ref=f14e314]:
+                      - generic [ref=f14e315]: NHQ-2024-0001
+                      - generic [ref=f14e316]: Escalated
+                    - generic [ref=f14e319]:
+                      - generic [ref=f14e320]: Critical
+                      - generic [ref=f14e322]: In Progress
+                  - paragraph [ref=f14e323]: "ERP sync failing for Acme warehouse #3"
+                  - generic [ref=f14e324]:
+                    - generic [ref=f14e325]:
+                      - generic [ref=f14e326]: Acme Corporation Ltd.
+                      - generic [ref=f14e327]: ·
+                      - generic [ref=f14e328]: Rafi Uddin
+                      - generic [ref=f14e329]: ·
+                      - generic [ref=f14e330]: 22 Jun 2024, 13:00
+                    - generic [ref=f14e331]: Overdue
+              - link "NHQ-2024-0007 High Triaged Data import from legacy system failing Delta Trade Ltd. · Imran Khan · 22 Jun 2024, 12:00 Overdue" [ref=f14e335] [cursor=pointer]:
+                - /url: /cases/case7
+                - generic [ref=f14e336]:
+                  - generic [ref=f14e337]:
+                    - generic [ref=f14e338]: NHQ-2024-0007
+                    - generic [ref=f14e340]:
+                      - generic [ref=f14e341]: High
+                      - generic [ref=f14e343]: Triaged
+                  - paragraph [ref=f14e344]: Data import from legacy system failing
+                  - generic [ref=f14e345]:
+                    - generic [ref=f14e346]:
+                      - generic [ref=f14e347]: Delta Trade Ltd.
+                      - generic [ref=f14e348]: ·
+                      - generic [ref=f14e349]: Imran Khan
+                      - generic [ref=f14e350]: ·
+                      - generic [ref=f14e351]: 22 Jun 2024, 12:00
+                    - generic [ref=f14e352]: Overdue
+              - link "NHQ-2024-0006 Medium In Progress Inventory barcode scanner not recognized on mobile Acme Corporation Ltd. · Rafi Uddin · 21 Jun 2024, 17:00 Overdue" [ref=f14e356] [cursor=pointer]:
+                - /url: /cases/case6
+                - generic [ref=f14e357]:
+                  - generic [ref=f14e358]:
+                    - generic [ref=f14e359]: NHQ-2024-0006
+                    - generic [ref=f14e361]:
+                      - generic [ref=f14e362]: Medium
+                      - generic [ref=f14e364]: In Progress
+                  - paragraph [ref=f14e365]: Inventory barcode scanner not recognized on mobile
+                  - generic [ref=f14e366]:
+                    - generic [ref=f14e367]:
+                      - generic [ref=f14e368]: Acme Corporation Ltd.
+                      - generic [ref=f14e369]: ·
+                      - generic [ref=f14e370]: Rafi Uddin
+                      - generic [ref=f14e371]: ·
+                      - generic [ref=f14e372]: 21 Jun 2024, 17:00
+                    - generic [ref=f14e373]: Overdue
+              - link "NHQ-2024-0002 High Pending Client Unable to generate monthly financial report Delta Trade Ltd. · Imran Khan · 21 Jun 2024, 15:00 Paused" [ref=f14e377] [cursor=pointer]:
+                - /url: /cases/case2
+                - generic [ref=f14e378]:
+                  - generic [ref=f14e379]:
+                    - generic [ref=f14e380]: NHQ-2024-0002
+                    - generic [ref=f14e382]:
+                      - generic [ref=f14e383]: High
+                      - generic [ref=f14e385]: Pending Client
+                  - paragraph [ref=f14e386]: Unable to generate monthly financial report
+                  - generic [ref=f14e387]:
+                    - generic [ref=f14e388]:
+                      - generic [ref=f14e389]: Delta Trade Ltd.
+                      - generic [ref=f14e390]: ·
+                      - generic [ref=f14e391]: Imran Khan
+                      - generic [ref=f14e392]: ·
+                      - generic [ref=f14e393]: 21 Jun 2024, 15:00
+                    - generic [ref=f14e394]: Paused
+            - generic [ref=f14e398]:
+              - separator [ref=f14e399]
+              - paragraph [ref=f14e400]:
+                - text: Closed / Resolved
+                - generic [ref=f14e401]: · 6
+              - link "NHQ-2024-0016 Critical Resolved Database corruption after failed migration Acme Corporation Ltd. · Rafi Uddin · 21 Jun 2024, 04:00 Paused" [ref=f14e402] [cursor=pointer]:
+                - /url: /cases/case16
+                - generic [ref=f14e403]:
+                  - generic [ref=f14e404]:
+                    - generic [ref=f14e405]: NHQ-2024-0016
+                    - generic [ref=f14e407]:
+                      - generic [ref=f14e408]: Critical
+                      - generic [ref=f14e410]: Resolved
+                  - paragraph [ref=f14e411]: Database corruption after failed migration
+                  - generic [ref=f14e412]:
+                    - generic [ref=f14e413]:
+                      - generic [ref=f14e414]: Acme Corporation Ltd.
+                      - generic [ref=f14e415]: ·
+                      - generic [ref=f14e416]: Rafi Uddin
+                      - generic [ref=f14e417]: ·
+                      - generic [ref=f14e418]: 21 Jun 2024, 04:00
+                    - generic [ref=f14e419]: Paused
+              - link "NHQ-2024-0011 Low Closed User cannot reset password Acme Corporation Ltd. · Farzana Begum · 08 Jun 2024, 16:00 Paused" [ref=f14e423] [cursor=pointer]:
+                - /url: /cases/case11
+                - generic [ref=f14e424]:
+                  - generic [ref=f14e425]:
+                    - generic [ref=f14e426]: NHQ-2024-0011
+                    - generic [ref=f14e428]:
+                      - generic [ref=f14e429]: Low
+                      - generic [ref=f14e431]: Closed
+                  - paragraph [ref=f14e432]: User cannot reset password
+                  - generic [ref=f14e433]:
+                    - generic [ref=f14e434]:
+                      - generic [ref=f14e435]: Acme Corporation Ltd.
+                      - generic [ref=f14e436]: ·
+                      - generic [ref=f14e437]: Farzana Begum
+                      - generic [ref=f14e438]: ·
+                      - generic [ref=f14e439]: 08 Jun 2024, 16:00
+                    - generic [ref=f14e440]: Paused
+              - link "NHQ-2024-0019 Medium Closed Cloud data warehouse query timeout on quarterly report Acme Corporation Ltd. · Rafi Uddin · 03 Apr 2024, 14:30 Paused" [ref=f14e444] [cursor=pointer]:
+                - /url: /cases/case19
+                - generic [ref=f14e445]:
+                  - generic [ref=f14e446]:
+                    - generic [ref=f14e447]: NHQ-2024-0019
+                    - generic [ref=f14e449]:
+                      - generic [ref=f14e450]: Medium
+                      - generic [ref=f14e452]: Closed
+                  - paragraph [ref=f14e453]: Cloud data warehouse query timeout on quarterly report
+                  - generic [ref=f14e454]:
+                    - generic [ref=f14e455]:
+                      - generic [ref=f14e456]: Acme Corporation Ltd.
+                      - generic [ref=f14e457]: ·
+                      - generic [ref=f14e458]: Rafi Uddin
+                      - generic [ref=f14e459]: ·
+                      - generic [ref=f14e460]: 03 Apr 2024, 14:30
+                    - generic [ref=f14e461]: Paused
+              - link "NHQ-2024-0018 High Resolved Inventory count mismatch after warehouse relocation Delta Trade Ltd. · Farzana Begum · 12 Mar 2024, 17:00 Paused" [ref=f14e465] [cursor=pointer]:
+                - /url: /cases/case18
+                - generic [ref=f14e466]:
+                  - generic [ref=f14e467]:
+                    - generic [ref=f14e468]: NHQ-2024-0018
+                    - generic [ref=f14e470]:
+                      - generic [ref=f14e471]: High
+                      - generic [ref=f14e473]: Resolved
+                  - paragraph [ref=f14e474]: Inventory count mismatch after warehouse relocation
+                  - generic [ref=f14e475]:
+                    - generic [ref=f14e476]:
+                      - generic [ref=f14e477]: Delta Trade Ltd.
+                      - generic [ref=f14e478]: ·
+                      - generic [ref=f14e479]: Farzana Begum
+                      - generic [ref=f14e480]: ·
+                      - generic [ref=f14e481]: 12 Mar 2024, 17:00
+                    - generic [ref=f14e482]: Paused
+              - link "NHQ-2024-0021 High Resolved Payroll tax table outdated for new fiscal year Delta Trade Ltd. · Sabbir Ahsan · 06 Mar 2024, 15:00 Paused" [ref=f14e486] [cursor=pointer]:
+                - /url: /cases/case21
+                - generic [ref=f14e487]:
+                  - generic [ref=f14e488]:
+                    - generic [ref=f14e489]: NHQ-2024-0021
+                    - generic [ref=f14e491]:
+                      - generic [ref=f14e492]: High
+                      - generic [ref=f14e494]: Resolved
+                  - paragraph [ref=f14e495]: Payroll tax table outdated for new fiscal year
+                  - generic [ref=f14e496]:
+                    - generic [ref=f14e497]:
+                      - generic [ref=f14e498]: Delta Trade Ltd.
+                      - generic [ref=f14e499]: ·
+                      - generic [ref=f14e500]: Sabbir Ahsan
+                      - generic [ref=f14e501]: ·
+                      - generic [ref=f14e502]: 06 Mar 2024, 15:00
+                    - generic [ref=f14e503]: Paused
+              - link "NHQ-2024-0017 Medium Resolved ERP login lockout after password policy update Acme Corporation Ltd. · Rafi Uddin · 10 Jan 2024, 15:15 Paused" [ref=f14e507] [cursor=pointer]:
+                - /url: /cases/case17
+                - generic [ref=f14e508]:
+                  - generic [ref=f14e509]:
+                    - generic [ref=f14e510]: NHQ-2024-0017
+                    - generic [ref=f14e512]:
+                      - generic [ref=f14e513]: Medium
+                      - generic [ref=f14e515]: Resolved
+                  - paragraph [ref=f14e516]: ERP login lockout after password policy update
+                  - generic [ref=f14e517]:
+                    - generic [ref=f14e518]:
+                      - generic [ref=f14e519]: Acme Corporation Ltd.
+                      - generic [ref=f14e520]: ·
+                      - generic [ref=f14e521]: Rafi Uddin
+                      - generic [ref=f14e522]: ·
+                      - generic [ref=f14e523]: 10 Jan 2024, 15:15
+                    - generic [ref=f14e524]: Paused
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f14e528] [cursor=pointer]:
+    - generic [ref=f14e531]:
+      - text: Compiling
+      - generic [ref=f14e532]:
+        - generic [ref=f14e533]: .
+        - generic [ref=f14e534]: .
+        - generic [ref=f14e535]: .
+  - alert [ref=f14e536]

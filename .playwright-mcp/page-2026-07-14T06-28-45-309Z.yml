@@ -1,0 +1,16 @@
+- generic [active] [ref=f14e1]:
+  - status [ref=f14e2]:
+    - paragraph [ref=f14e10]: NHQ Distributions
+    - generic [ref=f14e14]:
+      - generic [ref=f14e15]: Connecting
+      - generic [ref=f14e16]: ·
+      - generic [ref=f14e17]: 0%
+  - region "Notifications (F8)":
+    - list
+  - status [ref=f14e18]:
+    - paragraph [ref=f14e26]: NHQ Distributions
+    - generic [ref=f14e30]:
+      - generic [ref=f14e31]: Connecting
+      - generic [ref=f14e32]: ·
+      - generic [ref=f14e33]: 0%
+  - button "Open Next.js Dev Tools" [ref=f14e39] [cursor=pointer]

@@ -438,6 +438,22 @@ export interface EngineerMetrics {
   total_feedback_count: number
 }
 
+// Phase Final — Sales Executive performance (computed, not persisted, except
+// `target` which mirrors the currently assigned SalesTarget row).
+export interface SalesExecutiveMetrics {
+  sales_executive_id: string
+  target: SalesTarget | null
+  achieved_amount: number          // sum of estimated_value across closed_won prospects
+  achievement_pct: number | null   // achieved_amount / target.target_amount * 100
+  pipeline_value: number           // sum of estimated_value across open (non-closed) prospects
+  active_prospects: number
+  deals_won: number
+  deals_lost: number
+  win_rate_pct: number | null      // deals_won / (deals_won + deals_lost) * 100
+  active_clients: number           // clients with assigned_am === sales_executive_id
+  last_deal: { company_name: string; value: number; closed_at: string } | null
+}
+
 // Phase Final — Per-user notification channel preferences
 export interface UserNotificationPrefs {
   user_id: string
@@ -467,6 +483,21 @@ export interface Prospect {
   created_at: string
   updated_at: string
   converted_client_id?: string
+}
+
+// A revenue quota assigned to a Sales Executive for a period (set by the
+// Technical Head). Achievement against it is computed, not stored here —
+// see SalesExecutiveMetrics.
+export interface SalesTarget {
+  id: string
+  sales_executive_id: string
+  period_label: string   // e.g. "Q1 2025"
+  period_start: string
+  period_end: string
+  target_amount: number
+  assigned_by: string     // technical_head user id
+  assigned_at: string
+  notes?: string
 }
 
 // A client-raised request to change the engineer assigned to their case.

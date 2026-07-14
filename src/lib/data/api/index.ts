@@ -8,7 +8,7 @@ import type {
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
-  EngineerMetrics, UserNotificationPrefs, NotificationChannel,
+  EngineerMetrics, SalesExecutiveMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
   ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
   SolutionArticle,
@@ -162,6 +162,8 @@ export class ApiDataProvider implements DataProvider {
 
   async getEngineerMetrics(engineerId: string, _scope: ListScope): Promise<EngineerMetrics> { return http(`/engineers/${engineerId}/metrics`) }
   async listAllEngineerMetrics(_scope: ListScope): Promise<EngineerMetrics[]> { return http('/engineers/metrics') }
+
+  async getSalesExecutiveMetrics(salesExecutiveId: string, _scope: ListScope): Promise<SalesExecutiveMetrics> { return http(`/sales-executives/${salesExecutiveId}/metrics`) }
 
   async getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`) }
   async updateUserNotifPrefs(userId: string, channels: NotificationChannel[]): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`, { method: 'PUT', body: JSON.stringify({ channels }) }) }

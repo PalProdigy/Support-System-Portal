@@ -12,6 +12,8 @@ export interface SearchInputProps
   onChange: (value: string) => void
   /** Debounce window in ms. ~150-250 for client-side filtering, ~300-400 for server-side search. */
   debounceMs?: number
+  /** Minimum non-whitespace characters before a debounced search fires (default 0 = no threshold). Clearing the field or pressing Enter always bypasses this. */
+  minChars?: number
   /** Shows a spinner in place of the clear icon — for server-side search only. */
   loading?: boolean
   /** Number of results currently showing, announced to screen readers via aria-live. */
@@ -26,6 +28,7 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       value,
       onChange,
       debounceMs = 250,
+      minChars = 0,
       loading,
       resultCount,
       resultLabel = 'result',
@@ -62,6 +65,9 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         onChange('')
         return
       }
+      // Below the minimum-length threshold: leave existing results alone
+      // (don't fire a broad 1-character search) until the user types more.
+      if (next.trim().length < minChars) return
       timeoutRef.current = setTimeout(() => onChange(next), debounceMs)
     }
 

@@ -12,7 +12,10 @@ import { SearchInput } from '@/components/ui/search-input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+import { Calendar, toDateKey } from '@/components/ui/calendar'
 import { EmptyState } from '@/components/shared/empty-state'
+import { ErrorState } from '@/components/shared/error-state'
 import { CaseCard } from '@/components/shared/case-card'
 import { KBStatusBadge } from '@/modules/kb/status-badge'
 import { canReviewKB, canWriteKB, KB_CATEGORIES } from '@/modules/kb/constants'
@@ -20,11 +23,9 @@ import { estimateReadingTimeMinutes, slugify } from '@/lib/markdown/utils'
 import { cn, formatDate } from '@/lib/utils'
 import {
   BookOpen, ClipboardList, Clock, FolderOpen, MessageCircle, PenLine, PlusCircle,
-  Tag, User as UserIcon, X, CheckCircle2, ArrowUpDown,
+  Tag, User as UserIcon, X, CheckCircle2, Filter, CalendarDays,
 } from 'lucide-react'
 import type { Case, Client, KBArticle, User } from '@/types'
-
-type CaseSortKey = 'date' | 'team' | 'engineer' | 'service'
 
 type Shelf = 'browse' | 'mine' | 'review' | 'closed_cases'
 
@@ -43,14 +44,18 @@ function KnowledgeBaseIndex() {
 
   const [query, setQuery] = useState('')
   const [shelf, setShelf] = useState<Shelf>('browse')
-  const [caseSortKey, setCaseSortKey] = useState<CaseSortKey>('date')
+  const [dateFilter, setDateFilter] = useState<Date | null>(null)
+  const [dateOpen, setDateOpen] = useState(false)
+  const [teamFilter, setTeamFilter] = useState('all')
+  const [engineerFilter, setEngineerFilter] = useState('all')
+  const [serviceFilter, setServiceFilter] = useState('all')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
 
   const writer = canWriteKB(session.role)
   const reviewer = canReviewKB(session.role)
 
-  const { data: articles, isLoading, isFetching } = useQuery({
+  const { data: articles, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ['kb', 'index', session.userId, query],
     queryFn: () => dp.listKBArticles({ search: query || undefined }, scope),
   })
@@ -111,31 +116,64 @@ function KnowledgeBaseIndex() {
       new Date(b.published_at ?? b.updated_at).getTime() - new Date(a.published_at ?? a.updated_at).getTime())
   }, [shelfArticles, category, tag])
 
+  // Dates that have at least one closed case — drives the "has data" dot in the calendar.
+  const closedCaseDateKeys = useMemo(() => {
+    const set = new Set<string>()
+    for (const c of closedCases) set.add(toDateKey(new Date(c.closed_at ?? c.created_at)))
+    return set
+  }, [closedCases])
+
+  // Filter option lists — only values actually present among closed cases, so every
+  // choice is guaranteed to return at least one result.
+  const teamOptions = useMemo(() => {
+    const ids = new Set(closedCases.map((c) => c.team_id).filter(Boolean) as string[])
+    return [...ids].map((id) => ({ id, name: teamsMap[id] ?? 'Unknown team' })).sort((a, b) => a.name.localeCompare(b.name))
+  }, [closedCases, teamsMap])
+
+  const engineerOptions = useMemo(() => {
+    const ids = new Set(closedCases.map((c) => c.assignee_id).filter(Boolean) as string[])
+    return [...ids].map((id) => ({ id, name: usersMap[id]?.name ?? 'Unknown engineer' })).sort((a, b) => a.name.localeCompare(b.name))
+  }, [closedCases, usersMap])
+
+  const serviceOptions = useMemo(() => {
+    const ids = new Set(closedCases.map((c) => c.solution_id).filter(Boolean) as string[])
+    return [...ids].map((id) => ({ id, name: solutionsMap[id] ?? 'Unknown service' })).sort((a, b) => a.name.localeCompare(b.name))
+  }, [closedCases, solutionsMap])
+
+  const hasActiveCaseFilters = !!dateFilter || teamFilter !== 'all' || engineerFilter !== 'all' || serviceFilter !== 'all'
+
+  const clearCaseFilters = () => {
+    setDateFilter(null)
+    setTeamFilter('all')
+    setEngineerFilter('all')
+    setServiceFilter('all')
+  }
+
   const visibleClosedCases = useMemo(() => {
     const q = query.trim().toLowerCase()
-    const list = q
+    let list = q
       ? closedCases.filter((c: Case) => c.title.toLowerCase().includes(q) || c.reference_no.toLowerCase().includes(q))
       : closedCases
-    return [...list].sort((a, b) => {
-      switch (caseSortKey) {
-        case 'team':
-          return (teamsMap[a.team_id] ?? '').localeCompare(teamsMap[b.team_id] ?? '')
-        case 'engineer':
-          return (usersMap[a.assignee_id ?? '']?.name ?? '').localeCompare(usersMap[b.assignee_id ?? '']?.name ?? '')
-        case 'service':
-          return (solutionsMap[a.solution_id] ?? '').localeCompare(solutionsMap[b.solution_id] ?? '')
-        case 'date':
-        default:
-          return new Date(b.closed_at ?? b.created_at).getTime() - new Date(a.closed_at ?? a.created_at).getTime()
-      }
-    })
-  }, [closedCases, query, caseSortKey, teamsMap, usersMap, solutionsMap])
+
+    if (dateFilter) {
+      const key = toDateKey(dateFilter)
+      list = list.filter((c) => toDateKey(new Date(c.closed_at ?? c.created_at)) === key)
+    }
+    if (teamFilter !== 'all') list = list.filter((c) => c.team_id === teamFilter)
+    if (engineerFilter !== 'all') list = list.filter((c) => c.assignee_id === engineerFilter)
+    if (serviceFilter !== 'all') list = list.filter((c) => c.solution_id === serviceFilter)
+
+    return [...list].sort((a, b) =>
+      new Date(b.closed_at ?? b.created_at).getTime() - new Date(a.closed_at ?? a.created_at).getTime())
+  }, [closedCases, query, dateFilter, teamFilter, engineerFilter, serviceFilter])
 
   const setFilter = (key: 'category' | 'tag', value: string | null) => {
     const params = new URLSearchParams(searchParams.toString())
     if (value) params.set(key, value); else params.delete(key)
     router.replace(`/knowledge-base${params.size ? `?${params}` : ''}`)
   }
+
+  if (error) return <div className="p-6"><ErrorState onRetry={refetch} /></div>
 
   return (
     <div className="p-4 lg:p-6 max-w-6xl mx-auto space-y-5">
@@ -159,6 +197,7 @@ function KnowledgeBaseIndex() {
             value={query}
             onChange={setQuery}
             debounceMs={350}
+            minChars={2}
             loading={isFetching}
             placeholder={isClosedCasesShelf ? 'Search by title or reference…' : 'Search by title, content, tags, category or author…'}
             className="h-11 text-base bg-background"
@@ -211,22 +250,99 @@ function KnowledgeBaseIndex() {
         </div>
       )}
 
-      {/* ── Closed Cases sort ────────────────────────────────────────────────── */}
+      {/* ── Closed Cases filters ─────────────────────────────────────────────── */}
       {isClosedCasesShelf && (
-        <div className="flex items-center gap-2">
-          <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-          <span className="text-xs text-muted-foreground shrink-0">Sort by</span>
-          <Select value={caseSortKey} onValueChange={(v) => setCaseSortKey(v as CaseSortKey)}>
-            <SelectTrigger className="h-8 w-48 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="date">Date Closed</SelectItem>
-              <SelectItem value="team">Team Name</SelectItem>
-              <SelectItem value="engineer">Support Engineer Name</SelectItem>
-              <SelectItem value="service">Service</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex flex-wrap items-center gap-2">
+          <SearchInput
+            value={query}
+            onChange={setQuery}
+            debounceMs={350}
+            minChars={2}
+            loading={isFetching}
+            placeholder="Search by title or reference…"
+            containerClassName="w-56 shrink-0"
+            className="h-8 text-sm"
+            aria-label="Search closed cases"
+            resultCount={visibleClosedCases.length}
+            resultLabel="case"
+          />
+
+          <Filter className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+          <span className="text-xs text-muted-foreground shrink-0">Filter by</span>
+
+          {/* Date — opens a calendar; days with a closed case carry a dot */}
+          <div className="flex items-stretch shrink-0">
+            <Popover open={dateOpen} onOpenChange={setDateOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    'flex h-8 items-center gap-1.5 border border-input bg-transparent px-3 text-sm shadow-sm hover:bg-muted/50 transition-colors rounded-md',
+                    dateFilter && 'border-primary/50 text-primary rounded-r-none border-r-0',
+                  )}
+                >
+                  <CalendarDays className="h-3.5 w-3.5 shrink-0" />
+                  {dateFilter ? formatDate(dateFilter.toISOString()) : 'Date'}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="p-0" align="start">
+                <Calendar
+                  selected={dateFilter ?? undefined}
+                  onSelect={(d) => { setDateFilter(d); setDateOpen(false) }}
+                  markedDates={closedCaseDateKeys}
+                />
+              </PopoverContent>
+            </Popover>
+            {dateFilter && (
+              <button
+                type="button"
+                aria-label="Clear date filter"
+                onClick={() => setDateFilter(null)}
+                className="flex h-8 items-center rounded-r-md border border-l-0 border-primary/50 px-1.5 text-primary hover:bg-primary/10 transition-colors"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
+
+          {/* Team Name */}
+          <div className="w-40 shrink-0">
+            <Select value={teamFilter} onValueChange={setTeamFilter}>
+              <SelectTrigger className="h-8 w-full text-sm"><SelectValue placeholder="Team Name" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Teams</SelectItem>
+                {teamOptions.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Support Engineer Name */}
+          <div className="w-48 shrink-0">
+            <Select value={engineerFilter} onValueChange={setEngineerFilter}>
+              <SelectTrigger className="h-8 w-full text-sm"><SelectValue placeholder="Support Engineer Name" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Engineers</SelectItem>
+                {engineerOptions.map((e) => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Service */}
+          <div className="w-40 shrink-0">
+            <Select value={serviceFilter} onValueChange={setServiceFilter}>
+              <SelectTrigger className="h-8 w-full text-sm"><SelectValue placeholder="Service" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Services</SelectItem>
+                {serviceOptions.map((s) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {hasActiveCaseFilters && (
+            <Button variant="ghost" size="sm" className="h-8 text-xs text-muted-foreground shrink-0" onClick={clearCaseFilters}>
+              <X className="h-3 w-3" /> Clear
+            </Button>
+          )}
         </div>
       )}
 
@@ -239,8 +355,14 @@ function KnowledgeBaseIndex() {
         ) : visibleClosedCases.length === 0 ? (
           <EmptyState
             icon={CheckCircle2}
-            title={query ? `No results found for "${query}"` : 'No closed cases'}
-            description={query ? 'Try different keywords.' : 'Cases that have been closed will appear here.'}
+            title={query ? `No results found for "${query}"` : hasActiveCaseFilters ? 'No cases match these filters' : 'No closed cases'}
+            description={
+              query
+                ? 'Try different keywords.'
+                : hasActiveCaseFilters
+                  ? 'Try a different date, team, engineer or service.'
+                  : 'Cases that have been closed will appear here.'
+            }
           />
         ) : (
           <div className="space-y-3">

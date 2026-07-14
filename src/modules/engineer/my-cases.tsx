@@ -130,6 +130,7 @@ export function MyCases() {
           value={search}
           onChange={(v) => { setSearch(v); setPage(1) }}
           debounceMs={350}
+          minChars={2}
           loading={isFetching}
           aria-label="Search cases"
           resultCount={total}

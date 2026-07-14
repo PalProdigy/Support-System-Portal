@@ -3,7 +3,7 @@ import type {
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog, Role,
   Prospect, CreateClientAccountInput,
-  EngineerMetrics, UserNotificationPrefs, NotificationChannel,
+  EngineerMetrics, SalesExecutiveMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
   ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
   SolutionArticle, SolutionArticleStatus,
@@ -264,6 +264,9 @@ export interface DataProvider {
   // ── Phase Final: Performance metrics ──────────────────────────────────────
   getEngineerMetrics(engineerId: string, scope: ListScope): Promise<EngineerMetrics>
   listAllEngineerMetrics(scope: ListScope): Promise<EngineerMetrics[]>
+  // Target (assigned by Technical Head) + achievement/pipeline, computed from
+  // that Sales Executive's own prospects and clients.
+  getSalesExecutiveMetrics(salesExecutiveId: string, scope: ListScope): Promise<SalesExecutiveMetrics>
 
   // ── Phase Final: Notification preferences ─────────────────────────────────
   getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs>
