@@ -20,6 +20,8 @@ import { ArticleCard } from '@/modules/solutions/article-card'
 import type { Solution, SolutionComment, Role } from '@/types'
 
 const ALL_TAB = 'all'
+const TEAM_TAB = 'team'
+const OWN_TAB = 'own'
 
 type Banner = { kind: 'success' | 'error'; message: string }
 
@@ -255,14 +257,22 @@ export default function SolutionsPage() {
 
   const { data: solutions, isLoading } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
   const { data: currentUser } = useQuery({ queryKey: ['user', session.userId], queryFn: () => dp.getUser(session.userId) })
+  // Solution Articles are a team lead / support engineer resource only.
+  const canViewArticles = ['team_lead', 'support_engineer'].includes(session.role)
+
   // In-house knowledge-base articles (markdown, authored in the portal).
   const { data: articles, isLoading: articlesLoading } = useQuery({
     queryKey: ['solution-articles'],
     queryFn: () => dp.listSolutionArticles({ status: 'published' }),
+    enabled: canViewArticles,
   })
 
   const canAddSolution = session.role !== 'client'
   const canWriteArticle = session.role !== 'client'
+
+  const myArticles = (articles ?? []).filter((a) => a.created_by === session.userId)
+  const isArticlesTab = activeTab === TEAM_TAB || activeTab === OWN_TAB
+  const displayedArticles = activeTab === OWN_TAB ? myArticles : (articles ?? [])
 
   const categories = Array.from(new Set((solutions ?? []).map((s: Solution) => s.category).filter(Boolean)))
   const typeOptions = Array.from(new Set([...DEFAULT_TYPES, ...categories]))
@@ -378,7 +388,17 @@ export default function SolutionsPage() {
     <div className="p-6 space-y-4 max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between gap-3">
         <div><h1 className="text-2xl font-bold">Solutions</h1><p className="text-sm text-muted-foreground">{solutions?.length ?? 0} products/services</p></div>
-        {canAddSolution && <Button onClick={() => router.push('/solutions/new')}><PlusCircle className="h-4 w-4" /> Add Solution</Button>}
+        {isArticlesTab
+          ? canWriteArticle && (
+              <Button variant="outline" onClick={() => router.push('/solutions/articles/new')}>
+                <Pencil className="h-4 w-4" /> Write Article
+              </Button>
+            )
+          : canAddSolution && (
+              <Button onClick={() => router.push('/solutions/new')}>
+                <PlusCircle className="h-4 w-4" /> Add Solution
+              </Button>
+            )}
       </div>
 
       {/* Result banner */}
@@ -402,8 +422,6 @@ export default function SolutionsPage() {
 
       {isLoading ? (
         <div className="space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}</div>
-      ) : (solutions ?? []).length === 0 ? (
-        <EmptyState icon={Lightbulb} title="No solutions" />
       ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-full min-w-0 space-y-4">
           <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 overflow-hidden">
@@ -411,9 +429,45 @@ export default function SolutionsPage() {
             {categories.map((c) => (
               <TabsTrigger key={c} value={c} className="min-w-0 truncate">{c}</TabsTrigger>
             ))}
+            {canViewArticles && (
+              <TabsTrigger value={TEAM_TAB} className="min-w-0 truncate gap-1.5">
+                <Newspaper className="h-3.5 w-3.5" /> Team
+              </TabsTrigger>
+            )}
+            {canViewArticles && (
+              <TabsTrigger value={OWN_TAB} className="min-w-0 truncate gap-1.5">
+                <Newspaper className="h-3.5 w-3.5" /> Own ({myArticles.length})
+              </TabsTrigger>
+            )}
           </TabsList>
 
-          {filteredSolutions.length === 0 ? (
+          {isArticlesTab ? (
+            /* Solution Articles — in-house Knowledge Base (markdown, authored in
+               the portal). Team lead / support engineer resource only. */
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground">
+                {activeTab === OWN_TAB ? "Articles you've written" : 'In-depth guides written by our team'}
+              </p>
+
+              {articlesLoading ? (
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {[...Array(3)].map((_, i) => <div key={i} className="h-48 rounded-xl bg-muted animate-pulse" />)}
+                </div>
+              ) : displayedArticles.length === 0 ? (
+                <EmptyState
+                  icon={Newspaper}
+                  title={activeTab === OWN_TAB ? "You haven't written any articles yet" : 'No articles published yet'}
+                  description={activeTab === OWN_TAB ? 'Click "Write Article" to publish your first guide.' : undefined}
+                />
+              ) : (
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {displayedArticles.map((a) => <ArticleCard key={a.id} article={a} />)}
+                </div>
+              )}
+            </div>
+          ) : (solutions ?? []).length === 0 ? (
+            <EmptyState icon={Lightbulb} title="No solutions" />
+          ) : filteredSolutions.length === 0 ? (
             <EmptyState icon={Lightbulb} title="No solutions in this type" />
           ) : (
             <div className="space-y-3">
@@ -492,35 +546,6 @@ export default function SolutionsPage() {
           )}
         </Tabs>
       )}
-
-      {/* Solution Articles — in-house Knowledge Base (markdown, authored in the portal) */}
-      <div className="space-y-3 pt-2">
-        <div className="flex items-center justify-between gap-3 border-t pt-4">
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2">
-              <Newspaper className="h-4 w-4 text-primary" /> Solution Articles
-            </h2>
-            <p className="text-xs text-muted-foreground">In-depth guides written by our team</p>
-          </div>
-          {canWriteArticle && (
-            <Button variant="outline" size="sm" onClick={() => router.push('/solutions/articles/new')}>
-              <Pencil className="h-3.5 w-3.5" /> Write Article
-            </Button>
-          )}
-        </div>
-
-        {articlesLoading ? (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {[...Array(3)].map((_, i) => <div key={i} className="h-48 rounded-xl bg-muted animate-pulse" />)}
-          </div>
-        ) : (articles ?? []).length === 0 ? (
-          <EmptyState icon={Newspaper} title="No articles published yet" />
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {(articles ?? []).map((a) => <ArticleCard key={a.id} article={a} />)}
-          </div>
-        )}
-      </div>
 
       {/* Edit */}
       {editing && (
