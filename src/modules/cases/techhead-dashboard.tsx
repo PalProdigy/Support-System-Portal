@@ -19,7 +19,7 @@ import {
   ShieldCheck, ArrowLeftRight, UserPlus, BookOpen, Star, ChevronRight,
   Building2, Lightbulb, Package, Shield, TrendingDown, RotateCcw, TimerReset,
 } from 'lucide-react'
-import type { Case, User, Client, AuditLog, EngineerMetrics, Feedback, KBArticle, Notification, Team, CaseTransferRequest, TeamMemberRequest } from '@/types'
+import type { Case, User, Client, AuditLog, EngineerMetrics, Feedback, KBArticle, Notification, Team, CaseTransferRequest, TeamMemberRequest, SLARule } from '@/types'
 
 // Recharts widget — client-only so it stays out of SSR.
 const CaseSummary12m = dynamic(
@@ -80,6 +80,7 @@ export default function TechHeadDashboard() {
   const { data: memberReqs } = useQuery<TeamMemberRequest[]>({ queryKey: ['team-member-requests', 'pending'], queryFn: () => dp.listAllPendingTeamMemberRequests() })
   const { data: pendingKB } = useQuery<KBArticle[]>({ queryKey: ['kb', 'in_review'], queryFn: () => dp.listKBArticles({ status: 'in_review' }, scope) })
   const { data: feedback } = useQuery<Feedback[]>({ queryKey: ['feedback', session.userId], queryFn: () => dp.listFeedback(scope) })
+  const { data: slaRules, isLoading: slaRulesLoading } = useQuery<SLARule[]>({ queryKey: ['sla-rules'], queryFn: () => dp.listSLARules() })
 
   const cases = useMemo(() => casesData?.items ?? [], [casesData])
   const usersMap = useMemo(() => Object.fromEntries((users ?? []).map((u: User) => [u.id, u])), [users])
@@ -201,7 +202,7 @@ export default function TechHeadDashboard() {
         <StatCard title="Last Month Successful" value={lastMonthSuccessful} icon={CheckCircle} iconColor="text-emerald-500" loading={casesLoading} />
         <StatCard title="Last 3 Months Due" value={last3MonthsDue} icon={AlertTriangle} iconColor="text-red-500" loading={casesLoading} />
         <StatCard title="Reopened Cases" value={reopenedCount} icon={RotateCcw} iconColor="text-amber-500" loading={casesLoading} />
-        <StatCard title="SLA Compliance" value={avgSLA != null ? `${avgSLA}%` : '—'} icon={Gauge} iconColor={avgSLA != null && avgSLA < 70 ? 'text-red-500' : 'text-emerald-500'} />
+        <StatCard title="Total SLA" value={slaRules?.length ?? 0} icon={Gauge} iconColor="text-emerald-500" loading={slaRulesLoading} />
         <StatCard title="Pending Approvals" value={totalPending} icon={ShieldCheck} iconColor={totalPending > 0 ? 'text-amber-500' : 'text-emerald-500'} />
       </div>
 
