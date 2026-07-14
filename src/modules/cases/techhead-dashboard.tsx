@@ -181,21 +181,13 @@ export default function TechHeadDashboard() {
           <h1 className="text-2xl font-bold text-foreground">Overview</h1>
           <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
             All cases · all teams · full visibility
-            {escalated.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">
-                <AlertTriangle className="h-2.5 w-2.5" /> {escalated.length} escalated
-              </span>
-            )}
+
             {criticalPendingApproval.length > 0 && (
               <span className="inline-flex items-center gap-1 text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-semibold">
                 <ShieldCheck className="h-2.5 w-2.5" /> {criticalPendingApproval.length} need approval
               </span>
             )}
-            {unreadSlaNotifs.length > 0 && (
-              <span className="inline-flex text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-400 px-2 py-0.5 rounded-full font-semibold">
-                {unreadSlaNotifs.length} SLA alerts
-              </span>
-            )}
+
           </p>
         </div>
         <Link href="/technical-head" className="text-sm text-primary hover:underline inline-flex items-center gap-0.5 shrink-0">

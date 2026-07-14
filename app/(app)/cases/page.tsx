@@ -143,12 +143,7 @@ function CasesPageContent() {
             {total} total
           </p>
         </div>
-        {canCreate && (
-          <Button onClick={() => router.push('/cases/new')}>
-            <PlusCircle className="h-4 w-4" />
-            New Case
-          </Button>
-        )}
+
       </div>
 
       {/* Overview */}

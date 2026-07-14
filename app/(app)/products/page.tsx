@@ -11,10 +11,11 @@ import { SearchInput } from '@/components/ui/search-input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared/empty-state'
 import { toast } from '@/hooks/use-toast'
-import { Package, PlusCircle, ArrowRight } from 'lucide-react'
+import { Package, PlusCircle, ArrowRight, X } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
 import type { Product } from '@/types'
 import { getCategoryMeta } from '@/lib/products-shared'
@@ -27,6 +28,8 @@ export default function ProductCategoriesPage() {
   const scope = { userId: session.userId, role: session.role }
 
   const [query, setQuery] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const [productFilter, setProductFilter] = useState('all')
   const [showCreate, setShowCreate] = useState(false)
   const [form, setForm] = useState({ name: '', description: '', category: '', is_active: true })
 
@@ -45,6 +48,33 @@ export default function ProductCategoriesPage() {
     return [...byName.entries()].map(([name, items]) => ({ name, items, meta: getCategoryMeta(name) }))
   }, [visible])
 
+  // Dropdown option lists — independent of the current search/filter state.
+  const categoryOptions = useMemo(() => [...categories].sort((a, b) => a.name.localeCompare(b.name)), [categories])
+  const productOptions = useMemo(() => [...visible].sort((a, b) => a.name.localeCompare(b.name)), [visible])
+
+  // Selecting a product resolves and applies its category — this page browses
+  // categories, not individual products, so "picking a product" means "jump to
+  // the category that product lives in".
+  function handleProductChange(id: string) {
+    setProductFilter(id)
+    if (id === 'all') return
+    const product = visible.find((p) => p.id === id)
+    setCategoryFilter(product ? (product.category || 'Other') : 'all')
+  }
+
+  // Picking a category directly supersedes whatever product was selected.
+  function handleCategoryChange(name: string) {
+    setCategoryFilter(name)
+    setProductFilter('all')
+  }
+
+  function clearDropdownFilters() {
+    setCategoryFilter('all')
+    setProductFilter('all')
+  }
+
+  const hasDropdownFilter = categoryFilter !== 'all' || productFilter !== 'all'
+
   const searching = query.trim().length > 0
   const searchResults = useMemo(() => {
     if (!searching) return []
@@ -52,7 +82,10 @@ export default function ProductCategoriesPage() {
     return categories.filter((c) => c.name.toLowerCase().includes(q))
   }, [categories, query, searching])
 
-  const displayedCategories = searching ? searchResults : categories
+  const displayedCategories = useMemo(() => {
+    const base = searching ? searchResults : categories
+    return categoryFilter !== 'all' ? base.filter((c) => c.name === categoryFilter) : base
+  }, [searching, searchResults, categories, categoryFilter])
 
   const createMutation = useMutation({
     mutationFn: () => dp.createProduct(form),
@@ -72,15 +105,16 @@ export default function ProductCategoriesPage() {
             <Package className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Category</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products Category</h1>
             <p className="text-sm text-muted-foreground">Browse NHQ's product portfolio by category · {categories.length} {categories.length === 1 ? 'category' : 'categories'}</p>
           </div>
         </div>
-        {canManage && <Button onClick={() => setShowCreate(true)}><PlusCircle className="h-4 w-4 text-white" /> <span className="text-white">Add Category</span></Button>}
+
       </div>
 
-      <div className="max-w-md">
+      <div className="flex flex-wrap items-center gap-2">
         <SearchInput
+          containerClassName="w-full max-w-md"
           placeholder="Search category…"
           value={query}
           onChange={setQuery}
@@ -88,6 +122,28 @@ export default function ProductCategoriesPage() {
           resultCount={searching ? searchResults.length : undefined}
           resultLabel="category"
         />
+
+        <Select value={categoryFilter} onValueChange={handleCategoryChange}>
+          <SelectTrigger className="h-9 w-52"><SelectValue placeholder="Product Category" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            {categoryOptions.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
+          </SelectContent>
+        </Select>
+
+        <Select value={productFilter} onValueChange={handleProductChange}>
+          <SelectTrigger className="h-9 w-52"><SelectValue placeholder="Product Name" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Products</SelectItem>
+            {productOptions.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+          </SelectContent>
+        </Select>
+
+        {hasDropdownFilter && (
+          <Button variant="ghost" size="sm" className="h-9 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
+            <X className="h-3 w-3" /> Clear
+          </Button>
+        )}
       </div>
 
       {isLoading ? (
@@ -95,6 +151,8 @@ export default function ProductCategoriesPage() {
       ) : displayedCategories.length === 0 ? (
         searching ? (
           <EmptyState icon={Package} title={`No results found for "${query}"`} description="Try a different search term." />
+        ) : hasDropdownFilter ? (
+          <EmptyState icon={Package} title="No matching category" description="Try a different product or category filter." />
         ) : (
           <EmptyState icon={Package} title="No categories found" description="No product categories are available yet." />
         )
