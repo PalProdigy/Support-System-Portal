@@ -275,7 +275,7 @@ export default function LeadDashboard() {
             ) : (
               <div className="space-y-3">
                 {workload.slice(0, 6).map(({ eng, open: load, critical, breached: engBreached }) => (
-                  <Link key={eng.id} href={`/engineer/${eng.id}`} className="block group">
+                  <Link key={eng.id} href={`/my-case/${eng.id}`} className="block group">
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <span className="text-sm font-medium text-foreground truncate group-hover:text-primary">{eng.name}</span>
                       <div className="flex items-center gap-2 shrink-0">

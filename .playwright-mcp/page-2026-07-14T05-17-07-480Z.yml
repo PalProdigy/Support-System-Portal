@@ -1,0 +1,361 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e34]:
+    - complementary [ref=e36]:
+      - link [ref=e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e39]:
+          - generic [ref=e40]: NH
+          - generic [ref=e41]: DISTRIBUTIONS
+      - navigation [ref=e49]:
+        - link "Dashboard" [ref=e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e133]:
+        - generic [ref=e134]:
+          - generic "Arif Rahman" [ref=e135]:
+            - generic "Arif Rahman avatar" [ref=e137]: AR
+          - generic [ref=e138]:
+            - paragraph [ref=e139]: Arif Rahman
+            - paragraph [ref=e140]: Technical Head
+        - button "Collapse sidebar" [ref=e141]
+    - generic [ref=e144]:
+      - banner [ref=e146]:
+        - generic [ref=e147]:
+          - button "Toggle theme" [ref=e148] [cursor=pointer]
+          - button "Notifications" [ref=e149] [cursor=pointer]:
+            - generic [ref=e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=e152]:
+              - generic "Arif Rahman avatar" [ref=e154]: AR
+            - generic [ref=e155]:
+              - paragraph [ref=e156]: Arif Rahman
+              - paragraph [ref=e157]: Technical Head
+      - main [ref=e158]:
+        - generic [ref=e159]:
+          - generic [ref=e164]:
+            - heading "My Cases" [level=1] [ref=e165]
+            - paragraph [ref=e166]: Every case assigned to you, and how you're performing
+          - generic [ref=e167]:
+            - button "My Cases" [ref=e168]
+            - button "My Performance" [ref=e172]
+          - generic [ref=e176]:
+            - generic [ref=e177]:
+              - generic [ref=e180]:
+                - paragraph [ref=e181]: Total Cases
+                - paragraph [ref=e182]: "24"
+              - generic [ref=e188]:
+                - paragraph [ref=e189]: Active Cases
+                - paragraph [ref=e190]: "13"
+              - generic [ref=e196]:
+                - paragraph [ref=e197]: Escalated
+                - paragraph [ref=e198]: "6"
+              - generic [ref=e204]:
+                - paragraph [ref=e205]: Reopened
+                - paragraph [ref=e206]: "0"
+              - generic [ref=e213]:
+                - paragraph [ref=e214]: SLA Breached
+                - paragraph [ref=e215]: "24"
+            - generic [ref=e219]:
+              - generic [ref=e220]:
+                - textbox "Search cases" [ref=e221]:
+                  - /placeholder: Search by title or reference...
+                - generic [ref=e222]: 24 cases found
+              - combobox [ref=e223]:
+                - generic: All Statuses
+              - combobox [ref=e226]:
+                - generic: All Priorities
+              - combobox [ref=e229]:
+                - generic: All SLA States
+            - generic [ref=e232]:
+              - generic [ref=e233]:
+                - paragraph [ref=e234]:
+                  - text: Active
+                  - generic [ref=e235]: · 13
+                - link "NHQ-2026-0024 High Assigned Sample case — VPN connectivity issue · Rafi Uddin · 12 Jul 2026, 21:28 Overdue" [ref=e236] [cursor=pointer]:
+                  - /url: /my-case/maa9nmmfwlsmrhy6rnt
+                  - generic [ref=e237]:
+                    - generic [ref=e238]:
+                      - generic [ref=e239]: NHQ-2026-0024
+                      - generic [ref=e241]:
+                        - generic [ref=e242]: High
+                        - generic [ref=e244]: Assigned
+                    - paragraph [ref=e245]: Sample case — VPN connectivity issue
+                    - generic [ref=e246]:
+                      - generic [ref=e247]:
+                        - generic [ref=e248]: ·
+                        - generic [ref=e249]: Rafi Uddin
+                        - generic [ref=e250]: ·
+                        - generic [ref=e251]: 12 Jul 2026, 21:28
+                      - generic [ref=e252]: Overdue
+                - link "NHQ-2026-0023 High Assigned Sample case — VPN connectivity issue · Rafi Uddin · 12 Jul 2026, 21:18 Overdue" [ref=e256] [cursor=pointer]:
+                  - /url: /my-case/0v21c3dfnrvmrhxufd6
+                  - generic [ref=e257]:
+                    - generic [ref=e258]:
+                      - generic [ref=e259]: NHQ-2026-0023
+                      - generic [ref=e261]:
+                        - generic [ref=e262]: High
+                        - generic [ref=e264]: Assigned
+                    - paragraph [ref=e265]: Sample case — VPN connectivity issue
+                    - generic [ref=e266]:
+                      - generic [ref=e267]:
+                        - generic [ref=e268]: ·
+                        - generic [ref=e269]: Rafi Uddin
+                        - generic [ref=e270]: ·
+                        - generic [ref=e271]: 12 Jul 2026, 21:18
+                      - generic [ref=e272]: Overdue
+                - link "NHQ-2024-0013 Escalated Medium Escalated Analytics report export to Excel failing · 22 Jun 2024, 16:00 Overdue" [ref=e276] [cursor=pointer]:
+                  - /url: /my-case/case13
+                  - generic [ref=e277]:
+                    - generic [ref=e278]:
+                      - generic [ref=e279]:
+                        - generic [ref=e280]: NHQ-2024-0013
+                        - generic [ref=e281]: Escalated
+                      - generic [ref=e284]:
+                        - generic [ref=e285]: Medium
+                        - generic [ref=e287]: Escalated
+                    - paragraph [ref=e288]: Analytics report export to Excel failing
+                    - generic [ref=e289]:
+                      - generic [ref=e290]:
+                        - generic [ref=e291]: ·
+                        - generic [ref=e292]: 22 Jun 2024, 16:00
+                      - generic [ref=e293]: Overdue
+                - link "NHQ-2024-0010 High In Progress API rate limit errors in ERP connector · Rafi Uddin · 22 Jun 2024, 15:30 Overdue" [ref=e297] [cursor=pointer]:
+                  - /url: /my-case/case10
+                  - generic [ref=e298]:
+                    - generic [ref=e299]:
+                      - generic [ref=e300]: NHQ-2024-0010
+                      - generic [ref=e302]:
+                        - generic [ref=e303]: High
+                        - generic [ref=e305]: In Progress
+                    - paragraph [ref=e306]: API rate limit errors in ERP connector
+                    - generic [ref=e307]:
+                      - generic [ref=e308]:
+                        - generic [ref=e309]: ·
+                        - generic [ref=e310]: Rafi Uddin
+                        - generic [ref=e311]: ·
+                        - generic [ref=e312]: 22 Jun 2024, 15:30
+                      - generic [ref=e313]: Overdue
+                - link "NHQ-2024-0008 Escalated Medium Escalated Dashboard showing stale data after refresh · 22 Jun 2024, 15:00 Overdue" [ref=e317] [cursor=pointer]:
+                  - /url: /my-case/case8
+                  - generic [ref=e318]:
+                    - generic [ref=e319]:
+                      - generic [ref=e320]:
+                        - generic [ref=e321]: NHQ-2024-0008
+                        - generic [ref=e322]: Escalated
+                      - generic [ref=e325]:
+                        - generic [ref=e326]: Medium
+                        - generic [ref=e328]: Escalated
+                    - paragraph [ref=e329]: Dashboard showing stale data after refresh
+                    - generic [ref=e330]:
+                      - generic [ref=e331]:
+                        - generic [ref=e332]: ·
+                        - generic [ref=e333]: 22 Jun 2024, 15:00
+                      - generic [ref=e334]: Overdue
+                - link "NHQ-2024-0012 Escalated Critical Escalated Purchase order PDF not generating · Imran Khan · 22 Jun 2024, 14:30 Overdue" [ref=e338] [cursor=pointer]:
+                  - /url: /my-case/case12
+                  - generic [ref=e339]:
+                    - generic [ref=e340]:
+                      - generic [ref=e341]:
+                        - generic [ref=e342]: NHQ-2024-0012
+                        - generic [ref=e343]: Escalated
+                      - generic [ref=e346]:
+                        - generic [ref=e347]: Critical
+                        - generic [ref=e349]: Escalated
+                    - paragraph [ref=e350]: Purchase order PDF not generating
+                    - generic [ref=e351]:
+                      - generic [ref=e352]:
+                        - generic [ref=e353]: ·
+                        - generic [ref=e354]: Imran Khan
+                        - generic [ref=e355]: ·
+                        - generic [ref=e356]: 22 Jun 2024, 14:30
+                      - generic [ref=e357]: Overdue
+                - 'link "NHQ-2024-0004 Escalated Low Escalated Request: Add custom field to lead form · 22 Jun 2024, 14:00 Overdue" [ref=e361] [cursor=pointer]':
+                  - /url: /my-case/case4
+                  - generic [ref=e362]:
+                    - generic [ref=e363]:
+                      - generic [ref=e364]:
+                        - generic [ref=e365]: NHQ-2024-0004
+                        - generic [ref=e366]: Escalated
+                      - generic [ref=e369]:
+                        - generic [ref=e370]: Low
+                        - generic [ref=e372]: Escalated
+                    - paragraph [ref=e373]: "Request: Add custom field to lead form"
+                    - generic [ref=e374]:
+                      - generic [ref=e375]:
+                        - generic [ref=e376]: ·
+                        - generic [ref=e377]: 22 Jun 2024, 14:00
+                      - generic [ref=e378]: Overdue
+                - link "NHQ-2024-0014 Escalated High Escalated Mobile app crashes on product scan · 22 Jun 2024, 13:30 Overdue" [ref=e382] [cursor=pointer]:
+                  - /url: /my-case/case14
+                  - generic [ref=e383]:
+                    - generic [ref=e384]:
+                      - generic [ref=e385]:
+                        - generic [ref=e386]: NHQ-2024-0014
+                        - generic [ref=e387]: Escalated
+                      - generic [ref=e390]:
+                        - generic [ref=e391]: High
+                        - generic [ref=e393]: Escalated
+                    - paragraph [ref=e394]: Mobile app crashes on product scan
+                    - generic [ref=e395]:
+                      - generic [ref=e396]:
+                        - generic [ref=e397]: ·
+                        - generic [ref=e398]: 22 Jun 2024, 13:30
+                      - generic [ref=e399]: Overdue
+                - 'link "NHQ-2024-0001 Escalated Critical In Progress ERP sync failing for Acme warehouse #3 · Rafi Uddin · 22 Jun 2024, 13:00 Overdue" [ref=e403] [cursor=pointer]':
+                  - /url: /my-case/case1
+                  - generic [ref=e404]:
+                    - generic [ref=e405]:
+                      - generic [ref=e406]:
+                        - generic [ref=e407]: NHQ-2024-0001
+                        - generic [ref=e408]: Escalated
+                      - generic [ref=e411]:
+                        - generic [ref=e412]: Critical
+                        - generic [ref=e414]: In Progress
+                    - paragraph [ref=e415]: "ERP sync failing for Acme warehouse #3"
+                    - generic [ref=e416]:
+                      - generic [ref=e417]:
+                        - generic [ref=e418]: ·
+                        - generic [ref=e419]: Rafi Uddin
+                        - generic [ref=e420]: ·
+                        - generic [ref=e421]: 22 Jun 2024, 13:00
+                      - generic [ref=e422]: Overdue
+                - link "NHQ-2024-0007 High Triaged Data import from legacy system failing · Imran Khan · 22 Jun 2024, 12:00 Overdue" [ref=e426] [cursor=pointer]:
+                  - /url: /my-case/case7
+                  - generic [ref=e427]:
+                    - generic [ref=e428]:
+                      - generic [ref=e429]: NHQ-2024-0007
+                      - generic [ref=e431]:
+                        - generic [ref=e432]: High
+                        - generic [ref=e434]: Triaged
+                    - paragraph [ref=e435]: Data import from legacy system failing
+                    - generic [ref=e436]:
+                      - generic [ref=e437]:
+                        - generic [ref=e438]: ·
+                        - generic [ref=e439]: Imran Khan
+                        - generic [ref=e440]: ·
+                        - generic [ref=e441]: 22 Jun 2024, 12:00
+                      - generic [ref=e442]: Overdue
+                - link "NHQ-2024-0003 Medium Assigned CRM email integration not syncing · Imran Khan · 21 Jun 2024, 20:00 Overdue" [ref=e446] [cursor=pointer]:
+                  - /url: /my-case/case3
+                  - generic [ref=e447]:
+                    - generic [ref=e448]:
+                      - generic [ref=e449]: NHQ-2024-0003
+                      - generic [ref=e451]:
+                        - generic [ref=e452]: Medium
+                        - generic [ref=e454]: Assigned
+                    - paragraph [ref=e455]: CRM email integration not syncing
+                    - generic [ref=e456]:
+                      - generic [ref=e457]:
+                        - generic [ref=e458]: ·
+                        - generic [ref=e459]: Imran Khan
+                        - generic [ref=e460]: ·
+                        - generic [ref=e461]: 21 Jun 2024, 20:00
+                      - generic [ref=e462]: Overdue
+                - link "NHQ-2024-0006 Medium In Progress Inventory barcode scanner not recognized on mobile · Rafi Uddin · 21 Jun 2024, 17:00 Overdue" [ref=e466] [cursor=pointer]:
+                  - /url: /my-case/case6
+                  - generic [ref=e467]:
+                    - generic [ref=e468]:
+                      - generic [ref=e469]: NHQ-2024-0006
+                      - generic [ref=e471]:
+                        - generic [ref=e472]: Medium
+                        - generic [ref=e474]: In Progress
+                    - paragraph [ref=e475]: Inventory barcode scanner not recognized on mobile
+                    - generic [ref=e476]:
+                      - generic [ref=e477]:
+                        - generic [ref=e478]: ·
+                        - generic [ref=e479]: Rafi Uddin
+                        - generic [ref=e480]: ·
+                        - generic [ref=e481]: 21 Jun 2024, 17:00
+                      - generic [ref=e482]: Overdue
+                - link "NHQ-2024-0002 High Pending Client Unable to generate monthly financial report · Imran Khan · 21 Jun 2024, 15:00 Paused" [ref=e486] [cursor=pointer]:
+                  - /url: /my-case/case2
+                  - generic [ref=e487]:
+                    - generic [ref=e488]:
+                      - generic [ref=e489]: NHQ-2024-0002
+                      - generic [ref=e491]:
+                        - generic [ref=e492]: High
+                        - generic [ref=e494]: Pending Client
+                    - paragraph [ref=e495]: Unable to generate monthly financial report
+                    - generic [ref=e496]:
+                      - generic [ref=e497]:
+                        - generic [ref=e498]: ·
+                        - generic [ref=e499]: Imran Khan
+                        - generic [ref=e500]: ·
+                        - generic [ref=e501]: 21 Jun 2024, 15:00
+                      - generic [ref=e502]: Paused
+              - generic [ref=e506]:
+                - separator [ref=e507]
+                - paragraph [ref=e508]:
+                  - text: Closed / Resolved
+                  - generic [ref=e509]: · 2
+                - link "NHQ-2024-0016 Critical Resolved Database corruption after failed migration · Rafi Uddin · 21 Jun 2024, 04:00 Paused" [ref=e510] [cursor=pointer]:
+                  - /url: /my-case/case16
+                  - generic [ref=e511]:
+                    - generic [ref=e512]:
+                      - generic [ref=e513]: NHQ-2024-0016
+                      - generic [ref=e515]:
+                        - generic [ref=e516]: Critical
+                        - generic [ref=e518]: Resolved
+                    - paragraph [ref=e519]: Database corruption after failed migration
+                    - generic [ref=e520]:
+                      - generic [ref=e521]:
+                        - generic [ref=e522]: ·
+                        - generic [ref=e523]: Rafi Uddin
+                        - generic [ref=e524]: ·
+                        - generic [ref=e525]: 21 Jun 2024, 04:00
+                      - generic [ref=e526]: Paused
+                - link "NHQ-2024-0005 High Resolved Payroll calculation error for overtime hours · Farzana Begum · 19 Jun 2024, 16:00 Paused" [ref=e530] [cursor=pointer]:
+                  - /url: /my-case/case5
+                  - generic [ref=e531]:
+                    - generic [ref=e532]:
+                      - generic [ref=e533]: NHQ-2024-0005
+                      - generic [ref=e535]:
+                        - generic [ref=e536]: High
+                        - generic [ref=e538]: Resolved
+                    - paragraph [ref=e539]: Payroll calculation error for overtime hours
+                    - generic [ref=e540]:
+                      - generic [ref=e541]:
+                        - generic [ref=e542]: ·
+                        - generic [ref=e543]: Farzana Begum
+                        - generic [ref=e544]: ·
+                        - generic [ref=e545]: 19 Jun 2024, 16:00
+                      - generic [ref=e546]: Paused
+            - generic [ref=e550]:
+              - button "Previous" [disabled]
+              - generic [ref=e551]: Page 1 of 2
+              - button "Next" [ref=e552] [cursor=pointer]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e558] [cursor=pointer]
+  - alert [ref=e562]

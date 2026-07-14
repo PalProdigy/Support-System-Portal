@@ -12,7 +12,6 @@ import { ErrorState } from '@/components/shared/error-state'
 import { NewCases } from '@/modules/engineer/new-cases'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
   cn, slaRemainingMs, slaPercent, formatDuration, PRIORITY_COLORS, PRIORITY_LABELS,
@@ -114,24 +113,19 @@ export default function EngineerDashboard() {
             </p>
           </div>
         </div>
-        <Link href="/engineer">
-          <Button variant="outline">
-            <Wrench className="h-4 w-4" /> Engineer Hub
-          </Button>
-        </Link>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
-        <StatLink href="/engineer"><StatCard title="Total Cases" value={cases.length} icon={Ticket} loading={isLoading} /></StatLink>
-        <StatLink href="/engineer"><StatCard title="Open" value={open.length} icon={LayoutList} iconColor="text-blue-500" loading={isLoading} /></StatLink>
-        <StatLink href="/engineer">
+        <StatLink href="/my-case"><StatCard title="Total Cases" value={cases.length} icon={Ticket} loading={isLoading} /></StatLink>
+        <StatLink href="/my-case"><StatCard title="Open" value={open.length} icon={LayoutList} iconColor="text-blue-500" loading={isLoading} /></StatLink>
+        <StatLink href="/my-case">
           <StatCard title="Last Month — Solved" value={solvedLastMonth} icon={CheckCircle} iconColor="text-emerald-500" loading={isLoading} />
         </StatLink>
-        <StatLink href="/engineer">
+        <StatLink href="/my-case">
           <StatCard title="Last 3 Months — Due" value={dueLast3Months} icon={Clock} iconColor="text-amber-500" loading={isLoading} />
         </StatLink>
-        <StatLink href="/engineer">
+        <StatLink href="/my-case">
           <StatCard
             title="Customer Satisfaction"
             value={metrics?.satisfaction_score != null ? `${metrics.satisfaction_score}/5` : '—/5'}
@@ -193,7 +187,7 @@ export default function EngineerDashboard() {
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 <h3 className="text-sm font-semibold">My Performance</h3>
               </div>
-              <Link href="/engineer" className="text-xs text-primary hover:underline flex items-center gap-0.5">
+              <Link href="/my-case" className="text-xs text-primary hover:underline flex items-center gap-0.5">
                 Details <ArrowRight className="h-3 w-3" />
               </Link>
             </div>

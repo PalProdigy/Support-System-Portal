@@ -34,7 +34,7 @@ const TeamDetail = dynamic(
  * just without any management actions (TeamDetail already gates those on
  * role, so this stays automatically in sync with the managed version).
  */
-export default function MyTeamPage() {
+export default function TeamPage() {
   const session = useSession()
   const router = useRouter()
   const dp = getDataProvider()

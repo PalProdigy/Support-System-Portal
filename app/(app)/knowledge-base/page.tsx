@@ -11,18 +11,22 @@ import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { EmptyState } from '@/components/shared/empty-state'
+import { CaseCard } from '@/components/shared/case-card'
 import { KBStatusBadge } from '@/modules/kb/status-badge'
 import { canReviewKB, canWriteKB, KB_CATEGORIES } from '@/modules/kb/constants'
 import { estimateReadingTimeMinutes, slugify } from '@/lib/markdown/utils'
 import { cn, formatDate } from '@/lib/utils'
 import {
   BookOpen, ClipboardList, Clock, FolderOpen, MessageCircle, PenLine, PlusCircle,
-  Tag, User as UserIcon, X,
+  Tag, User as UserIcon, X, CheckCircle2, ArrowUpDown,
 } from 'lucide-react'
-import type { KBArticle } from '@/types'
+import type { Case, Client, KBArticle, User } from '@/types'
 
-type Shelf = 'browse' | 'mine' | 'review'
+type CaseSortKey = 'date' | 'team' | 'engineer' | 'service'
+
+type Shelf = 'browse' | 'mine' | 'review' | 'closed_cases'
 
 /**
  * Knowledge Base home: documentation-portal browsing experience — hero search,
@@ -39,6 +43,7 @@ function KnowledgeBaseIndex() {
 
   const [query, setQuery] = useState('')
   const [shelf, setShelf] = useState<Shelf>('browse')
+  const [caseSortKey, setCaseSortKey] = useState<CaseSortKey>('date')
   const category = searchParams.get('category')
   const tag = searchParams.get('tag')
 
@@ -50,11 +55,45 @@ function KnowledgeBaseIndex() {
     queryFn: () => dp.listKBArticles({ search: query || undefined }, scope),
   })
 
+  // Closed Cases shelf — resolved/closed support cases, scoped the same way
+  // the Cases page is (each role only sees what it's entitled to).
+  const { data: closedCasesData, isLoading: closedCasesLoading } = useQuery({
+    queryKey: ['cases', 'closed', session.userId],
+    queryFn: () => dp.listCases(scope, { status: 'closed', pageSize: 200, top_level_only: true }),
+    enabled: writer,
+  })
+  const { data: clients } = useQuery({
+    queryKey: ['clients', session.userId],
+    queryFn: () => dp.listClients(scope),
+    enabled: writer,
+  })
+  const { data: users } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => dp.listUsers(),
+    enabled: writer,
+  })
+  const { data: teams } = useQuery({
+    queryKey: ['teams'],
+    queryFn: () => dp.listTeams(),
+    enabled: writer,
+  })
+  const { data: solutions } = useQuery({
+    queryKey: ['solutions'],
+    queryFn: () => dp.listSolutions(),
+    enabled: writer,
+  })
+
   const all = useMemo(() => articles ?? [], [articles])
   const publishedAll = useMemo(() => all.filter((a) => a.status === 'published'), [all])
   const mine = useMemo(() => all.filter((a) => a.author_id === session.userId), [all, session.userId])
   const reviewQueue = useMemo(() => all.filter((a) => a.status === 'in_review'), [all])
+  const closedCases = useMemo(() => closedCasesData?.items ?? [], [closedCasesData])
+  const clientsMap = useMemo(() => Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c])), [clients])
+  const usersMap = useMemo(() => Object.fromEntries((users ?? []).map((u: User) => [u.id, u])), [users])
+  const teamsMap = useMemo(() => Object.fromEntries((teams ?? []).map((t) => [t.id, t.name])), [teams])
+  const solutionsMap = useMemo(() => Object.fromEntries((solutions ?? []).map((s) => [s.id, s.name])), [solutions])
 
+  const isClosedCasesShelf = shelf === 'closed_cases'
   const shelfArticles = shelf === 'mine' ? mine : shelf === 'review' ? reviewQueue : publishedAll
 
   // Category chips: the curated list, with live counts from the current shelf.
@@ -71,6 +110,26 @@ function KnowledgeBaseIndex() {
     return [...list].sort((a, b) =>
       new Date(b.published_at ?? b.updated_at).getTime() - new Date(a.published_at ?? a.updated_at).getTime())
   }, [shelfArticles, category, tag])
+
+  const visibleClosedCases = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    const list = q
+      ? closedCases.filter((c: Case) => c.title.toLowerCase().includes(q) || c.reference_no.toLowerCase().includes(q))
+      : closedCases
+    return [...list].sort((a, b) => {
+      switch (caseSortKey) {
+        case 'team':
+          return (teamsMap[a.team_id] ?? '').localeCompare(teamsMap[b.team_id] ?? '')
+        case 'engineer':
+          return (usersMap[a.assignee_id ?? '']?.name ?? '').localeCompare(usersMap[b.assignee_id ?? '']?.name ?? '')
+        case 'service':
+          return (solutionsMap[a.solution_id] ?? '').localeCompare(solutionsMap[b.solution_id] ?? '')
+        case 'date':
+        default:
+          return new Date(b.closed_at ?? b.created_at).getTime() - new Date(a.closed_at ?? a.created_at).getTime()
+      }
+    })
+  }, [closedCases, query, caseSortKey, teamsMap, usersMap, solutionsMap])
 
   const setFilter = (key: 'category' | 'tag', value: string | null) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -101,11 +160,11 @@ function KnowledgeBaseIndex() {
             onChange={setQuery}
             debounceMs={350}
             loading={isFetching}
-            placeholder="Search by title, content, tags, category or author…"
+            placeholder={isClosedCasesShelf ? 'Search by title or reference…' : 'Search by title, content, tags, category or author…'}
             className="h-11 text-base bg-background"
-            aria-label="Search articles"
-            resultCount={visible.length}
-            resultLabel="article"
+            aria-label={isClosedCasesShelf ? 'Search closed cases' : 'Search articles'}
+            resultCount={isClosedCasesShelf ? visibleClosedCases.length : visible.length}
+            resultLabel={isClosedCasesShelf ? 'case' : 'article'}
           />
         </div>
       </div>
@@ -121,57 +180,108 @@ function KnowledgeBaseIndex() {
                 <ClipboardList className="h-3.5 w-3.5" /> Review Queue ({reviewQueue.length})
               </TabsTrigger>
             )}
+            <TabsTrigger value="closed_cases" className="gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5" /> Closed Cases ({closedCases.length})
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       )}
 
       {/* ── Category chips + active filters ──────────────────────────────────── */}
-      <div className="flex flex-wrap items-center gap-1.5">
-        <CategoryChip label="All" active={!category} onClick={() => setFilter('category', null)} />
-        {KB_CATEGORIES.filter((c) => (categoryCounts.get(c) ?? 0) > 0).map((c) => (
-          <CategoryChip
-            key={c}
-            label={`${c} (${categoryCounts.get(c)})`}
-            active={category === c}
-            onClick={() => setFilter('category', category === c ? null : c)}
-          />
-        ))}
-        {tag && (
-          <button
-            type="button"
-            onClick={() => setFilter('tag', null)}
-            className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium hover:bg-primary/20"
-          >
-            <Tag className="h-3 w-3" /> {tag} <X className="h-3 w-3" />
-          </button>
-        )}
-      </div>
-
-      {/* ── Article grid ─────────────────────────────────────────────────────── */}
-      {isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-40 rounded-xl" />)}
-        </div>
-      ) : visible.length === 0 ? (
-        <EmptyState
-          icon={shelf === 'review' ? ClipboardList : BookOpen}
-          title={query ? `No results found for "${query}"` : shelf === 'review' ? 'Nothing to review' : 'No articles found'}
-          description={
-            query || category || tag
-              ? 'Try different keywords or clear the filters.'
-              : shelf === 'mine'
-                ? 'Write your first article — click "New Article" to get started.'
-                : shelf === 'review'
-                  ? 'Submitted articles will appear here for approval.'
-                  : 'No published articles yet.'
-          }
-        />
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {visible.map((a) => (
-            <ArticleCard key={a.id} article={a} showStatus={shelf !== 'browse'} onTag={(t) => setFilter('tag', t)} />
+      {!isClosedCasesShelf && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <CategoryChip label="All" active={!category} onClick={() => setFilter('category', null)} />
+          {KB_CATEGORIES.filter((c) => (categoryCounts.get(c) ?? 0) > 0).map((c) => (
+            <CategoryChip
+              key={c}
+              label={`${c} (${categoryCounts.get(c)})`}
+              active={category === c}
+              onClick={() => setFilter('category', category === c ? null : c)}
+            />
           ))}
+          {tag && (
+            <button
+              type="button"
+              onClick={() => setFilter('tag', null)}
+              className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-medium hover:bg-primary/20"
+            >
+              <Tag className="h-3 w-3" /> {tag} <X className="h-3 w-3" />
+            </button>
+          )}
         </div>
+      )}
+
+      {/* ── Closed Cases sort ────────────────────────────────────────────────── */}
+      {isClosedCasesShelf && (
+        <div className="flex items-center gap-2">
+          <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+          <span className="text-xs text-muted-foreground shrink-0">Sort by</span>
+          <Select value={caseSortKey} onValueChange={(v) => setCaseSortKey(v as CaseSortKey)}>
+            <SelectTrigger className="h-8 w-48 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="date">Date Closed</SelectItem>
+              <SelectItem value="team">Team Name</SelectItem>
+              <SelectItem value="engineer">Support Engineer Name</SelectItem>
+              <SelectItem value="service">Service</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
+      {/* ── Closed Cases list ────────────────────────────────────────────────── */}
+      {isClosedCasesShelf ? (
+        closedCasesLoading ? (
+          <div className="space-y-3">
+            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
+          </div>
+        ) : visibleClosedCases.length === 0 ? (
+          <EmptyState
+            icon={CheckCircle2}
+            title={query ? `No results found for "${query}"` : 'No closed cases'}
+            description={query ? 'Try different keywords.' : 'Cases that have been closed will appear here.'}
+          />
+        ) : (
+          <div className="space-y-3">
+            {visibleClosedCases.map((c: Case) => (
+              <CaseCard
+                key={c.id}
+                case_={c}
+                client={clientsMap[c.client_id]}
+                assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined}
+                href={`/cases/${c.id}`}
+              />
+            ))}
+          </div>
+        )
+      ) : (
+        /* ── Article grid ───────────────────────────────────────────────────── */
+        isLoading ? (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-40 rounded-xl" />)}
+          </div>
+        ) : visible.length === 0 ? (
+          <EmptyState
+            icon={shelf === 'review' ? ClipboardList : BookOpen}
+            title={query ? `No results found for "${query}"` : shelf === 'review' ? 'Nothing to review' : 'No articles found'}
+            description={
+              query || category || tag
+                ? 'Try different keywords or clear the filters.'
+                : shelf === 'mine'
+                  ? 'Write your first article — click "New Article" to get started.'
+                  : shelf === 'review'
+                    ? 'Submitted articles will appear here for approval.'
+                    : 'No published articles yet.'
+            }
+          />
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {visible.map((a) => (
+              <ArticleCard key={a.id} article={a} showStatus={shelf !== 'browse'} onTag={(t) => setFilter('tag', t)} />
+            ))}
+          </div>
+        )
       )}
     </div>
   )

@@ -128,9 +128,9 @@ export function CaseWorkspace({ caseId }: Props) {
   const isActive = !['closed', 'resolved', 'pending_closure'].includes(caseData.status)
 
   return (
-    <div className="space-y-5 max-w-4xl">
+    <div className="space-y-5 max-w-4xl mx-auto">
       {/* Case header */}
-      <div className="rounded-xl border bg-card p-5 space-y-3">
+      <div className="rounded-xl border bg-card p-4 sm:p-5 space-y-3">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="flex-1 min-w-0 space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
@@ -142,8 +142,8 @@ export function CaseWorkspace({ caseId }: Props) {
                 <Badge variant="destructive" className="text-[10px]">Escalated</Badge>
               )}
             </div>
-            <h1 className="text-xl font-bold text-foreground">{caseData.title}</h1>
-            <p className="text-sm text-muted-foreground">{caseData.description}</p>
+            <h1 className="text-lg sm:text-xl font-bold text-foreground break-words">{caseData.title}</h1>
+            <p className="text-sm text-muted-foreground break-words">{caseData.description}</p>
           </div>
           <span className={cn('text-xs font-medium px-2.5 py-1 rounded-full shrink-0', STATUS_COLORS[caseData.status])}>
             {STATUS_LABELS[caseData.status]}
@@ -153,20 +153,20 @@ export function CaseWorkspace({ caseId }: Props) {
         {/* Info row */}
         <div className="flex flex-wrap gap-4 text-sm border-t pt-3">
           {client && (
-            <div className="space-y-0.5">
+            <div className="space-y-0.5 min-w-0">
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Client</p>
-              <p className="font-medium">{client.company_name}</p>
-              <p className="text-xs text-muted-foreground">{client.contact_person}</p>
+              <p className="font-medium truncate">{client.company_name}</p>
+              <p className="text-xs text-muted-foreground truncate">{client.contact_person}</p>
             </div>
           )}
           {solution && (
-            <div className="space-y-0.5">
+            <div className="space-y-0.5 min-w-0">
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Solution</p>
-              <p className="font-medium">{solution.name}</p>
-              <p className="text-xs text-muted-foreground">{solution.category}</p>
+              <p className="font-medium truncate">{solution.name}</p>
+              <p className="text-xs text-muted-foreground truncate">{solution.category}</p>
             </div>
           )}
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 min-w-0">
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Opened</p>
             <p className="font-medium">{formatDate(caseData.created_at)}</p>
           </div>
@@ -175,7 +175,7 @@ export function CaseWorkspace({ caseId }: Props) {
         {/* SLA + Timer row */}
         <div className="flex items-center gap-3 flex-wrap border-t pt-3">
           <div className={cn('flex items-center gap-1.5 text-sm font-medium', slaBreached ? 'text-red-600 dark:text-red-400' : remaining < 4 * 3600 * 1000 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground')}>
-            <Clock className="h-4 w-4" />
+            <Clock className="h-4 w-4 shrink-0" />
             {isActive ? (slaBreached ? `SLA breached ${formatDuration(Math.abs(remaining))} ago` : `${formatDuration(remaining)} remaining`) : STATUS_LABELS[caseData.status]}
           </div>
           <WorkTimer />
@@ -242,13 +242,13 @@ export function CaseWorkspace({ caseId }: Props) {
 
       {/* Workspace tabs */}
       <div className="rounded-xl border bg-card overflow-hidden">
-        <div className="flex items-center border-b bg-muted/20">
+        <div className="flex items-center border-b bg-muted/20 overflow-x-auto">
           {([['updates', 'Updates', MessageSquare], ['rca', 'RCA', FileSearch], ['attachments', 'Attachments', Paperclip]] as const).map(([key, label, Icon]) => (
             <button
               key={key}
               onClick={() => setTab(key as WorkspaceTab)}
               className={cn(
-                'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors',
+                'flex items-center gap-2 px-3 sm:px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0',
                 tab === key ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'
               )}
             >
@@ -261,7 +261,7 @@ export function CaseWorkspace({ caseId }: Props) {
           ))}
         </div>
 
-        <div className="p-4">
+        <div className="p-3 sm:p-4">
           {/* Updates tab */}
           {tab === 'updates' && (
             <div className="space-y-4">
@@ -276,9 +276,9 @@ export function CaseWorkspace({ caseId }: Props) {
                         {c.is_internal && <Lock className="h-3 w-3 text-amber-600 shrink-0" />}
                         <span className="text-xs font-semibold text-foreground">{c.author_id === session.userId ? 'You' : `Engineer (${c.author_id.slice(0, 4)})`}</span>
                         <span className="text-[10px] text-muted-foreground">{formatDateTime(c.created_at)}</span>
-                        {c.is_internal && <span className="text-[10px] font-medium text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/40 px-1.5 py-0.5 rounded-full ml-auto">Internal</span>}
+                        {c.is_internal && <span className="text-[10px] font-medium text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/40 px-1.5 py-0.5 rounded-full sm:ml-auto">Internal</span>}
                       </div>
-                      <p className="text-sm text-foreground whitespace-pre-wrap">{c.body}</p>
+                      <p className="text-sm text-foreground whitespace-pre-wrap break-words">{c.body}</p>
                     </div>
                   ))}
                 </div>
@@ -286,7 +286,7 @@ export function CaseWorkspace({ caseId }: Props) {
 
               {/* New comment form */}
               <div className="space-y-2 border-t pt-3">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-wrap">
                   <Label className="text-sm font-medium">Add update</Label>
                   <button
                     type="button"
@@ -323,20 +323,20 @@ export function CaseWorkspace({ caseId }: Props) {
               {(attachments ?? []).length > 0 && (
                 <div className="space-y-1.5">
                   {attachments!.map((att) => (
-                    <div key={att.id} className="flex items-center gap-2 rounded-lg bg-muted/40 px-3 py-2">
+                    <div key={att.id} className="flex items-center gap-2 flex-wrap rounded-lg bg-muted/40 px-3 py-2">
                       <Paperclip className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                      <span className="text-sm text-foreground flex-1 truncate">{att.file_name}</span>
+                      <span className="text-sm text-foreground flex-1 min-w-[8rem] truncate">{att.file_name}</span>
                       <span className="text-xs text-muted-foreground shrink-0">{formatBytes(att.size)}</span>
-                      <span className="text-[10px] text-muted-foreground shrink-0">{formatDate(att.created_at)}</span>
-                      <a href={att.file_url} target="_blank" rel="noreferrer" className="text-primary hover:text-primary/80">
+                      <span className="text-[10px] text-muted-foreground shrink-0 hidden sm:inline">{formatDate(att.created_at)}</span>
+                      <a href={att.file_url} target="_blank" rel="noreferrer" className="text-primary hover:text-primary/80 shrink-0">
                         <Download className="h-3.5 w-3.5" />
                       </a>
                     </div>
                   ))}
                 </div>
               )}
-              <label className="flex items-center justify-center gap-2 rounded-lg border border-dashed bg-muted/30 p-6 cursor-pointer hover:bg-muted/50 transition-colors text-sm text-muted-foreground">
-                <Upload className="h-4 w-4" />
+              <label className="flex flex-col sm:flex-row items-center justify-center gap-2 rounded-lg border border-dashed bg-muted/30 p-6 cursor-pointer hover:bg-muted/50 transition-colors text-sm text-muted-foreground text-center">
+                <Upload className="h-4 w-4 shrink-0" />
                 <span>Click to upload logs, screenshots, or supporting files</span>
                 <input type="file" multiple className="sr-only" onChange={(e) => setFiles((f) => [...f, ...Array.from(e.target.files ?? [])])} />
               </label>
@@ -345,9 +345,9 @@ export function CaseWorkspace({ caseId }: Props) {
                   {files.map((f, i) => (
                     <div key={i} className="flex items-center gap-2 rounded-lg bg-muted/40 px-3 py-2 text-sm">
                       <Paperclip className="h-3 w-3 text-muted-foreground shrink-0" />
-                      <span className="flex-1 truncate">{f.name}</span>
-                      <span className="text-xs text-muted-foreground">{formatBytes(f.size)}</span>
-                      <button onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))} className="text-muted-foreground hover:text-destructive">
+                      <span className="flex-1 min-w-0 truncate">{f.name}</span>
+                      <span className="text-xs text-muted-foreground shrink-0">{formatBytes(f.size)}</span>
+                      <button onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))} className="text-muted-foreground hover:text-destructive shrink-0">
                         <X className="h-3 w-3" />
                       </button>
                     </div>

@@ -194,7 +194,7 @@ export function MyCases() {
                 Active <span className="font-normal">· {activeCases.length}</span>
               </p>
               {activeCases.map((c: Case) => (
-                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/engineer/case/${c.id}`} />
+                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/my-case/${c.id}`} />
               ))}
             </div>
           )}
@@ -205,7 +205,7 @@ export function MyCases() {
                 Closed / Resolved <span className="font-normal">· {previousCases.length}</span>
               </p>
               {previousCases.map((c: Case) => (
-                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/engineer/case/${c.id}`} />
+                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/my-case/${c.id}`} />
               ))}
             </div>
           )}
@@ -218,7 +218,7 @@ export function MyCases() {
               case_={c}
               client={clientsMap[c.client_id]}
               assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined}
-              href={`/engineer/case/${c.id}`}
+              href={`/my-case/${c.id}`}
             />
           ))}
         </div>

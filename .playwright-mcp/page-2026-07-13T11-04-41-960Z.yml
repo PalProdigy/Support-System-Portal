@@ -1,0 +1,138 @@
+- generic [ref=e1]:
+  - generic [ref=e34]:
+    - complementary [ref=e36]:
+      - link [ref=e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e39]:
+          - generic [ref=e40]: NH
+          - generic [ref=e41]: DISTRIBUTIONS
+      - navigation [ref=e49]:
+        - link "Dashboard" [ref=e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e133]:
+        - generic [ref=e134]:
+          - generic "Arif Rahman" [ref=e135]:
+            - generic "Arif Rahman avatar" [ref=e137]: AR
+          - generic [ref=e138]:
+            - paragraph [ref=e139]: Arif Rahman
+            - paragraph [ref=e140]: Technical Head
+        - button "Collapse sidebar" [ref=e141]
+    - generic [ref=e144]:
+      - banner [ref=e146]:
+        - generic [ref=e147]:
+          - button "Toggle theme" [ref=e148] [cursor=pointer]
+          - button "Notifications" [ref=e149] [cursor=pointer]:
+            - generic [ref=e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=e152]:
+              - generic "Arif Rahman avatar" [ref=e154]: AR
+            - generic [ref=e155]:
+              - paragraph [ref=e156]: Arif Rahman
+              - paragraph [ref=e157]: Technical Head
+      - main [ref=e158]:
+        - generic [ref=e159]:
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - heading "Knowledge Base" [level=1] [ref=e163]
+                - paragraph [ref=e164]: Guides, troubleshooting and best practices — solve it before it becomes a ticket.
+              - button "New Article" [ref=e165] [cursor=pointer]
+            - generic [ref=e167]:
+              - textbox "Search closed cases" [ref=e371]:
+                - /placeholder: Search by title or reference…
+              - generic [ref=e169]: 3 cases found
+          - tablist [ref=e171]:
+            - tab "Browse (6)" [ref=e172]
+            - tab "My Articles (0)" [ref=e175]
+            - tab "Review Queue (1)" [ref=e178]
+            - tab "Closed Cases (3)" [active] [selected] [ref=e182]
+          - generic [ref=e372]:
+            - generic [ref=e376]: Sort by
+            - combobox [ref=e377]:
+              - generic: Date Closed
+          - generic [ref=e192]:
+            - link "NHQ-2024-0015 Low Closed Two-factor authentication setup guide request TechWave Solutions · 13 Jun 2024, 15:00 Paused" [ref=e380] [cursor=pointer]:
+              - /url: /cases/case15
+              - generic [ref=e381]:
+                - generic [ref=e382]:
+                  - generic [ref=e383]: NHQ-2024-0015
+                  - generic [ref=e385]:
+                    - generic [ref=e386]: Low
+                    - generic [ref=e388]: Closed
+                - paragraph [ref=e389]: Two-factor authentication setup guide request
+                - generic [ref=e390]:
+                  - generic [ref=e391]:
+                    - generic [ref=e392]: TechWave Solutions
+                    - generic [ref=e393]: ·
+                    - generic [ref=e394]: 13 Jun 2024, 15:00
+                  - generic [ref=e395]: Paused
+            - link "NHQ-2024-0011 Low Closed User cannot reset password Acme Corporation Ltd. · Farzana Begum · 08 Jun 2024, 16:00 Paused" [ref=e399] [cursor=pointer]:
+              - /url: /cases/case11
+              - generic [ref=e400]:
+                - generic [ref=e401]:
+                  - generic [ref=e402]: NHQ-2024-0011
+                  - generic [ref=e404]:
+                    - generic [ref=e405]: Low
+                    - generic [ref=e407]: Closed
+                - paragraph [ref=e408]: User cannot reset password
+                - generic [ref=e409]:
+                  - generic [ref=e410]:
+                    - generic [ref=e411]: Acme Corporation Ltd.
+                    - generic [ref=e412]: ·
+                    - generic [ref=e413]: Farzana Begum
+                    - generic [ref=e414]: ·
+                    - generic [ref=e415]: 08 Jun 2024, 16:00
+                  - generic [ref=e416]: Paused
+            - link "NHQ-2024-0019 Medium Closed Cloud data warehouse query timeout on quarterly report Acme Corporation Ltd. · Rafi Uddin · 03 Apr 2024, 14:30 Paused" [ref=e420] [cursor=pointer]:
+              - /url: /cases/case19
+              - generic [ref=e421]:
+                - generic [ref=e422]:
+                  - generic [ref=e423]: NHQ-2024-0019
+                  - generic [ref=e425]:
+                    - generic [ref=e426]: Medium
+                    - generic [ref=e428]: Closed
+                - paragraph [ref=e429]: Cloud data warehouse query timeout on quarterly report
+                - generic [ref=e430]:
+                  - generic [ref=e431]:
+                    - generic [ref=e432]: Acme Corporation Ltd.
+                    - generic [ref=e433]: ·
+                    - generic [ref=e434]: Rafi Uddin
+                    - generic [ref=e435]: ·
+                    - generic [ref=e436]: 03 Apr 2024, 14:30
+                  - generic [ref=e437]: Paused
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e366] [cursor=pointer]
+  - alert [ref=e370]

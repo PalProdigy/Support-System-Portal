@@ -36,14 +36,14 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'TH Hub', href: '/technical-head', icon: ShieldAlert, roles: ['technical_head'] },
   { label: 'Lead Hub', href: '/lead', icon: Users, roles: ['team_lead'] },
   { label: 'AM Hub', href: '/sales-executive', icon: Briefcase, roles: ['sales_executive'] },
-  { label: 'My Cases', href: '/engineer', icon: Wrench, roles: ['support_engineer'] },
+  { label: 'My Cases', href: '/my-case', icon: Wrench, roles: ['support_engineer'] },
 
 // Case Management
   { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead', 'sales_executive'] },
 
 // Team Management
   { label: 'Teams', href: '/teams', icon: Headset, roles: ['team_lead', 'technical_head'] },
-  { label: 'Team', href: '/my-team', icon: Headset, roles: ['support_engineer'] },
+  { label: 'Team', href: '/team', icon: Headset, roles: ['support_engineer'] },
   { label: 'Team Leads', href: '/team-lead', icon: Users, roles: ['technical_head'] },
   { label: 'Support Engineers', href: '/support-engineer', icon: Wrench, roles: ['technical_head', 'team_lead'] },
   { label: 'Sales Executives', href: '/sales-executive', icon: Briefcase, roles: ['technical_head'] },
@@ -75,6 +75,10 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'My Feedback', href: '/my-feedback', icon: Star, roles: ['client'] },
   { label: 'Notifications', href: '/notifications', icon: Bell, roles: ['client'] },
 ]
+
+// Routes whose href would otherwise prefix-match a sibling route via
+// pathname.startsWith() (e.g. /client → /clients, /team → /teams, /team-lead).
+const EXACT_MATCH_ROUTES = ['/client', '/team']
 
 interface SidebarProps {
   userName?: string
@@ -242,9 +246,10 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
         data-scrolling={navScrolling}
       >
         {visibleItems.map((item) => {
-          // Exact match for root-level portals to avoid /client matching /clients
-          const isActive = item.href === '/client'
-            ? pathname === '/client'
+          // Exact match for short/root-level routes whose href would otherwise
+          // prefix-match a sibling route (e.g. /client → /clients, /team → /teams, /team-lead)
+          const isActive = EXACT_MATCH_ROUTES.includes(item.href)
+            ? pathname === item.href
             : pathname.startsWith(item.href)
           return (
             <Link

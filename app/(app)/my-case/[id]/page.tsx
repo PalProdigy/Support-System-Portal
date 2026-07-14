@@ -27,10 +27,10 @@ export default function EngineerCasePage({ params }: Props) {
   const { id } = use(params)
 
   return (
-    <div className="space-y-5">
+    <div className="p-4 sm:p-6 space-y-5">
       <Guard />
       <div>
-        <Link href="/engineer" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-4">
+        <Link href="/my-case" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-4">
           <ChevronLeft className="h-3.5 w-3.5" />
           Back to My Cases
         </Link>

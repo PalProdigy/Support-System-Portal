@@ -1,0 +1,110 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e34]:
+    - complementary [ref=f1e36]:
+      - link [ref=f1e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f1e39]:
+          - generic [ref=f1e40]: NH
+          - generic [ref=f1e41]: DISTRIBUTIONS
+      - navigation [ref=f1e49]:
+        - link "Dashboard" [ref=f1e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f1e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f1e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f1e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f1e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f1e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f1e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f1e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f1e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f1e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f1e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f1e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f1e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f1e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f1e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f1e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f1e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f1e133]:
+        - generic [ref=f1e134]:
+          - generic "Arif Rahman" [ref=f1e135]:
+            - generic "Arif Rahman avatar" [ref=f1e137]: AR
+          - generic [ref=f1e138]:
+            - paragraph [ref=f1e139]: Arif Rahman
+            - paragraph [ref=f1e140]: Technical Head
+        - button "Collapse sidebar" [ref=f1e141]
+    - generic [ref=f1e144]:
+      - banner [ref=f1e146]:
+        - generic [ref=f1e147]:
+          - button "Toggle theme" [ref=f1e148] [cursor=pointer]
+          - button "Notifications" [ref=f1e149] [cursor=pointer]:
+            - generic [ref=f1e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f1e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f1e152]:
+              - generic "Arif Rahman avatar" [ref=f1e154]: AR
+            - generic [ref=f1e155]:
+              - paragraph [ref=f1e156]: Arif Rahman
+              - paragraph [ref=f1e157]: Technical Head
+      - main [ref=f1e158]:
+        - generic [ref=f1e159]:
+          - link "Back to My Cases" [ref=f1e161] [cursor=pointer]:
+            - /url: /my-case
+          - generic [ref=f1e164]:
+            - generic [ref=f1e165]:
+              - generic [ref=f1e166]:
+                - generic [ref=f1e167]:
+                  - generic [ref=f1e168]:
+                    - generic [ref=f1e169]: NHQ-2026-0024
+                    - generic [ref=f1e170]: High
+                  - heading "Sample case — VPN connectivity issue" [level=1] [ref=f1e171]
+                  - paragraph [ref=f1e172]: Client reports intermittent VPN drops when connecting from the branch office network, roughly every 20 minutes, requiring a manual reconnect each time.
+                - generic [ref=f1e173]: Assigned
+              - generic [ref=f1e174]:
+                - generic [ref=f1e175]:
+                  - paragraph [ref=f1e176]: Solution
+                  - paragraph [ref=f1e177]: ERP Integration Suite
+                  - paragraph [ref=f1e178]: Integration
+                - generic [ref=f1e179]:
+                  - paragraph [ref=f1e180]: Opened
+                  - paragraph [ref=f1e181]: 12 Jul 2026
+              - generic [ref=f1e182]:
+                - generic [ref=f1e183]: SLA breached 1d 9h ago
+                - generic [ref=f1e187]:
+                  - generic [ref=f1e191]: 00:00
+                  - button "Start timer" [ref=f1e192] [cursor=pointer]
+                  - button "Reset timer" [ref=f1e193] [cursor=pointer]
+            - button "Start Work" [ref=f1e195] [cursor=pointer]
+            - generic [ref=f1e196]:
+              - generic [ref=f1e197]:
+                - button "Updates" [ref=f1e198]
+                - button "RCA" [ref=f1e201]
+                - button "Attachments" [ref=f1e207]
+              - generic [ref=f1e211]:
+                - paragraph [ref=f1e212]: No updates yet.
+                - generic [ref=f1e213]:
+                  - generic [ref=f1e214]:
+                    - generic [ref=f1e215]: Add update
+                    - button "Public update" [ref=f1e216]
+                  - textbox "Post an update to the client…" [ref=f1e220]
+                  - generic [ref=f1e221]:
+                    - button "Post" [disabled]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f1e227] [cursor=pointer]
+  - alert [ref=f1e231]

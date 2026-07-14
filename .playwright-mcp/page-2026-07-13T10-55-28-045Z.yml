@@ -1,0 +1,181 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e34]:
+    - complementary [ref=e36]:
+      - link [ref=e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e39]:
+          - generic [ref=e40]: NH
+          - generic [ref=e41]: DISTRIBUTIONS
+      - navigation [ref=e49]:
+        - link "Dashboard" [ref=e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e133]:
+        - generic [ref=e134]:
+          - generic "Arif Rahman" [ref=e135]:
+            - generic "Arif Rahman avatar" [ref=e137]: AR
+          - generic [ref=e138]:
+            - paragraph [ref=e139]: Arif Rahman
+            - paragraph [ref=e140]: Technical Head
+        - button "Collapse sidebar" [ref=e141]
+    - generic [ref=e144]:
+      - banner [ref=e146]:
+        - generic [ref=e147]:
+          - button "Toggle theme" [ref=e148] [cursor=pointer]
+          - button "Notifications" [ref=e149] [cursor=pointer]:
+            - generic [ref=e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=e152]:
+              - generic "Arif Rahman avatar" [ref=e154]: AR
+            - generic [ref=e155]:
+              - paragraph [ref=e156]: Arif Rahman
+              - paragraph [ref=e157]: Technical Head
+      - main [ref=e158]:
+        - generic [ref=e159]:
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - generic [ref=e162]:
+                - heading "Knowledge Base" [level=1] [ref=e163]
+                - paragraph [ref=e164]: Guides, troubleshooting and best practices — solve it before it becomes a ticket.
+              - button "New Article" [ref=e165] [cursor=pointer]
+            - generic [ref=e167]:
+              - textbox "Search articles" [ref=e168]:
+                - /placeholder: Search by title, content, tags, category or author…
+              - generic [ref=e169]: 6 articles found
+          - tablist [ref=e171]:
+            - tab "Browse (6)" [selected] [ref=e172]
+            - tab "My Articles (0)" [ref=e175]
+            - tab "Review Queue (1)" [ref=e178]
+            - tab "Closed Cases (3)" [ref=e182]
+          - generic [ref=e186]:
+            - button "All" [ref=e187]
+            - button "Installation (1)" [ref=e188]
+            - button "Configuration (2)" [ref=e189]
+            - button "Troubleshooting (2)" [ref=e190]
+            - button "Authentication (1)" [ref=e191]
+          - generic [ref=e192]:
+            - generic [ref=e193]:
+              - generic [ref=e194]: Installation
+              - link [ref=e198] [cursor=pointer]:
+                - /url: /knowledge-base/deploying-the-nhq-agent-with-docker
+                - heading "Deploying the NHQ Agent with Docker" [level=3] [ref=e200]
+              - paragraph [ref=e201]: Step-by-step production deployment of the NHQ monitoring agent using Docker or Docker Compose.
+              - generic [ref=e202]:
+                - button "Docker" [ref=e203]
+                - button "Linux" [ref=e205]
+                - button "agent" [ref=e207]
+                - button "deployment" [ref=e209]
+              - generic [ref=e211]:
+                - generic [ref=e212]: Farzana Begum
+                - generic [ref=e216]: 1 min read
+                - generic [ref=e220]: 10 May 2024
+            - generic [ref=e221]:
+              - generic [ref=e222]: Troubleshooting
+              - link [ref=e226] [cursor=pointer]:
+                - /url: /knowledge-base/troubleshooting-mobile-barcode-scanner-on-android-14
+                - heading "Troubleshooting mobile barcode scanner on Android 14" [level=3] [ref=e228]
+              - paragraph [ref=e229]: Fix Android barcode scanner pairing and input-mode problems in the warehouse mobile app.
+              - generic [ref=e230]:
+                - button "mobile" [ref=e231]
+                - button "android" [ref=e233]
+                - button "barcode" [ref=e235]
+                - button "scanner" [ref=e237]
+              - generic [ref=e239]:
+                - generic [ref=e240]: Rafi Uddin
+                - generic [ref=e244]: 1 min read
+                - generic [ref=e248]: 01 May 2024
+            - generic [ref=e249]:
+              - generic [ref=e250]: Configuration
+              - link [ref=e254] [cursor=pointer]:
+                - /url: /knowledge-base/configuring-overtime-rules-in-hr-payroll
+                - heading "Configuring overtime rules in HR & Payroll" [level=3] [ref=e256]
+              - paragraph [ref=e257]: Define weekly and holiday overtime rules and how they interact with approval workflows.
+              - generic [ref=e258]:
+                - button "hr" [ref=e259]
+                - button "payroll" [ref=e261]
+                - button "overtime" [ref=e263]
+                - button "department" [ref=e265]
+              - generic [ref=e267]:
+                - generic [ref=e268]: Farzana Begum
+                - generic [ref=e272]: 1 min read
+                - generic [ref=e276]: 15 Apr 2024
+            - generic [ref=e277]:
+              - generic [ref=e278]: Authentication
+              - link [ref=e282] [cursor=pointer]:
+                - /url: /knowledge-base/setting-up-2fa-for-crm-pro-users
+                - heading "Setting up 2FA for CRM Pro users" [level=3] [ref=e284]
+              - paragraph [ref=e285]: Enable and enforce two-factor authentication for every CRM Pro user in your organization.
+              - generic [ref=e286]:
+                - button "security" [ref=e287]
+                - button "2fa" [ref=e289]
+                - button "authentication" [ref=e291]
+                - button "crm" [ref=e293]
+              - generic [ref=e295]:
+                - generic [ref=e296]: Farzana Begum
+                - generic [ref=e300]: 1 min read
+                - generic [ref=e304]: 01 Apr 2024
+            - generic [ref=e305]:
+              - generic [ref=e306]: Troubleshooting
+              - link [ref=e310] [cursor=pointer]:
+                - /url: /knowledge-base/resolving-journal-entry-mismatch-errors-in-analytics-engine
+                - heading "Resolving journal entry mismatch errors in Analytics Engine" [level=3] [ref=e312]
+              - paragraph [ref=e313]: Diagnose and fix journal entry mismatch errors caused by rounding or GL account mapping issues.
+              - generic [ref=e314]:
+                - button "analytics" [ref=e315]
+                - button "journal" [ref=e317]
+                - button "error" [ref=e319]
+                - button "reporting" [ref=e321]
+              - generic [ref=e323]:
+                - generic [ref=e324]: Imran Khan
+                - generic [ref=e328]: 1 min read
+                - generic [ref=e332]: 15 Mar 2024
+            - generic [ref=e333]:
+              - generic [ref=e334]: Configuration
+              - link [ref=e338] [cursor=pointer]:
+                - /url: /knowledge-base/how-to-configure-erp-integration-suite-api-credentials
+                - heading "How to configure ERP Integration Suite API credentials" [level=3] [ref=e340]
+              - paragraph [ref=e341]: Update ERP Integration Suite API credentials safely and verify the connection before saving.
+              - generic [ref=e342]:
+                - button "integration" [ref=e343]
+                - button "api" [ref=e345]
+                - button "credentials" [ref=e347]
+                - button "erp" [ref=e349]
+              - generic [ref=e351]:
+                - generic [ref=e352]: Rafi Uddin
+                - generic [ref=e356]: 1 min read
+                - generic [ref=e360]: 01 Mar 2024
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e366] [cursor=pointer]
+  - alert [ref=e370]

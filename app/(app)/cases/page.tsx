@@ -23,10 +23,10 @@ export default function CasesPage() {
   const session = useSession()
   const router = useRouter()
 
-  // Support engineers get a single, merged case workspace at /engineer
+  // Support engineers get a single, merged case workspace at /my-case
   // ("My Cases") instead of this general Cases list.
   useEffect(() => {
-    if (session.role === 'support_engineer') router.replace('/engineer')
+    if (session.role === 'support_engineer') router.replace('/my-case')
   }, [session.role, router])
 
   if (session.role === 'support_engineer') return null
