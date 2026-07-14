@@ -13,7 +13,7 @@ import { ErrorState } from '@/components/shared/error-state'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { CaseApprovalQueue } from '@/modules/shared/case-approval-queue'
-import { cn, formatDateTime } from '@/lib/utils'
+import { cn, formatDateTime, slaRemainingMs } from '@/lib/utils'
 import {
   Ticket, AlertTriangle, CheckCircle, CheckCircle2, Clock, Users, Gauge,
   ShieldCheck, ArrowLeftRight, UserPlus, BookOpen, Star, ChevronRight,
@@ -102,6 +102,7 @@ export default function TechHeadDashboard() {
   // Top KPI metrics. Capture "now" once at mount (lazy state initializer keeps
   // the render pure) so the time-window cutoffs are stable across re-renders.
   const [nowMs] = useState(() => Date.now())
+  const [priorityTab, setPriorityTab] = useState<'attention' | 'pending'>('pending')
   // Successful = fully closed within the last 30 days.
   const lastMonthSuccessful = useMemo(() => {
     const cutoff = nowMs - 30 * 86_400_000
@@ -122,6 +123,18 @@ export default function TechHeadDashboard() {
     [cases]
   )
   const feedbackPendingReview = useMemo(() => (feedback ?? []).filter((f) => !f.th_reviewed), [feedback])
+
+  // High Priority → Attention: live SLA-health signals across all open cases.
+  const slaBreachCases = useMemo(() => openCases.filter((c) => slaRemainingMs(c.sla_due_at) < 0), [openCases])
+  const dueTodayCases = useMemo(
+    () => openCases.filter((c) => { const r = slaRemainingMs(c.sla_due_at); return r >= 0 && r <= 86_400_000 }),
+    [openCases]
+  )
+  // Stale = no closure/resolution activity yet and it's been 15+ days since the case was created.
+  const staleCases = useMemo(
+    () => openCases.filter((c) => nowMs - new Date(c.closed_at ?? c.resolved_at ?? c.created_at).getTime() >= 15 * 86_400_000),
+    [openCases, nowMs]
+  )
 
   // SLA health
   const unreadSlaNotifs = useMemo(
@@ -149,7 +162,7 @@ export default function TechHeadDashboard() {
   }, [teams, openCases])
   const maxTeamLoad = Math.max(1, ...workload.map((w) => w.count))
 
-  // Action center
+  // Action center — approvals & requests waiting on the Technical Head.
   const actionItems: { label: string; count: number; icon: React.ComponentType<{ className?: string }>; href: string; tone: Tone }[] = [
     { label: 'Critical resolutions awaiting approval', count: criticalPendingApproval.length, icon: ShieldCheck, href: '/technical-head?tab=approvals', tone: 'red' },
     { label: 'Escalations awaiting response', count: escalated.length, icon: AlertTriangle, href: '/technical-head?tab=escalations', tone: 'red' },
@@ -159,6 +172,14 @@ export default function TechHeadDashboard() {
     { label: 'Feedback pending review', count: feedbackPendingReview.length, icon: Star, href: '/feedback', tone: 'blue' },
   ]
   const totalPending = actionItems.reduce((s, a) => s + a.count, 0)
+
+  // Attention — SLA-health signals that need proactive review right now.
+  const attentionItems: { label: string; count: number; icon: React.ComponentType<{ className?: string }>; href: string; tone: Tone }[] = [
+    { label: 'SLA Breach', count: slaBreachCases.length, icon: AlertTriangle, href: '/cases', tone: 'red' },
+    { label: 'Due Case', count: dueTodayCases.length, icon: Gauge, href: '/cases', tone: 'amber' },
+    { label: 'Stale (15+ Days)', count: staleCases.length, icon: TimerReset, href: '/cases', tone: 'blue' },
+  ]
+  const totalAttention = attentionItems.reduce((s, a) => s + a.count, 0)
 
   const manageLinks = [
     { label: 'Support Engineers', href: '/support-engineer', icon: Users },
@@ -206,41 +227,77 @@ export default function TechHeadDashboard() {
         <StatCard title="Pending Approvals" value={totalPending} icon={ShieldCheck} iconColor={totalPending > 0 ? 'text-amber-500' : 'text-emerald-500'} />
       </div>
 
-      {/* Action Center */}
+      {/* High Priority */}
       <div className="rounded-xl border bg-card p-4">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
           <ShieldCheck className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-foreground">Needs your attention</h3>
-          <span className={cn('ml-auto text-xs font-semibold px-2 py-0.5 rounded-full', totalPending > 0 ? TONE.amber : TONE.blue)}>
-            {totalPending > 0 ? `${totalPending} pending` : 'All caught up'}
-          </span>
+          <h3 className="text-sm font-semibold text-foreground">High Priority</h3>
         </div>
-        {totalPending === 0 ? (
-          <EmptyState size="sm" icon={CheckCircle2} title="You're all caught up" description="No approvals or requests are waiting on you." />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {actionItems.map(({ label, count, icon: Icon, href, tone }) => (
-              <Link
-                key={label}
-                href={href}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors',
-                  count > 0 ? 'hover:bg-accent/40' : 'opacity-60 hover:opacity-100'
-                )}
-              >
-                <div className={cn('rounded-md p-1.5 shrink-0', count > 0 ? TONE[tone] : 'bg-muted text-muted-foreground')}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <span className="text-sm text-foreground flex-1 leading-tight">{label}</span>
-                {count > 0 ? (
-                  <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full shrink-0', TONE[tone])}>{count}</span>
-                ) : (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                )}
-              </Link>
-            ))}
-          </div>
-        )}
+
+        <Tabs value={priorityTab} onValueChange={(v) => setPriorityTab(v as 'attention' | 'pending')}>
+          <TabsList className="mb-3">
+            <TabsTrigger value="pending">Pending ({totalPending})</TabsTrigger>
+            <TabsTrigger value="attention">Attention ({totalAttention})</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="pending">
+            {totalPending === 0 ? (
+              <EmptyState size="sm" icon={CheckCircle2} title="You're all caught up" description="No approvals or requests are waiting on you." />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {actionItems.map(({ label, count, icon: Icon, href, tone }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors',
+                      count > 0 ? 'hover:bg-accent/40' : 'opacity-60 hover:opacity-100'
+                    )}
+                  >
+                    <div className={cn('rounded-md p-1.5 shrink-0', count > 0 ? TONE[tone] : 'bg-muted text-muted-foreground')}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="text-sm text-foreground flex-1 leading-tight">{label}</span>
+                    {count > 0 ? (
+                      <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full shrink-0', TONE[tone])}>{count}</span>
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    )}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="attention">
+            {totalAttention === 0 ? (
+              <EmptyState size="sm" icon={CheckCircle2} title="No SLA concerns" description="No cases are breached, due, or stale right now." />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {attentionItems.map(({ label, count, icon: Icon, href, tone }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors',
+                      count > 0 ? 'hover:bg-accent/40' : 'opacity-60 hover:opacity-100'
+                    )}
+                  >
+                    <div className={cn('rounded-md p-1.5 shrink-0', count > 0 ? TONE[tone] : 'bg-muted text-muted-foreground')}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="text-sm text-foreground flex-1 leading-tight">{label}</span>
+                    {count > 0 ? (
+                      <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full shrink-0', TONE[tone])}>{count}</span>
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    )}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Routing approval queue — new cases + overdue team-lead windows */}
