@@ -13,7 +13,6 @@ import type { Role } from '@/types'
 import { getDataProvider } from '@/lib/data'
 
 const ROLES: Role[] = [
-  'client',
   'sales_executive',
   'support_engineer',
   'team_lead',

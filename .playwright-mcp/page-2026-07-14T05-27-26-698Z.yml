@@ -1,0 +1,180 @@
+- generic [active] [ref=f4e1]:
+  - generic [ref=f4e34]:
+    - complementary [ref=f4e36]:
+      - link [ref=f4e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f4e39]:
+          - generic [ref=f4e40]: NH
+          - generic [ref=f4e41]: DISTRIBUTIONS
+      - navigation [ref=f4e49]:
+        - link "Dashboard" [ref=f4e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f4e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f4e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f4e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f4e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f4e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f4e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f4e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f4e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f4e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f4e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f4e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f4e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f4e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f4e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f4e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f4e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f4e133]:
+        - generic [ref=f4e134]:
+          - generic "Arif Rahman" [ref=f4e135]:
+            - generic "Arif Rahman avatar" [ref=f4e137]: AR
+          - generic [ref=f4e138]:
+            - paragraph [ref=f4e139]: Arif Rahman
+            - paragraph [ref=f4e140]: Technical Head
+        - button "Collapse sidebar" [ref=f4e141]
+    - generic [ref=f4e144]:
+      - banner [ref=f4e146]:
+        - generic [ref=f4e147]:
+          - button "Toggle theme" [ref=f4e148] [cursor=pointer]
+          - button "Notifications" [ref=f4e149] [cursor=pointer]:
+            - generic [ref=f4e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f4e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f4e152]:
+              - generic "Arif Rahman avatar" [ref=f4e154]: AR
+            - generic [ref=f4e155]:
+              - paragraph [ref=f4e156]: Arif Rahman
+              - paragraph [ref=f4e157]: Technical Head
+      - main [ref=f4e158]:
+        - generic [ref=f4e159]:
+          - button "Back" [ref=f4e160] [cursor=pointer]
+          - generic [ref=f4e161]:
+            - generic [ref=f4e162]: NHQ-2026-0024
+            - heading "Sample case — VPN connectivity issue" [level=1] [ref=f4e164]
+            - generic [ref=f4e165]:
+              - generic [ref=f4e166]: High
+              - generic [ref=f4e168]: Assigned
+              - generic [ref=f4e169]: Overdue
+            - paragraph [ref=f4e173]: Client reports intermittent VPN drops when connecting from the branch office network, roughly every 20 minutes, requiring a manual reconnect each time.
+            - paragraph [ref=f4e174]: Created 12 Jul 2026, 21:28
+            - generic [ref=f4e175]:
+              - heading "Attachments" [level=3] [ref=f4e176]
+              - paragraph [ref=f4e179]: No attachments yet.
+              - generic [ref=f4e180] [cursor=pointer]:
+                - paragraph [ref=f4e184]: Click to upload or drag and drop
+                - paragraph [ref=f4e185]: Images, PDF, documents, archives · up to 10.0 MB
+                - button "Choose File" [ref=f4e186]
+          - paragraph [ref=f4e189]: Case accepted by Sadia Islam
+          - generic [ref=f4e193]:
+            - generic [ref=f4e194]:
+              - generic [ref=f4e195]:
+                - tablist [ref=f4e196]:
+                  - tab "Progress" [ref=f4e197]
+                  - tab "Comments (0)" [selected] [ref=f4e198]
+                  - tab "Actions" [ref=f4e199]
+                - tabpanel "Comments (0)" [ref=f4e200]:
+                  - paragraph [ref=f4e202]: No comments yet.
+                  - generic [ref=f4e203]:
+                    - textbox "Write a comment..." [ref=f4e204]
+                    - generic [ref=f4e205]:
+                      - generic [ref=f4e206]:
+                        - switch "Internal note" [ref=f4e207] [cursor=pointer]
+                        - generic [ref=f4e208] [cursor=pointer]: Internal note
+                      - button "Post" [disabled]
+              - generic [ref=f4e209]:
+                - generic [ref=f4e210]:
+                  - heading "Sub Tasks" [level=3] [ref=f4e211]
+                  - button "Add Sub Task" [ref=f4e216] [cursor=pointer]
+                - generic [ref=f4e217]:
+                  - heading "No sub tasks" [level=3] [ref=f4e223]
+                  - paragraph [ref=f4e224]: Break this case into smaller work items with “Add Sub Task”.
+            - generic [ref=f4e225]:
+              - generic [ref=f4e226]:
+                - heading "Client" [level=3] [ref=f4e227]
+                - paragraph [ref=f4e228]: Acme Corporation Ltd.
+                - paragraph [ref=f4e229]: Priya Sharma
+                - paragraph [ref=f4e230]: "+8801711000001"
+              - generic [ref=f4e231]:
+                - heading "Solution" [level=3] [ref=f4e232]
+                - paragraph [ref=f4e233]: ERP Integration Suite
+                - paragraph [ref=f4e234]: Integration
+              - generic [ref=f4e235]:
+                - heading "Assigned" [level=3] [ref=f4e236]
+                - generic [ref=f4e242]:
+                  - paragraph [ref=f4e243]: Team
+                  - paragraph [ref=f4e244]: Alpha Support Team
+                - generic [ref=f4e245]:
+                  - paragraph [ref=f4e246]: Team Lead
+                  - generic [ref=f4e247]:
+                    - generic "Sadia Islam" [ref=f4e248]:
+                      - generic "Sadia Islam avatar" [ref=f4e250]: SI
+                    - generic [ref=f4e251]:
+                      - paragraph [ref=f4e252]: Sadia Islam
+                      - paragraph [ref=f4e253]: Team Lead
+                - generic [ref=f4e254]:
+                  - paragraph [ref=f4e255]: Support Engineers (2)
+                  - generic [ref=f4e256]:
+                    - generic [ref=f4e257]:
+                      - generic "Rafi Uddin" [ref=f4e258]:
+                        - generic "Rafi Uddin avatar" [ref=f4e260]: RU
+                      - generic [ref=f4e261]:
+                        - paragraph [ref=f4e262]: Rafi Uddin
+                        - paragraph [ref=f4e263]: Support Engineer
+                      - generic [ref=f4e264]: Primary
+                    - generic [ref=f4e266]:
+                      - generic "Farzana Begum" [ref=f4e267]:
+                        - generic "Farzana Begum avatar" [ref=f4e269]: FB
+                      - generic [ref=f4e270]:
+                        - paragraph [ref=f4e271]: Farzana Begum
+                        - paragraph [ref=f4e272]: Support Engineer
+                      - generic [ref=f4e273]:
+                        - generic [ref=f4e274]: Co-assignee
+                        - button "Remove co-assignee" [ref=f4e275]
+                  - generic [ref=f4e279]:
+                    - paragraph [ref=f4e280]: Set primary
+                    - combobox [ref=f4e281]:
+                      - generic: Rafi Uddin
+                    - paragraph [ref=f4e284]: Add co-assignee
+                    - combobox [ref=f4e285]:
+                      - generic: Add engineer...
+              - generic [ref=f4e288]:
+                - heading "Client Feedback" [level=3] [ref=f4e289]
+                - paragraph [ref=f4e304]: Feedback available after resolution
+              - generic [ref=f4e305]:
+                - heading "Timeline" [level=3] [ref=f4e306]
+                - generic [ref=f4e307]:
+                  - generic [ref=f4e308]:
+                    - generic [ref=f4e309]: Duration
+                    - paragraph [ref=f4e313]: 1d 13h
+                  - generic [ref=f4e314]:
+                    - generic [ref=f4e315]: Days Open
+                    - paragraph [ref=f4e318]: 2 days
+                - generic [ref=f4e319]:
+                  - generic [ref=f4e320]:
+                    - generic [ref=f4e321]: Created
+                    - generic [ref=f4e325]: 12 Jul 2026, 21:28
+                  - generic [ref=f4e326]:
+                    - generic [ref=f4e327]: SLA Due
+                    - generic [ref=f4e330]:
+                      - paragraph [ref=f4e331]: 13 Jul 2026, 01:28
+                      - paragraph [ref=f4e332]: Breached
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f4e338] [cursor=pointer]
+  - alert [ref=f4e342]
