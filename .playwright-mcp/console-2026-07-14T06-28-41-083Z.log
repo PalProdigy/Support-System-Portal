@@ -2190,3 +2190,3485 @@
 [ 1939607ms] [LOG] [Fast Refresh] done in 779ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
 [ 1940233ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
 [ 1940966ms] [LOG] [Fast Refresh] done in 836ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2066577ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2066577ms] [LOG] [Fast Refresh] done in 111ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2088191ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2088833ms] [LOG] [Fast Refresh] done in 750ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2094043ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2094064ms] [LOG] [Fast Refresh] done in 123ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2094184ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2094388ms] [LOG] [Fast Refresh] done in 312ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2117567ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2117987ms] [LOG] [Fast Refresh] done in 530ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2529670ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2529795ms] [LOG] [Fast Refresh] done in 240ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2541228ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2541729ms] [LOG] [Fast Refresh] done in 600ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2542139ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2542576ms] [LOG] [Fast Refresh] done in 538ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2542691ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2543125ms] [LOG] [Fast Refresh] done in 541ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2554253ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2554576ms] [LOG] [Fast Refresh] done in 424ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2554692ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2555668ms] [LOG] [Fast Refresh] done in 1088ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2566828ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2577112ms] [LOG] [Fast Refresh] done in 10376ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2577272ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2578133ms] [LOG] [Fast Refresh] done in 968ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2578338ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2578406ms] [LOG] [Fast Refresh] done in 172ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2578510ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2578558ms] [LOG] [Fast Refresh] done in 151ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2624276ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2624626ms] [LOG] [Fast Refresh] done in 465ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2665092ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2665515ms] [LOG] [Fast Refresh] done in 519ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2665627ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2665897ms] [LOG] [Fast Refresh] done in 374ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2666008ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2666031ms] [LOG] [Fast Refresh] done in 125ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2666177ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2666311ms] [LOG] [Fast Refresh] done in 243ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2683850ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2684159ms] [LOG] [Fast Refresh] done in 417ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2684274ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2684783ms] [LOG] [Fast Refresh] done in 621ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2778408ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2778942ms] [LOG] [Fast Refresh] done in 633ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2779297ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2779584ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2779707ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2779842ms] [LOG] [Fast Refresh] done in 243ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2834763ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2834873ms] [LOG] [Fast Refresh] done in 221ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2843684ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2843708ms] [LOG] [Fast Refresh] done in 128ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2901625ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2901797ms] [LOG] [Fast Refresh] done in 274ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2922216ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2923322ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[ 2923518ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2923873ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[ 2923876ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[ 2923880ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/cases?_rsc=b2Fgc8TDomNN7-Pm:0
+[ 2923983ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2924138ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[ 2924139ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/cases?_rsc=b2Fgc8TDomNN7-Pm:0
+[ 2924214ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[ 2924272ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/cases:0
+[ 2925338ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_react-dom_0kla17-._.js:15305
+[ 2925426ms] Error: ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./src/modules/cases/engineer-dashboard.tsx:268:10)
+    at Object.getCompilationErrors (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\dev\hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\lib\dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\dev\next-dev-server.js:720:42)
+    at DevServer.findPageComponents (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\dev\next-dev-server.js:690:43)
+    at async DevServer.renderErrorToResponseImpl (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\base-server.js:1753:26)
+[ 2925694ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2925914ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2925947ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926132ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926165ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926293ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926302ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2926416ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926442ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2926523ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926618ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926713ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926805ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926899ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2926945ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2927025ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927055ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2927142ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927177ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2927233ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927273ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927321ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927368ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927413ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927505ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927519ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2927645ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927658ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2927741ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927844ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2927845ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2927946ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928035ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928050ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2928131ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928183ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928258ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928314ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928397ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928442ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2928580ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2928584ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928683ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928791ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928884ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2928974ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929069ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929164ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929257ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929351ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929478ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929577ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929671ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929779ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929818ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2929913ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2929926ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930054ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2930068ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930203ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930204ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2930328ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2930368ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930434ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2930525ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2930553ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930669ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930670ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2930780ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2930816ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930927ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2930928ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931028ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931136ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931175ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2931256ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931285ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2931395ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931409ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2931534ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931548ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2931628ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931690ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931783ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931796ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2931908ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2931972ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2932035ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2932141ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2933130ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933134ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933138ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933308ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933332ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2933466ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933469ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2933617ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933645ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2933740ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933787ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933881ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2933909ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2934022ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934066ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934148ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934192ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934300ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934314ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2934442ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934455ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2934566ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934596ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2934708ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934735ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2934851ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2934863ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2934995ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935005ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2935119ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935147ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2935259ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935273ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2935399ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935412ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2935524ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935554ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2935650ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935679ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2935744ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935786ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935854ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2935947ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936057ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936101ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2936152ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936199ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936242ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936339ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936352ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2936494ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2936520ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936649ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2936719ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936775ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936863ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2936933ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937004ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937116ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2937185ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937276ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937373ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937443ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937541ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937603ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937667ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937712ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937812ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937917ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2937978ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938070ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938100ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2938225ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938239ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2938349ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938411ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938459ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938554ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938567ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2938710ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938711ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2938820ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2938863ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2938974ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939022ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939133ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939144ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2939285ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939298ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2939423ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939437ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2939562ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939576ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2939656ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939703ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939781ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939811ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2939894ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2939933ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2939984ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940025ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940092ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940186ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940280ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940373ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940466ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940561ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940654ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940745ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940824ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940902ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2940996ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2941074ms] [ERROR] ./src/modules/cases/engineer-dashboard.tsx:268:10
+the name `CertificationCard` is defined multiple times
+  266 | }
+  267 |
+> 268 | function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
+      |          ^^^^^^^^^^^^^^^^^
+  269 |   return (
+  270 |     <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
+  271 |       <div className="flex h-full items-start justify-between gap-3">
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Client Component Browser]
+    ./app/(app)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/cases/engineer-dashboard.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Client Component SSR]
+    ./app/(app)/dashboard/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[ 2941196ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2942936ms] [LOG] [Fast Refresh] done in 1839ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2943113ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2943799ms] [LOG] [Fast Refresh] done in 788ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[ 2944511ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2944873ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2946325ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2946390ms] [LOG] [Fast Refresh] done in 178ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2976066ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2977863ms] [LOG] [Fast Refresh] done in 1901ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2977994ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2978940ms] [LOG] [Fast Refresh] done in 1046ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2979518ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2979611ms] [LOG] [Fast Refresh] done in 195ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2979720ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2980370ms] [LOG] [Fast Refresh] done in 758ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2986914ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2987556ms] [LOG] [Fast Refresh] done in 740ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2987801ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2988300ms] [LOG] [Fast Refresh] done in 613ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2988416ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2988433ms] [LOG] [Fast Refresh] done in 119ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2988546ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 2988655ms] [LOG] [Fast Refresh] done in 215ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3003358ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3003603ms] [LOG] [Fast Refresh] done in 352ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3003714ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3003916ms] [LOG] [Fast Refresh] done in 306ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3025634ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3029476ms] [LOG] [Fast Refresh] done in 3954ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3029593ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3029982ms] [LOG] [Fast Refresh] done in 492ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3030144ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3030168ms] [LOG] [Fast Refresh] done in 136ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3030277ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3030402ms] [LOG] [Fast Refresh] done in 232ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3056772ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3056821ms] [LOG] [Fast Refresh] done in 162ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3057005ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3057006ms] [LOG] [Fast Refresh] done in 106ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3057253ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3057258ms] [LOG] [Fast Refresh] done in 114ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3057422ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3057424ms] [LOG] [Fast Refresh] done in 111ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3076931ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3077900ms] [LOG] [Fast Refresh] done in 644ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3088859ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3089195ms] [LOG] [Fast Refresh] done in 224ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3100394ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3101682ms] [LOG] [Fast Refresh] done in 1137ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3101784ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3102076ms] [LOG] [Fast Refresh] done in 392ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3102198ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3102210ms] [LOG] [Fast Refresh] done in 117ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3102443ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3102495ms] [LOG] [Fast Refresh] done in 163ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3116829ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3116908ms] [LOG] [Fast Refresh] done in 184ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3150336ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3150740ms] [LOG] [Fast Refresh] done in 516ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3151115ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3151117ms] [LOG] [Fast Refresh] done in 111ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3162718ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3163617ms] [LOG] [Fast Refresh] done in 998ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3163835ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3163838ms] [LOG] [Fast Refresh] done in 106ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3164022ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3165095ms] [LOG] [Fast Refresh] done in 1182ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3188924ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3189074ms] [LOG] [Fast Refresh] done in 266ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3217745ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3218256ms] [LOG] [Fast Refresh] done in 641ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3218434ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 3219120ms] [LOG] [Fast Refresh] done in 787ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477

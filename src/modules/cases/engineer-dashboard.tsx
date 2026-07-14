@@ -7,36 +7,23 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { StatCard } from '@/components/shared/stat-card'
 import { CaseCard } from '@/components/shared/case-card'
+import { CertificationCard } from '@/components/shared/certification-card'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
 import { NewCases } from '@/modules/engineer/new-cases'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
 import {
   cn, slaRemainingMs, slaPercent, formatDuration, PRIORITY_COLORS, PRIORITY_LABELS,
 } from '@/lib/utils'
 import {
   Ticket, LayoutList, CheckCircle, Gauge, Clock, Star,
-  Wrench, TrendingUp, ArrowRight, Inbox, Award, Briefcase,
+  Wrench, TrendingUp, ArrowRight, Inbox,
 } from 'lucide-react'
-import type { Case, Client, EngineerMetrics, CertificationLevel } from '@/types'
+import type { Case, Client, EngineerMetrics } from '@/types'
 
 const OPEN_EXCLUDE = ['closed', 'resolved', 'pending_closure']
 const DONE_STATUSES = ['resolved', 'pending_closure', 'closed']
-
-// Colour tiers for the certification level badge (L1 junior → L5 expert) —
-// mirrors the palette used on the staff profile page for visual consistency.
-const CERT_COLORS: Record<CertificationLevel, string> = {
-  L1: 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-600',
-  L2: 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/40 dark:text-blue-400 dark:border-blue-700',
-  L3: 'bg-violet-100 text-violet-700 border-violet-300 dark:bg-violet-900/40 dark:text-violet-400 dark:border-violet-700',
-  L4: 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700',
-  L5: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-400 dark:border-emerald-700',
-}
-const CERT_LABELS: Record<CertificationLevel, string> = {
-  L1: 'Foundation', L2: 'Associate', L3: 'Professional', L4: 'Senior', L5: 'Expert',
-}
 
 export default function EngineerDashboard() {
   const session = useSession()
@@ -135,8 +122,6 @@ export default function EngineerDashboard() {
           />
         </StatLink>
         <StatLink href="/profile"><CertificationCard level={myUser?.certification_level} years={myUser?.years_of_experience} /></StatLink>
-
-
       </div>
 
       {/* New cases available to claim */}
@@ -275,35 +260,5 @@ function StatLink({ href, children }: { href: string; children: React.ReactNode 
     <Link href={href} className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
       {children}
     </Link>
-  )
-}
-
-function CertificationCard({ level, years }: { level?: CertificationLevel; years?: number }) {
-  return (
-    <div className="h-full rounded-xl border bg-card p-3 shadow-sm transition-shadow hover:shadow-md">
-      <div className="flex h-full items-start justify-between gap-3">
-        <div className="flex-1 min-w-0 flex flex-col">
-          <p className="text-sm font-medium text-muted-foreground">Certification</p>
-          <div className="mt-1.5">
-            {level ? (
-              <Badge variant="outline" className={cn('font-mono font-bold gap-1', CERT_COLORS[level])}>
-                <Award className="h-3 w-3" /> {level}
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="gap-1 text-muted-foreground">
-                <Briefcase className="h-3 w-3" /> Uncertified
-              </Badge>
-            )}
-          </div>
-          <p className="mt-1.5 text-xs text-muted-foreground leading-snug">
-            {level ? CERT_LABELS[level] : 'Not yet certified'}
-            {years != null && ` · ${years} yr${years === 1 ? '' : 's'}`}
-          </p>
-        </div>
-        <div className="rounded-lg bg-primary/10 p-2.5 shrink-0">
-          <Award className="h-5 w-5 text-primary" />
-        </div>
-      </div>
-    </div>
   )
 }

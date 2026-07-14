@@ -9,13 +9,14 @@ import { cn } from '@/lib/utils'
 import { StatCard } from '@/components/shared/stat-card'
 import { SLABreachWidget } from '@/components/shared/sla-breach-widget'
 import { CaseCard } from '@/components/shared/case-card'
+import { CertificationCard } from '@/components/shared/certification-card'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
 import { RecentActivity, type ActivityItem } from '@/components/shared/recent-activity'
 import { Button } from '@/components/ui/button'
 import {
   Ticket, Building2, CheckCircle2, AlertTriangle, PlusCircle, Target,
-  Trophy, RefreshCcw, Briefcase,
+  Trophy, RefreshCcw, Briefcase, TrendingUp,
 } from 'lucide-react'
 import type { Case, Client, Prospect, ProspectStage } from '@/types'
 
@@ -52,6 +53,11 @@ export default function AMDashboard() {
     queryFn: () => dp.listProspects(scope),
   })
 
+  const { data: myUser } = useQuery({
+    queryKey: ['user', session.userId],
+    queryFn: () => dp.getUser(session.userId),
+  })
+
   const cases = useMemo(() => casesData?.items ?? [], [casesData])
   const clientList: Client[] = useMemo(() => clients ?? [], [clients])
   const prospectList: Prospect[] = useMemo(() => prospects ?? [], [prospects])
@@ -71,6 +77,19 @@ export default function AMDashboard() {
     .reduce((sum, p) => sum + (p.estimated_value ?? 0), 0)
   const resolvedCases = cases.filter((c: Case) => ['resolved', 'closed'].includes(c.status))
   const resolutionRatePct = cases.length > 0 ? Math.round((resolvedCases.length / cases.length) * 100) : null
+
+  // Last month's conversion — successful sales (deals won) closed in the
+  // previous calendar month, and the win rate among everything decided that month.
+  const now = new Date()
+  const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+  const closedLastMonth = prospectList.filter((p) => {
+    if (p.stage !== 'closed_won' && p.stage !== 'closed_lost') return false
+    const d = new Date(p.updated_at)
+    return d >= lastMonthStart && d < thisMonthStart
+  })
+  const wonLastMonth = closedLastMonth.filter((p) => p.stage === 'closed_won')
+  const lastMonthConversionPct = closedLastMonth.length > 0 ? Math.round((wonLastMonth.length / closedLastMonth.length) * 100) : null
 
   // Recent activity — synthesized from the AM's own cases, clients, and
   // pipeline (all already scope-filtered by the data provider), so it never
@@ -160,10 +179,17 @@ export default function AMDashboard() {
       </div>
 
       {/* KPI strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         <StatCard title="Total Clients" value={clientList.length} icon={Building2} loading={clientsLoading} />
         <StatCard title="Open Cases" value={open.length} icon={Ticket} loading={casesLoading} />
         <SLABreachWidget cases={cases} isLoading={casesLoading} onRefresh={() => refetch()} inline />
+        <CertificationCard level={myUser?.certification_level} years={myUser?.years_of_experience} />
+        <StatCard
+          title="Monthly Conversion"
+          value={lastMonthConversionPct !== null ? `${lastMonthConversionPct}%` : '—'}
+          subtitle={`${wonLastMonth.length} won last month`}
+          icon={TrendingUp}
+        />
       </div>
 
       {/* Main layout: content (left) + activity rail (right) */}

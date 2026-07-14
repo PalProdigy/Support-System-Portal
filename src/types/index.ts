@@ -83,7 +83,8 @@ export interface User {
   is_active: boolean
   avatar?: string
   created_at: string
-  // Support-engineer profile fields (optional; other roles leave these unset).
+  // Staff seniority profile fields — shown on the engineer and AM dashboards'
+  // Certification card (optional; client/lead/TH roles leave these unset).
   years_of_experience?: number
   certification_level?: CertificationLevel
   // ── Extended profile (editable by the engineer) ──────────────────────────
