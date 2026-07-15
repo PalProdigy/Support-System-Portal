@@ -49,6 +49,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const [showTransferCase, setShowTransferCase] = useState(false)
   const [showEditServices, setShowEditServices] = useState(false)
   const [editServiceIds, setEditServiceIds] = useState<string[]>([])
+  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null)
 
   const { data: team, isLoading: loadingTeam, error } = useQuery({
     queryKey: ['team', teamId],
@@ -222,6 +223,13 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const resolvedCases = cases.filter((c) => ['resolved', 'pending_closure', 'closed'].includes(c.status))
   const openCases = cases.filter((c) => !['resolved', 'pending_closure', 'closed'].includes(c.status))
   const escalatedCases = cases.filter((c) => c.is_escalated || c.status === 'escalated')
+
+  // When a member is selected on the roster, scope the Cases panel to just
+  // that engineer's own cases (active + resolved) instead of the whole team.
+  const selectedMember = selectedMemberId ? members.find((m) => m.id === selectedMemberId) ?? null : null
+  const displayedCases = selectedMember ? cases.filter((c) => c.assignee_id === selectedMember.id) : cases
+  const displayedOpenCases = selectedMember ? displayedCases.filter((c) => openCases.includes(c)) : openCases
+  const displayedResolvedCases = selectedMember ? displayedCases.filter((c) => resolvedCases.includes(c)) : resolvedCases
 
   const transferableCases = cases.filter((c) => !['closed'].includes(c.status))
   const otherTeams = (allTeams ?? []).filter((t: Team) => t.id !== teamId)
@@ -663,38 +671,47 @@ export function TeamDetail({ teamId }: { teamId: string }) {
               {members.map((m) => {
                 const metrics = metricsMap[m.id]
                 const isLeadCard = m.id === team.lead_user_id
-                // A support engineer sees their team roster as plain info —
-                // not a directory to click into teammates' detail pages.
-                const isClickable = session.role !== 'support_engineer'
+                const isSelected = selectedMemberId === m.id
+                // A support engineer can't navigate to a teammate's full profile
+                // page, but everyone can still select a card to filter the Cases panel.
+                const canNavigate = session.role !== 'support_engineer'
                 const memberHref = isLeadCard && session.role === 'team_lead'
                   ? '/dashboard'
                   : m.role === 'support_engineer' ? `/support-engineer/${m.id}`
                   : m.role === 'team_lead' ? `/team-lead/${m.id}`
                   : `/users/${m.id}`
+                const toggleSelect = () => setSelectedMemberId((prev) => (prev === m.id ? null : m.id))
                 return (
                   <div
                     key={m.id}
-                    role={isClickable ? 'button' : undefined}
-                    tabIndex={isClickable ? 0 : undefined}
-                    aria-label={isClickable ? (isLeadCard && session.role === 'team_lead' ? 'Go to your dashboard' : `View ${m.name}'s profile`) : undefined}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
+                    aria-label={isSelected ? `Clear case filter for ${m.name}` : `Show ${m.name}'s cases`}
                     className={cn(
                       'relative rounded-xl border bg-card p-3 flex items-start gap-3',
-                      isClickable && 'group transition-all cursor-pointer hover:border-primary/40 hover:shadow-sm hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50'
+                      'group transition-all cursor-pointer hover:border-primary/40 hover:shadow-sm hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                      isSelected && 'border-primary bg-primary/5 ring-1 ring-primary/30'
                     )}
-                    onClick={isClickable ? () => router.push(memberHref) : undefined}
-                    onKeyDown={isClickable ? (e) => {
+                    onClick={toggleSelect}
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault()
-                        router.push(memberHref)
+                        toggleSelect()
                       }
-                    } : undefined}
+                    }}
                   >
                     <UserAvatar name={m.name} />
                     <div className="flex-1 min-w-0 pr-5">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <p className={cn('text-sm font-medium text-foreground', isClickable && 'group-hover:text-primary transition-colors')}>{m.name}</p>
+                        <p className={cn('text-sm font-medium text-foreground group-hover:text-primary transition-colors', isSelected && 'text-primary')}>{m.name}</p>
                         {m.id === team.lead_user_id && (
                           <Badge variant="default" className="text-[10px] h-4 px-1.5">Lead</Badge>
+                        )}
+                        {isSelected && (
+                          <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-primary text-primary">
+                            Showing cases
+                          </Badge>
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5">{m.email}</p>
@@ -797,8 +814,17 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                       >
                         {isTH ? <UserMinus className="h-3.5 w-3.5" /> : <ClockIcon className="h-3.5 w-3.5 text-amber-500" />}
                       </Button>
-                    ) : isClickable ? (
-                      <ChevronRight className="absolute right-3 top-3.5 h-4 w-4 text-muted-foreground/0 group-hover:text-primary/60 transition-colors shrink-0" />
+                    ) : canNavigate ? (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 shrink-0 absolute right-3 top-3 text-muted-foreground/0 group-hover:text-muted-foreground hover:!text-primary transition-colors"
+                        onClick={(e) => { e.stopPropagation(); router.push(memberHref) }}
+                        aria-label={isLeadCard && session.role === 'team_lead' ? 'Go to your dashboard' : `View ${m.name}'s profile`}
+                        title="View profile"
+                      >
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </Button>
                     ) : null}
                   </div>
                 )
@@ -809,37 +835,56 @@ export function TeamDetail({ teamId }: { teamId: string }) {
 
         {/* Cases panel */}
         <div className="lg:col-span-2 space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold flex items-center gap-2">
-              <Ticket className="h-4 w-4 text-muted-foreground" />
-              Cases <span className="text-sm font-normal text-muted-foreground">({cases.length})</span>
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h2 className="text-base font-semibold flex items-center gap-2 min-w-0">
+              <Ticket className="h-4 w-4 text-muted-foreground shrink-0" />
+              {selectedMember ? (
+                <span className="flex items-center gap-1.5 min-w-0">
+                  <UserAvatar name={selectedMember.name} size="sm" />
+                  <span className="truncate">{selectedMember.name}&apos;s Cases</span>
+                  <span className="text-sm font-normal text-muted-foreground shrink-0">({displayedCases.length})</span>
+                </span>
+              ) : (
+                <>
+                  Cases <span className="text-sm font-normal text-muted-foreground">({cases.length})</span>
+                </>
+              )}
             </h2>
-            {canManage && transferableCases.length > 0 && (
-              <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-primary" onClick={() => setShowTransferCase(true)}>
-                <ArrowRightLeft className="h-3 w-3" /> {isTH ? 'Transfer' : 'Request Transfer'}
-              </Button>
-            )}
+            <div className="flex items-center gap-2 shrink-0">
+              {selectedMember && (
+                <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-muted-foreground" onClick={() => setSelectedMemberId(null)}>
+                  <X className="h-3 w-3" /> Clear filter
+                </Button>
+              )}
+              {canManage && transferableCases.length > 0 && (
+                <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-primary" onClick={() => setShowTransferCase(true)}>
+                  <ArrowRightLeft className="h-3 w-3" /> {isTH ? 'Transfer' : 'Request Transfer'}
+                </Button>
+              )}
+            </div>
           </div>
 
           {loadingCases ? (
             <div className="space-y-2">
               {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-20 rounded-xl" />)}
             </div>
-          ) : cases.length === 0 ? (
-            <p className="text-sm text-muted-foreground italic">No cases for this team yet.</p>
+          ) : displayedCases.length === 0 ? (
+            <p className="text-sm text-muted-foreground italic">
+              {selectedMember ? `No cases assigned to ${selectedMember.name}.` : 'No cases for this team yet.'}
+            </p>
           ) : (
             <div className="space-y-5">
               {/* Active cases */}
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                   <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
-                  Active Cases <span className="text-xs font-normal text-muted-foreground">({openCases.length})</span>
+                  Active Cases <span className="text-xs font-normal text-muted-foreground">({displayedOpenCases.length})</span>
                 </h3>
-                {openCases.length === 0 ? (
+                {displayedOpenCases.length === 0 ? (
                   <p className="text-sm text-muted-foreground italic">No active cases.</p>
                 ) : (
                   <div className="space-y-2 h-[320px] overflow-y-auto pr-1">
-                    {openCases.map((c: Case) => renderCaseCard(c))}
+                    {displayedOpenCases.map((c: Case) => renderCaseCard(c))}
                   </div>
                 )}
               </div>
@@ -848,13 +893,13 @@ export function TeamDetail({ teamId }: { teamId: string }) {
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                  Resolved Cases <span className="text-xs font-normal text-muted-foreground">({resolvedCases.length})</span>
+                  Resolved Cases <span className="text-xs font-normal text-muted-foreground">({displayedResolvedCases.length})</span>
                 </h3>
-                {resolvedCases.length === 0 ? (
+                {displayedResolvedCases.length === 0 ? (
                   <p className="text-sm text-muted-foreground italic">No resolved cases yet.</p>
                 ) : (
                   <div className="space-y-2 h-[320px] overflow-y-auto pr-1">
-                    {resolvedCases.map((c: Case) => renderCaseCard(c))}
+                    {displayedResolvedCases.map((c: Case) => renderCaseCard(c))}
                   </div>
                 )}
               </div>
