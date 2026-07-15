@@ -11,10 +11,8 @@ import { BarChart3 } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { buildDateBuckets, PERIOD_TABS, type Period } from '@/lib/date-buckets'
 import type { Case } from '@/types'
-
-const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 type SeriesKey = 'opened' | 'solved' | 'reopened' | 'escalated'
 
@@ -23,17 +21,6 @@ const SERIES: { key: SeriesKey; label: string; color: string }[] = [
   { key: 'solved',    label: 'Solved',    color: '#10b981' },
   { key: 'reopened',  label: 'Reopened',  color: '#f59e0b' },
   { key: 'escalated', label: 'Escalated', color: '#ef4444' },
-]
-
-type Period = '12m' | '6m' | '3m' | '1m' | 'week' | 'custom'
-
-const PERIOD_TABS: { value: Period; label: string; title: string }[] = [
-  { value: '12m',    label: '12 Months', title: 'Last 12 Months' },
-  { value: '6m',     label: '6 Months',  title: 'Last 6 Months' },
-  { value: '3m',     label: '3 Months',  title: 'Last 3 Months' },
-  { value: '1m',     label: '1 Month',   title: 'Last 30 Days' },
-  { value: 'week',   label: 'Week',      title: 'Last 7 Days' },
-  { value: 'custom', label: 'Custom',    title: 'Custom Range' },
 ]
 
 interface Bucket {
@@ -46,79 +33,10 @@ interface Bucket {
   escalated: number
 }
 
-function emptyBucket(label: string, start: Date, end: Date): Bucket {
-  return { label, start: start.getTime(), end: end.getTime(), opened: 0, solved: 0, reopened: 0, escalated: 0 }
-}
-
-function monthlyBuckets(monthsCount: number, now: Date): Bucket[] {
-  const buckets: Bucket[] = []
-  for (let i = monthsCount - 1; i >= 0; i--) {
-    const start = new Date(now.getFullYear(), now.getMonth() - i, 1)
-    const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 1)
-    buckets.push(emptyBucket(`${MONTH_LABELS[start.getMonth()]} ${String(start.getFullYear()).slice(2)}`, start, end))
-  }
-  return buckets
-}
-
-function dailyBuckets(from: Date, to: Date): Bucket[] {
-  const buckets: Bucket[] = []
-  const cursor = new Date(from.getFullYear(), from.getMonth(), from.getDate())
-  const last = new Date(to.getFullYear(), to.getMonth(), to.getDate())
-  while (cursor.getTime() <= last.getTime()) {
-    const start = new Date(cursor)
-    const end = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate() + 1)
-    buckets.push(emptyBucket(`${MONTH_LABELS[start.getMonth()]} ${start.getDate()}`, start, end))
-    cursor.setDate(cursor.getDate() + 1)
-  }
-  return buckets
-}
-
-// Today back to the previous 6 days, labeled by weekday name (today's weekday
-// shifts daily, so the labels are always relative to "now").
-function weekBuckets(now: Date): Bucket[] {
-  const buckets: Bucket[] = []
-  for (let i = 6; i >= 0; i--) {
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i)
-    const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1)
-    buckets.push(emptyBucket(WEEKDAY_LABELS[start.getDay()], start, end))
-  }
-  return buckets
-}
-
-// Custom ranges bucket by day when short enough to stay readable, otherwise by month.
-function customBuckets(fromStr: string, toStr: string): Bucket[] {
-  if (!fromStr || !toStr) return []
-  const from = new Date(fromStr)
-  const to = new Date(toStr)
-  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || from.getTime() > to.getTime()) return []
-
-  const daySpan = Math.round((to.getTime() - from.getTime()) / 86_400_000) + 1
-  if (daySpan <= 45) return dailyBuckets(from, to)
-
-  const buckets: Bucket[] = []
-  const cursor = new Date(from.getFullYear(), from.getMonth(), 1)
-  const last = new Date(to.getFullYear(), to.getMonth(), 1)
-  while (cursor.getTime() <= last.getTime()) {
-    const start = new Date(cursor)
-    const end = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1)
-    buckets.push(emptyBucket(`${MONTH_LABELS[start.getMonth()]} ${String(start.getFullYear()).slice(2)}`, start, end))
-    cursor.setMonth(cursor.getMonth() + 1)
-  }
-  return buckets
-}
-
 function buildBuckets(period: Period, customFrom: string, customTo: string, nowMs: number): Bucket[] {
-  const now = new Date(nowMs)
-  if (period === '12m') return monthlyBuckets(12, now)
-  if (period === '6m') return monthlyBuckets(6, now)
-  if (period === '3m') return monthlyBuckets(3, now)
-  if (period === '1m') {
-    const from = new Date(now)
-    from.setDate(from.getDate() - 29)
-    return dailyBuckets(from, now)
-  }
-  if (period === 'week') return weekBuckets(now)
-  return customBuckets(customFrom, customTo)
+  return buildDateBuckets(period, customFrom, customTo, nowMs).map((b) => ({
+    ...b, opened: 0, solved: 0, reopened: 0, escalated: 0,
+  }))
 }
 
 /**

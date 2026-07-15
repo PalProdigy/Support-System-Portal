@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import type { ReactNode } from 'react'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -12,6 +12,7 @@ import { StatusBadge } from '@/components/shared/status-badge'
 import { PriorityChip } from '@/components/shared/priority-chip'
 import { SLACountdown } from '@/components/shared/sla-countdown'
 import { ErrorState } from '@/components/shared/error-state'
+import { TeamMonthlyActivity } from '@/modules/teams/team-monthly-activity'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -22,7 +23,7 @@ import { ROLE_LABELS } from '@/lib/rbac'
 import { cn, formatDateTime, formatDuration } from '@/lib/utils'
 import {
   ArrowLeft, Headset, Users, CheckCircle2, Clock,
-  Star, AlertTriangle, Ticket, TrendingUp, TrendingDown, Minus,
+  Star, AlertTriangle, Ticket, TrendingUp,
   UserPlus, UserMinus, ArrowRightLeft, Plus, X,
   ClockIcon, CheckCircle, XCircle, ChevronRight,
 } from 'lucide-react'
@@ -256,35 +257,6 @@ export function TeamDetail({ teamId }: { teamId: string }) {
     ...(unassignedCount > 0 ? [{ name: 'Unassigned', value: unassignedCount, color: '#94a3b8' }] : []),
   ].filter((d) => d.value > 0)
 
-  // Monthly activity: cases this team actually resolved, by the month they were resolved (last 6 months).
-  // Anchored to the most recent activity in the data (rather than the real wall clock) so the
-  // window still lines up with seeded/demo data whose dates don't track the current date.
-  const monthlyActivityData = (() => {
-    const referenceDate = cases.length > 0
-      ? new Date(Math.max(...cases.map((c) => new Date(c.resolved_at ?? c.created_at).getTime())))
-      : new Date()
-    return Array.from({ length: 6 }, (_, i) => {
-      const d = new Date(referenceDate.getFullYear(), referenceDate.getMonth() - (5 - i), 1)
-      const monthIdx = d.getMonth()
-      const year = d.getFullYear()
-      return {
-        name: d.toLocaleString('default', { month: 'short' }),
-        Resolved: resolvedCases.filter((c) => {
-          if (!c.resolved_at) return false
-          const rd = new Date(c.resolved_at)
-          return rd.getMonth() === monthIdx && rd.getFullYear() === year
-        }).length,
-      }
-    })
-  })()
-  const hasMonthlyActivity = monthlyActivityData.some((d) => d.Resolved > 0)
-  // Month-over-month change: latest tracked month vs the one right before it.
-  const currentMonth = monthlyActivityData[monthlyActivityData.length - 1]
-  const previousMonth = monthlyActivityData[monthlyActivityData.length - 2]
-  const momDelta = hasMonthlyActivity && currentMonth && previousMonth
-    ? currentMonth.Resolved - previousMonth.Resolved
-    : null
-
   const metricsMap = Object.fromEntries(
     (allMetrics ?? []).map((m: EngineerMetrics) => [m.engineer_id, m])
   )
@@ -304,6 +276,51 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const totalPending = pendingMemberRequests.length + pendingTransferRequests.length
   const usersMap = Object.fromEntries(allUsers.map((u) => [u.id, u]))
   const casesMap = Object.fromEntries(cases.map((c) => [c.id, c]))
+
+  const renderCaseCard = (c: Case) => {
+    const assignee = allUsers.find((u) => u.id === c.assignee_id)
+    const resTime = c.resolved_at
+      ? new Date(c.resolved_at).getTime() - new Date(c.created_at).getTime()
+      : null
+    return (
+      <div
+        key={c.id}
+        className="rounded-xl border bg-card p-3.5 hover:shadow-sm transition-shadow cursor-pointer"
+        onClick={() => router.push(`/cases/${c.id}`)}
+      >
+        <div className="flex items-start justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[10px] font-mono text-muted-foreground">{c.reference_no}</span>
+            <PriorityChip priority={c.priority} />
+            <StatusBadge status={c.status} />
+            {c.is_escalated && (
+              <Badge variant="destructive" className="text-[10px] h-4 px-1.5 gap-0.5">
+                <AlertTriangle className="h-2.5 w-2.5" /> Escalated
+              </Badge>
+            )}
+          </div>
+          <SLACountdown createdAt={c.created_at} dueAt={c.sla_due_at} status={c.status} />
+        </div>
+
+        <p className="text-sm font-medium text-foreground mt-1.5 line-clamp-1">{c.title}</p>
+
+        <div className="flex items-center gap-3 mt-2 text-[11px] text-muted-foreground flex-wrap">
+          <span><Clock className="inline h-3 w-3 mr-0.5" />Created {formatDateTime(c.created_at)}</span>
+          {assignee && (
+            <span className="flex items-center gap-1">
+              <UserAvatar name={assignee.name} size="sm" />
+              {assignee.name}
+            </span>
+          )}
+          {resTime != null && (
+            <span className="flex items-center gap-1 text-emerald-600 font-medium">
+              <CheckCircle2 className="h-3 w-3" /> Resolved in {formatDuration(resTime)}
+            </span>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
@@ -523,35 +540,13 @@ export function TeamDetail({ teamId }: { teamId: string }) {
           </div>
         </div>
 
-        <div className="rounded-xl border bg-card p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="h-4 w-4 text-emerald-500" />
-            <p className="text-xs text-muted-foreground">SLA Compliance</p>
-            {slaCompliancePct != null && (
-              <span className={`ml-auto text-sm font-bold ${
-                slaCompliancePct >= 90 ? 'text-emerald-600'
-                : slaCompliancePct >= 70 ? 'text-amber-600'
-                : 'text-red-600'}`}>
-                {slaCompliancePct.toFixed(0)}%
-              </span>
-            )}
+        <div className="rounded-xl border bg-card p-4 flex items-start gap-3">
+          <TrendingUp className="h-5 w-5 text-emerald-500 mt-0.5 shrink-0" />
+          <div>
+            <p className="text-xs text-muted-foreground">Total SLA</p>
+            <p className="text-xl font-bold text-foreground">{slaCases.length}</p>
+
           </div>
-          {slaCompliancePct != null ? (
-            <div className="h-2.5 rounded-full bg-muted overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all ${
-                  slaCompliancePct >= 90 ? 'bg-emerald-500'
-                  : slaCompliancePct >= 70 ? 'bg-amber-500'
-                  : 'bg-red-500'}`}
-                style={{ width: `${Math.min(slaCompliancePct, 100)}%` }}
-              />
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">No data yet</p>
-          )}
-          <p className="text-[11px] text-muted-foreground mt-1.5">
-            {slaCompliantCount} of {slaCases.length} cases within SLA
-          </p>
         </div>
 
         <div className="rounded-xl border bg-card p-4 flex items-start gap-3">
@@ -599,7 +594,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
       )}
 
       {/* Team member contribution + monthly resolved activity */}
-      {(contributionData.length > 0 || hasMonthlyActivity) && (
+      {(contributionData.length > 0 || cases.length > 0) && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {contributionData.length > 0 && (
             <div className="rounded-xl border bg-card p-4 space-y-3">
@@ -635,49 +630,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
             </div>
           )}
 
-          {hasMonthlyActivity && (
-            <div className="rounded-xl border bg-card p-4 space-y-3">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold">Monthly Activity</p>
-                  <p className="text-xs text-muted-foreground">Cases resolved by this team (last 6 months)</p>
-                </div>
-                {momDelta != null && (
-                  <div className={`flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-semibold shrink-0 ${
-                    momDelta > 0 ? 'bg-emerald-500/10 text-emerald-600'
-                    : momDelta < 0 ? 'bg-red-500/10 text-red-600'
-                    : 'bg-muted text-muted-foreground'}`}>
-                    {momDelta > 0 ? <TrendingUp className="h-3 w-3" />
-                      : momDelta < 0 ? <TrendingDown className="h-3 w-3" />
-                      : <Minus className="h-3 w-3" />}
-                    {momDelta > 0 ? `+${momDelta}` : momDelta} vs last month
-                  </div>
-                )}
-              </div>
-              <ResponsiveContainer width="100%" height={280}>
-                <BarChart data={monthlyActivityData} barSize={26} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                  <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
-                  <Tooltip
-                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.5 }}
-                    formatter={(value) => {
-                      const n = Number(value)
-                      return [`${n} case${n !== 1 ? 's' : ''}`, 'Resolved']
-                    }}
-                    contentStyle={{ fontSize: 12, borderRadius: 8 }}
-                  />
-                  <Bar dataKey="Resolved" fill="#10b981" radius={[6, 6, 0, 0]} maxBarSize={32}>
-                    <LabelList
-                      dataKey="Resolved"
-                      position="top"
-                      style={{ fontSize: 11, fontWeight: 600, fill: 'hsl(var(--muted-foreground))' }}
-                    />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          )}
+          <TeamMonthlyActivity cases={cases} />
         </div>
       )}
 
@@ -875,51 +828,36 @@ export function TeamDetail({ teamId }: { teamId: string }) {
           ) : cases.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">No cases for this team yet.</p>
           ) : (
-            <div className="space-y-2 max-h-[640px] overflow-y-auto pr-1">
-              {cases.map((c: Case) => {
-                const assignee = allUsers.find((u) => u.id === c.assignee_id)
-                const resTime = c.resolved_at
-                  ? new Date(c.resolved_at).getTime() - new Date(c.created_at).getTime()
-                  : null
-                return (
-                  <div
-                    key={c.id}
-                    className="rounded-xl border bg-card p-3.5 hover:shadow-sm transition-shadow cursor-pointer"
-                    onClick={() => router.push(`/cases/${c.id}`)}
-                  >
-                    <div className="flex items-start justify-between gap-2 flex-wrap">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px] font-mono text-muted-foreground">{c.reference_no}</span>
-                        <PriorityChip priority={c.priority} />
-                        <StatusBadge status={c.status} />
-                        {c.is_escalated && (
-                          <Badge variant="destructive" className="text-[10px] h-4 px-1.5 gap-0.5">
-                            <AlertTriangle className="h-2.5 w-2.5" /> Escalated
-                          </Badge>
-                        )}
-                      </div>
-                      <SLACountdown createdAt={c.created_at} dueAt={c.sla_due_at} status={c.status} />
-                    </div>
-
-                    <p className="text-sm font-medium text-foreground mt-1.5 line-clamp-1">{c.title}</p>
-
-                    <div className="flex items-center gap-3 mt-2 text-[11px] text-muted-foreground flex-wrap">
-                      <span><Clock className="inline h-3 w-3 mr-0.5" />Created {formatDateTime(c.created_at)}</span>
-                      {assignee && (
-                        <span className="flex items-center gap-1">
-                          <UserAvatar name={assignee.name} size="sm" />
-                          {assignee.name}
-                        </span>
-                      )}
-                      {resTime != null && (
-                        <span className="flex items-center gap-1 text-emerald-600 font-medium">
-                          <CheckCircle2 className="h-3 w-3" /> Resolved in {formatDuration(resTime)}
-                        </span>
-                      )}
-                    </div>
+            <div className="space-y-5">
+              {/* Active cases */}
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
+                  Active Cases <span className="text-xs font-normal text-muted-foreground">({openCases.length})</span>
+                </h3>
+                {openCases.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic">No active cases.</p>
+                ) : (
+                  <div className="space-y-2 h-[320px] overflow-y-auto pr-1">
+                    {openCases.map((c: Case) => renderCaseCard(c))}
                   </div>
-                )
-              })}
+                )}
+              </div>
+
+              {/* Resolved cases */}
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                  Resolved Cases <span className="text-xs font-normal text-muted-foreground">({resolvedCases.length})</span>
+                </h3>
+                {resolvedCases.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic">No resolved cases yet.</p>
+                ) : (
+                  <div className="space-y-2 h-[320px] overflow-y-auto pr-1">
+                    {resolvedCases.map((c: Case) => renderCaseCard(c))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

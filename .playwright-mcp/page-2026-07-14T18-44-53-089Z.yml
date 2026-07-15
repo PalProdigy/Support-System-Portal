@@ -1,0 +1,175 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - link:
+            - /url: /dashboard
+            - img:
+              - generic: NH
+              - generic: DISTRIBUTIONS
+        - navigation:
+          - link:
+            - /url: /dashboard
+            - generic: Dashboard
+          - link:
+            - /url: /technical-head
+            - generic: TH Hub
+          - link:
+            - /url: /cases
+            - generic: Cases
+          - link:
+            - /url: /teams
+            - generic: Teams
+          - link:
+            - /url: /team-lead
+            - generic: Team Leads
+          - link:
+            - /url: /support-engineer
+            - generic: Support Engineers
+          - link:
+            - /url: /sales-executive
+            - generic: Sales Executives
+          - link:
+            - /url: /clients
+            - generic: Clients
+          - link:
+            - /url: /products
+            - generic: Products
+          - link:
+            - /url: /solutions
+            - generic: Solutions
+          - link:
+            - /url: /knowledge-base
+            - generic: Knowledge Base
+          - link:
+            - /url: /reporting
+            - generic: Reporting
+          - link:
+            - /url: /feedback
+            - generic: Feedback
+          - link:
+            - /url: /sla-rules
+            - generic: SLA Rules
+          - link:
+            - /url: /audit-log
+            - generic: Audit Log
+          - link:
+            - /url: /notifications
+            - generic: Notifications
+          - link:
+            - /url: /settings
+            - generic: Settings
+        - generic:
+          - generic:
+            - generic:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+            - button
+    - generic:
+      - generic:
+        - banner:
+          - generic:
+            - button
+            - button:
+              - generic: 9+
+            - button:
+              - generic: AR
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: TH Hub
+                - paragraph: Technical Head oversight — all teams
+          - generic:
+            - button: All Cases
+            - button: Escalations
+            - button: Critical Approval
+            - button: Workload
+            - button: Performance
+          - generic:
+            - generic:
+              - generic: 2 critical
+              - generic: 4 high
+              - generic: 4 medium
+              - generic: 1 low
+              - generic: 11 total open
+            - generic:
+              - generic:
+                - heading [level=3]: Top 3 Team Case Load (open cases by priority)
+                - button: View All
+              - generic:
+                - generic:
+                  - generic:
+                    - list:
+                      - listitem: critical
+                      - listitem: high
+                      - listitem: low
+                      - listitem: medium
+                  - application:
+                    - generic:
+                      - generic: Alpha
+                      - generic:
+                        - generic: "0"
+                        - generic: "8"
+            - generic:
+              - generic:
+                - heading [level=3]: Top 5 Engineer Active Case Count
+                - button: View All
+              - generic:
+                - generic:
+                  - application:
+                    - generic:
+                      - generic:
+                        - generic: Imran
+                        - generic: Rafi
+                        - generic: Farzana
+              - paragraph: 4+ cases — overloaded2–3 cases — busy0–1 cases — available
+            - generic:
+              - heading [level=3]: Status Distribution
+              - generic:
+                - generic:
+                  - generic: triaged
+                  - generic: "1"
+                  - generic: 9%
+                - generic:
+                  - generic: assigned
+                  - generic: "1"
+                  - generic: 9%
+                - generic:
+                  - generic: in progress
+                  - generic: "3"
+                  - generic: 27%
+                - generic:
+                  - generic: pending client
+                  - generic: "1"
+                  - generic: 9%
+                - generic:
+                  - generic: escalated
+                  - generic: "5"
+                  - generic: 45%
+  - list
+  - button "Open Next.js Dev Tools" [ref=f2e277] [cursor=pointer]
+  - alert
+  - generic: "1"
+  - dialog [ref=f2e284]:
+    - generic [ref=f2e285]:
+      - heading "Engineer Active Case Count — All Engineers" [level=2] [ref=f2e286]
+      - paragraph [ref=f2e299]: 3 engineers · sorted by active case count, heaviest first
+    - application [ref=f2e303]:
+      - generic [ref=f2e311]:
+        - generic [ref=f2e312]:
+          - generic [ref=f2e313]: "0"
+          - generic [ref=f2e315]: "1"
+          - generic [ref=f2e317]: "2"
+          - generic [ref=f2e319]: "3"
+          - generic [ref=f2e321]: "4"
+        - generic [ref=f2e323]:
+          - generic [ref=f2e324]: Imran
+          - generic [ref=f2e326]: Rafi
+          - generic [ref=f2e328]: Farzana
+    - paragraph [ref=f2e330]: 4+ cases — overloaded2–3 cases — busy0–1 cases — available
+    - button "Close" [active] [ref=f2e334]

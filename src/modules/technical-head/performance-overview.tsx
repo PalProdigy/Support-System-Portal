@@ -20,13 +20,6 @@ function StarRow({ score }: { score: number | null }) {
   )
 }
 
-function SLABadge({ pct }: { pct: number }) {
-  const cls = pct >= 90 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' :
-    pct >= 70 ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
-      'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-  return <span className={cn('text-xs font-semibold px-1.5 py-0.5 rounded-full', cls)}>{pct}%</span>
-}
-
 export function PerformanceOverview() {
   const session = useSession()
   const dp = getDataProvider()
@@ -89,14 +82,14 @@ export function PerformanceOverview() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-muted/30">
-              {['#', 'Engineer', 'Resolved', 'Avg Time', 'SLA %', 'Satisfaction', 'Open'].map((h) => (
+              {['#', 'Engineer', 'Resolved', 'Avg Time', 'Satisfaction', 'Open'].map((h) => (
                 <th key={h} className="text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {(metrics ?? []).length === 0 && (
-              <tr><td colSpan={7} className="text-center py-8 text-sm text-muted-foreground">No engineer data yet</td></tr>
+              <tr><td colSpan={6} className="text-center py-8 text-sm text-muted-foreground">No engineer data yet</td></tr>
             )}
             {(metrics ?? []).map((m, i) => {
               const user = usersMap[m.engineer_id]
@@ -113,7 +106,6 @@ export function PerformanceOverview() {
                   <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">
                     {m.avg_resolution_hours != null ? `${m.avg_resolution_hours}h` : '—'}
                   </td>
-                  <td className="px-3 py-2.5"><SLABadge pct={m.sla_compliance_pct} /></td>
                   <td className="px-3 py-2.5"><StarRow score={m.satisfaction_score} /></td>
                   <td className="px-3 py-2.5 text-xs tabular-nums text-muted-foreground">{m.open_cases}</td>
                 </tr>
