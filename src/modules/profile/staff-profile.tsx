@@ -26,6 +26,16 @@ const CERT_LEVEL_COLORS: Record<CertificationLevel, string> = {
   L5: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-400 dark:border-emerald-700',
 }
 
+const CERT_LEVELS: CertificationLevel[] = ['L1', 'L2', 'L3', 'L4', 'L5']
+
+// Deterministic placeholder certification (stable per user) so the badge
+// always has something to show before a real level has been assigned.
+function demoCertificationLevel(seed: string): CertificationLevel {
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) | 0
+  return CERT_LEVELS[Math.abs(hash) % CERT_LEVELS.length]
+}
+
 export interface StatItem {
   icon: ReactNode
   label: string
@@ -60,11 +70,12 @@ function Chips({ items, empty }: { items?: string[]; empty: string }) {
 
 // Generic, editable staff profile shared by every non-client role. Role-specific
 // data is limited to the `stats` summary — everything else lives on the User.
-export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performance Summary' }: {
+export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performance Summary', points }: {
   user: User
   teamName?: string
   stats: StatItem[]
   summaryTitle?: string
+  points?: number
 }) {
   const session = useSession()
   const [editOpen, setEditOpen] = useState(false)
@@ -75,6 +86,7 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
     : user.department === 'technical' ? 'Technical'
     : user.role === 'sales_executive' ? 'Sales' : 'Technical'
   const employeeId = user.employee_id ?? user.id.toUpperCase()
+  const certLevel = user.certification_level ?? demoCertificationLevel(user.id)
 
   return (
     <>
@@ -93,12 +105,17 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
                 <p className="text-sm text-muted-foreground">{designation}</p>
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   <Badge variant="secondary">{ROLE_LABELS[user.role]}</Badge>
-                  {user.certification_level && (
-                    <Badge variant="outline" className={`font-mono gap-1 ${CERT_LEVEL_COLORS[user.certification_level]}`}>
-                      <Award className="h-3 w-3" /> {user.certification_level}
+                  <Badge variant="outline" className={`font-mono gap-1 ${CERT_LEVEL_COLORS[certLevel]}`}>
+                    <Award className="h-3 w-3" /> {certLevel}
+                  </Badge>
+                  {typeof points === 'number' && (
+                    <Badge
+                      variant="outline"
+                      className="font-mono gap-1 bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700"
+                    >
+                      <Trophy className="h-3 w-3" /> {points} pts
                     </Badge>
                   )}
-
                 </div>
               </div>
             </div>

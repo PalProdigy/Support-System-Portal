@@ -16,6 +16,7 @@ import { canAccess, requireAccess, canCreateSubCase } from '@/lib/rbac'
 import { CLIENT_INFO_REASON_LABELS } from '@/lib/utils'
 import { dispatchToChannels } from '@/lib/notifications/dispatcher'
 import { ALL_ADAPTERS } from '@/lib/notifications/adapters'
+import { pointsForCases } from '@/modules/profile/case-stats'
 
 // Seed imports
 import seedUsers from '@/data/seed/users.json'
@@ -2064,6 +2065,7 @@ class MockDataProvider implements DataProvider {
       satisfaction_score: satisfactionScore,
       open_cases: openCases,
       total_feedback_count: myFeedback.length,
+      points: pointsForCases(resolved),
     })
   }
 

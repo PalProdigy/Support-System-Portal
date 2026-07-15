@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { StaffProfile, type StatItem } from './staff-profile'
-import { isOpen, isDone } from './case-stats'
+import { isOpen, isDone, pointsForCases } from './case-stats'
 import { Building2, Target, Briefcase, ShieldAlert, Ticket, CheckCircle2, Trophy } from 'lucide-react'
 import type { Case, Client, Prospect, User } from '@/types'
 
@@ -34,5 +34,5 @@ export function SalesExecutiveProfile({ user, teamName }: { user: User; teamName
     { icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />, label: 'Resolved', value: String(cases.filter(isDone).length) },
   ]
 
-  return <StaffProfile user={user} teamName={teamName} stats={stats} summaryTitle="Sales Summary" />
+  return <StaffProfile user={user} teamName={teamName} stats={stats} summaryTitle="Sales Summary" points={pointsForCases(cases.filter(isDone))} />
 }

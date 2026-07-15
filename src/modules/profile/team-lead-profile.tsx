@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { StaffProfile, type StatItem } from './staff-profile'
-import { isOpen, isDone, isEscalated, slaCompliancePct, avgRating } from './case-stats'
+import { isOpen, isDone, isEscalated, slaCompliancePct, avgRating, pointsForCases } from './case-stats'
 import { Ticket, CheckCircle2, AlertTriangle, TrendingUp, Star, RotateCcw, Users } from 'lucide-react'
 import type { Case, Feedback, User } from '@/types'
 
@@ -36,5 +36,5 @@ export function TeamLeadProfile({ user, teamName }: { user: User; teamName?: str
     { icon: <Users className="h-3.5 w-3.5 text-violet-500" />, label: 'Team Members', value: String(members) },
   ]
 
-  return <StaffProfile user={user} teamName={teamName ?? ledTeam?.name} stats={stats} summaryTitle="Team Summary" />
+  return <StaffProfile user={user} teamName={teamName ?? ledTeam?.name} stats={stats} summaryTitle="Team Summary" points={pointsForCases(cases.filter(isDone))} />
 }

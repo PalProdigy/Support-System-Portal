@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { cn } from '@/lib/utils'
-import { Star, TrendingUp, Clock, CheckCircle2, ThumbsUp } from 'lucide-react'
+import { Star, TrendingUp, Clock, CheckCircle2, ThumbsUp, Trophy } from 'lucide-react'
 import type { EngineerMetrics } from '@/types'
 
 function MetricCard({ label, value, sub, icon: Icon, accent }: {
@@ -74,6 +74,13 @@ export function PerformanceDashboard() {
     if (!metrics) return null
     return [
       {
+        label: 'Points',
+        value: String(metrics.points),
+        sub: 'Earned by resolving cases',
+        icon: Trophy,
+        accent: 'bg-amber-500',
+      },
+      {
         label: 'Total Resolved',
         value: String(metrics.total_resolved),
         sub: `${metrics.open_cases} currently open`,
@@ -105,7 +112,7 @@ export function PerformanceDashboard() {
   }, [metrics])
 
   if (isLoading) {
-    return <div className="space-y-3">{[...Array(4)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}</div>
+    return <div className="space-y-3">{[...Array(5)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}</div>
   }
 
   if (!metrics) return null
@@ -113,7 +120,7 @@ export function PerformanceDashboard() {
   return (
     <div className="space-y-6">
       {/* KPI grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {(kpis ?? []).map((k) => <MetricCard key={k.label} {...k} />)}
       </div>
 

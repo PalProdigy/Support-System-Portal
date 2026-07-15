@@ -437,6 +437,7 @@ export interface EngineerMetrics {
   satisfaction_score: number | null // avg of feedback ratings (1–5)
   open_cases: number
   total_feedback_count: number
+  points: number // earned by resolving cases, weighted by priority
 }
 
 // Phase Final — Sales Executive performance (computed, not persisted, except

@@ -20,3 +20,17 @@ export function avgRating(feedback: Feedback[]): number | null {
   if (rated.length === 0) return null
   return rated.reduce((s, f) => s + (f.rating ?? 0), 0) / rated.length
 }
+
+// Points earned per resolved case, weighted by priority — higher-priority
+// cases are harder / more time-critical to resolve, so they're worth more.
+const POINTS_BY_PRIORITY: Record<Case['priority'], number> = {
+  low: 5,
+  medium: 10,
+  high: 15,
+  critical: 25,
+}
+
+// Total points an engineer has earned so far, from the cases they've resolved.
+export function pointsForCases(cases: Case[]): number {
+  return cases.filter(isDone).reduce((sum, c) => sum + (POINTS_BY_PRIORITY[c.priority] ?? 10), 0)
+}
