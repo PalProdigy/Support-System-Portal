@@ -23,7 +23,7 @@ import { cn, formatDateTime, formatDuration } from '@/lib/utils'
 import {
   ArrowLeft, Mail, Calendar, Ticket, CheckCircle2,
   AlertTriangle, Clock, Star, TrendingUp, ArrowRightLeft,
-  ExternalLink, MessageSquare, Eye, Award, Users,
+  ExternalLink, MessageSquare, Eye, Award, Users, Trophy,
 } from 'lucide-react'
 import type { Case, Feedback, AuditLog, CertificationLevel } from '@/types'
 import { SupportEngineerProfile } from '@/modules/profile/support-engineer-profile'
@@ -279,11 +279,14 @@ export function UserDetail({ id }: { id: string }) {
         <div className="flex-1 min-w-0 space-y-2">
           <div className="flex items-start justify-between gap-3 flex-wrap">
             <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-            {(user.role === 'support_engineer' || user.role === 'team_lead') && (
-              <Button variant="outline" size="sm" onClick={() => setShowProfile(true)}>
-                <Eye className="h-3.5 w-3.5" /> View
-              </Button>
-            )}
+            <div className="flex items-center gap-2 shrink-0">
+
+              {(user.role === 'support_engineer' || user.role === 'team_lead') && (
+                <Button variant="outline" size="sm" onClick={() => setShowProfile(true)}>
+                  <Eye className="h-3.5 w-3.5" /> View
+                </Button>
+              )}
+            </div>
           </div>
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <Mail className="h-3.5 w-3.5 shrink-0" />
@@ -303,6 +306,14 @@ export function UserDetail({ id }: { id: string }) {
               >
                 <Award className="h-3 w-3" /> {user.certification_level}
               </Badge>
+            )}
+            {isEngineer && metrics && (
+                <Badge
+                    variant="outline"
+                    className="font-mono gap-1 bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700"
+                >
+                  <Trophy className="h-3 w-3" /> {metrics.points} pts
+                </Badge>
             )}
           </div>
         </div>
