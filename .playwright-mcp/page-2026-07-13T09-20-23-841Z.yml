@@ -1,0 +1,15 @@
+- generic [active] [ref=f6e1]:
+  - status [ref=f6e2]:
+    - paragraph [ref=f6e10]: NH Distributions
+    - generic [ref=f6e14]:
+      - generic [ref=f6e15]: Connecting
+      - generic [ref=f6e16]: ·
+      - generic [ref=f6e17]: 0%
+  - region "Notifications (F8)":
+    - list
+  - status [ref=f6e18]:
+    - paragraph [ref=f6e26]: NH Distributions
+    - generic [ref=f6e30]:
+      - generic [ref=f6e31]: Connecting
+      - generic [ref=f6e32]: ·
+      - generic [ref=f6e33]: 0%

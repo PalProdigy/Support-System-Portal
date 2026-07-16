@@ -1,0 +1,67 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - heading "NHQ" [level=1] [ref=e5]
+        - paragraph [ref=e6]: DISTRIBUTIONS
+      - generic [ref=e16]:
+        - generic [ref=e18]:
+          - generic [ref=e19]: "0"
+          - generic [ref=e20]: "1"
+          - generic [ref=e21]: "2"
+          - generic [ref=e22]: "3"
+          - generic [ref=e23]: "4"
+          - generic [ref=e24]: "5"
+          - generic [ref=e25]: "6"
+          - generic [ref=e26]: "7"
+          - generic [ref=e27]: "8"
+          - generic [ref=e28]: "9"
+        - generic [ref=e30]:
+          - generic [ref=e31]: "0"
+          - generic [ref=e32]: "1"
+          - generic [ref=e33]: "2"
+          - generic [ref=e34]: "3"
+          - generic [ref=e35]: "4"
+          - generic [ref=e36]: "5"
+          - generic [ref=e37]: "6"
+          - generic [ref=e38]: "7"
+          - generic [ref=e39]: "8"
+          - generic [ref=e40]: "9"
+        - generic [ref=e41]: "%"
+    - generic [ref=e44]:
+      - text: Loading Data ...
+      - generic [ref=e45]: 0%
+  - region "Notifications (F8)":
+    - list
+  - generic [ref=e46]:
+    - generic [ref=e47]:
+      - generic [ref=e48]:
+        - heading "NHQ" [level=1] [ref=e49]
+        - paragraph [ref=e50]: DISTRIBUTIONS
+      - generic [ref=e60]:
+        - generic [ref=e62]:
+          - generic [ref=e63]: "0"
+          - generic [ref=e64]: "1"
+          - generic [ref=e65]: "2"
+          - generic [ref=e66]: "3"
+          - generic [ref=e67]: "4"
+          - generic [ref=e68]: "5"
+          - generic [ref=e69]: "6"
+          - generic [ref=e70]: "7"
+          - generic [ref=e71]: "8"
+          - generic [ref=e72]: "9"
+        - generic [ref=e74]:
+          - generic [ref=e75]: "0"
+          - generic [ref=e76]: "1"
+          - generic [ref=e77]: "2"
+          - generic [ref=e78]: "3"
+          - generic [ref=e79]: "4"
+          - generic [ref=e80]: "5"
+          - generic [ref=e81]: "6"
+          - generic [ref=e82]: "7"
+          - generic [ref=e83]: "8"
+          - generic [ref=e84]: "9"
+        - generic [ref=e85]: "%"
+    - generic [ref=e88]:
+      - text: Loading Data ...
+      - generic [ref=e89]: 0%

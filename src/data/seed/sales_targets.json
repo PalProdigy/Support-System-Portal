@@ -1,0 +1,23 @@
+[
+  {
+    "id": "target1",
+    "sales_executive_id": "u4",
+    "period_label": "Q1 2025",
+    "period_start": "2025-01-01T00:00:00Z",
+    "period_end": "2025-03-31T23:59:59Z",
+    "target_amount": 2000000,
+    "assigned_by": "u1",
+    "assigned_at": "2024-12-28T10:00:00Z",
+    "notes": "Focus on mid-market logistics and pharma accounts."
+  },
+  {
+    "id": "target2",
+    "sales_executive_id": "u5",
+    "period_label": "Q1 2025",
+    "period_start": "2025-01-01T00:00:00Z",
+    "period_end": "2025-03-31T23:59:59Z",
+    "target_amount": 1500000,
+    "assigned_by": "u1",
+    "assigned_at": "2024-12-28T10:00:00Z"
+  }
+]

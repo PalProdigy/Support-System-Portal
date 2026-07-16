@@ -7,14 +7,14 @@ import { useSession } from '@/lib/auth/context'
 import { EmptyState } from '@/components/shared/empty-state'
 import { StatusBadge } from '@/components/shared/status-badge'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { toast } from '@/hooks/use-toast'
 import { CreateClientDialog } from './create-client-dialog'
 import { useRouter } from 'next/navigation'
-import { Building2, PlusCircle, Search, Ticket, AlertTriangle, ChevronRight, Pencil } from 'lucide-react'
+import { Building2, PlusCircle, Ticket, AlertTriangle, ChevronRight, Pencil } from 'lucide-react'
 import { cn, formatDate, slaPercent } from '@/lib/utils'
 import type { Client, Case } from '@/types'
 
@@ -33,7 +33,7 @@ export function MyClients() {
   const router = useRouter()
   const scope = { userId: session.userId, role: session.role }
 
-  const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
   const [showCreate, setShowCreate] = useState(false)
   const [editingClient, setEditingClient] = useState<Client | null>(null)
   const [notes, setNotes] = useState('')
@@ -77,7 +77,7 @@ export function MyClients() {
   const rows: ClientRow[] = useMemo(() => {
     const allCases = casesPage?.items ?? []
     return (clients ?? [])
-      .filter((c) => !search || c.company_name.toLowerCase().includes(search.toLowerCase()))
+      .filter((c) => !query || c.company_name.toLowerCase().includes(query.toLowerCase()))
       .map((client) => {
         const cases = allCases.filter((c) => c.client_id === client.id)
         const openCases = cases.filter((c) => !['closed', 'resolved', 'pending_closure'].includes(c.status))
@@ -85,7 +85,7 @@ export function MyClients() {
         const breachedCount = openCases.filter((c) => slaPercent(c.created_at, c.sla_due_at) >= 100).length
         return { client, cases, openCount: openCases.length, criticalCount, breachedCount }
       })
-  }, [clients, casesPage, search])
+  }, [clients, casesPage, query])
 
   if (loadingClients) return (
     <div className="space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}</div>
@@ -95,17 +95,27 @@ export function MyClients() {
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex items-center gap-3">
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input className="pl-9 h-8 text-sm" placeholder="Search clients…" value={search} onChange={(e) => setSearch(e.target.value)} />
-        </div>
+        <SearchInput
+          containerClassName="flex-1 max-w-xs"
+          className="h-8 text-sm"
+          placeholder="Search clients…"
+          value={query}
+          onChange={setQuery}
+          aria-label="Search clients"
+          resultCount={rows.length}
+          resultLabel="client"
+        />
         <Button size="sm" onClick={() => setShowCreate(true)}>
           <PlusCircle className="h-4 w-4" /> New Client
         </Button>
       </div>
 
       {rows.length === 0 ? (
-        <EmptyState icon={Building2} title="No clients yet" description="Create your first client account to get started." action={{ label: 'Create Client Account', onClick: () => setShowCreate(true) }} />
+        query ? (
+          <EmptyState icon={Building2} title={`No results found for "${query}"`} description="Try a different search term." />
+        ) : (
+          <EmptyState icon={Building2} title="No clients yet" description="Create your first client account to get started." action={{ label: 'Create Client Account', onClick: () => setShowCreate(true) }} />
+        )
       ) : (
         <div className="space-y-3">
           {rows.map(({ client, cases, openCount, criticalCount, breachedCount }) => {

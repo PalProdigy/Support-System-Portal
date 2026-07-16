@@ -2,15 +2,16 @@
 // Switch via NEXT_PUBLIC_DATA_SOURCE='api'
 // Replace all TODOs with fetch() calls to your REST/GraphQL backend
 
-import type { DataProvider, ListScope, CaseFilters, Paginated } from '../provider'
+import type { DataProvider, ListScope, CaseFilters, KBArticleFilters, Paginated, SolutionArticleFilters, CreateSolutionArticleInput } from '../provider'
 import type {
   User, Client, Solution, ClientSolution, Team, Product, Role,
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
-  EngineerMetrics, UserNotificationPrefs, NotificationChannel,
+  EngineerMetrics, SalesExecutiveMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
-  ClientInfoReason, EngineerChangeRequest,
+  ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
+  SolutionArticle,
 } from '@/types'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api'
@@ -47,6 +48,14 @@ export class ApiDataProvider implements DataProvider {
   async addSolutionComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<Solution> { return http(`/solutions/${id}/comments`, { method: 'POST', body: JSON.stringify(input) }) }
   async deleteSolutionComment(id: string, commentId: string): Promise<Solution> { return http(`/solutions/${id}/comments/${commentId}`, { method: 'DELETE' }) }
   async toggleSolutionCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<Solution> { return http(`/solutions/${id}/comments/${commentId}/reaction`, { method: 'POST', body: JSON.stringify({ user_id: userId, reaction }) }) }
+
+  // Solution Articles — backend stores markdown only and owns slug uniqueness.
+  async listSolutionArticles(filters: SolutionArticleFilters = {}): Promise<SolutionArticle[]> { return http(`/solution-articles?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async getSolutionArticle(id: string): Promise<SolutionArticle | null> { return http(`/solution-articles/${id}`) }
+  async getSolutionArticleBySlug(slug: string): Promise<SolutionArticle | null> { return http(`/solution-articles/slug/${encodeURIComponent(slug)}`) }
+  async createSolutionArticle(input: CreateSolutionArticleInput): Promise<SolutionArticle> { return http('/solution-articles', { method: 'POST', body: JSON.stringify(input) }) }
+  async updateSolutionArticle(id: string, patch: Partial<SolutionArticle>): Promise<SolutionArticle> { return http(`/solution-articles/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
+  async deleteSolutionArticle(id: string): Promise<void> { return http(`/solution-articles/${id}`, { method: 'DELETE' }) }
 
   async listClientSolutions(clientId?: string): Promise<ClientSolution[]> { return http(`/client-solutions${clientId ? `?client_id=${clientId}` : ''}`) }
   async addClientSolution(clientId: string, solutionId: string): Promise<ClientSolution> { return http('/client-solutions', { method: 'POST', body: JSON.stringify({ client_id: clientId, solution_id: solutionId }) }) }
@@ -88,6 +97,14 @@ export class ApiDataProvider implements DataProvider {
   // and runs the time-based escalation to the Technical Head server-side (e.g. a scheduled job).
   async acceptCaseApproval(caseId: string, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/accept-approval`, { method: 'POST' }) }
 
+  // Case claim requests — backend enforces: SE-only create, TL/TH-only resolve;
+  // approving assigns the case to the requesting engineer, settles the routing
+  // approval, and auto-rejects competing pending claims.
+  async listClaimableCases(_scope: ListScope): Promise<Case[]> { return http('/cases/claimable') }
+  async listCaseClaimRequests(filters: { case_id?: string; engineer_id?: string; status?: CaseClaimRequest['status'] } = {}): Promise<CaseClaimRequest[]> { return http(`/case-claims?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async requestCaseClaim(caseId: string, _scope: ListScope): Promise<CaseClaimRequest> { return http(`/cases/${caseId}/claim`, { method: 'POST' }) }
+  async resolveCaseClaim(requestId: string, decision: 'approved' | 'rejected', _scope: ListScope): Promise<CaseClaimRequest> { return http(`/case-claims/${requestId}/resolve`, { method: 'POST', body: JSON.stringify({ decision }) }) }
+
   // Sub-cases — backend must enforce that only support_engineer/team_lead/technical_head can create.
   async listSubCases(parentCaseId: string, _scope: ListScope): Promise<Case[]> { return http(`/cases/${parentCaseId}/sub-cases`) }
   async createSubCase(parentCaseId: string, input: Partial<Case>, _scope: ListScope): Promise<Case> { return http(`/cases/${parentCaseId}/sub-cases`, { method: 'POST', body: JSON.stringify(input) }) }
@@ -106,14 +123,19 @@ export class ApiDataProvider implements DataProvider {
   async getRCA(caseId: string): Promise<RCA | null> { return http(`/cases/${caseId}/rca`) }
   async upsertRCA(input: Omit<RCA, 'id' | 'created_at'>): Promise<RCA> { return http(`/cases/${input.case_id}/rca`, { method: 'PUT', body: JSON.stringify(input) }) }
 
-  async listKBArticles(filters: { status?: string; search?: string } = {}, _scope?: ListScope): Promise<KBArticle[]> { return http(`/kb?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async listKBArticles(filters: KBArticleFilters = {}, _scope?: ListScope): Promise<KBArticle[]> { return http(`/kb?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
   async getKBArticle(id: string): Promise<KBArticle | null> { return http(`/kb/${id}`) }
   async createKBArticle(input: Omit<KBArticle, 'id' | 'created_at' | 'updated_at'>): Promise<KBArticle> { return http('/kb', { method: 'POST', body: JSON.stringify(input) }) }
-  async updateKBArticle(id: string, patch: Partial<KBArticle>): Promise<KBArticle> { return http(`/kb/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
+  async updateKBArticle(id: string, patch: Partial<KBArticle>, _actor?: ListScope): Promise<KBArticle> { return http(`/kb/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
   async deleteKBArticle(id: string): Promise<void> { return http(`/kb/${id}`, { method: 'DELETE' }) }
   async submitKBArticle(input: { title: string; body: string; tags: string[]; author_id: string; author_name?: string; author_role?: Role }): Promise<KBArticle> { return http('/kb/submit', { method: 'POST', body: JSON.stringify(input) }) }
+  async submitKBArticleForReview(id: string, _actor: ListScope): Promise<KBArticle> { return http(`/kb/${id}/submit`, { method: 'POST' }) }
+  async approveKBArticle(id: string, _actor: ListScope): Promise<KBArticle> { return http(`/kb/${id}/approve`, { method: 'POST' }) }
   async publishKBArticle(id: string, _actor: ListScope): Promise<KBArticle> { return http(`/kb/${id}/publish`, { method: 'POST' }) }
-  async rejectKBArticle(id: string, _actor: ListScope, reason?: string): Promise<KBArticle> { return http(`/kb/${id}/reject`, { method: 'POST', body: JSON.stringify({ reason }) }) }
+  async rejectKBArticle(id: string, _actor: ListScope, reason?: string): Promise<KBArticle> { return http(`/kb/${id}/request-changes`, { method: 'POST', body: JSON.stringify({ reason }) }) }
+  async archiveKBArticle(id: string, _actor: ListScope): Promise<KBArticle> { return http(`/kb/${id}/archive`, { method: 'POST' }) }
+  async restoreKBArticle(id: string, _actor: ListScope): Promise<KBArticle> { return http(`/kb/${id}/restore`, { method: 'POST' }) }
+  async restoreKBVersion(id: string, version: number, _actor: ListScope): Promise<KBArticle> { return http(`/kb/${id}/versions/${version}/restore`, { method: 'POST' }) }
   async addKBComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<KBArticle> { return http(`/kb/${id}/comments`, { method: 'POST', body: JSON.stringify(input) }) }
   async deleteKBComment(id: string, commentId: string): Promise<KBArticle> { return http(`/kb/${id}/comments/${commentId}`, { method: 'DELETE' }) }
   async toggleKBCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<KBArticle> { return http(`/kb/${id}/comments/${commentId}/reaction`, { method: 'POST', body: JSON.stringify({ user_id: userId, reaction }) }) }
@@ -140,6 +162,8 @@ export class ApiDataProvider implements DataProvider {
 
   async getEngineerMetrics(engineerId: string, _scope: ListScope): Promise<EngineerMetrics> { return http(`/engineers/${engineerId}/metrics`) }
   async listAllEngineerMetrics(_scope: ListScope): Promise<EngineerMetrics[]> { return http('/engineers/metrics') }
+
+  async getSalesExecutiveMetrics(salesExecutiveId: string, _scope: ListScope): Promise<SalesExecutiveMetrics> { return http(`/sales-executives/${salesExecutiveId}/metrics`) }
 
   async getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`) }
   async updateUserNotifPrefs(userId: string, channels: NotificationChannel[]): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`, { method: 'PUT', body: JSON.stringify({ channels }) }) }

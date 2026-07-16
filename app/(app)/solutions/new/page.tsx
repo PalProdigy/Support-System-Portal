@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useDeferredValue, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
@@ -8,12 +9,29 @@ import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ArrowLeft, CheckCircle2, XCircle, X } from 'lucide-react'
+import { MarkdownViewer } from '@/components/markdown/markdown-viewer'
+import { MarkdownGuide } from '@/components/markdown/markdown-guide'
+import { ArrowLeft, CheckCircle2, XCircle, X, Eye } from 'lucide-react'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { cn } from '@/lib/utils'
 import type { Solution } from '@/types'
+
+// MDXEditor is client-only — load it lazily so the page shell renders
+// immediately while the editor bundle streams in.
+const MarkdownEditor = dynamic(
+  () => import('@/components/markdown/markdown-editor'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="space-y-3 p-6">
+        <Skeleton className="h-9 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    ),
+  },
+)
 
 // Fallback Type options, unioned with whatever categories already exist in the data.
 const DEFAULT_TYPES = ['Integration', 'Data & Analytics', 'CRM', 'Operations', 'HR']
@@ -32,6 +50,16 @@ export default function NewSolutionPage() {
   const [saving, setSaving] = useState(false)
   const [readOnly, setReadOnly] = useState(false)
   const [savedId, setSavedId] = useState<string | null>(null)
+
+  // The preview trails typing by one idle frame so keystrokes stay snappy;
+  // MarkdownViewer is memoized on top of that.
+  const deferredDescription = useDeferredValue(form.description)
+  const deferredTitle = useDeferredValue(form.title)
+
+  // Stable callback so the editor (and its toolbar) never re-mounts on keystrokes.
+  const handleDescriptionChange = useCallback((md: string) => {
+    setForm((f) => ({ ...f, description: md }))
+  }, [])
 
   const { data: solutions } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
   const { data: currentUser } = useQuery({ queryKey: ['user', session.userId], queryFn: () => dp.getUser(session.userId) })
@@ -134,6 +162,10 @@ export default function NewSolutionPage() {
         </div>
       )}
 
+      {/* Desktop: the right column is pinned to the form card's exact height
+          (absolute inset in a stretched cell), so both cards share the same
+          bottom edge; the preview and the manual scroll inside themselves. */}
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-stretch">
       <div className="rounded-xl border bg-card p-6 space-y-4">
         {/* Title */}
         <div className="space-y-1.5">
@@ -164,15 +196,26 @@ export default function NewSolutionPage() {
 
         {/* Description */}
         <div className="space-y-1.5">
-          <Label htmlFor="desc">Description <span className="text-destructive">*</span></Label>
-          <Textarea
-            id="desc"
-            placeholder="Describe the solution..."
-            rows={5}
-            value={form.description}
-            readOnly={readOnly}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-          />
+          <Label>Description <span className="text-destructive">*</span></Label>
+          {readOnly ? (
+            <div className="rounded-lg border bg-muted/30 p-4">
+              {form.description.trim()
+                ? <MarkdownViewer content={form.description} />
+                : <p className="text-sm text-muted-foreground">No description.</p>}
+            </div>
+          ) : (
+            <div className="rounded-lg border overflow-hidden min-w-0">
+              <MarkdownEditor
+                markdown={form.description}
+                onChange={handleDescriptionChange}
+                placeholder="Describe the solution… Use the toolbar or markdown shortcuts: # heading, **bold**, `code`, - list"
+                className="nhq-editor-compact"
+              />
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Markdown is supported — the rendered result appears in the live preview panel.
+          </p>
           {showError('description') && <p className="text-xs text-destructive">{errors.description}</p>}
         </div>
 
@@ -192,6 +235,62 @@ export default function NewSolutionPage() {
           </Button>
 
         </div>
+      </div>
+
+      {/* ── Live preview + markdown manual ──────────────────────────────────── */}
+      <div className="min-w-0 lg:relative">
+      <div className="min-w-0 space-y-4 lg:absolute lg:inset-0 lg:flex lg:flex-col lg:gap-4 lg:space-y-0">
+      <div className="rounded-xl border bg-card min-w-0 lg:flex lg:flex-col lg:min-h-0 lg:shrink-0 lg:max-h-[55%]">
+        <div className="flex items-center justify-between border-b px-4 py-2.5">
+          <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <Eye className="h-3.5 w-3.5" /> Live preview
+          </span>
+          <span className="text-[11px] text-muted-foreground">rendered exactly as published</span>
+        </div>
+        <div className="p-5 sm:p-6 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+          {deferredTitle.trim() || form.type || deferredDescription.trim() ? (
+            <div className="space-y-4">
+              {(deferredTitle.trim() || form.type) && (
+                <div className="space-y-2">
+                  {deferredTitle.trim() && (
+                    <h2 className="text-2xl font-bold leading-tight tracking-tight break-words">
+                      {deferredTitle}
+                    </h2>
+                  )}
+                  {form.type && (
+                    <span className="inline-flex items-center rounded-full border bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                      {form.type}
+                    </span>
+                  )}
+                </div>
+              )}
+              {deferredDescription.trim() ? (
+                <MarkdownViewer content={deferredDescription} />
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Add a description to see it rendered here.
+                </p>
+              )}
+            </div>
+          ) : (
+            <p className="py-10 text-center text-sm text-muted-foreground">
+              Start typing on the left — your solution renders here in real time.
+            </p>
+          )}
+        </div>
+
+        {/* Author metadata — mirrors what gets saved with the solution */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t px-5 py-3 sm:px-6 text-xs text-muted-foreground lg:shrink-0">
+          <span>Author: <span className="font-medium text-foreground">{currentUser?.name ?? '—'}</span></span>
+          <span>Role: <span className="font-medium text-foreground">{ROLE_LABELS[session.role] ?? session.role}</span></span>
+          <span>Date: <span className="font-medium text-foreground">{new Date().toLocaleDateString()}</span></span>
+        </div>
+      </div>
+
+      {/* How-to manual: each notation with its rendered result */}
+      <MarkdownGuide />
+      </div>
+      </div>
       </div>
     </div>
   )

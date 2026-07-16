@@ -74,7 +74,14 @@ function CommentNode({
         }`}
       >
         <div className="flex items-center gap-2 mb-2 flex-wrap">
-          <UserAvatar name={author?.name ?? '?'} size="sm" />
+          <UserAvatar 
+            name={author?.name ?? '?'} 
+            avatarUrl={author?.avatar}
+            userId={author?.id}
+            size="sm" 
+            border={false}
+            shadow={false}
+          />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium leading-tight">{author?.name ?? 'Unknown'}</p>
             {author?.role && (

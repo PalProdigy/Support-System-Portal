@@ -8,17 +8,33 @@ import { useSession } from '@/lib/auth/context'
 import { CaseCard } from '@/components/shared/case-card'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
+import { StatCard } from '@/components/shared/stat-card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { PlusCircle, Search, Ticket, RotateCcw } from 'lucide-react'
+import { PlusCircle, Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert, CheckCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { Case, Client, User } from '@/types'
 import { STATUS_LABELS, PRIORITY_LABELS, slaRemainingMs, slaPercent } from '@/lib/utils'
 import type { CaseStatus, Priority } from '@/types'
 
 export default function CasesPage() {
+  const session = useSession()
+  const router = useRouter()
+
+  // Support engineers get a single, merged case workspace at /my-case
+  // ("My Cases") instead of this general Cases list.
+  useEffect(() => {
+    if (session.role === 'support_engineer') router.replace('/my-case')
+  }, [session.role, router])
+
+  if (session.role === 'support_engineer') return null
+
+  return <CasesPageContent />
+}
+
+function CasesPageContent() {
   const session = useSession()
   const dp = getDataProvider()
   const router = useRouter()
@@ -40,7 +56,7 @@ export default function CasesPage() {
     setPage(1)
   }, [searchParams])
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ['cases', scope, search, status, priority, page],
     queryFn: () =>
       dp.listCases(scope, {
@@ -63,8 +79,25 @@ export default function CasesPage() {
     queryFn: () => dp.listUsers(),
   })
 
+  // Unfiltered snapshot of every case in scope, used for the overview cards
+  // above — independent of the current search/filter/pagination state.
+  const { data: statsData, isLoading: statsLoading } = useQuery({
+    queryKey: ['cases', 'stats', scope],
+    queryFn: () => dp.listCases(scope, { pageSize: 1000, top_level_only: true }),
+  })
+
   const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
   const usersMap = Object.fromEntries((users ?? []).map((u: User) => [u.id, u]))
+
+  const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
+  const DONE_STATUSES = new Set(['resolved', 'pending_closure', 'closed'])
+  const allCases = statsData?.items ?? []
+  const totalCount = statsData?.total ?? 0
+  const activeCount = allCases.filter((c) => ACTIVE_STATUSES.has(c.status)).length
+  const resolvedCount = allCases.filter((c) => DONE_STATUSES.has(c.status)).length
+  const escalatedCount = allCases.filter((c) => c.is_escalated || c.status === 'escalated').length
+  const reopenedCount = allCases.filter((c) => !!c.reopened_from_case_id).length
+  const slaBreachedCount = allCases.filter((c) => slaRemainingMs(c.sla_due_at) <= 0).length
 
   let cases = data?.items ?? []
   const total = data?.total ?? 0
@@ -82,7 +115,6 @@ export default function CasesPage() {
 
   const totalPages = Math.ceil(total / 15)
 
-  const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
   const showGrouped = status === 'all' && !search && slaFilter === 'all'
   const activeCases = cases.filter(c => ACTIVE_STATUSES.has(c.status))
   const previousCases = cases.filter(c => !ACTIVE_STATUSES.has(c.status))
@@ -93,6 +125,9 @@ export default function CasesPage() {
 
   const canCreate = ['client', 'technical_head'].includes(session.role)
   const hasFilters = search || status !== 'all' || priority !== 'all' || slaFilter !== 'all'
+  // Resolved-count card: a team lead's cases are already scoped to their own team,
+  // and a technical head's cases are unscoped (everyone) — both sums are unfiltered totals.
+  const showResolvedCard = ['team_lead', 'technical_head'].includes(session.role)
 
   return (
     <div className="p-6 space-y-4">
@@ -102,32 +137,42 @@ export default function CasesPage() {
           <h1 className="text-2xl font-bold">Cases</h1>
           <p className="text-sm text-muted-foreground">
             {session.role === 'team_lead' && 'Your team · '}
-            {session.role === 'support_engineer' && 'Assigned to you · '}
             {session.role === 'technical_head' && 'All cases · '}
             {session.role === 'client' && 'Your cases · '}
             {session.role === 'sales_executive' && "Your clients' cases · "}
             {total} total
           </p>
         </div>
-        {canCreate && (
-          <Button onClick={() => router.push('/cases/new')}>
-            <PlusCircle className="h-4 w-4" />
-            New Case
-          </Button>
+
+      </div>
+
+      {/* Overview */}
+      <div className={`grid grid-cols-2 sm:grid-cols-3 gap-4 ${showResolvedCard ? 'lg:grid-cols-6' : 'lg:grid-cols-5'}`}>
+        <StatCard title="Total Cases" value={totalCount} icon={Ticket} loading={statsLoading} />
+        {showResolvedCard && (
+          <StatCard title="Total Resolved" value={resolvedCount} icon={CheckCircle} iconColor="text-emerald-500" loading={statsLoading} />
         )}
+        <StatCard title="Active Cases" value={activeCount} icon={Activity} iconColor="text-sky-500" loading={statsLoading} />
+        <StatCard title="Escalated" value={escalatedCount} icon={AlertTriangle} iconColor="text-red-500" loading={statsLoading} />
+        <StatCard title="Reopened" value={reopenedCount} icon={RotateCcw} iconColor="text-amber-500" loading={statsLoading} />
+        <StatCard title="SLA Breached" value={slaBreachedCount} icon={ShieldAlert} iconColor={slaBreachedCount > 0 ? 'text-red-500' : 'text-emerald-500'} loading={statsLoading} />
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search by title or reference..."
-            className="pl-9"
-            value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-          />
-        </div>
+        <SearchInput
+          containerClassName="flex-1 min-w-48"
+          className="h-9"
+          placeholder="Search by title or reference..."
+          value={search}
+          onChange={(v) => { setSearch(v); setPage(1) }}
+          debounceMs={350}
+          minChars={2}
+          loading={isFetching}
+          aria-label="Search cases"
+          resultCount={total}
+          resultLabel="case"
+        />
         <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Status" />
@@ -176,7 +221,7 @@ export default function CasesPage() {
       ) : cases.length === 0 ? (
         <EmptyState
           icon={Ticket}
-          title="No cases found"
+          title={search ? `No results found for "${search}"` : 'No cases found'}
           description={hasFilters ? 'Try adjusting your filters.' : 'No cases yet.'}
         />
       ) : showGrouped ? (

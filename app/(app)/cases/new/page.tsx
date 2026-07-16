@@ -71,6 +71,7 @@ function NewCaseForm() {
   const { data: clients } = useQuery({ queryKey: ['clients', session.userId], queryFn: () => dp.listClients(scope) })
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
   const { data: slaRules } = useQuery({ queryKey: ['sla-rules'], queryFn: () => dp.listSLARules() })
+  const { data: solutions } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
 
   const { data: kbArticles } = useQuery({
     queryKey: ['kb-suggest-new', kbQuery],
@@ -289,13 +290,17 @@ function NewCaseForm() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="solution">Solution <span className="text-destructive">*</span></Label>
-            <Input
-              id="solution"
-              placeholder="Solution / service name"
-              value={form.solution_id}
-              onChange={(e) => setForm({ ...form, solution_id: e.target.value })}
-            />
+            <Label>Solution <span className="text-destructive">*</span></Label>
+            {/* A real solution id (not free text) — service-based routing matches
+                it against each team's solution_ids to pick the approving lead. */}
+            <Select value={form.solution_id} onValueChange={(v) => setForm({ ...form, solution_id: v })}>
+              <SelectTrigger aria-label="Solution"><SelectValue placeholder="Select the solution / service" /></SelectTrigger>
+              <SelectContent>
+                {(solutions ?? []).filter((s) => s.is_active).map((s) => (
+                  <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {session.role !== 'client' && (

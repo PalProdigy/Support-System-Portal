@@ -4,16 +4,16 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Package, Search } from 'lucide-react'
+import { Package } from 'lucide-react'
 import type { Product } from '@/types'
 
 export function ProductCatalog() {
   const dp = getDataProvider()
-  const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
   const [viewing, setViewing] = useState<Product | null>(null)
 
   const { data: products, isLoading } = useQuery({
@@ -23,8 +23,8 @@ export function ProductCatalog() {
 
   const filtered = (products ?? []).filter((p) => {
     if (!p.is_active) return false
-    if (!search) return true
-    const q = search.toLowerCase()
+    if (!query) return true
+    const q = query.toLowerCase()
     return p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || (p.category ?? '').toLowerCase().includes(q)
   })
 
@@ -39,28 +39,29 @@ export function ProductCatalog() {
   return (
     <>
       <div className="space-y-4">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            className="pl-9"
+        <div className="max-w-lg">
+          <SearchInput
             placeholder="Search products…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={query}
+            onChange={setQuery}
+            aria-label="Search products"
+            resultCount={filtered.length}
+            resultLabel="product"
           />
         </div>
 
         {filtered.length === 0 ? (
-          <EmptyState icon={Package} title="No products found" description="Try a different search term." />
+          <EmptyState icon={Package} title={query ? `No results found for "${query}"` : 'No products found'} description="Try a different search term." />
         ) : (
           <div className="space-y-6">
-            {(search ? [undefined] : categories).map((cat) => {
+            {(query ? [undefined] : categories).map((cat) => {
               const items = cat === undefined
                 ? filtered
                 : filtered.filter((p) => p.category === cat)
               if (items.length === 0) return null
               return (
                 <div key={cat ?? 'all'} className="space-y-3">
-                  {cat && !search && (
+                  {cat && !query && (
                     <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{cat}</h3>
                   )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

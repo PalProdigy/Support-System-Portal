@@ -35,6 +35,45 @@ export type AuditAction = 'create' | 'update' | 'delete' | 'status_change' | 'as
 // Skill/certification tier for support engineers (L1 = junior … L5 = expert).
 export type CertificationLevel = 'L1' | 'L2' | 'L3' | 'L4' | 'L5'
 
+// One entry in a user's educational background (e.g. BSc, HSC, SSC).
+export interface EducationEntry {
+  id: string
+  degree: string        // e.g. "BSc in Computer Science"
+  institution: string   // e.g. "University of Dhaka"
+  year?: string         // graduation year, e.g. "2018"
+  gpa?: string          // CGPA/GPA, e.g. "3.85 / 4.00"
+}
+
+// An uploaded certification document (PDF/DOC) with editable metadata.
+export interface CertificationDoc {
+  id: string
+  title: string
+  description?: string
+  file_name?: string
+  file_type?: string
+  file_url?: string     // base64 data URL so it persists and stays downloadable
+  size?: number
+}
+
+export type AchievementType =
+  | 'employee_of_month'
+  | 'best_sla'
+  | 'fastest_resolution'
+  | 'top_rating'
+  | 'internal_award'
+
+// An award/recognition earned by the engineer (display-only, not self-editable).
+export interface Achievement {
+  id: string
+  type: AchievementType
+  title: string
+  description?: string
+  date?: string
+}
+
+// Which broad department a staff member belongs to.
+export type Department = 'technical' | 'sales'
+
 export interface User {
   id: string
   name: string
@@ -44,9 +83,23 @@ export interface User {
   is_active: boolean
   avatar?: string
   created_at: string
-  // Support-engineer profile fields (optional; other roles leave these unset).
+  // Staff seniority profile fields — shown on the engineer and AM dashboards'
+  // Certification card (optional; client/lead/TH roles leave these unset).
   years_of_experience?: number
   certification_level?: CertificationLevel
+  // ── Extended profile (editable by the engineer) ──────────────────────────
+  about?: string
+  contact_numbers?: string[]
+  languages?: string[]
+  technical_skills?: string[]
+  expertise?: string[]
+  education?: EducationEntry[]
+  certifications?: CertificationDoc[]
+  // ── Extended profile (org-managed, display-only) ─────────────────────────
+  designation?: string
+  department?: Department
+  employee_id?: string
+  achievements?: Achievement[]
 }
 
 export interface Client {
@@ -136,6 +189,7 @@ export interface Product {
   category: string
   is_active: boolean
   created_at: string
+  image_urls?: string[]   // base64 data URLs uploaded from the Add/Edit Product form (max 5)
 }
 
 export interface SLARule {
@@ -245,24 +299,94 @@ export interface RCA {
   created_at: string
 }
 
+// ── Knowledge Base ────────────────────────────────────────────────────────────
+// Article lifecycle: draft → in_review → (changes_requested → draft →) approved
+// → published → archived. Legacy values 'pending'/'rejected' are migrated to
+// 'in_review'/'changes_requested' by the data layer on read.
+export type KBArticleStatus =
+  | 'draft'
+  | 'in_review'
+  | 'changes_requested'
+  | 'approved'
+  | 'published'
+  | 'archived'
+
+// One workflow transition — every status change is tracked.
+export interface KBStatusEvent {
+  from: KBArticleStatus | null
+  to: KBArticleStatus
+  by: string
+  by_name?: string
+  at: string
+  note?: string          // e.g. the reviewer's "changes requested" note
+}
+
+// Full content snapshot taken BEFORE an edit is applied; enables compare/restore.
+export interface KBArticleVersion {
+  version: number
+  title: string
+  description?: string
+  body: string           // markdown only — HTML is never stored
+  category?: string
+  subcategory?: string
+  tags: string[]
+  saved_at: string
+  saved_by: string
+  saved_by_name?: string
+}
+
 export interface KBArticle {
   id: string
+  slug?: string          // unique, SEO-friendly; server owns uniqueness
   title: string
-  body: string
+  description?: string   // short summary shown on cards / search / meta description
+  body: string           // markdown source — the single source of truth
+  category?: string
+  subcategory?: string
   solution_id?: string
   product_id?: string
   tags: string[]
-  status: 'draft' | 'pending' | 'published' | 'rejected' | 'archived'
+  status: KBArticleStatus
+  version?: number                  // current version number (starts at 1)
+  versions?: KBArticleVersion[]     // previous snapshots, oldest → newest
+  status_history?: KBStatusEvent[]
   author_id: string
   author_name?: string
   author_role?: Role
+  reviewer_id?: string   // last TL/TH who acted on the review
+  reviewer_name?: string
   published_at?: string
-  published_by?: string        // user id of the Technical Head who approved
+  published_by?: string        // user id of the reviewer who published
   rejected_by?: string
-  rejection_reason?: string
+  rejection_reason?: string    // the active "changes requested" note
   created_at: string
   updated_at: string
   comments?: ThreadComment[]
+}
+
+// ── Solution Articles (in-house Knowledge Base) ──────────────────────────────
+// Long-form markdown articles authored in the portal (Hashnode-like writing
+// experience, our own storage). The database stores ONLY markdown — rendered
+// HTML is never persisted; the viewer renders `content` dynamically.
+export type SolutionArticleStatus = 'draft' | 'published'
+
+export interface SolutionArticle {
+  id: string
+  title: string
+  slug: string                 // unique, URL-safe; server owns uniqueness
+  description: string          // short summary shown on cards / meta
+  content: string              // Markdown source (GFM) — the single source of truth
+  category?: string
+  tags: string[]
+  cover_image_url?: string
+  status: SolutionArticleStatus // always 'published' today; enables drafts later
+  created_by: string           // user id
+  created_by_name?: string
+  created_by_role?: Role
+  updated_by?: string
+  updated_by_name?: string
+  created_at: string
+  updated_at: string
 }
 
 export interface Feedback {
@@ -313,6 +437,23 @@ export interface EngineerMetrics {
   satisfaction_score: number | null // avg of feedback ratings (1–5)
   open_cases: number
   total_feedback_count: number
+  points: number // earned by resolving cases, weighted by priority
+}
+
+// Phase Final — Sales Executive performance (computed, not persisted, except
+// `target` which mirrors the currently assigned SalesTarget row).
+export interface SalesExecutiveMetrics {
+  sales_executive_id: string
+  target: SalesTarget | null
+  achieved_amount: number          // sum of estimated_value across closed_won prospects
+  achievement_pct: number | null   // achieved_amount / target.target_amount * 100
+  pipeline_value: number           // sum of estimated_value across open (non-closed) prospects
+  active_prospects: number
+  deals_won: number
+  deals_lost: number
+  win_rate_pct: number | null      // deals_won / (deals_won + deals_lost) * 100
+  active_clients: number           // clients with assigned_am === sales_executive_id
+  last_deal: { company_name: string; value: number; closed_at: string } | null
 }
 
 // Phase Final — Per-user notification channel preferences
@@ -346,6 +487,21 @@ export interface Prospect {
   converted_client_id?: string
 }
 
+// A revenue quota assigned to a Sales Executive for a period (set by the
+// Technical Head). Achievement against it is computed, not stored here —
+// see SalesExecutiveMetrics.
+export interface SalesTarget {
+  id: string
+  sales_executive_id: string
+  period_label: string   // e.g. "Q1 2025"
+  period_start: string
+  period_end: string
+  target_amount: number
+  assigned_by: string     // technical_head user id
+  assigned_at: string
+  notes?: string
+}
+
 // A client-raised request to change the engineer assigned to their case.
 // Creating one does NOT change case status — the case stays In Progress and a
 // warning badge is shown until a Team Lead / Technical Head approves or rejects.
@@ -359,6 +515,21 @@ export interface EngineerChangeRequest {
   resolved_by?: string            // TL/TH who approved or rejected
   new_engineer_id?: string        // set when approved
   created_at: string
+  resolved_at?: string
+}
+
+// A support engineer's request to grab (self-assign) a newly routed case.
+// Creating one does NOT assign the case — the TL/TH sees the requesting
+// engineer's name on the case card with Accept/Reject; approving assigns the
+// case to that engineer and auto-rejects competing claims for the same case.
+export interface CaseClaimRequest {
+  id: string
+  case_id: string
+  engineer_id: string
+  engineer_name?: string          // denormalized for card display
+  status: 'pending' | 'approved' | 'rejected'
+  created_at: string
+  resolved_by?: string            // TL/TH who decided
   resolved_at?: string
 }
 

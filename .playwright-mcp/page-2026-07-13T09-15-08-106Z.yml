@@ -1,0 +1,9 @@
+- generic [active] [ref=f5e1]:
+  - generic [ref=f5e9]:
+    - text: Loading Data ...
+    - generic [ref=f5e10]: 0%
+  - region "Notifications (F8)":
+    - list
+  - generic [ref=f5e18]:
+    - text: Loading Data ...
+    - generic [ref=f5e19]: 0%

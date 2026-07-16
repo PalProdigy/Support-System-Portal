@@ -1,0 +1,294 @@
+- generic [active] [ref=f5e1]:
+  - generic [ref=f5e34]:
+    - complementary [ref=f5e36]:
+      - link [ref=f5e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f5e39]:
+          - generic [ref=f5e40]: NH
+          - generic [ref=f5e41]: DISTRIBUTIONS
+      - navigation [ref=f5e49]:
+        - link "Dashboard" [ref=f5e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f5e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f5e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f5e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f5e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f5e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f5e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f5e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f5e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f5e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f5e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f5e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f5e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f5e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f5e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f5e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f5e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f5e133]:
+        - generic [ref=f5e134]:
+          - generic "Arif Rahman" [ref=f5e135]:
+            - generic "Arif Rahman avatar" [ref=f5e137]: AR
+          - generic [ref=f5e138]:
+            - paragraph [ref=f5e139]: Arif Rahman
+            - paragraph [ref=f5e140]: Technical Head
+        - button "Collapse sidebar" [ref=f5e141]
+    - generic [ref=f5e144]:
+      - banner [ref=f5e146]:
+        - generic [ref=f5e147]:
+          - button "Toggle theme" [ref=f5e148] [cursor=pointer]
+          - button "Notifications" [ref=f5e149] [cursor=pointer]:
+            - generic [ref=f5e150]: 9+
+          - button "Arif Rahman avatar" [ref=f5e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f5e152]:
+              - generic "Arif Rahman avatar" [ref=f5e154]: AR
+      - main [ref=f5e155]:
+        - generic [ref=f5e156]:
+          - button "Back" [ref=f5e157] [cursor=pointer]
+          - generic [ref=f5e158]:
+            - generic [ref=f5e159]:
+              - generic [ref=f5e160]: NHQ-2024-0001
+              - generic [ref=f5e161]: Escalated L1
+            - 'heading "ERP sync failing for Acme warehouse #3" [level=1] [ref=f5e164]'
+            - generic [ref=f5e165]:
+              - generic [ref=f5e166]: Critical
+              - generic [ref=f5e168]: In Progress
+              - generic [ref=f5e169]: Overdue
+            - paragraph [ref=f5e173]: "Inventory sync between the ERP and WMS for warehouse #3 has been failing since yesterday afternoon. Stock counts are diverging and orders are being incorrectly allocated."
+            - paragraph [ref=f5e174]: Created 22 Jun 2024, 13:00
+            - generic [ref=f5e175]:
+              - heading "Attachments" [level=3] [ref=f5e176]
+              - paragraph [ref=f5e178]: No attachments yet.
+              - generic [ref=f5e179] [cursor=pointer]:
+                - paragraph [ref=f5e183]: Click to upload or drag and drop
+                - paragraph [ref=f5e184]: Images, PDF, documents, archives · up to 10.0 MB
+                - button "Choose File" [ref=f5e185]
+          - generic [ref=f5e186]:
+            - generic [ref=f5e187]:
+              - generic [ref=f5e188]:
+                - tablist [ref=f5e189]:
+                  - tab "Progress" [ref=f5e190]
+                  - tab "Comments (11)" [selected] [ref=f5e191]
+                  - tab "Actions" [ref=f5e192]
+                - tabpanel "Comments (11)" [ref=f5e193]:
+                  - generic [ref=f5e194]:
+                    - generic [ref=f5e196]:
+                      - generic [ref=f5e197]:
+                        - generic "Rafi Uddin" [ref=f5e198]:
+                          - generic "Rafi Uddin avatar" [ref=f5e200]: RU
+                        - generic [ref=f5e201]:
+                          - paragraph [ref=f5e202]: Rafi Uddin
+                          - paragraph [ref=f5e203]: Support Engineer
+                        - generic [ref=f5e204]: Internal
+                        - generic [ref=f5e208]: 22 Jun 2024, 13:30
+                      - paragraph [ref=f5e209]: Investigated the sync adapter logs. Found 403 errors from the WMS API starting at 14:32 yesterday. The service account password was rotated by the client's IT team without notifying us.
+                      - button "Reply" [ref=f5e211] [cursor=pointer]
+                    - generic [ref=f5e213]:
+                      - generic [ref=f5e214]:
+                        - generic "Rafi Uddin" [ref=f5e215]:
+                          - generic "Rafi Uddin avatar" [ref=f5e217]: RU
+                        - generic [ref=f5e218]:
+                          - paragraph [ref=f5e219]: Rafi Uddin
+                          - paragraph [ref=f5e220]: Support Engineer
+                        - generic [ref=f5e221]: 22 Jun 2024, 13:45
+                      - paragraph [ref=f5e222]: We have identified the root cause of the sync failure. Your IT team rotated the WMS API credentials yesterday afternoon which caused the integration to lose access. Could you please share the new credentials so we can update the connector?
+                      - button "Reply" [ref=f5e224] [cursor=pointer]
+                    - generic [ref=f5e226]:
+                      - generic [ref=f5e227]:
+                        - generic "Priya Sharma" [ref=f5e228]:
+                          - generic "Priya Sharma avatar" [ref=f5e230]: PS
+                        - generic [ref=f5e231]:
+                          - paragraph [ref=f5e232]: Priya Sharma
+                          - paragraph [ref=f5e233]: Client
+                        - generic [ref=f5e234]: Client
+                        - generic [ref=f5e235]: 22 Jun 2024, 14:15
+                      - paragraph [ref=f5e236]: Yes, our IT team confirmed the rotation. I'll get the new credentials to you within the hour.
+                      - button "Reply" [ref=f5e238] [cursor=pointer]
+                    - generic [ref=f5e240]:
+                      - generic [ref=f5e241]:
+                        - generic "Priya Sharma" [ref=f5e242]:
+                          - generic "Priya Sharma avatar" [ref=f5e244]: PS
+                        - generic [ref=f5e245]:
+                          - paragraph [ref=f5e246]: Priya Sharma
+                          - paragraph [ref=f5e247]: Client
+                        - generic [ref=f5e248]: Client
+                        - generic [ref=f5e249]: 22 Jun 2024, 15:10
+                      - paragraph [ref=f5e250]: Hi, it has been almost an hour. Could you give us a status update? Our warehouse operations are completely halted and we are losing orders.
+                      - button "Reply" [ref=f5e252] [cursor=pointer]
+                    - generic [ref=f5e254]:
+                      - generic [ref=f5e255]:
+                        - generic "Rafi Uddin" [ref=f5e256]:
+                          - generic "Rafi Uddin avatar" [ref=f5e258]: RU
+                        - generic [ref=f5e259]:
+                          - paragraph [ref=f5e260]: Rafi Uddin
+                          - paragraph [ref=f5e261]: Support Engineer
+                        - generic [ref=f5e262]: 22 Jun 2024, 15:18
+                      - paragraph [ref=f5e263]: Priya, we are actively working on this. The credential update is in progress — we are testing the new connector config in staging before applying it to production to avoid any data corruption. Estimated 20 minutes.
+                      - button "Reply" [ref=f5e265] [cursor=pointer]
+                    - generic [ref=f5e267]:
+                      - generic [ref=f5e268]:
+                        - generic "Sadia Islam" [ref=f5e269]:
+                          - generic "Sadia Islam avatar" [ref=f5e271]: SI
+                        - generic [ref=f5e272]:
+                          - paragraph [ref=f5e273]: Sadia Islam
+                          - paragraph [ref=f5e274]: Team Lead
+                        - generic [ref=f5e275]: Internal
+                        - generic [ref=f5e279]: 22 Jun 2024, 15:22
+                      - paragraph [ref=f5e280]: Rafi — escalation level raised to L1. Loop in Arif if the staging test fails. Do not push to production without a rollback snapshot. Client SLA breached at 10:00, so move fast.
+                      - button "Reply" [ref=f5e282] [cursor=pointer]
+                    - generic [ref=f5e284]:
+                      - generic [ref=f5e285]:
+                        - generic "Rafi Uddin" [ref=f5e286]:
+                          - generic "Rafi Uddin avatar" [ref=f5e288]: RU
+                        - generic [ref=f5e289]:
+                          - paragraph [ref=f5e290]: Rafi Uddin
+                          - paragraph [ref=f5e291]: Support Engineer
+                        - generic [ref=f5e292]: Internal
+                        - generic [ref=f5e296]: 22 Jun 2024, 15:38
+                      - paragraph [ref=f5e297]: Staging test passed. Applying the updated credentials to the production connector now. Will confirm sync status in 5 minutes.
+                      - button "Reply" [ref=f5e299] [cursor=pointer]
+                    - generic [ref=f5e301]:
+                      - generic [ref=f5e302]:
+                        - generic "Rafi Uddin" [ref=f5e303]:
+                          - generic "Rafi Uddin avatar" [ref=f5e305]: RU
+                        - generic [ref=f5e306]:
+                          - paragraph [ref=f5e307]: Rafi Uddin
+                          - paragraph [ref=f5e308]: Support Engineer
+                        - generic [ref=f5e309]: 22 Jun 2024, 15:45
+                      - paragraph [ref=f5e310]: "Good news — the WMS sync has resumed successfully. Warehouse #3 is now syncing in real time. Stock counts will reconcile over the next 10–15 minutes as the backlog processes. Please monitor and let us know if any orders still show incorrect allocations."
+                      - button "Reply" [ref=f5e312] [cursor=pointer]
+                    - generic [ref=f5e314]:
+                      - generic [ref=f5e315]:
+                        - generic "Sadia Islam" [ref=f5e316]:
+                          - generic "Sadia Islam avatar" [ref=f5e318]: SI
+                        - generic [ref=f5e319]:
+                          - paragraph [ref=f5e320]: Sadia Islam
+                          - paragraph [ref=f5e321]: Team Lead
+                        - generic [ref=f5e322]: Internal
+                        - generic [ref=f5e326]: 22 Jun 2024, 15:50
+                      - paragraph [ref=f5e327]: Good work Rafi. Mark for post-incident review — we need a process with the client to notify us before credential rotations. Prepare a brief RCA.
+                      - button "Reply" [ref=f5e329] [cursor=pointer]
+                    - generic [ref=f5e331]:
+                      - generic [ref=f5e332]:
+                        - generic "Priya Sharma" [ref=f5e333]:
+                          - generic "Priya Sharma avatar" [ref=f5e335]: PS
+                        - generic [ref=f5e336]:
+                          - paragraph [ref=f5e337]: Priya Sharma
+                          - paragraph [ref=f5e338]: Client
+                        - generic [ref=f5e339]: Client
+                        - generic [ref=f5e340]: 22 Jun 2024, 16:05
+                      - paragraph [ref=f5e341]: Confirmed — sync is working and the allocation figures are correcting themselves. Thank you for the fast resolution. We would appreciate if you could send a short incident report.
+                      - button "Reply" [ref=f5e343] [cursor=pointer]
+                    - generic [ref=f5e345]:
+                      - generic [ref=f5e346]:
+                        - generic "Rafi Uddin" [ref=f5e347]:
+                          - generic "Rafi Uddin avatar" [ref=f5e349]: RU
+                        - generic [ref=f5e350]:
+                          - paragraph [ref=f5e351]: Rafi Uddin
+                          - paragraph [ref=f5e352]: Support Engineer
+                        - generic [ref=f5e353]: 22 Jun 2024, 16:12
+                      - paragraph [ref=f5e354]: Absolutely, Priya. We will share a full incident report by end of day. We will also reach out to schedule a short call to set up a credential-change notification process to prevent this from happening again.
+                      - button "Reply" [ref=f5e356] [cursor=pointer]
+                  - generic [ref=f5e357]:
+                    - textbox "Write a comment..." [ref=f5e358]
+                    - generic [ref=f5e359]:
+                      - generic [ref=f5e360]:
+                        - switch "Internal note" [ref=f5e361] [cursor=pointer]
+                        - generic [ref=f5e362] [cursor=pointer]: Internal note
+                      - button "Post" [disabled]
+              - generic [ref=f5e363]:
+                - generic [ref=f5e364]:
+                  - heading "Sub Tasks" [level=3] [ref=f5e365]
+                  - button "Add Sub Task" [ref=f5e370] [cursor=pointer]
+                - generic [ref=f5e371]:
+                  - heading "No sub tasks" [level=3] [ref=f5e377]
+                  - paragraph [ref=f5e378]: Break this case into smaller work items with “Add Sub Task”.
+            - generic [ref=f5e379]:
+              - generic [ref=f5e380]:
+                - heading "Client" [level=3] [ref=f5e381]
+                - paragraph [ref=f5e382]: Acme Corporation Ltd.
+                - paragraph [ref=f5e383]: Priya Sharma
+                - paragraph [ref=f5e384]: "+8801711000001"
+              - generic [ref=f5e385]:
+                - heading "Solution" [level=3] [ref=f5e386]
+                - paragraph [ref=f5e387]: ERP Integration Suite
+                - paragraph [ref=f5e388]: Integration
+              - generic [ref=f5e389]:
+                - heading "Assigned" [level=3] [ref=f5e390]
+                - generic [ref=f5e395]:
+                  - paragraph [ref=f5e396]: Team
+                  - paragraph [ref=f5e397]: Alpha Support Team
+                - generic [ref=f5e398]:
+                  - paragraph [ref=f5e399]: Team Lead
+                  - generic [ref=f5e400]:
+                    - generic "Sadia Islam" [ref=f5e401]:
+                      - generic "Sadia Islam avatar" [ref=f5e403]: SI
+                    - generic [ref=f5e404]:
+                      - paragraph [ref=f5e405]: Sadia Islam
+                      - paragraph [ref=f5e406]: Team Lead
+                - generic [ref=f5e407]:
+                  - paragraph [ref=f5e408]: Support Engineer (1)
+                  - generic [ref=f5e410]:
+                    - generic "Rafi Uddin" [ref=f5e411]:
+                      - generic "Rafi Uddin avatar" [ref=f5e413]: RU
+                    - generic:
+                      - paragraph: Rafi Uddin
+                      - paragraph: Support Engineer
+                    - generic [ref=f5e414]: Primary
+                  - generic [ref=f5e416]:
+                    - paragraph [ref=f5e417]: Set primary
+                    - combobox [ref=f5e418]:
+                      - generic: Rafi Uddin
+                    - paragraph [ref=f5e421]: Add co-assignee
+                    - combobox [ref=f5e422]:
+                      - generic: Add engineer...
+              - generic [ref=f5e425]:
+                - heading "Client Feedback" [level=3] [ref=f5e426]
+                - generic [ref=f5e428]:
+                  - generic [ref=f5e429]: 5 / 5
+                  - paragraph [ref=f5e441]: Excellent
+                - blockquote [ref=f5e442]:
+                  - generic [ref=f5e443]: “The ERP sync issue for our warehouse was handled really well. The engineer kept us updated throughout and got the inventory counts back in line by end of day. Great work.”
+                - generic [ref=f5e444]:
+                  - generic [ref=f5e445]:
+                    - paragraph [ref=f5e446]: Acme Corporation Ltd.
+                    - paragraph [ref=f5e447]: 12 Jun 2024, 20:30
+                  - generic [ref=f5e448]: Reviewed
+              - generic [ref=f5e452]:
+                - heading "Timeline" [level=3] [ref=f5e453]
+                - generic [ref=f5e454]:
+                  - generic [ref=f5e455]:
+                    - generic [ref=f5e456]: Duration
+                    - paragraph [ref=f5e459]: 751d 22h
+                  - generic [ref=f5e460]:
+                    - generic [ref=f5e461]: Days Open
+                    - paragraph [ref=f5e463]: 752 days
+                - generic [ref=f5e464]:
+                  - generic [ref=f5e465]:
+                    - generic [ref=f5e466]: Created
+                    - generic [ref=f5e470]: 22 Jun 2024, 13:00
+                  - generic [ref=f5e471]:
+                    - generic [ref=f5e472]: SLA Due
+                    - generic [ref=f5e475]:
+                      - paragraph [ref=f5e476]: 22 Jun 2024, 16:00
+                      - paragraph [ref=f5e477]: Breached
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f5e483] [cursor=pointer]
+  - alert [ref=f5e487]

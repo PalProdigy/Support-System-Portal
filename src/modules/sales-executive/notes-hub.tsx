@@ -7,8 +7,8 @@ import { useSession } from '@/lib/auth/context'
 import { PreSalesNotesPanel } from './pre-sales-notes'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { MessageSquare, Search } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import { MessageSquare } from 'lucide-react'
+import { SearchInput } from '@/components/ui/search-input'
 import type { Client } from '@/types'
 
 export function NotesHub() {
@@ -17,7 +17,7 @@ export function NotesHub() {
   const scope = { userId: session.userId, role: session.role }
 
   const [selectedClientId, setSelectedClientId] = useState<string>('')
-  const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
 
   const { data: clients = [] } = useQuery({
     queryKey: ['clients', session.userId],
@@ -25,8 +25,8 @@ export function NotesHub() {
   })
 
   const filteredClients = clients.filter((c: Client) =>
-    c.company_name.toLowerCase().includes(search.toLowerCase()) ||
-    c.contact_person.toLowerCase().includes(search.toLowerCase())
+    c.company_name.toLowerCase().includes(query.toLowerCase()) ||
+    c.contact_person.toLowerCase().includes(query.toLowerCase())
   )
 
   const selectedClient = clients.find((c: Client) => c.id === selectedClientId)
@@ -34,15 +34,15 @@ export function NotesHub() {
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search clients..."
-            className="pl-9"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+        <SearchInput
+          containerClassName="flex-1"
+          placeholder="Search clients..."
+          value={query}
+          onChange={setQuery}
+          aria-label="Search clients"
+          resultCount={filteredClients.length}
+          resultLabel="client"
+        />
         <Select value={selectedClientId} onValueChange={setSelectedClientId}>
           <SelectTrigger className="w-full sm:w-64">
             <SelectValue placeholder="Select a client" />

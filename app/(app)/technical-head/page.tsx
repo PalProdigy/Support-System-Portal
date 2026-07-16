@@ -1,13 +1,18 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { Suspense, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
-import { redirect } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import { ShieldAlert, LayoutList, AlertTriangle, ShieldCheck, BarChart3, TrendingUp } from 'lucide-react'
+import { redirect, useRouter, useSearchParams } from 'next/navigation'
+import { cn, slaRemainingMs } from '@/lib/utils'
+import { StatCard } from '@/components/shared/stat-card'
+import {
+  ShieldAlert, LayoutList, AlertTriangle, ShieldCheck, BarChart3, TrendingUp,
+  Ticket, UserX, Gauge,
+} from 'lucide-react'
+import type { EngineerMetrics } from '@/types'
 
 const OverviewBoard = dynamic(
   () => import('@/modules/technical-head/overview-board').then((m) => m.OverviewBoard),
@@ -50,56 +55,75 @@ function Guard() {
   return null
 }
 
+// One KPI card per hub tab (plus SLA Breached as a cross-cutting urgency
+// signal) so the snapshot is visible no matter which tab is active, and each
+// card jumps straight to the tab it summarizes.
 function THHeader() {
   const session = useSession()
   const dp = getDataProvider()
   const scope = { userId: session.userId, role: session.role }
 
-  const { data: casesPage } = useQuery({
+  const { data: casesPage, isLoading: casesLoading } = useQuery({
     queryKey: ['cases', 'all-teams'],
     queryFn: () => dp.listCases(scope, { pageSize: 500 }),
   })
-  const { data: notifications } = useQuery({
-    queryKey: ['notifications', session.userId],
-    queryFn: () => dp.listNotifications(session.userId),
+  // Shared query key with PerformanceOverview — warms its cache too.
+  const { data: metrics } = useQuery<EngineerMetrics[]>({
+    queryKey: ['all-engineer-metrics'],
+    queryFn: () => dp.listAllEngineerMetrics(scope),
+    staleTime: 30_000,
   })
 
-  const escalatedCount       = (casesPage?.items ?? []).filter((c) => c.is_escalated || c.status === 'escalated').length
-  const criticalPending      = (casesPage?.items ?? []).filter((c) => c.priority === 'critical' && ['resolved', 'pending_closure'].includes(c.status) && !c.th_approved).length
-  const slaNotifCount        = (notifications ?? []).filter((n) => !n.read_at && ['sla_at_risk', 'sla_breached', 'case_auto_escalated'].includes(n.type)).length
+  const cases = useMemo(() => casesPage?.items ?? [], [casesPage])
+  const OPEN_STATUSES = useMemo(() => new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated']), [])
+
+  const openCount = useMemo(() => cases.filter((c) => OPEN_STATUSES.has(c.status)).length, [cases, OPEN_STATUSES])
+  const escalatedCount = useMemo(() => cases.filter((c) => c.is_escalated || c.status === 'escalated').length, [cases])
+  const slaBreachedCount = useMemo(
+    () => cases.filter((c) => OPEN_STATUSES.has(c.status) && slaRemainingMs(c.sla_due_at) < 0).length,
+    [cases, OPEN_STATUSES]
+  )
+  const pendingApprovalCount = useMemo(
+    () => cases.filter((c) => c.priority === 'critical' && ['resolved', 'pending_closure'].includes(c.status) && !c.th_approved).length,
+    [cases]
+  )
+  const unassignedCount = useMemo(() => cases.filter((c) => OPEN_STATUSES.has(c.status) && !c.assignee_id).length, [cases, OPEN_STATUSES])
+  const avgSLA = useMemo(() => {
+    if (!metrics?.length) return null
+    return Math.round(metrics.reduce((s, m) => s + m.sla_compliance_pct, 0) / metrics.length)
+  }, [metrics])
 
   return (
-    <div className="flex items-center gap-3 flex-wrap">
-      <div className="rounded-xl bg-red-100 dark:bg-red-900/30 p-2.5">
-        <ShieldAlert className="h-5 w-5 text-red-600 dark:text-red-400" />
-      </div>
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">TH Hub</h1>
-        <p className="text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
-          Technical Head oversight — all teams
-          {escalatedCount > 0 && (
-            <span className="inline-flex items-center gap-1 text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">
-              <AlertTriangle className="h-2.5 w-2.5" /> {escalatedCount} escalated
-            </span>
-          )}
-          {criticalPending > 0 && (
-            <span className="inline-flex items-center gap-1 text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-semibold">
-              <ShieldCheck className="h-2.5 w-2.5" /> {criticalPending} need approval
-            </span>
-          )}
-          {slaNotifCount > 0 && (
-            <span className="inline-flex text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-400 px-2 py-0.5 rounded-full font-semibold">
-              {slaNotifCount} SLA alerts
-            </span>
-          )}
-        </p>
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="rounded-xl bg-red-100 dark:bg-red-900/30 p-2.5">
+          <ShieldAlert className="h-5 w-5 text-red-600 dark:text-red-400" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">TH Hub</h1>
+          <p className="text-sm text-muted-foreground">Technical Head oversight — all teams</p>
+        </div>
       </div>
     </div>
   )
 }
 
-export default function THHubPage() {
-  const [tab, setTab] = useState<Tab>('overview')
+const TAB_KEYS = TABS.map((t) => t.key)
+
+function isTab(value: string | null): value is Tab {
+  return value != null && (TAB_KEYS as string[]).includes(value)
+}
+
+function THHubContent() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  // Deep-linkable tabs: /technical-head?tab=approvals opens Critical Approval, etc.
+  const tabParam = searchParams.get('tab')
+  const tab: Tab = isTab(tabParam) ? tabParam : 'overview'
+
+  const selectTab = (key: Tab) => {
+    router.replace(`/technical-head?tab=${key}`, { scroll: false })
+  }
 
   return (
     <div className="space-y-6 p-6">
@@ -111,7 +135,7 @@ export default function THHubPage() {
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
-            onClick={() => setTab(key)}
+            onClick={() => selectTab(key)}
             className={cn(
               'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors whitespace-nowrap',
               tab === key
@@ -133,5 +157,14 @@ export default function THHubPage() {
         {tab === 'performance'  && <PerformanceOverview />}
       </Suspense>
     </div>
+  )
+}
+
+export default function THHubPage() {
+  // useSearchParams must live under a Suspense boundary.
+  return (
+    <Suspense fallback={<div className="p-6"><ListSkeleton /></div>}>
+      <THHubContent />
+    </Suspense>
   )
 }

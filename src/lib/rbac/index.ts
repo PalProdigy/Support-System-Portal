@@ -120,6 +120,15 @@ export function canCreateSubCase(role: Role): boolean {
   return SUBCASE_CREATOR_ROLES.includes(role)
 }
 
+// Only the Technical Head and Team Leads get the engineer-assignment picker
+// when creating a sub-task. Support engineers can still create sub-cases
+// (inheriting the parent's assignee), just without a manual picker.
+export const SUBCASE_ASSIGNER_ROLES: Role[] = ['team_lead', 'technical_head']
+
+export function canAssignSubCaseEngineer(role: Role): boolean {
+  return SUBCASE_ASSIGNER_ROLES.includes(role)
+}
+
 export const ROLE_LABELS: Record<Role, string> = {
   client: 'Client',
   sales_executive: 'Sales Executive',

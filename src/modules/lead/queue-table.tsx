@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { AssignDialog } from './assign-dialog'
@@ -10,7 +10,7 @@ import {
   cn, formatDate, slaRemainingMs, formatDuration,
   PRIORITY_COLORS, PRIORITY_LABELS, STATUS_COLORS, STATUS_LABELS,
 } from '@/lib/utils'
-import { Search, ArrowUpDown, UserCheck, AlertTriangle, ExternalLink } from 'lucide-react'
+import { ArrowUpDown, UserCheck, AlertTriangle, ExternalLink } from 'lucide-react'
 import type { Case, User } from '@/types'
 import type { CaseStatus, Priority } from '@/types'
 
@@ -29,7 +29,7 @@ interface Props {
 
 export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate }: Props) {
   const router = useRouter()
-  const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<CaseStatus | 'all'>('all')
   const [priorityFilter, setPriorityFilter] = useState<Priority | 'all'>('all')
   const [assigneeFilter, setAssigneeFilter] = useState<string>('all')
@@ -50,8 +50,8 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
       if (assigneeFilter === 'unassigned') list = list.filter((c) => !c.assignee_id)
       else list = list.filter((c) => c.assignee_id === assigneeFilter)
     }
-    if (search) {
-      const q = search.toLowerCase()
+    if (query) {
+      const q = query.toLowerCase()
       list = list.filter((c) => c.title.toLowerCase().includes(q) || c.reference_no.toLowerCase().includes(q))
     }
     list.sort((a, b) => {
@@ -64,7 +64,7 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
       return sortDir === 'asc' ? cmp : -cmp
     })
     return list
-  }, [cases, statusFilter, priorityFilter, assigneeFilter, search, sortKey, sortDir])
+  }, [cases, statusFilter, priorityFilter, assigneeFilter, query, sortKey, sortDir])
 
   function Th({ label, sk }: { label: string; sk: SortKey }) {
     const active = sortKey === sk
@@ -85,10 +85,16 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
     <div className="space-y-3">
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="relative flex-1 min-w-[180px] max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input className="pl-9 h-8 text-sm" placeholder="Search ref# or title…" value={search} onChange={(e) => setSearch(e.target.value)} />
-        </div>
+        <SearchInput
+          containerClassName="flex-1 min-w-[180px] max-w-xs"
+          className="h-8 text-sm"
+          placeholder="Search ref# or title…"
+          value={query}
+          onChange={setQuery}
+          aria-label="Search cases"
+          resultCount={filtered.length}
+          resultLabel="case"
+        />
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as CaseStatus | 'all')}>
           <SelectTrigger className="h-8 w-36 text-sm"><SelectValue placeholder="All statuses" /></SelectTrigger>
           <SelectContent>
@@ -137,7 +143,7 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
           </thead>
           <tbody className="divide-y">
             {filtered.length === 0 && (
-              <tr><td colSpan={8} className="px-3 py-8 text-center text-sm text-muted-foreground">No matching cases</td></tr>
+              <tr><td colSpan={8} className="px-3 py-8 text-center text-sm text-muted-foreground">{query ? `No results found for "${query}"` : 'No matching cases'}</td></tr>
             )}
             {filtered.map((c) => {
               const remaining = slaRemainingMs(c.sla_due_at)
@@ -149,9 +155,10 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
                 <tr
                   key={c.id}
                   className={cn(
-                    'hover:bg-muted/30 transition-colors',
+                    'hover:bg-muted/30 transition-colors cursor-pointer',
                     c.is_escalated && 'bg-red-50/30 dark:bg-red-950/10',
                   )}
+                  onClick={() => router.push(`/cases/${c.id}`)}
                 >
                   <td className="px-3 py-2.5">
                     <span className="font-mono text-xs text-muted-foreground">{c.reference_no}</span>
@@ -186,7 +193,7 @@ export function QueueTable({ cases, engineers, usersMap, clientsMap, onEscalate 
                       <span className="text-xs text-muted-foreground">{formatDate(c.sla_due_at)}</span>
                     )}
                   </td>
-                  <td className="px-3 py-2.5">
+                  <td className="px-3 py-2.5" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center gap-1">
                       <Button variant="ghost" size="icon" className="h-7 w-7" title="View case" onClick={() => router.push(`/cases/${c.id}`)}>
                         <ExternalLink className="h-3.5 w-3.5" />

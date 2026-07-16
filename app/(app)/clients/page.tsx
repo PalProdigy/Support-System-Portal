@@ -6,11 +6,11 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Badge } from '@/components/ui/badge'
-import { Building2, PlusCircle, Phone, Search, RotateCcw, ChevronRight } from 'lucide-react'
+import { Building2, PlusCircle, Phone, Eye } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import type { Client, ClientSolution } from '@/types'
+import type { Client, ClientSolution, Case } from '@/types'
 import { formatDate, cn } from '@/lib/utils'
 import { CreateClientDialog } from '@/modules/sales-executive/create-client-dialog'
 
@@ -116,14 +116,13 @@ export default function ClientsPage() {
  *  - Ordered by the most recent engagement (product / service / solution taken),
  *    so the currently-active clients appear at the top and older ones below.
  *  - Search by Client Name (contact person), Client ID, or Company / Organization
- *    name — applied only when the Search button is pressed (or Enter).
+ *    name — filters live as you type (debounced), or immediately on Enter.
  *  - Total client count shown at the top; a row click opens the client detail.
  */
 function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: boolean }) {
   const dp = getDataProvider()
   const router = useRouter()
 
-  const [draft, setDraft] = useState('')
   const [query, setQuery] = useState('')
 
   // Client-solution links carry the date a client engaged a solution; we use the
@@ -132,6 +131,12 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
   const { data: clientSolutions } = useQuery({
     queryKey: ['client-solutions'],
     queryFn: () => dp.listClientSolutions(),
+  })
+
+  // Query cases to count total cases per client
+  const { data: casesData } = useQuery({
+    queryKey: ['cases', 'all'],
+    queryFn: () => dp.listCases({ userId: 'system', role: 'technical_head' }, { pageSize: 500 }),
   })
 
   const recentByClient = useMemo(() => {
@@ -144,6 +149,19 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     return map
   }, [clientSolutions])
 
+  // Count total cases per client
+  const casesByClient = useMemo(() => {
+    const map: Record<string, number> = {}
+    const cases = (casesData?.items ?? []) as Case[]
+    for (const c of cases) {
+      if (!map[c.client_id]) {
+        map[c.client_id] = 0
+      }
+      map[c.client_id]++
+    }
+    return map
+  }, [casesData])
+
   const recencyOf = (c: Client) => {
     const dates = [recentByClient[c.id], c.last_activity_at, c.created_at].filter(Boolean) as string[]
     return dates.sort().at(-1) ?? c.created_at
@@ -154,7 +172,6 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     const filtered = q
       ? clients.filter((c) =>
           c.contact_person?.toLowerCase().includes(q) ||
-          c.id.toLowerCase().includes(q) ||
           c.company_name?.toLowerCase().includes(q)
         )
       : clients
@@ -162,47 +179,35 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
     return [...filtered].sort((a, b) => recencyOf(b).localeCompare(recencyOf(a)))
   }, [clients, query, recentByClient])
 
-  const runSearch = () => setQuery(draft)
-  const resetSearch = () => { setDraft(''); setQuery('') }
-
-  const COLS = ['Company / Organization', 'Client Name', 'Client ID', 'Industry', 'Tier', 'Status', 'Recent Activity', '']
+  const COLS = ['Company / Organization', 'Representative Name', 'Total Case', 'Recent Activity', '']
 
   return (
     <div className="p-6 space-y-4">
       {/* Header + total count */}
-      <div className="flex items-center gap-3">
-        <div className="rounded-xl bg-primary/10 p-2.5">
-          <Building2 className="h-5 w-5 text-primary" />
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl bg-primary/10 p-2.5">
+            <Building2 className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">Clients</h1>
+            <p className="text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground tabular-nums">{clients.length}</span> total
+              {query && <> · {ordered.length} match “{query}”</>}
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold">Clients</h1>
-          <p className="text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground tabular-nums">{clients.length}</span> total
-            {query && <> · {ordered.length} match “{query}”</>}
-          </p>
-        </div>
-      </div>
 
-      {/* Search section — searches Client Name, Client ID, Company / Organization */}
-      <div className="flex flex-wrap gap-2 items-center">
-        <div className="relative flex-1 min-w-[220px]">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="pl-9"
-            placeholder="Search by Client Name, Client ID, or Company / Organization…"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') runSearch() }}
-          />
-        </div>
-        <Button onClick={runSearch}>
-          <Search className="h-4 w-4" /> Search
-        </Button>
-        {query && (
-          <Button variant="outline" onClick={resetSearch}>
-            <RotateCcw className="h-4 w-4" /> Reset
-          </Button>
-        )}
+        {/* Search — searches Client Name or Company / Organization */}
+        <SearchInput
+          containerClassName="w-full max-w-xs"
+          placeholder="Search Client Name…"
+          value={query}
+          onChange={setQuery}
+          aria-label="Search clients"
+          resultCount={ordered.length}
+          resultLabel="client"
+        />
       </div>
 
       {/* Table */}
@@ -217,22 +222,32 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/30">
-                {COLS.map((h, i) => (
-                  <th key={i} className="text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground whitespace-nowrap">{h}</th>
-                ))}
+                {COLS.map((h, i) => {
+                  const isActionCol = i === COLS.length - 1
+                  return (
+                    <th
+                      key={i}
+                      className={`text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground ${
+                        isActionCol
+                          ? 'sticky right-0 w-24 text-right'
+                          : 'whitespace-nowrap'
+                      }`}
+                    >
+                      {h}
+                    </th>
+                  )
+                })}
               </tr>
             </thead>
             <tbody>
               {ordered.length === 0 && (
-                <tr><td colSpan={COLS.length} className="text-center py-8 text-muted-foreground text-sm">No clients match your search</td></tr>
+                <tr><td colSpan={COLS.length} className="text-center py-8 text-muted-foreground text-sm">{query ? `No results found for "${query}"` : 'No clients match your search'}</td></tr>
               )}
               {ordered.map((c) => {
-                const status = c.account_status || 'active'
-                const statusConfig = STATUS_COLORS[status] || STATUS_COLORS.active
                 return (
                   <tr
                     key={c.id}
-                    className="border-b last:border-0 hover:bg-accent/20 transition-colors cursor-pointer"
+                    className="border-b last:border-0 hover:bg-accent/20 transition-colors cursor-pointer group"
                     onClick={() => router.push(`/clients/${c.id}`)}
                   >
                     <td className="px-3 py-2.5 max-w-[240px]">
@@ -244,17 +259,16 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                       </div>
                     </td>
                     <td className="px-3 py-2.5 whitespace-nowrap">{c.contact_person}</td>
-                    <td className="px-3 py-2.5 font-mono text-xs text-muted-foreground whitespace-nowrap">{c.id}</td>
-                    <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{c.industry ?? '—'}</td>
-                    <td className="px-3 py-2.5 text-xs whitespace-nowrap capitalize">{c.account_tier ?? '—'}</td>
-                    <td className="px-3 py-2.5 whitespace-nowrap">
-                      <span className={cn('text-xs font-medium px-2 py-0.5 rounded-full', statusConfig.badge)}>
-                        {statusConfig.label}
-                      </span>
-                    </td>
+                    <td className="px-3 py-2.5 whitespace-nowrap font-medium">{casesByClient[c.id] ?? 0}</td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
-                    <td className="px-3 py-2.5">
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    <td className="px-3 py-2.5 sticky right-0 bg-card/95 group-hover:bg-accent/20 transition-colors w-24 text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push(`/clients/${c.id}`)}
+                      >
+                        <Eye className="h-3.5 w-3.5" /> View
+                      </Button>
                     </td>
                   </tr>
                 )

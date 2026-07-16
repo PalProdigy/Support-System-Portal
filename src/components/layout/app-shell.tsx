@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth/context'
 import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
-import { Skeleton } from '@/components/ui/skeleton'
+import NHQLoader from '@/components/NHQLoader/page'
 import { getDataProvider } from '@/lib/data'
 import { useState } from 'react'
 import type { User } from '@/types'
@@ -32,28 +32,28 @@ export function AppShell({ children }: AppShellProps) {
   }, [session])
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-4 w-24" />
-        </div>
-      </div>
-    )
+    return <NHQLoader />
   }
 
   if (!session) return null
 
   return (
     <SLAEngineProvider>
-      <div className="flex h-screen overflow-hidden bg-background">
-        <Sidebar
-          userName={currentUser?.name ?? 'User'}
-          userRole={session.role}
-        />
-        <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-          <Topbar userName={currentUser?.name ?? 'User'} />
-          <main className="flex-1 overflow-y-auto">
+      {/* print: hide the app chrome and unlock the scroll containers so the
+          full page content (e.g. a KB article) prints, not just one viewport */}
+      <div className="flex h-screen overflow-hidden bg-background print:h-auto print:overflow-visible">
+
+        <div className="contents print:hidden">
+          <Sidebar
+            userName={currentUser?.name ?? 'User'}
+            userRole={session.role}
+          />
+        </div>
+        <div className="relative flex-1 overflow-hidden min-w-0 print:overflow-visible">
+          <div className="contents print:hidden">
+            <Topbar userName={currentUser?.name ?? 'User'} />
+          </div>
+          <main className="absolute inset-0 overflow-y-auto pt-14 print:static print:overflow-visible print:pt-0">
             {children}
           </main>
         </div>

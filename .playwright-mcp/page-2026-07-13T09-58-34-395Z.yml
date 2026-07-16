@@ -1,0 +1,15 @@
+- generic [active] [ref=f15e1]:
+  - status [ref=f15e2]:
+    - paragraph [ref=f15e10]: NHQ Distributions
+    - generic [ref=f15e14]:
+      - generic [ref=f15e15]: Connecting
+      - generic [ref=f15e16]: ·
+      - generic [ref=f15e17]: 0%
+  - region "Notifications (F8)":
+    - list
+  - status [ref=f15e18]:
+    - paragraph [ref=f15e26]: NHQ Distributions
+    - generic [ref=f15e30]:
+      - generic [ref=f15e31]: Connecting
+      - generic [ref=f15e32]: ·
+      - generic [ref=f15e33]: 0%

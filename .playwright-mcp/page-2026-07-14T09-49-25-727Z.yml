@@ -1,0 +1,35 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - generic [ref=f1e5]: "N"
+      - heading "NHQ Support Portal" [level=1] [ref=f1e6]
+      - paragraph [ref=f1e7]: NHQ Distributions Ltd.
+    - generic [ref=f1e8]:
+      - heading "Sign in" [level=2] [ref=f1e9]
+      - generic [ref=f1e10]:
+        - generic [ref=f1e11]:
+          - text: Email
+          - textbox "Email" [ref=f1e12]:
+            - /placeholder: you@example.com
+        - generic [ref=f1e13]:
+          - text: Password
+          - textbox "Password" [ref=f1e14]:
+            - /placeholder: Any password
+        - generic [ref=f1e15]:
+          - text: Role
+          - combobox "Role" [ref=f1e16]:
+            - generic: Team Lead
+          - combobox [ref=f1e45]
+        - button "Sign In" [ref=f1e20] [cursor=pointer]
+      - generic [ref=f1e21]:
+        - paragraph [ref=f1e22]: Demo mode
+        - paragraph [ref=f1e23]: Any email and password work. Select a role to explore that role's dashboard with seeded data.
+    - generic [ref=f1e24]:
+      - button "Sales Executive— manage clients & track cases" [ref=f1e25]
+      - button "Support Engineer— work assigned cases" [ref=f1e26]
+      - button "Team Lead— oversee team, escalate, assign" [active] [ref=f1e27]
+      - button "Technical Head— full admin access" [ref=f1e28]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f1e51] [cursor=pointer]
+  - alert [ref=f1e55]

@@ -8,9 +8,11 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid,
 } from 'recharts'
 import { BarChart3 } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { buildDateBuckets, PERIOD_TABS, type Period } from '@/lib/date-buckets'
 import type { Case } from '@/types'
-
-const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 type SeriesKey = 'opened' | 'solved' | 'reopened' | 'escalated'
 
@@ -21,14 +23,27 @@ const SERIES: { key: SeriesKey; label: string; color: string }[] = [
   { key: 'escalated', label: 'Escalated', color: '#ef4444' },
 ]
 
-function monthKey(d: Date) {
-  return `${d.getFullYear()}-${d.getMonth()}`
+interface Bucket {
+  label: string
+  start: number
+  end: number
+  opened: number
+  solved: number
+  reopened: number
+  escalated: number
+}
+
+function buildBuckets(period: Period, customFrom: string, customTo: string, nowMs: number): Bucket[] {
+  return buildDateBuckets(period, customFrom, customTo, nowMs).map((b) => ({
+    ...b, opened: 0, solved: 0, reopened: 0, escalated: 0,
+  }))
 }
 
 /**
- * Technical-Head dashboard widget: a 12-month rolling summary of case activity
- * (opened / solved / reopened / escalated), bucketed by month. Rendered via a
- * client-only dynamic import so recharts stays out of SSR.
+ * Technical-Head dashboard widget: case activity (opened / solved / reopened /
+ * escalated) bucketed over a selectable window — 12/6/3 rolling months, the
+ * last 30 days, or a custom date range. Rendered via a client-only dynamic
+ * import so recharts stays out of SSR.
  */
 export function CaseSummary12m() {
   const session = useSession()
@@ -40,29 +55,26 @@ export function CaseSummary12m() {
     queryFn: () => dp.listCases(scope, { pageSize: 500 }),
   })
 
-  // Capture "now" once at mount so the month buckets stay stable across renders.
+  // Capture "now" once at mount so the rolling windows stay stable across renders.
   const [nowMs] = useState(() => Date.now())
+  const [period, setPeriod] = useState<Period>('12m')
+  const todayStr = useMemo(() => new Date(nowMs).toISOString().slice(0, 10), [nowMs])
+  const [customFrom, setCustomFrom] = useState(() => {
+    const d = new Date(nowMs)
+    d.setDate(d.getDate() - 29)
+    return d.toISOString().slice(0, 10)
+  })
+  const [customTo, setCustomTo] = useState(todayStr)
 
   const { data, totals } = useMemo(() => {
     const cases: Case[] = casesPage?.items ?? []
-    const now = new Date(nowMs)
-
-    // 12 rolling month buckets, oldest → current month.
-    const buckets: { label: string; opened: number; solved: number; reopened: number; escalated: number }[] = []
-    const index = new Map<string, number>()
-    for (let i = 11; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
-      index.set(monthKey(d), buckets.length)
-      buckets.push({
-        label: `${MONTH_LABELS[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`,
-        opened: 0, solved: 0, reopened: 0, escalated: 0,
-      })
-    }
+    const buckets = buildBuckets(period, customFrom, customTo, nowMs)
 
     const bump = (dateStr: string | undefined, field: SeriesKey) => {
       if (!dateStr) return
-      const i = index.get(monthKey(new Date(dateStr)))
-      if (i !== undefined) buckets[i][field] += 1
+      const t = new Date(dateStr).getTime()
+      const bucket = buckets.find((b) => t >= b.start && t < b.end)
+      if (bucket) bucket[field] += 1
     }
 
     for (const c of cases) {
@@ -84,38 +96,83 @@ export function CaseSummary12m() {
     )
 
     return { data: buckets, totals }
-  }, [casesPage, nowMs])
+  }, [casesPage, nowMs, period, customFrom, customTo])
+
+  const activeTab = PERIOD_TABS.find((t) => t.value === period)!
+  const tickInterval = data.length > 16 ? Math.ceil(data.length / 12) - 1 : 0
 
   return (
-    <div className="rounded-xl border bg-card p-4 space-y-3">
+    <div className="rounded-xl border bg-card p-4 space-y-3 min-w-0">
       <div className="flex items-center gap-2 flex-wrap">
-        <BarChart3 className="h-4 w-4 text-muted-foreground" />
-        <h3 className="text-sm font-semibold text-foreground">Last 12 Months — Case Summary</h3>
-        <div className="ml-auto flex flex-wrap gap-x-3 gap-y-1">
+        <BarChart3 className="h-4 w-4 text-muted-foreground shrink-0" />
+        <h3 className="text-sm font-semibold text-foreground">{activeTab.title} — Case Summary</h3>
+        <div className="sm:ml-auto flex flex-wrap gap-x-3 gap-y-1">
           {SERIES.map((s) => (
             <span key={s.key} className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-              <span className="h-2 w-2 rounded-full" style={{ background: s.color }} />
+              <span className="h-2 w-2 rounded-full shrink-0" style={{ background: s.color }} />
               {s.label} <span className="font-semibold text-foreground tabular-nums">{totals[s.key]}</span>
             </span>
           ))}
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="h-[280px] rounded-lg bg-muted animate-pulse" />
-      ) : (
-        <ResponsiveContainer width="100%" height={280}>
-          <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -12 }} barCategoryGap="16%">
-            <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-muted" />
-            <XAxis dataKey="label" tick={{ fontSize: 11 }} interval={0} tickMargin={6} />
-            <YAxis tick={{ fontSize: 11 }} width={32} allowDecimals={false} />
-            <Tooltip cursor={{ fill: 'hsl(var(--muted) / 0.4)' }} content={<SummaryTooltip />} />
-            <Legend iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-            {SERIES.map((s) => (
-              <Bar key={s.key} dataKey={s.key} name={s.label} fill={s.color} radius={[2, 2, 0, 0]} />
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+        <Tabs value={period} onValueChange={(v) => setPeriod(v as Period)} className="min-w-0">
+          <TabsList className="max-w-full overflow-x-auto justify-start">
+            {PERIOD_TABS.map((t) => (
+              <TabsTrigger key={t.value} value={t.value} className="shrink-0">{t.label}</TabsTrigger>
             ))}
-          </BarChart>
-        </ResponsiveContainer>
+          </TabsList>
+        </Tabs>
+
+        {period === 'custom' && (
+          <div className="flex items-end gap-3 flex-wrap">
+            <div className="space-y-1">
+              <Label className="text-xs text-muted-foreground">From</Label>
+              <Input
+                type="date"
+                value={customFrom}
+                max={customTo}
+                onChange={(e) => setCustomFrom(e.target.value)}
+                className="h-8 text-sm"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs text-muted-foreground">To</Label>
+              <Input
+                type="date"
+                value={customTo}
+                min={customFrom}
+                max={todayStr}
+                onChange={(e) => setCustomTo(e.target.value)}
+                className="h-8 text-sm"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {isLoading ? (
+        <div className="h-[220px] sm:h-[280px] rounded-lg bg-muted animate-pulse" />
+      ) : data.length === 0 ? (
+        <div className="h-[220px] sm:h-[280px] flex items-center justify-center text-sm text-muted-foreground">
+          Select a valid date range
+        </div>
+      ) : (
+        <div className="h-[220px] sm:h-[280px] w-full min-w-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -12 }} barCategoryGap="16%">
+              <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-muted" />
+              <XAxis dataKey="label" tick={{ fontSize: 11 }} interval={tickInterval} tickMargin={6} />
+              <YAxis tick={{ fontSize: 11 }} width={32} allowDecimals={false} />
+              <Tooltip cursor={{ fill: 'hsl(var(--muted) / 0.4)' }} content={<SummaryTooltip />} />
+              <Legend iconSize={8} wrapperStyle={{ fontSize: 11 }} />
+              {SERIES.map((s) => (
+                <Bar key={s.key} dataKey={s.key} name={s.label} fill={s.color} radius={[2, 2, 0, 0]} />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       )}
     </div>
   )

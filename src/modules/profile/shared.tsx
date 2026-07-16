@@ -13,7 +13,7 @@ import type { User } from '@/types'
 export function ProfileHeader({ user, badges }: { user: User; badges?: ReactNode }) {
   return (
     <div className="rounded-xl border bg-card p-6 flex items-start gap-5 flex-wrap">
-      <UserAvatar name={user.name} size="lg" />
+      <UserAvatar name={user.name} avatarUrl={user.avatar} userId={user.id} size="lg" border shadow />
       <div className="flex-1 min-w-0 space-y-2">
         <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -46,6 +46,19 @@ export function KpiCard({ icon, label, value, sub }: { icon: ReactNode; label: s
         <p className="text-xl font-bold text-foreground leading-tight">{value}</p>
         {sub && <p className="text-[10px] text-muted-foreground truncate">{sub}</p>}
       </div>
+    </div>
+  )
+}
+
+// Compact stat used in dense grids (e.g. the performance summary panel).
+export function StatTile({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+  return (
+    <div className="rounded-lg border bg-muted/30 p-3 space-y-1">
+      <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        {icon}
+        <span className="truncate">{label}</span>
+      </div>
+      <p className="text-lg font-bold text-foreground leading-none">{value}</p>
     </div>
   )
 }

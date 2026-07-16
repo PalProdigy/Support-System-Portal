@@ -88,7 +88,10 @@ export function SubCasesSection({ parentCase }: { parentCase: Case }) {
           {/* Branches — each sub task */}
           <ul className="ml-3 mt-1 border-l border-border">
             {subs.map((s) => {
-              const engineer = s.assignee_id ? usersMap[s.assignee_id] : undefined
+              const engineerNames = [s.assignee_id, ...(s.co_assignee_ids ?? [])]
+                .filter((id): id is string => Boolean(id))
+                .map((id) => usersMap[id]?.name)
+                .filter((name): name is string => Boolean(name))
               const isRecent = s.id === recentSubId
               return (
                 <li key={s.id} className="relative pl-5 pt-3">
@@ -125,7 +128,7 @@ export function SubCasesSection({ parentCase }: { parentCase: Case }) {
                       )}
                       <div className="flex items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground flex-wrap pt-0.5">
                         <span className="inline-flex items-center gap-1">
-                          <UserIcon className="h-3 w-3" /> {engineer ? engineer.name : 'Unassigned'}
+                          <UserIcon className="h-3 w-3" /> {engineerNames.length > 0 ? engineerNames.join(', ') : 'Unassigned'}
                         </span>
                         <span className="inline-flex items-center gap-1">
                           <Clock className="h-3 w-3" /> Created {formatDateTime(s.created_at)}
@@ -146,7 +149,7 @@ export function SubCasesSection({ parentCase }: { parentCase: Case }) {
         </div>
       )}
 
-      {canAdd && <AddSubCaseDialog parentCase={parentCase} open={addOpen} onOpenChange={setAddOpen} />}
+      {canAdd && addOpen && <AddSubCaseDialog parentCase={parentCase} open={addOpen} onOpenChange={setAddOpen} />}
     </div>
   )
 }

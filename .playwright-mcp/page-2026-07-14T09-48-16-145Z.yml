@@ -1,0 +1,164 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e34]:
+    - complementary [ref=e36]:
+      - link [ref=e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e39]:
+          - generic [ref=e40]: NH
+          - generic [ref=e41]: DISTRIBUTIONS
+      - navigation [ref=e49]:
+        - link "Dashboard" [ref=e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "AM Hub" [ref=e57] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "My Performance" [ref=e62] [cursor=pointer]:
+          - /url: /my-performance
+        - link "Cases" [ref=e67] [cursor=pointer]:
+          - /url: /cases
+        - link "Clients" [ref=e71] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=e77] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=e83] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e87] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e91] [cursor=pointer]:
+          - /url: /reporting
+        - link "Notifications" [ref=e95] [cursor=pointer]:
+          - /url: /notifications
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - generic "Tanvir Ahmed" [ref=e103]:
+            - generic "Tanvir Ahmed avatar" [ref=e105]: TA
+          - generic [ref=e106]:
+            - paragraph [ref=e107]: Tanvir Ahmed
+            - paragraph [ref=e108]: Sales Executive
+        - button "Collapse sidebar" [ref=e109]
+    - generic [ref=e112]:
+      - banner [ref=e114]:
+        - generic [ref=e115]:
+          - button "Toggle theme" [ref=e116] [cursor=pointer]
+          - button "Notifications" [ref=e117] [cursor=pointer]:
+            - generic [ref=e118]: 9+
+          - button "Tanvir Ahmed avatar Tanvir Ahmed Sales Executive" [ref=e119] [cursor=pointer]:
+            - generic "Tanvir Ahmed" [ref=e120]:
+              - generic "Tanvir Ahmed avatar" [ref=e122]: TA
+            - generic [ref=e123]:
+              - paragraph [ref=e124]: Tanvir Ahmed
+              - paragraph [ref=e125]: Sales Executive
+      - main [ref=e126]:
+        - generic [ref=e127]:
+          - generic [ref=e129]:
+            - heading "Knowledge Base" [level=1] [ref=e131]
+            - generic [ref=e132]:
+              - generic [ref=e134]:
+                - textbox "Search articles" [ref=e135]:
+                  - /placeholder: Search by title, content, tags, category or author…
+                - generic [ref=e136]: 6 articles found
+              - button "New Article" [ref=e137] [cursor=pointer]
+          - tablist [ref=e139]:
+            - tab "Browse (6)" [selected] [ref=e140]
+            - tab "My Articles (0)" [ref=e143]
+            - tab "Closed Cases (2)" [ref=e146]
+          - generic [ref=e150]:
+            - button "All" [ref=e151]
+            - button "Installation (1)" [ref=e152]
+            - button "Configuration (2)" [ref=e153]
+            - button "Troubleshooting (2)" [ref=e154]
+            - button "Authentication (1)" [ref=e155]
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - generic [ref=e158]: Installation
+              - link [ref=e162] [cursor=pointer]:
+                - /url: /knowledge-base/deploying-the-nhq-agent-with-docker
+                - heading "Deploying the NHQ Agent with Docker" [level=3] [ref=e164]
+              - paragraph [ref=e165]: Step-by-step production deployment of the NHQ monitoring agent using Docker or Docker Compose.
+              - generic [ref=e166]:
+                - button "Docker" [ref=e167]
+                - button "Linux" [ref=e169]
+                - button "agent" [ref=e171]
+                - button "deployment" [ref=e173]
+              - generic [ref=e175]:
+                - generic [ref=e176]: Farzana Begum
+                - generic [ref=e180]: 1 min read
+                - generic [ref=e184]: 10 May 2024
+            - generic [ref=e185]:
+              - generic [ref=e186]: Troubleshooting
+              - link [ref=e190] [cursor=pointer]:
+                - /url: /knowledge-base/troubleshooting-mobile-barcode-scanner-on-android-14
+                - heading "Troubleshooting mobile barcode scanner on Android 14" [level=3] [ref=e192]
+              - paragraph [ref=e193]: Fix Android barcode scanner pairing and input-mode problems in the warehouse mobile app.
+              - generic [ref=e194]:
+                - button "mobile" [ref=e195]
+                - button "android" [ref=e197]
+                - button "barcode" [ref=e199]
+                - button "scanner" [ref=e201]
+              - generic [ref=e203]:
+                - generic [ref=e204]: Rafi Uddin
+                - generic [ref=e208]: 1 min read
+                - generic [ref=e212]: 01 May 2024
+            - generic [ref=e213]:
+              - generic [ref=e214]: Configuration
+              - link [ref=e218] [cursor=pointer]:
+                - /url: /knowledge-base/configuring-overtime-rules-in-hr-payroll
+                - heading "Configuring overtime rules in HR & Payroll" [level=3] [ref=e220]
+              - paragraph [ref=e221]: Define weekly and holiday overtime rules and how they interact with approval workflows.
+              - generic [ref=e222]:
+                - button "hr" [ref=e223]
+                - button "payroll" [ref=e225]
+                - button "overtime" [ref=e227]
+                - button "department" [ref=e229]
+              - generic [ref=e231]:
+                - generic [ref=e232]: Farzana Begum
+                - generic [ref=e236]: 1 min read
+                - generic [ref=e240]: 15 Apr 2024
+            - generic [ref=e241]:
+              - generic [ref=e242]: Authentication
+              - link [ref=e246] [cursor=pointer]:
+                - /url: /knowledge-base/setting-up-2fa-for-crm-pro-users
+                - heading "Setting up 2FA for CRM Pro users" [level=3] [ref=e248]
+              - paragraph [ref=e249]: Enable and enforce two-factor authentication for every CRM Pro user in your organization.
+              - generic [ref=e250]:
+                - button "security" [ref=e251]
+                - button "2fa" [ref=e253]
+                - button "authentication" [ref=e255]
+                - button "crm" [ref=e257]
+              - generic [ref=e259]:
+                - generic [ref=e260]: Farzana Begum
+                - generic [ref=e264]: 1 min read
+                - generic [ref=e268]: 01 Apr 2024
+            - generic [ref=e269]:
+              - generic [ref=e270]: Troubleshooting
+              - link [ref=e274] [cursor=pointer]:
+                - /url: /knowledge-base/resolving-journal-entry-mismatch-errors-in-analytics-engine
+                - heading "Resolving journal entry mismatch errors in Analytics Engine" [level=3] [ref=e276]
+              - paragraph [ref=e277]: Diagnose and fix journal entry mismatch errors caused by rounding or GL account mapping issues.
+              - generic [ref=e278]:
+                - button "analytics" [ref=e279]
+                - button "journal" [ref=e281]
+                - button "error" [ref=e283]
+                - button "reporting" [ref=e285]
+              - generic [ref=e287]:
+                - generic [ref=e288]: Imran Khan
+                - generic [ref=e292]: 1 min read
+                - generic [ref=e296]: 15 Mar 2024
+            - generic [ref=e297]:
+              - generic [ref=e298]: Configuration
+              - link [ref=e302] [cursor=pointer]:
+                - /url: /knowledge-base/how-to-configure-erp-integration-suite-api-credentials
+                - heading "How to configure ERP Integration Suite API credentials" [level=3] [ref=e304]
+              - paragraph [ref=e305]: Update ERP Integration Suite API credentials safely and verify the connection before saving.
+              - generic [ref=e306]:
+                - button "integration" [ref=e307]
+                - button "api" [ref=e309]
+                - button "credentials" [ref=e311]
+                - button "erp" [ref=e313]
+              - generic [ref=e315]:
+                - generic [ref=e316]: Rafi Uddin
+                - generic [ref=e320]: 1 min read
+                - generic [ref=e324]: 01 Mar 2024
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e330] [cursor=pointer]
+  - alert [ref=e334]

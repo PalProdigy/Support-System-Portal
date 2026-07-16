@@ -52,10 +52,10 @@ export default function ProfilePage() {
         <ArrowLeft className="h-4 w-4" /> Back
       </Button>
 
-      {session.role === 'technical_head' && <TechnicalHeadProfile user={user} />}
-      {session.role === 'team_lead' && <TeamLeadProfile user={user} />}
+      {session.role === 'technical_head' && <TechnicalHeadProfile user={user} teamName={teamName} />}
+      {session.role === 'team_lead' && <TeamLeadProfile user={user} teamName={teamName} />}
       {session.role === 'support_engineer' && <SupportEngineerProfile user={user} teamName={teamName} />}
-      {session.role === 'sales_executive' && <SalesExecutiveProfile user={user} />}
+      {session.role === 'sales_executive' && <SalesExecutiveProfile user={user} teamName={teamName} />}
       {session.role === 'client' && <ClientProfile user={user} />}
     </div>
   )

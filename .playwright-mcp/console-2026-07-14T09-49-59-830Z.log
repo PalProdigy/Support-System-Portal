@@ -1,0 +1,3567 @@
+[     127ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[     171ms] [LOG] [Fast Refresh] done in 152ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[     494ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[    1301ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[    6442ms] ReferenceError: canReviewKB is not defined
+    at KnowledgeBaseIndex (http://localhost:3000/_next/static/chunks/_1uf2xmx._.js?id=%255Bproject%255D%252Fapp%252F%2528app%2529%252Fknowledge-base%252Fpage.tsx+%255Bapp-client%255D+%2528ecmascript%2529:81:22)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10179:316)
+    at flushSyncWork$1 (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9230:86)
+    at Object.scheduleRefresh (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:299:13)
+    at http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:391:33
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:384:38)
+    at applyUpdate (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:878:31)
+    at http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:886:13
+[    7037ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[    9014ms] [LOG] [Fast Refresh] done in 2087ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[    9207ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   10582ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   10929ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   17431ms] ReferenceError: canReviewKB is not defined
+    at KnowledgeBaseIndex (http://localhost:3000/_next/static/chunks/_1uf2xmx._.js:623:22)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10179:316)
+    at processRootScheduleInMicrotask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10200:106)
+    at http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10274:158
+[   17866ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   18122ms] [LOG] [Fast Refresh] done in 362ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   34969ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   37564ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   37600ms] [LOG] [Fast Refresh] done in 2703ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   39932ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   50958ms] [LOG] [Fast Refresh] done in 11136ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   56524ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   56996ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  100001ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  121676ms] ReferenceError: isClosedCasesShelf is not defined
+    at KnowledgeBaseIndex (http://localhost:3000/_next/static/chunks/_0v2ccnh._.js:735:54)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10179:316)
+    at flushSpawnedWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9939:13)
+    at commitRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9746:441)
+    at completeRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9711:13)
+    at completeRootWhenReady (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9187:9)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9159:25)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64)
+[  122690ms] [LOG] [Fast Refresh] done in 22892ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  156176ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  162227ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  162276ms] [LOG] [Fast Refresh] done in 6168ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  162380ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  168152ms] [LOG] [Fast Refresh] done in 5876ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  168598ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  169554ms] [LOG] [Fast Refresh] done in 1061ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  170902ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  171443ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  171910ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  171914ms] [LOG] [Fast Refresh] done in 214ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  175659ms] ReferenceError: reviewer is not defined
+    at KnowledgeBaseIndex (http://localhost:3000/_next/static/chunks/_0v2ccnh._.js:830:25)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10179:316)
+    at flushSpawnedWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9939:13)
+    at commitRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9746:441)
+    at completeRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9711:13)
+    at completeRootWhenReady (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9187:9)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9159:25)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64)
+[  176369ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  176734ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  176748ms] [LOG] [Fast Refresh] done in 588ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  176849ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  181408ms] [LOG] [Fast Refresh] done in 4658ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  182217ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  183007ms] [LOG] [Fast Refresh] done in 897ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  184014ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  185101ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  187298ms] ReferenceError: isClosedCasesShelf is not defined
+    at KnowledgeBaseIndex (http://localhost:3000/_next/static/chunks/_0v2ccnh._.js:841:14)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10179:316)
+    at flushSpawnedWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9939:13)
+    at commitRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9746:441)
+    at completeRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9711:13)
+    at completeRootWhenReady (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9187:9)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9159:25)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64)
+[  197975ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  200613ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  200623ms] [LOG] [Fast Refresh] done in 2860ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  200769ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  202326ms] [LOG] [Fast Refresh] done in 1670ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  203237ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  203645ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  206006ms] ReferenceError: isClosedCasesShelf is not defined
+    at KnowledgeBaseIndex (http://localhost:3000/_next/static/chunks/_0v2ccnh._.js:896:13)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10179:316)
+    at flushSpawnedWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9939:13)
+    at commitRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9746:441)
+    at completeRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9711:13)
+    at completeRootWhenReady (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9187:9)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9159:25)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64)
+[  236591ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  238718ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  239112ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  239232ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  239308ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  239344ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  239452ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  239954ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  239962ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  239969ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  240048ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/knowledge-base:0
+[  240620ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_react-dom_0kla17-._.js:15305
+[  240667ms] Error: ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./app/(app)/knowledge-base/page.tsx:180:7)
+    at Object.getCompilationErrors (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\dev\hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\lib\dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\dev\next-dev-server.js:720:42)
+    at DevServer.findPageComponents (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\dev\next-dev-server.js:690:43)
+    at async DevServer.renderErrorToResponseImpl (file://D:\Projects\NHQ_Support _portal\support_system_frontend\node_modules\next\dist\server\base-server.js:1753:26)
+[  241727ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  241791ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  242518ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  242520ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  242521ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  242522ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  242623ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  243083ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  243190ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  243314ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  243397ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  243458ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  243556ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  243562ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  243766ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  243810ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  243893ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  243938ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  244019ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  244075ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  244203ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  244206ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  244362ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  244374ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  244487ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  244533ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  244654ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  244970ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  245020ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  245098ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  245136ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  245233ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  245367ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  245387ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  246604ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  246659ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  246792ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  246820ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  247021ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  247066ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  247303ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  247409ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  247565ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  247736ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  247895ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  247943ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  248016ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  248045ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  248957ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249056ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249159ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  249262ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249470ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249515ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  249610ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249623ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  249734ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249781ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249873ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  249902ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  249983ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250032ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250160ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  250162ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250297ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250323ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  250419ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250465ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250537ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250594ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250667ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250717ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250810ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250859ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250933ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  250980ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251058ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251109ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251188ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251230ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251330ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251393ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251446ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251542ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251588ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251678ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251745ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  251864ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  251866ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252025ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252036ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  252147ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252190ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252301ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252313ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  252473ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252473ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  252578ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252688ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252727ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  252908ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  252937ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  253014ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  253125ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  253154ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  253369ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  253513ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  253542ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  253653ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  253667ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  253823ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  254618ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  254620ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  254795ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  254851ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  254955ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  254974ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  255098ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  255112ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  255237ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  255251ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  255379ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  255391ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  255548ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  255592ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  255687ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  255700ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  255840ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  256194ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256242ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256321ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256430ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256489ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  256522ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256615ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256644ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  256714ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256755ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256859ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  256860ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256863ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  256957ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257050ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257143ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257295ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  257299ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257469ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257496ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  257577ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257618ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257715ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  257727ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  257913ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  258257ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  258259ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  258348ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  258442ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  258536ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  258596ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  258646ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  258737ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  258751ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  261950ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  261955ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262059ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262212ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  262254ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262328ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262417ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262508ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  262600ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262659ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  262743ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262805ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262847ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262939ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  262957ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  263077ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  263187ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  263230ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  263338ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  263549ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  263646ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  263688ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  263802ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  263815ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  263942ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  263972ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  264132ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  264133ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  264267ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  264280ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  264421ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  264481ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  264533ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  264624ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  264638ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  264763ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  264807ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  264931ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  265025ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265026ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265134ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  265152ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265157ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265293ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265356ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265420ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265524ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  265525ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265805ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  265872ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  265981ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266044ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266104ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266153ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266226ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266273ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266353ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266403ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266476ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266536ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266627ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266640ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  266767ms] [ERROR] ./app/(app)/knowledge-base/page.tsx:180:7
+Expected '</', got ')'
+  178 |           </div>
+  179 |         )
+> 180 |       ) : (
+      |       ^
+  181 |         /* ── Article grid ───────────────────────────────────────────────────── */
+  182 |         isLoading ? (
+  183 |           <div className="grid gap-4 sm:grid-cols-2">
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/(app)/knowledge-base/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(app)/knowledge-base/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  266796ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  266966ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  268234ms] [LOG] [Fast Refresh] done in 1359ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  268449ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  270274ms] [LOG] [Fast Refresh] done in 1944ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1226
+[  274894ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  275402ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  326928ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  327780ms] [LOG] [Fast Refresh] done in 747ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  328020ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  328896ms] [LOG] [Fast Refresh] done in 986ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  329027ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  329694ms] [LOG] [Fast Refresh] done in 794ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  391422ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  455723ms] [LOG] [Fast Refresh] done in 9441ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  470399ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  493220ms] [LOG] [Fast Refresh] done in 33207ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  498646ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  502431ms] [LOG] [Fast Refresh] done in 3925ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  608301ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  609163ms] [LOG] [Fast Refresh] done in 977ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  610405ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  610619ms] [LOG] [Fast Refresh] done in 321ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  611327ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  611390ms] [LOG] [Fast Refresh] done in 171ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  612987ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  613042ms] [LOG] [Fast Refresh] done in 156ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1054730ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1070919ms] [LOG] [Fast Refresh] done in 16270ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1071546ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1076340ms] [LOG] [Fast Refresh] done in 4894ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1076495ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1077701ms] [LOG] [Fast Refresh] done in 1317ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1083367ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1094195ms] [LOG] [Fast Refresh] done in 11090ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1094357ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1095409ms] [LOG] [Fast Refresh] done in 1167ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1095619ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1095782ms] [LOG] [Fast Refresh] done in 264ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1095995ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1096000ms] [LOG] [Fast Refresh] done in 121ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1096206ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[ 1096247ms] [LOG] [Fast Refresh] done in 156ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477

@@ -12,13 +12,14 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { cn, formatDateTime } from '@/lib/utils'
+import { CaseApprovalQueue } from '@/modules/shared/case-approval-queue'
+import { cn, formatDateTime, slaRemainingMs } from '@/lib/utils'
 import {
   Ticket, AlertTriangle, CheckCircle, CheckCircle2, Clock, Users, Gauge,
   ShieldCheck, ArrowLeftRight, UserPlus, BookOpen, Star, ChevronRight,
-  Building2, Lightbulb, Package, Shield, TrendingDown, RotateCcw,
+  Building2, Lightbulb, Package, Shield, TrendingDown, RotateCcw, TimerReset,
 } from 'lucide-react'
-import type { Case, User, Client, AuditLog, EngineerMetrics, Feedback, KBArticle, Notification, Team, CaseTransferRequest, TeamMemberRequest } from '@/types'
+import type { Case, User, Client, AuditLog, EngineerMetrics, Feedback, KBArticle, Notification, Team, CaseTransferRequest, TeamMemberRequest, SLARule } from '@/types'
 
 // Recharts widget — client-only so it stays out of SSR.
 const CaseSummary12m = dynamic(
@@ -77,8 +78,9 @@ export default function TechHeadDashboard() {
   const { data: notifications } = useQuery<Notification[]>({ queryKey: ['notifications', session.userId], queryFn: () => dp.listNotifications(session.userId) })
   const { data: transferReqs } = useQuery<CaseTransferRequest[]>({ queryKey: ['case-transfer-requests', 'pending'], queryFn: () => dp.listAllPendingCaseTransferRequests() })
   const { data: memberReqs } = useQuery<TeamMemberRequest[]>({ queryKey: ['team-member-requests', 'pending'], queryFn: () => dp.listAllPendingTeamMemberRequests() })
-  const { data: pendingKB } = useQuery<KBArticle[]>({ queryKey: ['kb', 'pending'], queryFn: () => dp.listKBArticles({ status: 'pending' }, scope) })
+  const { data: pendingKB } = useQuery<KBArticle[]>({ queryKey: ['kb', 'in_review'], queryFn: () => dp.listKBArticles({ status: 'in_review' }, scope) })
   const { data: feedback } = useQuery<Feedback[]>({ queryKey: ['feedback', session.userId], queryFn: () => dp.listFeedback(scope) })
+  const { data: slaRules, isLoading: slaRulesLoading } = useQuery<SLARule[]>({ queryKey: ['sla-rules'], queryFn: () => dp.listSLARules() })
 
   const cases = useMemo(() => casesData?.items ?? [], [casesData])
   const usersMap = useMemo(() => Object.fromEntries((users ?? []).map((u: User) => [u.id, u])), [users])
@@ -86,11 +88,21 @@ export default function TechHeadDashboard() {
 
   const openCases = useMemo(() => cases.filter((c) => !['closed', 'resolved'].includes(c.status)), [cases])
   const escalated = useMemo(() => cases.filter((c) => c.is_escalated || c.status === 'escalated'), [cases])
+  // Routing-approval queue: cases pending directly with the TH (no team owns
+  // the service) plus overdue ones no team lead assigned within 30 minutes.
+  const approvalQueueCount = useMemo(
+    () => cases.filter((c) =>
+      !c.assignee_id &&
+      (c.approval_status === 'escalated' || (c.approval_status === 'pending' && c.approval_user_id === session.userId))
+    ).length,
+    [cases, session.userId]
+  )
   const critical = useMemo(() => cases.filter((c) => c.priority === 'critical' && !['closed', 'resolved'].includes(c.status)), [cases])
 
   // Top KPI metrics. Capture "now" once at mount (lazy state initializer keeps
   // the render pure) so the time-window cutoffs are stable across re-renders.
   const [nowMs] = useState(() => Date.now())
+  const [priorityTab, setPriorityTab] = useState<'attention' | 'pending'>('pending')
   // Successful = fully closed within the last 30 days.
   const lastMonthSuccessful = useMemo(() => {
     const cutoff = nowMs - 30 * 86_400_000
@@ -111,6 +123,18 @@ export default function TechHeadDashboard() {
     [cases]
   )
   const feedbackPendingReview = useMemo(() => (feedback ?? []).filter((f) => !f.th_reviewed), [feedback])
+
+  // High Priority → Attention: live SLA-health signals across all open cases.
+  const slaBreachCases = useMemo(() => openCases.filter((c) => slaRemainingMs(c.sla_due_at) < 0), [openCases])
+  const dueTodayCases = useMemo(
+    () => openCases.filter((c) => { const r = slaRemainingMs(c.sla_due_at); return r >= 0 && r <= 86_400_000 }),
+    [openCases]
+  )
+  // Stale = no closure/resolution activity yet and it's been 15+ days since the case was created.
+  const staleCases = useMemo(
+    () => openCases.filter((c) => nowMs - new Date(c.closed_at ?? c.resolved_at ?? c.created_at).getTime() >= 15 * 86_400_000),
+    [openCases, nowMs]
+  )
 
   // SLA health
   const unreadSlaNotifs = useMemo(
@@ -138,16 +162,24 @@ export default function TechHeadDashboard() {
   }, [teams, openCases])
   const maxTeamLoad = Math.max(1, ...workload.map((w) => w.count))
 
-  // Action center
+  // Action center — approvals & requests waiting on the Technical Head.
   const actionItems: { label: string; count: number; icon: React.ComponentType<{ className?: string }>; href: string; tone: Tone }[] = [
-    { label: 'Critical resolutions awaiting approval', count: criticalPendingApproval.length, icon: ShieldCheck, href: '/technical-head', tone: 'red' },
-    { label: 'Escalations awaiting response', count: escalated.length, icon: AlertTriangle, href: '/technical-head', tone: 'red' },
+    { label: 'Critical resolutions awaiting approval', count: criticalPendingApproval.length, icon: ShieldCheck, href: '/technical-head?tab=approvals', tone: 'red' },
+    { label: 'Escalations awaiting response', count: escalated.length, icon: AlertTriangle, href: '/technical-head?tab=escalations', tone: 'red' },
     { label: 'Case transfer requests', count: transferReqs?.length ?? 0, icon: ArrowLeftRight, href: '/teams', tone: 'amber' },
     { label: 'Team member requests', count: memberReqs?.length ?? 0, icon: UserPlus, href: '/teams', tone: 'amber' },
     { label: 'KB articles pending publish', count: pendingKB?.length ?? 0, icon: BookOpen, href: '/knowledge-base', tone: 'violet' },
     { label: 'Feedback pending review', count: feedbackPendingReview.length, icon: Star, href: '/feedback', tone: 'blue' },
   ]
   const totalPending = actionItems.reduce((s, a) => s + a.count, 0)
+
+  // Attention — SLA-health signals that need proactive review right now.
+  const attentionItems: { label: string; count: number; icon: React.ComponentType<{ className?: string }>; href: string; tone: Tone }[] = [
+    { label: 'SLA Breach', count: slaBreachCases.length, icon: AlertTriangle, href: '/cases', tone: 'red' },
+    { label: 'Due Case', count: dueTodayCases.length, icon: Gauge, href: '/cases', tone: 'amber' },
+    { label: 'Stale (15+ Days)', count: staleCases.length, icon: TimerReset, href: '/cases', tone: 'blue' },
+  ]
+  const totalAttention = attentionItems.reduce((s, a) => s + a.count, 0)
 
   const manageLinks = [
     { label: 'Support Engineers', href: '/support-engineer', icon: Users },
@@ -171,21 +203,13 @@ export default function TechHeadDashboard() {
           <h1 className="text-2xl font-bold text-foreground">Overview</h1>
           <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
             All cases · all teams · full visibility
-            {escalated.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">
-                <AlertTriangle className="h-2.5 w-2.5" /> {escalated.length} escalated
-              </span>
-            )}
+
             {criticalPendingApproval.length > 0 && (
               <span className="inline-flex items-center gap-1 text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-semibold">
                 <ShieldCheck className="h-2.5 w-2.5" /> {criticalPendingApproval.length} need approval
               </span>
             )}
-            {unreadSlaNotifs.length > 0 && (
-              <span className="inline-flex text-xs bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-400 px-2 py-0.5 rounded-full font-semibold">
-                {unreadSlaNotifs.length} SLA alerts
-              </span>
-            )}
+
           </p>
         </div>
         <Link href="/technical-head" className="text-sm text-primary hover:underline inline-flex items-center gap-0.5 shrink-0">
@@ -196,49 +220,99 @@ export default function TechHeadDashboard() {
       {/* KPI row */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <StatCard title="Open Cases" value={openCases.length} icon={Ticket} loading={casesLoading} />
-        <StatCard title="Last Month Successful" value={lastMonthSuccessful} subtitle="cases closed · 30d" icon={CheckCircle} iconColor="text-emerald-500" loading={casesLoading} />
-        <StatCard title="Last 3 Months Due" value={last3MonthsDue} subtitle="SLA overdue · 90d" icon={AlertTriangle} iconColor="text-red-500" loading={casesLoading} />
-        <StatCard title="Reopened Cases" value={reopenedCount} subtitle="from closed cases" icon={RotateCcw} iconColor="text-amber-500" loading={casesLoading} />
-        <StatCard title="SLA Compliance" value={avgSLA != null ? `${avgSLA}%` : '—'} subtitle="avg across engineers" icon={Gauge} iconColor={avgSLA != null && avgSLA < 70 ? 'text-red-500' : 'text-emerald-500'} />
-        <StatCard title="Pending Approvals" value={totalPending} subtitle="needs your action" icon={ShieldCheck} iconColor={totalPending > 0 ? 'text-amber-500' : 'text-emerald-500'} />
+        <StatCard title="Last Month Successful" value={lastMonthSuccessful} icon={CheckCircle} iconColor="text-emerald-500" loading={casesLoading} />
+        <StatCard title="Last 3 Months Due" value={last3MonthsDue} icon={AlertTriangle} iconColor="text-red-500" loading={casesLoading} />
+        <StatCard title="Reopened Cases" value={reopenedCount} icon={RotateCcw} iconColor="text-amber-500" loading={casesLoading} />
+        <StatCard title="Total SLA" value={slaRules?.length ?? 0} icon={Gauge} iconColor="text-emerald-500" loading={slaRulesLoading} />
+        <StatCard title="Pending Approvals" value={totalPending} icon={ShieldCheck} iconColor={totalPending > 0 ? 'text-amber-500' : 'text-emerald-500'} />
       </div>
 
-      {/* Action Center */}
+      {/* High Priority */}
       <div className="rounded-xl border bg-card p-4">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
           <ShieldCheck className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-foreground">Needs your attention</h3>
-          <span className={cn('ml-auto text-xs font-semibold px-2 py-0.5 rounded-full', totalPending > 0 ? TONE.amber : TONE.blue)}>
-            {totalPending > 0 ? `${totalPending} pending` : 'All caught up'}
-          </span>
+          <h3 className="text-sm font-semibold text-foreground">High Priority</h3>
         </div>
-        {totalPending === 0 ? (
-          <EmptyState size="sm" icon={CheckCircle2} title="You're all caught up" description="No approvals or requests are waiting on you." />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {actionItems.map(({ label, count, icon: Icon, href, tone }) => (
-              <Link
-                key={label}
-                href={href}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors',
-                  count > 0 ? 'hover:bg-accent/40' : 'opacity-60 hover:opacity-100'
-                )}
-              >
-                <div className={cn('rounded-md p-1.5 shrink-0', count > 0 ? TONE[tone] : 'bg-muted text-muted-foreground')}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <span className="text-sm text-foreground flex-1 leading-tight">{label}</span>
-                {count > 0 ? (
-                  <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full shrink-0', TONE[tone])}>{count}</span>
-                ) : (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                )}
-              </Link>
-            ))}
-          </div>
-        )}
+
+        <Tabs value={priorityTab} onValueChange={(v) => setPriorityTab(v as 'attention' | 'pending')}>
+          <TabsList className="mb-3">
+            <TabsTrigger value="pending">Pending ({totalPending})</TabsTrigger>
+            <TabsTrigger value="attention">Attention ({totalAttention})</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="pending">
+            {totalPending === 0 ? (
+              <EmptyState size="sm" icon={CheckCircle2} title="You're all caught up" description="No approvals or requests are waiting on you." />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {actionItems.map(({ label, count, icon: Icon, href, tone }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors',
+                      count > 0 ? 'hover:bg-accent/40' : 'opacity-60 hover:opacity-100'
+                    )}
+                  >
+                    <div className={cn('rounded-md p-1.5 shrink-0', count > 0 ? TONE[tone] : 'bg-muted text-muted-foreground')}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="text-sm text-foreground flex-1 leading-tight">{label}</span>
+                    {count > 0 ? (
+                      <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full shrink-0', TONE[tone])}>{count}</span>
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    )}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="attention">
+            {totalAttention === 0 ? (
+              <EmptyState size="sm" icon={CheckCircle2} title="No SLA concerns" description="No cases are breached, due, or stale right now." />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {attentionItems.map(({ label, count, icon: Icon, href, tone }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors',
+                      count > 0 ? 'hover:bg-accent/40' : 'opacity-60 hover:opacity-100'
+                    )}
+                  >
+                    <div className={cn('rounded-md p-1.5 shrink-0', count > 0 ? TONE[tone] : 'bg-muted text-muted-foreground')}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="text-sm text-foreground flex-1 leading-tight">{label}</span>
+                    {count > 0 ? (
+                      <span className={cn('text-xs font-bold px-2 py-0.5 rounded-full shrink-0', TONE[tone])}>{count}</span>
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    )}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
+
+      {/* Routing approval queue — new cases + overdue team-lead windows */}
+      {approvalQueueCount > 0 && (
+        <div className="rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/40 dark:bg-red-950/10 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <TimerReset className="h-4 w-4 text-red-500" />
+            <h3 className="text-sm font-semibold text-foreground">Case Assignment Queue</h3>
+            <span className="text-[11px] text-muted-foreground">
+              Unassigned cases — including team-lead windows that ran past 30 minutes
+            </span>
+          </div>
+          <CaseApprovalQueue cases={cases} users={users ?? []} />
+        </div>
+      )}
 
       {/* Main grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -291,7 +365,7 @@ export default function TechHeadDashboard() {
         {/* Side panels */}
         <div className="space-y-4">
           {/* SLA & performance */}
-          <Panel title="SLA & Performance" icon={Gauge} action={{ label: 'Performance', href: '/technical-head' }}>
+          <Panel title="SLA & Performance" icon={Gauge} action={{ label: 'Performance', href: '/technical-head?tab=performance' }}>
             <div className="grid grid-cols-2 gap-2 mb-3">
               <div className="rounded-lg border p-2.5">
                 <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Avg SLA</p>
@@ -332,7 +406,7 @@ export default function TechHeadDashboard() {
           </Panel>
 
           {/* Team workload */}
-          <Panel title={`Team Workload (${workload.length})`} icon={Users} action={{ label: 'Workload', href: '/technical-head' }}>
+          <Panel title={`Team Workload (${workload.length})`} icon={Users} action={{ label: 'Workload', href: '/technical-head?tab=workload' }}>
             {workload.length === 0 ? (
               <EmptyState size="sm" icon={Users} title="No teams" />
             ) : (

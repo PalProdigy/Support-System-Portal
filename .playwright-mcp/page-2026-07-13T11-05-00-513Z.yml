@@ -1,0 +1,163 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - link:
+            - /url: /dashboard
+            - img:
+              - generic: NH
+              - generic: DISTRIBUTIONS
+        - navigation:
+          - link:
+            - /url: /dashboard
+            - generic: Dashboard
+          - link:
+            - /url: /technical-head
+            - generic: TH Hub
+          - link:
+            - /url: /cases
+            - generic: Cases
+          - link:
+            - /url: /teams
+            - generic: Teams
+          - link:
+            - /url: /team-lead
+            - generic: Team Leads
+          - link:
+            - /url: /support-engineer
+            - generic: Support Engineers
+          - link:
+            - /url: /sales-executive
+            - generic: Sales Executives
+          - link:
+            - /url: /clients
+            - generic: Clients
+          - link:
+            - /url: /products
+            - generic: Products
+          - link:
+            - /url: /solutions
+            - generic: Solutions
+          - link:
+            - /url: /knowledge-base
+            - generic: Knowledge Base
+          - link:
+            - /url: /reporting
+            - generic: Reporting
+          - link:
+            - /url: /feedback
+            - generic: Feedback
+          - link:
+            - /url: /sla-rules
+            - generic: SLA Rules
+          - link:
+            - /url: /audit-log
+            - generic: Audit Log
+          - link:
+            - /url: /notifications
+            - generic: Notifications
+          - link:
+            - /url: /settings
+            - generic: Settings
+        - generic:
+          - generic:
+            - generic:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+            - button
+    - generic:
+      - generic:
+        - banner:
+          - generic:
+            - button
+            - button:
+              - generic: 9+
+            - button:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: Knowledge Base
+                - paragraph: Guides, troubleshooting and best practices — solve it before it becomes a ticket.
+              - button: New Article
+            - generic:
+              - generic:
+                - textbox:
+                  - /placeholder: Search by title or reference…
+                - generic: 3 cases found
+          - generic:
+            - tablist:
+              - tab: Browse (6)
+              - tab: My Articles (0)
+              - tab: Review Queue (1)
+              - tab [selected]: Closed Cases (3)
+          - generic:
+            - generic: Sort by
+            - combobox [expanded]:
+              - generic: Date Closed
+          - generic:
+            - link:
+              - /url: /cases/case15
+              - generic:
+                - generic:
+                  - generic: NHQ-2024-0015
+                  - generic:
+                    - generic: Low
+                    - generic: Closed
+                - paragraph: Two-factor authentication setup guide request
+                - generic:
+                  - generic:
+                    - generic: TechWave Solutions
+                    - generic: ·
+                    - generic: 13 Jun 2024, 15:00
+                  - generic: Paused
+            - link:
+              - /url: /cases/case11
+              - generic:
+                - generic:
+                  - generic: NHQ-2024-0011
+                  - generic:
+                    - generic: Low
+                    - generic: Closed
+                - paragraph: User cannot reset password
+                - generic:
+                  - generic:
+                    - generic: Acme Corporation Ltd.
+                    - generic: ·
+                    - generic: Farzana Begum
+                    - generic: ·
+                    - generic: 08 Jun 2024, 16:00
+                  - generic: Paused
+            - link:
+              - /url: /cases/case19
+              - generic:
+                - generic:
+                  - generic: NHQ-2024-0019
+                  - generic:
+                    - generic: Medium
+                    - generic: Closed
+                - paragraph: Cloud data warehouse query timeout on quarterly report
+                - generic:
+                  - generic:
+                    - generic: Acme Corporation Ltd.
+                    - generic: ·
+                    - generic: Rafi Uddin
+                    - generic: ·
+                    - generic: 03 Apr 2024, 14:30
+                  - generic: Paused
+  - list
+  - button "Open Next.js Dev Tools" [ref=e366] [cursor=pointer]
+  - alert
+  - listbox [ref=e441]:
+    - option "Date Closed" [active] [selected] [ref=e442]
+    - option "Team Name" [ref=e448]
+    - option "Support Engineer Name" [ref=e451]
+    - option "Service" [ref=e454]

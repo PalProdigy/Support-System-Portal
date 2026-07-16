@@ -1,0 +1,399 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e56]:
+    - complementary [ref=e58]:
+      - link [ref=e60] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e61]:
+          - generic [ref=e62]: NH
+          - generic [ref=e63]: DISTRIBUTIONS
+      - navigation [ref=e71]:
+        - link "Dashboard" [ref=e72] [cursor=pointer]:
+          - /url: /dashboard
+        - link "AM Hub" [ref=e79] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Cases" [ref=e84] [cursor=pointer]:
+          - /url: /cases
+        - link "Clients" [ref=e88] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=e94] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=e100] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=e104] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=e108] [cursor=pointer]:
+          - /url: /reporting
+        - link "Notifications" [ref=e112] [cursor=pointer]:
+          - /url: /notifications
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic "Tanvir Ahmed" [ref=e120]:
+            - generic "Tanvir Ahmed avatar" [ref=e122]: TA
+          - generic [ref=e123]:
+            - paragraph [ref=e124]: Tanvir Ahmed
+            - paragraph [ref=e125]: Sales Executive
+        - button "Collapse sidebar" [ref=e126]
+    - generic [ref=e129]:
+      - banner [ref=e131]:
+        - generic [ref=e132]:
+          - button "Toggle theme" [ref=e133] [cursor=pointer]
+          - button "Notifications" [ref=e134] [cursor=pointer]:
+            - generic [ref=e135]: 9+
+          - button "Tanvir Ahmed avatar Tanvir Ahmed Sales Executive" [ref=e136] [cursor=pointer]:
+            - generic "Tanvir Ahmed" [ref=e137]:
+              - generic "Tanvir Ahmed avatar" [ref=e139]: TA
+            - generic [ref=e140]:
+              - paragraph [ref=e141]: Tanvir Ahmed
+              - paragraph [ref=e142]: Sales Executive
+      - main [ref=e143]:
+        - generic [ref=e144]:
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - heading "Account Overview" [level=1] [ref=e147]
+              - paragraph [ref=e148]: Your clients, cases, and pipeline at a glance
+            - generic [ref=e149]:
+              - button "Pipeline" [ref=e150] [cursor=pointer]
+              - button "New Case" [ref=e151] [cursor=pointer]
+          - generic [ref=e152]:
+            - generic [ref=e155]:
+              - paragraph [ref=e156]: My Clients
+              - paragraph [ref=e157]: "2"
+            - generic [ref=e165]:
+              - paragraph [ref=e166]: Open Pipeline
+              - paragraph [ref=e167]: "3"
+              - paragraph [ref=e168]: ৳950K value
+            - generic [ref=e176]:
+              - paragraph [ref=e177]: Open Cases
+              - paragraph [ref=e178]: "11"
+            - generic [ref=e184]:
+              - paragraph [ref=e185]: Escalated
+              - paragraph [ref=e186]: "5"
+            - generic [ref=e192]:
+              - paragraph [ref=e193]: Resolved
+              - paragraph [ref=e194]: "6"
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - generic [ref=e201]:
+                - paragraph [ref=e202]: SLA Health
+                - generic [ref=e203]:
+                  - generic [ref=e204] [cursor=pointer]:
+                    - generic [ref=e205]: "11"
+                    - paragraph [ref=e209]: Breaching SLA
+                  - generic [ref=e210] [cursor=pointer]:
+                    - generic [ref=e211]: "0"
+                    - paragraph [ref=e216]: At Risk (within 2h)
+                  - generic [ref=e217]:
+                    - generic [ref=e218]: "0"
+                    - paragraph [ref=e223]: On Track
+                - paragraph [ref=e224]: 11 cases breaching SLA.
+              - generic [ref=e225]:
+                - generic [ref=e226]:
+                  - heading "Pipeline Distribution" [level=3] [ref=e227]
+                  - generic [ref=e233]:
+                    - list [ref=e235]:
+                      - listitem [ref=e236]:
+                        - img "Closed Lost legend icon" [ref=e237]
+                        - text: Closed Lost
+                      - listitem [ref=e239]:
+                        - img "Closed Won legend icon" [ref=e240]
+                        - text: Closed Won
+                      - listitem [ref=e242]:
+                        - img "Discovery legend icon" [ref=e243]
+                        - text: Discovery
+                      - listitem [ref=e245]:
+                        - img "Negotiation legend icon" [ref=e246]
+                        - text: Negotiation
+                      - listitem [ref=e248]:
+                        - img "Proposal legend icon" [ref=e249]
+                        - text: Proposal
+                    - application [ref=e251]
+                - generic [ref=e252]:
+                  - heading "Case Activity (last 6 months)" [level=3] [ref=e253]
+                  - generic [ref=e258]:
+                    - list [ref=e260]:
+                      - listitem [ref=e261]:
+                        - img "Opened legend icon" [ref=e262]
+                        - text: Opened
+                      - listitem [ref=e264]:
+                        - img "Resolved legend icon" [ref=e265]
+                        - text: Resolved
+                    - application [ref=e267]:
+                      - generic [ref=e271]:
+                        - generic [ref=e272]:
+                          - generic [ref=e273]: Feb
+                          - generic [ref=e275]: Mar
+                          - generic [ref=e277]: Apr
+                          - generic [ref=e279]: May
+                          - generic [ref=e281]: Jun
+                          - generic [ref=e283]: Jul
+                        - generic [ref=e285]:
+                          - generic [ref=e286]: "0"
+                          - generic [ref=e288]: "1"
+                          - generic [ref=e290]: "2"
+                          - generic [ref=e292]: "3"
+                          - generic [ref=e294]: "4"
+              - generic [ref=e296]:
+                - heading "Clients" [level=2] [ref=e298]
+                - generic [ref=e299]:
+                  - generic [ref=e300] [cursor=pointer]:
+                    - paragraph [ref=e302]: Acme Corporation Ltd.
+                    - paragraph [ref=e303]: Priya Sharma
+                    - generic [ref=e304]:
+                      - generic [ref=e305]: 6 open
+                      - generic [ref=e306]: ·
+                      - generic [ref=e307]: 10 total
+                  - generic [ref=e308] [cursor=pointer]:
+                    - paragraph [ref=e310]: Delta Trade Ltd.
+                    - paragraph [ref=e311]: Rahim Molla
+                    - generic [ref=e312]:
+                      - generic [ref=e313]: 5 open
+                      - generic [ref=e314]: ·
+                      - generic [ref=e315]: 7 total
+              - generic [ref=e316]:
+                - heading "Recent Cases" [level=2] [ref=e317]
+                - generic [ref=e318]:
+                  - link "NHQ-2026-0024 High Assigned Sample case — VPN connectivity issue Acme Corporation Ltd. Overdue" [ref=e319] [cursor=pointer]:
+                    - /url: /cases/maa9nmmfwlsmrhy6rnt
+                    - generic [ref=e320]:
+                      - generic [ref=e321]:
+                        - generic [ref=e322]: NHQ-2026-0024
+                        - generic [ref=e324]:
+                          - generic [ref=e325]: High
+                          - generic [ref=e327]: Assigned
+                      - paragraph [ref=e328]: Sample case — VPN connectivity issue
+                      - generic [ref=e329]:
+                        - generic [ref=e330]: Acme Corporation Ltd.
+                        - generic [ref=e332]: Overdue
+                  - link "NHQ-2026-0023 High Assigned Sample case — VPN connectivity issue Acme Corporation Ltd. Overdue" [ref=e336] [cursor=pointer]:
+                    - /url: /cases/0v21c3dfnrvmrhxufd6
+                    - generic [ref=e337]:
+                      - generic [ref=e338]:
+                        - generic [ref=e339]: NHQ-2026-0023
+                        - generic [ref=e341]:
+                          - generic [ref=e342]: High
+                          - generic [ref=e344]: Assigned
+                      - paragraph [ref=e345]: Sample case — VPN connectivity issue
+                      - generic [ref=e346]:
+                        - generic [ref=e347]: Acme Corporation Ltd.
+                        - generic [ref=e349]: Overdue
+                  - link "NHQ-2024-0013 Escalated Medium Escalated Analytics report export to Excel failing Delta Trade Ltd. Overdue" [ref=e353] [cursor=pointer]:
+                    - /url: /cases/case13
+                    - generic [ref=e354]:
+                      - generic [ref=e355]:
+                        - generic [ref=e356]:
+                          - generic [ref=e357]: NHQ-2024-0013
+                          - generic [ref=e358]: Escalated
+                        - generic [ref=e361]:
+                          - generic [ref=e362]: Medium
+                          - generic [ref=e364]: Escalated
+                      - paragraph [ref=e365]: Analytics report export to Excel failing
+                      - generic [ref=e366]:
+                        - generic [ref=e367]: Delta Trade Ltd.
+                        - generic [ref=e369]: Overdue
+                  - link "NHQ-2024-0010 High In Progress API rate limit errors in ERP connector Acme Corporation Ltd. Overdue" [ref=e373] [cursor=pointer]:
+                    - /url: /cases/case10
+                    - generic [ref=e374]:
+                      - generic [ref=e375]:
+                        - generic [ref=e376]: NHQ-2024-0010
+                        - generic [ref=e378]:
+                          - generic [ref=e379]: High
+                          - generic [ref=e381]: In Progress
+                      - paragraph [ref=e382]: API rate limit errors in ERP connector
+                      - generic [ref=e383]:
+                        - generic [ref=e384]: Acme Corporation Ltd.
+                        - generic [ref=e386]: Overdue
+                  - link "NHQ-2024-0008 Escalated Medium Escalated Dashboard showing stale data after refresh Delta Trade Ltd. Overdue" [ref=e390] [cursor=pointer]:
+                    - /url: /cases/case8
+                    - generic [ref=e391]:
+                      - generic [ref=e392]:
+                        - generic [ref=e393]:
+                          - generic [ref=e394]: NHQ-2024-0008
+                          - generic [ref=e395]: Escalated
+                        - generic [ref=e398]:
+                          - generic [ref=e399]: Medium
+                          - generic [ref=e401]: Escalated
+                      - paragraph [ref=e402]: Dashboard showing stale data after refresh
+                      - generic [ref=e403]:
+                        - generic [ref=e404]: Delta Trade Ltd.
+                        - generic [ref=e406]: Overdue
+                  - link "NHQ-2024-0012 Escalated Critical Escalated Purchase order PDF not generating Delta Trade Ltd. Overdue" [ref=e410] [cursor=pointer]:
+                    - /url: /cases/case12
+                    - generic [ref=e411]:
+                      - generic [ref=e412]:
+                        - generic [ref=e413]:
+                          - generic [ref=e414]: NHQ-2024-0012
+                          - generic [ref=e415]: Escalated
+                        - generic [ref=e418]:
+                          - generic [ref=e419]: Critical
+                          - generic [ref=e421]: Escalated
+                      - paragraph [ref=e422]: Purchase order PDF not generating
+                      - generic [ref=e423]:
+                        - generic [ref=e424]: Delta Trade Ltd.
+                        - generic [ref=e426]: Overdue
+            - generic [ref=e431]:
+              - generic [ref=e432]:
+                - heading "Recent Activity" [level=3] [ref=e433]
+                - generic [ref=e438]: "25"
+              - list [ref=e442]:
+                - listitem [ref=e443]:
+                  - link [ref=e444] [cursor=pointer]:
+                    - /url: /cases/maa9nmmfwlsmrhy6rnt
+                    - generic [ref=e449]:
+                      - paragraph [ref=e450]: New case opened
+                      - paragraph [ref=e451]: NHQ-2026-0024 · Acme Corporation Ltd.
+                      - paragraph [ref=e452]: 1d ago
+                - listitem [ref=e453]:
+                  - link [ref=e454] [cursor=pointer]:
+                    - /url: /cases/0v21c3dfnrvmrhxufd6
+                    - generic [ref=e459]:
+                      - paragraph [ref=e460]: New case opened
+                      - paragraph [ref=e461]: NHQ-2026-0023 · Acme Corporation Ltd.
+                      - paragraph [ref=e462]: 1d ago
+                - listitem [ref=e463]:
+                  - generic [ref=e472]:
+                    - paragraph [ref=e473]: Deal won
+                    - paragraph [ref=e474]: Meridian Pharma · Closed Won
+                    - paragraph [ref=e475]: 534d ago
+                - listitem [ref=e476]:
+                  - generic [ref=e483]:
+                    - paragraph [ref=e484]: New prospect added
+                    - paragraph [ref=e485]: GreenTech BD
+                    - paragraph [ref=e486]: 537d ago
+                - listitem [ref=e487]:
+                  - generic [ref=e495]:
+                    - paragraph [ref=e496]: Pipeline stage updated
+                    - paragraph [ref=e497]: Summit Finance Ltd · Negotiation
+                    - paragraph [ref=e498]: 539d ago
+                - listitem [ref=e499]:
+                  - generic [ref=e507]:
+                    - paragraph [ref=e508]: Pipeline stage updated
+                    - paragraph [ref=e509]: Apex Logistics BD · Proposal
+                    - paragraph [ref=e510]: 541d ago
+                - listitem [ref=e511]:
+                  - generic [ref=e518]:
+                    - paragraph [ref=e519]: New prospect added
+                    - paragraph [ref=e520]: Apex Logistics BD
+                    - paragraph [ref=e521]: 549d ago
+                - listitem [ref=e522]:
+                  - generic [ref=e529]:
+                    - paragraph [ref=e530]: New prospect added
+                    - paragraph [ref=e531]: Summit Finance Ltd
+                    - paragraph [ref=e532]: 554d ago
+                - listitem [ref=e533]:
+                  - generic [ref=e538]:
+                    - paragraph [ref=e539]: Deal lost
+                    - paragraph [ref=e540]: Coastal Traders · Closed Lost
+                    - paragraph [ref=e541]: 570d ago
+                - listitem [ref=e542]:
+                  - generic [ref=e549]:
+                    - paragraph [ref=e550]: New prospect added
+                    - paragraph [ref=e551]: Meridian Pharma
+                    - paragraph [ref=e552]: 575d ago
+                - listitem [ref=e553]:
+                  - generic [ref=e560]:
+                    - paragraph [ref=e561]: New prospect added
+                    - paragraph [ref=e562]: Coastal Traders
+                    - paragraph [ref=e563]: 619d ago
+                - listitem [ref=e564]:
+                  - link [ref=e565] [cursor=pointer]:
+                    - /url: /cases/case13
+                    - generic [ref=e570]:
+                      - paragraph [ref=e571]: New case opened
+                      - paragraph [ref=e572]: NHQ-2024-0013 · Delta Trade Ltd.
+                      - paragraph [ref=e573]: 751d ago
+                - listitem [ref=e574]:
+                  - link [ref=e575] [cursor=pointer]:
+                    - /url: /cases/case13
+                    - generic [ref=e580]:
+                      - paragraph [ref=e581]: Case escalated
+                      - paragraph [ref=e582]: NHQ-2024-0013 · Delta Trade Ltd.
+                      - paragraph [ref=e583]: 751d ago
+                - listitem [ref=e584]:
+                  - link [ref=e585] [cursor=pointer]:
+                    - /url: /cases/case10
+                    - generic [ref=e590]:
+                      - paragraph [ref=e591]: New case opened
+                      - paragraph [ref=e592]: NHQ-2024-0010 · Acme Corporation Ltd.
+                      - paragraph [ref=e593]: 751d ago
+                - listitem [ref=e594]:
+                  - link [ref=e595] [cursor=pointer]:
+                    - /url: /cases/case8
+                    - generic [ref=e600]:
+                      - paragraph [ref=e601]: New case opened
+                      - paragraph [ref=e602]: NHQ-2024-0008 · Delta Trade Ltd.
+                      - paragraph [ref=e603]: 751d ago
+                - listitem [ref=e604]:
+                  - link [ref=e605] [cursor=pointer]:
+                    - /url: /cases/case8
+                    - generic [ref=e610]:
+                      - paragraph [ref=e611]: Case escalated
+                      - paragraph [ref=e612]: NHQ-2024-0008 · Delta Trade Ltd.
+                      - paragraph [ref=e613]: 751d ago
+                - listitem [ref=e614]:
+                  - link [ref=e615] [cursor=pointer]:
+                    - /url: /cases/case12
+                    - generic [ref=e620]:
+                      - paragraph [ref=e621]: New case opened
+                      - paragraph [ref=e622]: NHQ-2024-0012 · Delta Trade Ltd.
+                      - paragraph [ref=e623]: 751d ago
+                - listitem [ref=e624]:
+                  - link [ref=e625] [cursor=pointer]:
+                    - /url: /cases/case12
+                    - generic [ref=e630]:
+                      - paragraph [ref=e631]: Case escalated
+                      - paragraph [ref=e632]: NHQ-2024-0012 · Delta Trade Ltd.
+                      - paragraph [ref=e633]: 751d ago
+                - listitem [ref=e634]:
+                  - link [ref=e635] [cursor=pointer]:
+                    - /url: /cases/case14
+                    - generic [ref=e640]:
+                      - paragraph [ref=e641]: New case opened
+                      - paragraph [ref=e642]: NHQ-2024-0014 · Acme Corporation Ltd.
+                      - paragraph [ref=e643]: 751d ago
+                - listitem [ref=e644]:
+                  - link [ref=e645] [cursor=pointer]:
+                    - /url: /cases/case14
+                    - generic [ref=e650]:
+                      - paragraph [ref=e651]: Case escalated
+                      - paragraph [ref=e652]: NHQ-2024-0014 · Acme Corporation Ltd.
+                      - paragraph [ref=e653]: 751d ago
+                - listitem [ref=e654]:
+                  - link [ref=e655] [cursor=pointer]:
+                    - /url: /cases/case1
+                    - generic [ref=e660]:
+                      - paragraph [ref=e661]: New case opened
+                      - paragraph [ref=e662]: NHQ-2024-0001 · Acme Corporation Ltd.
+                      - paragraph [ref=e663]: 751d ago
+                - listitem [ref=e664]:
+                  - link [ref=e665] [cursor=pointer]:
+                    - /url: /cases/case1
+                    - generic [ref=e670]:
+                      - paragraph [ref=e671]: Case escalated
+                      - paragraph [ref=e672]: NHQ-2024-0001 · Acme Corporation Ltd.
+                      - paragraph [ref=e673]: 751d ago
+                - listitem [ref=e674]:
+                  - link [ref=e675] [cursor=pointer]:
+                    - /url: /cases/case7
+                    - generic [ref=e680]:
+                      - paragraph [ref=e681]: New case opened
+                      - paragraph [ref=e682]: NHQ-2024-0007 · Delta Trade Ltd.
+                      - paragraph [ref=e683]: 751d ago
+                - listitem [ref=e684]:
+                  - link [ref=e685] [cursor=pointer]:
+                    - /url: /cases/case6
+                    - generic [ref=e690]:
+                      - paragraph [ref=e691]: New case opened
+                      - paragraph [ref=e692]: NHQ-2024-0006 · Acme Corporation Ltd.
+                      - paragraph [ref=e693]: 752d ago
+                - listitem [ref=e694]:
+                  - link [ref=e695] [cursor=pointer]:
+                    - /url: /cases/case2
+                    - generic [ref=e700]:
+                      - paragraph [ref=e701]: New case opened
+                      - paragraph [ref=e702]: NHQ-2024-0002 · Delta Trade Ltd.
+                      - paragraph [ref=e703]: 752d ago
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e51] [cursor=pointer]
+  - alert [ref=e55]
+  - generic [ref=e704]: "0"

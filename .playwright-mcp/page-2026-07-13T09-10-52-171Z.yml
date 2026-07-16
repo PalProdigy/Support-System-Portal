@@ -1,0 +1,17 @@
+- generic [active] [ref=f4e1]:
+  - generic [ref=f4e2]:
+    - generic [ref=f4e4]:
+      - heading "NHQ" [level=1] [ref=f4e5]
+      - paragraph [ref=f4e6]: DISTRIBUTIONS
+    - generic [ref=f4e9]:
+      - text: Loading Data ...
+      - generic [ref=f4e10]: 0%
+  - region "Notifications (F8)":
+    - list
+  - generic [ref=f4e11]:
+    - generic [ref=f4e13]:
+      - heading "NHQ" [level=1] [ref=f4e14]
+      - paragraph [ref=f4e15]: DISTRIBUTIONS
+    - generic [ref=f4e18]:
+      - text: Loading Data ...
+      - generic [ref=f4e19]: 0%

@@ -1,0 +1,155 @@
+- generic [active] [ref=f5e1]:
+  - generic [ref=f5e34]:
+    - complementary [ref=f5e36]:
+      - link [ref=f5e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f5e39]:
+          - generic [ref=f5e40]: NH
+          - generic [ref=f5e41]: DISTRIBUTIONS
+      - navigation [ref=f5e49]:
+        - link "Dashboard" [ref=f5e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f5e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f5e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f5e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f5e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f5e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f5e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f5e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f5e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f5e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f5e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f5e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f5e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f5e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f5e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f5e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f5e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f5e133]:
+        - generic [ref=f5e134]:
+          - generic "Arif Rahman" [ref=f5e135]:
+            - generic "Arif Rahman avatar" [ref=f5e137]: AR
+          - generic [ref=f5e138]:
+            - paragraph [ref=f5e139]: Arif Rahman
+            - paragraph [ref=f5e140]: Technical Head
+        - button "Collapse sidebar" [ref=f5e141]
+    - generic [ref=f5e144]:
+      - banner [ref=f5e146]:
+        - generic [ref=f5e147]:
+          - button "Toggle theme" [ref=f5e148] [cursor=pointer]
+          - button "Notifications" [ref=f5e149] [cursor=pointer]:
+            - generic [ref=f5e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f5e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f5e152]:
+              - generic "Arif Rahman avatar" [ref=f5e154]: AR
+            - generic [ref=f5e155]:
+              - paragraph [ref=f5e156]: Arif Rahman
+              - paragraph [ref=f5e157]: Technical Head
+      - main [ref=f5e158]:
+        - generic [ref=f5e159]:
+          - generic [ref=f5e165]:
+            - heading "TH Hub" [level=1] [ref=f5e166]
+            - paragraph [ref=f5e167]: Technical Head oversight — all teams
+          - generic [ref=f5e168]:
+            - button "All Cases" [ref=f5e169]
+            - button "Escalations" [ref=f5e173]
+            - button "Critical Approval" [ref=f5e176]
+            - button "Workload" [ref=f5e180]
+            - button "Performance" [ref=f5e183]
+          - generic [ref=f5e187]:
+            - generic [ref=f5e188]:
+              - generic [ref=f5e189]: 2 critical
+              - generic [ref=f5e190]: 4 high
+              - generic [ref=f5e191]: 4 medium
+              - generic [ref=f5e192]: 1 low
+              - generic [ref=f5e193]: 11 total open
+            - generic [ref=f5e194]:
+              - generic [ref=f5e195]:
+                - heading "Top 3 Team Case Load (open cases by priority)" [level=3] [ref=f5e196]
+                - button "View All" [ref=f5e197] [cursor=pointer]
+              - generic [ref=f5e199]:
+                - list [ref=f5e201]:
+                  - listitem [ref=f5e202]:
+                    - img "critical legend icon" [ref=f5e203]
+                    - text: critical
+                  - listitem [ref=f5e205]:
+                    - img "high legend icon" [ref=f5e206]
+                    - text: high
+                  - listitem [ref=f5e208]:
+                    - img "low legend icon" [ref=f5e209]
+                    - text: low
+                  - listitem [ref=f5e211]:
+                    - img "medium legend icon" [ref=f5e212]
+                    - text: medium
+                - application [ref=f5e214]:
+                  - generic [ref=f5e222]:
+                    - generic [ref=f5e223]:
+                      - generic [ref=f5e224]: Beta
+                      - generic [ref=f5e226]: Alpha
+                    - generic [ref=f5e228]:
+                      - generic [ref=f5e229]: "0"
+                      - generic [ref=f5e231]: "2"
+                      - generic [ref=f5e233]: "4"
+                      - generic [ref=f5e235]: "6"
+                      - generic [ref=f5e237]: "8"
+            - generic [ref=f5e239]:
+              - generic [ref=f5e240]:
+                - heading "Top 5 Engineer Active Case Count" [level=3] [ref=f5e241]
+                - button "View All" [ref=f5e242] [cursor=pointer]
+              - application [ref=f5e245]:
+                - generic [ref=f5e253]:
+                  - generic [ref=f5e254]:
+                    - generic [ref=f5e255]: "0"
+                    - generic [ref=f5e257]: "1"
+                    - generic [ref=f5e259]: "2"
+                    - generic [ref=f5e261]: "3"
+                    - generic [ref=f5e263]: "4"
+                  - generic [ref=f5e265]:
+                    - generic [ref=f5e266]: Imran
+                    - generic [ref=f5e268]: Rafi
+                    - generic [ref=f5e270]: Farzana
+              - paragraph [ref=f5e272]: 4+ cases — overloaded2–3 cases — busy0–1 cases — available
+            - generic [ref=f5e276]:
+              - heading "Status Distribution" [level=3] [ref=f5e277]
+              - generic [ref=f5e278]:
+                - generic [ref=f5e279]:
+                  - generic [ref=f5e280]: triaged
+                  - generic [ref=f5e283]: "1"
+                  - generic [ref=f5e284]: 9%
+                - generic [ref=f5e285]:
+                  - generic [ref=f5e286]: assigned
+                  - generic [ref=f5e289]: "1"
+                  - generic [ref=f5e290]: 9%
+                - generic [ref=f5e291]:
+                  - generic [ref=f5e292]: in progress
+                  - generic [ref=f5e295]: "3"
+                  - generic [ref=f5e296]: 27%
+                - generic [ref=f5e297]:
+                  - generic [ref=f5e298]: pending client
+                  - generic [ref=f5e301]: "1"
+                  - generic [ref=f5e302]: 9%
+                - generic [ref=f5e303]:
+                  - generic [ref=f5e304]: escalated
+                  - generic [ref=f5e307]: "5"
+                  - generic [ref=f5e308]: 45%
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f5e314] [cursor=pointer]
+  - alert [ref=f5e318]
+  - generic [ref=f5e319]: Imran

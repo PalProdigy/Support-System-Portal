@@ -4,16 +4,16 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { BookOpen, Search, Tag, Clock } from 'lucide-react'
+import { BookOpen, Tag, Clock } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import type { KBArticle } from '@/types'
 
 export function KBBrowse() {
   const dp = getDataProvider()
-  const [search, setSearch] = useState('')
+  const [query, setQuery] = useState('')
   const [reading, setReading] = useState<KBArticle | null>(null)
 
   const { data: articles, isLoading } = useQuery({
@@ -22,8 +22,8 @@ export function KBBrowse() {
   })
 
   const filtered = (articles ?? []).filter((a) => {
-    if (!search) return true
-    const q = search.toLowerCase()
+    if (!query) return true
+    const q = query.toLowerCase()
     return (
       a.title.toLowerCase().includes(q) ||
       a.body.toLowerCase().includes(q) ||
@@ -40,21 +40,22 @@ export function KBBrowse() {
   return (
     <>
       <div className="space-y-4">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            className="pl-9"
+        <div className="max-w-lg">
+          <SearchInput
             placeholder="Search articles, tags…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={query}
+            onChange={setQuery}
+            aria-label="Search articles"
+            resultCount={filtered.length}
+            resultLabel="article"
           />
         </div>
 
         {filtered.length === 0 ? (
           <EmptyState
             icon={BookOpen}
-            title={search ? 'No matching articles' : 'No articles published yet'}
-            description={search ? 'Try different keywords.' : 'Check back soon for guides and documentation.'}
+            title={query ? `No results found for "${query}"` : 'No articles published yet'}
+            description={query ? 'Try different keywords.' : 'Check back soon for guides and documentation.'}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

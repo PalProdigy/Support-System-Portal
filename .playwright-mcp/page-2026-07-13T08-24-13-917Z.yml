@@ -1,0 +1,35 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - heading "NHQ" [level=1] [ref=e5]
+        - paragraph [ref=e6]: DISTRIBUTIONS
+      - generic [ref=e16]:
+        - generic [ref=e18]:
+          - generic [ref=e19]: "0"
+          - generic [ref=e20]: "1"
+          - generic [ref=e21]: "2"
+          - generic [ref=e22]: "3"
+          - generic [ref=e23]: "4"
+          - generic [ref=e24]: "5"
+          - generic [ref=e25]: "6"
+          - generic [ref=e26]: "7"
+          - generic [ref=e27]: "8"
+          - generic [ref=e28]: "9"
+        - generic [ref=e30]:
+          - generic [ref=e31]: "0"
+          - generic [ref=e32]: "1"
+          - generic [ref=e33]: "2"
+          - generic [ref=e34]: "3"
+          - generic [ref=e35]: "4"
+          - generic [ref=e36]: "5"
+          - generic [ref=e37]: "6"
+          - generic [ref=e38]: "7"
+          - generic [ref=e39]: "8"
+          - generic [ref=e40]: "9"
+        - generic [ref=e41]: "%"
+    - generic [ref=e44]:
+      - text: Loading Data ...
+      - generic [ref=e45]: 0%
+  - region "Notifications (F8)":
+    - list

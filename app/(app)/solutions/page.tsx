@@ -8,17 +8,20 @@ import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { SearchInput } from '@/components/ui/search-input'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Lightbulb, PlusCircle, Pencil, Eye, User as UserIcon, Calendar, CheckCircle2, XCircle, X, ThumbsUp, ThumbsDown, MessageCircle, Trash2, Send, Reply, ChevronDown, ChevronUp } from 'lucide-react'
+import { Lightbulb, PlusCircle, Pencil, Eye, User as UserIcon, Calendar, CheckCircle2, XCircle, X, ThumbsUp, ThumbsDown, MessageCircle, Trash2, Send, Reply, ChevronDown, ChevronUp, Newspaper } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ROLE_LABELS } from '@/lib/rbac'
 import type { Solution, SolutionComment, Role } from '@/types'
 
 const ALL_TAB = 'all'
+const TEAM_TAB = 'team'
+const OWN_TAB = 'own'
 
 type Banner = { kind: 'success' | 'error'; message: string }
 
@@ -244,6 +247,7 @@ export default function SolutionsPage() {
   const [commentText, setCommentText] = useState('')
   const [activeTab, setActiveTab] = useState(ALL_TAB)
   const [banner, setBanner] = useState<Banner | null>(null)
+  const [query, setQuery] = useState('')
 
   // Auto-dismiss the result banner after a few seconds
   useEffect(() => {
@@ -254,12 +258,31 @@ export default function SolutionsPage() {
 
   const { data: solutions, isLoading } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
   const { data: currentUser } = useQuery({ queryKey: ['user', session.userId], queryFn: () => dp.getUser(session.userId) })
+  // Solution Articles are a team lead / support engineer resource only.
+  const canViewArticles = ['team_lead', 'support_engineer'].includes(session.role)
+
+  // In-house knowledge-base articles (markdown, authored in the portal).
+  const { data: articles, isLoading: articlesLoading } = useQuery({
+    queryKey: ['solution-articles'],
+    queryFn: () => dp.listSolutionArticles({ status: 'published' }),
+    enabled: canViewArticles,
+  })
 
   const canAddSolution = session.role !== 'client'
 
+  const myArticles = (articles ?? []).filter((a) => a.created_by === session.userId)
+  const isArticlesTab = activeTab === TEAM_TAB || activeTab === OWN_TAB
+  const q = query.trim().toLowerCase()
+  const matchesQuery = (name: string, description: string, category?: string) =>
+    !q || name.toLowerCase().includes(q) || description.toLowerCase().includes(q) || (category ?? '').toLowerCase().includes(q)
+  const displayedArticles = (activeTab === OWN_TAB ? myArticles : (articles ?? []))
+    .filter((a) => matchesQuery(a.title, a.description, a.category))
+
   const categories = Array.from(new Set((solutions ?? []).map((s: Solution) => s.category).filter(Boolean)))
   const typeOptions = Array.from(new Set([...DEFAULT_TYPES, ...categories]))
-  const filteredSolutions = (solutions ?? []).filter((s: Solution) => activeTab === ALL_TAB || s.category === activeTab)
+  const filteredSolutions = (solutions ?? [])
+    .filter((s: Solution) => activeTab === ALL_TAB || s.category === activeTab)
+    .filter((s: Solution) => matchesQuery(s.name, s.description, s.category))
   // Live solution behind the open comment dialog (kept in sync with the cache)
   const commenting = (solutions ?? []).find((s: Solution) => s.id === commentingId) ?? null
 
@@ -369,9 +392,24 @@ export default function SolutionsPage() {
 
   return (
     <div className="p-6 space-y-4 max-w-full overflow-x-hidden">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div><h1 className="text-2xl font-bold">Solutions</h1><p className="text-sm text-muted-foreground">{solutions?.length ?? 0} products/services</p></div>
-        {canAddSolution && <Button onClick={() => router.push('/solutions/new')}><PlusCircle className="h-4 w-4" /> Add Solution</Button>}
+        <div className="flex items-center gap-2">
+          <SearchInput
+            containerClassName="w-full max-w-xs"
+            placeholder={isArticlesTab ? 'Search articles...' : 'Search solutions...'}
+            value={query}
+            onChange={setQuery}
+            aria-label={isArticlesTab ? 'Search articles' : 'Search solutions'}
+            resultCount={isArticlesTab ? displayedArticles.length : filteredSolutions.length}
+            resultLabel={isArticlesTab ? 'article' : 'solution'}
+          />
+          {canAddSolution && (
+            <Button onClick={() => router.push('/solutions/new')}>
+              <PlusCircle className="h-4 w-4" /> Add Solution
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Result banner */}
@@ -395,19 +433,84 @@ export default function SolutionsPage() {
 
       {isLoading ? (
         <div className="space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}</div>
-      ) : (solutions ?? []).length === 0 ? (
-        <EmptyState icon={Lightbulb} title="No solutions" />
       ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-full min-w-0 space-y-4">
           <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 overflow-hidden">
-            <TabsTrigger value={ALL_TAB} className="min-w-0 truncate">All</TabsTrigger>
+            <TabsTrigger value={ALL_TAB} className="w-full min-w-0 truncate">All</TabsTrigger>
             {categories.map((c) => (
-              <TabsTrigger key={c} value={c} className="min-w-0 truncate">{c}</TabsTrigger>
+              <TabsTrigger key={c} value={c} className="w-full min-w-0 truncate">{c}</TabsTrigger>
             ))}
+            {canViewArticles && (
+              <TabsTrigger value={TEAM_TAB} className="w-full min-w-0 truncate gap-1.5">
+                <Newspaper className="h-3.5 w-3.5 shrink-0" /> Team
+              </TabsTrigger>
+            )}
+            {canViewArticles && (
+              <TabsTrigger value={OWN_TAB} className="w-full min-w-0 truncate gap-1.5">
+                <Newspaper className="h-3.5 w-3.5 shrink-0" /> Own ({myArticles.length})
+              </TabsTrigger>
+            )}
           </TabsList>
 
-          {filteredSolutions.length === 0 ? (
-            <EmptyState icon={Lightbulb} title="No solutions in this type" />
+          {isArticlesTab ? (
+            /* Solution Articles — in-house Knowledge Base (markdown, authored in
+               the portal). Team lead / support engineer resource only. */
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground">
+                {activeTab === OWN_TAB ? "Articles you've written" : 'In-depth guides written by our team'}
+              </p>
+
+              {articlesLoading ? (
+                <div className="space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}</div>
+              ) : displayedArticles.length === 0 ? (
+                <EmptyState
+                  icon={Newspaper}
+                  title={
+                    query ? `No results found for "${query}"`
+                      : activeTab === OWN_TAB ? "You haven't written any articles yet" : 'No articles published yet'
+                  }
+                  description={query ? undefined : activeTab === OWN_TAB ? 'Click "Write Article" to publish your first guide.' : undefined}
+                />
+              ) : (
+                <div className="space-y-3">
+                  {displayedArticles.map((a) => (
+                    <div key={a.id} className="rounded-xl border bg-card p-4 flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3 flex-1 min-w-0">
+                        <div className="rounded-lg bg-primary/10 p-2.5 mt-0.5 shrink-0">
+                          <Newspaper className="h-4 w-4 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <p className="font-semibold truncate min-w-0">{a.title}</p>
+                          </div>
+                          {a.category && <p className="text-xs text-muted-foreground mt-0.5 truncate">{a.category}</p>}
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-2 break-words">{a.description}</p>
+                          <div className="flex flex-wrap items-center gap-2 text-xs mt-2">
+                            <span className="flex items-center gap-1 min-w-0 rounded-full bg-primary/10 text-primary px-2 py-0.5 font-medium">
+                              <UserIcon className="h-3 w-3 shrink-0" />
+                              <span className="truncate">{a.created_by_name ?? 'Unknown'}</span>
+                            </span>
+                            <span className="flex items-center gap-1 shrink-0 rounded-full bg-amber-500/10 text-amber-950 dark:text-amber-400 px-2 py-0.5 font-medium">
+                              <Calendar className="h-3 w-3" />
+                              {new Date(a.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-stretch gap-2 shrink-0 self-center">
+                        <Button variant="outline" size="sm" onClick={() => router.push(`/solutions/articles/${a.slug}`)}>
+                          <Eye className="h-3.5 w-3.5" /> View
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (solutions ?? []).length === 0 ? (
+            <EmptyState icon={Lightbulb} title="No solutions" />
+          ) : filteredSolutions.length === 0 ? (
+            <EmptyState icon={Lightbulb} title={query ? `No results found for "${query}"` : 'No solutions in this type'} />
           ) : (
             <div className="space-y-3">
               {filteredSolutions.map((s: Solution) => (

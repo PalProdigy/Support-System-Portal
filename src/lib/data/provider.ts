@@ -3,14 +3,35 @@ import type {
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog, Role,
   Prospect, CreateClientAccountInput,
-  EngineerMetrics, UserNotificationPrefs, NotificationChannel,
+  EngineerMetrics, SalesExecutiveMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
-  ClientInfoReason, EngineerChangeRequest,
+  ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
+  SolutionArticle, SolutionArticleStatus,
 } from '@/types'
+
+export interface SolutionArticleFilters {
+  status?: SolutionArticleStatus
+  category?: string
+  tag?: string
+  search?: string   // matches title, description, tags and markdown content
+}
+
+// Server assigns id, slug (unique), created_at and updated_at. `content` is
+// markdown only — rendered HTML must never be sent to or stored by the backend.
+export type CreateSolutionArticleInput = Omit<
+  SolutionArticle, 'id' | 'slug' | 'created_at' | 'updated_at'
+> & { slug?: string }
 
 export interface ListScope {
   userId: string
   role: Role
+}
+
+export interface KBArticleFilters {
+  status?: string
+  search?: string
+  category?: string
+  tag?: string
 }
 
 export interface CaseFilters {
@@ -67,6 +88,21 @@ export interface DataProvider {
   addSolutionComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<Solution>
   deleteSolutionComment(id: string, commentId: string): Promise<Solution>
   toggleSolutionCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<Solution>
+
+  // Solution Articles — in-house Knowledge Base (markdown-only storage).
+  // REST mapping once the backend exists:
+  //   listSolutionArticles      → GET    /solution-articles?status=&category=&tag=&search=
+  //   getSolutionArticle        → GET    /solution-articles/:id
+  //   getSolutionArticleBySlug  → GET    /solution-articles/slug/:slug
+  //   createSolutionArticle     → POST   /solution-articles      (server assigns id/slug/timestamps)
+  //   updateSolutionArticle     → PATCH  /solution-articles/:id  (server refreshes updated_at/updated_by)
+  //   deleteSolutionArticle     → DELETE /solution-articles/:id
+  listSolutionArticles(filters?: SolutionArticleFilters): Promise<SolutionArticle[]>
+  getSolutionArticle(id: string): Promise<SolutionArticle | null>
+  getSolutionArticleBySlug(slug: string): Promise<SolutionArticle | null>
+  createSolutionArticle(input: CreateSolutionArticleInput): Promise<SolutionArticle>
+  updateSolutionArticle(id: string, patch: Partial<SolutionArticle>): Promise<SolutionArticle>
+  deleteSolutionArticle(id: string): Promise<void>
 
   // Client Solutions
   listClientSolutions(clientId?: string): Promise<ClientSolution[]>
@@ -130,6 +166,18 @@ export interface DataProvider {
   // Service-based routing: team lead (or escalated Technical Head) accepts a routed case.
   acceptCaseApproval(caseId: string, scope: ListScope): Promise<Case>
 
+  // ── Case claim requests (support engineer "grabs" a new case) ─────────────
+  // REST mapping once the backend exists:
+  //   listClaimableCases    → GET  /cases/claimable            (SE: unassigned cases routed to my team, approval pending/escalated)
+  //   listCaseClaimRequests → GET  /case-claims?case_id=&engineer_id=&status=
+  //   requestCaseClaim      → POST /cases/:id/claim            (SE; notifies TL + TH)
+  //   resolveCaseClaim      → POST /case-claims/:id/resolve    { decision } (TL/TH; approve assigns the case
+  //                            to the requesting engineer and auto-rejects competing pending claims)
+  listClaimableCases(scope: ListScope): Promise<Case[]>
+  listCaseClaimRequests(filters?: { case_id?: string; engineer_id?: string; status?: CaseClaimRequest['status'] }): Promise<CaseClaimRequest[]>
+  requestCaseClaim(caseId: string, scope: ListScope): Promise<CaseClaimRequest>
+  resolveCaseClaim(requestId: string, decision: 'approved' | 'rejected', scope: ListScope): Promise<CaseClaimRequest>
+
   // Sub-cases (child cases with time tracking)
   listSubCases(parentCaseId: string, scope: ListScope): Promise<Case[]>
   createSubCase(parentCaseId: string, input: Partial<Case>, scope: ListScope): Promise<Case>
@@ -153,19 +201,34 @@ export interface DataProvider {
   upsertRCA(input: Omit<RCA, 'id' | 'created_at'>): Promise<RCA>
 
   // KB Articles
-  // When scope is provided, the public list enforces visibility: published articles
-  // for everyone, plus the requester's own submissions, plus all articles for a
-  // Technical Head. Without scope the legacy (unfiltered) behaviour is preserved.
-  listKBArticles(filters?: { status?: string; search?: string }, scope?: ListScope): Promise<KBArticle[]>
+  // When scope is provided, the list enforces visibility: published articles for
+  // everyone, the requester's own articles in any status, and everything for the
+  // reviewer roles (team_lead / technical_head). Without scope the legacy
+  // (unfiltered) behaviour is preserved.
+  // Search matches title, description, content, tags, category and author name.
+  listKBArticles(filters?: KBArticleFilters, scope?: ListScope): Promise<KBArticle[]>
   getKBArticle(id: string): Promise<KBArticle | null>
   createKBArticle(input: Omit<KBArticle, 'id' | 'created_at' | 'updated_at'>): Promise<KBArticle>
-  updateKBArticle(id: string, patch: Partial<KBArticle>): Promise<KBArticle>
+  // Content edits snapshot the previous state into `versions` and bump `version`.
+  // `actor` stamps who saved (falls back to the article author when omitted).
+  updateKBArticle(id: string, patch: Partial<KBArticle>, actor?: ListScope): Promise<KBArticle>
   deleteKBArticle(id: string): Promise<void>
-  // Submission & approval workflow (backend enforces the Technical-Head-only rules):
-  //   submitKBArticle  → POST /kb/submit         → creates a status:'pending' article
-  //   publishKBArticle → POST /kb/:id/publish    → TH-only; pending → published
-  //   rejectKBArticle  → POST /kb/:id/reject     → TH-only; pending → rejected
+  // ── Review workflow (backend enforces role rules; every transition is
+  //    appended to status_history, audited and notified) ─────────────────────
+  //   submitKBArticle          → POST /kb/submit              → create + status:'in_review'
+  //   submitKBArticleForReview → POST /kb/:id/submit          → draft/changes_requested → in_review (author)
+  //   approveKBArticle         → POST /kb/:id/approve         → in_review → approved (TL/TH)
+  //   publishKBArticle         → POST /kb/:id/publish         → in_review/approved → published (TL/TH)
+  //   rejectKBArticle          → POST /kb/:id/request-changes → in_review/approved → changes_requested + note (TL/TH)
+  //   archiveKBArticle         → POST /kb/:id/archive         → published → archived (TL/TH)
+  //   restoreKBArticle         → POST /kb/:id/restore         → archived → draft (TH only)
+  //   restoreKBVersion         → POST /kb/:id/versions/:v/restore → apply an old snapshot as a new version
   submitKBArticle(input: { title: string; body: string; tags: string[]; author_id: string; author_name?: string; author_role?: Role }): Promise<KBArticle>
+  submitKBArticleForReview(id: string, actor: ListScope): Promise<KBArticle>
+  approveKBArticle(id: string, actor: ListScope): Promise<KBArticle>
+  archiveKBArticle(id: string, actor: ListScope): Promise<KBArticle>
+  restoreKBArticle(id: string, actor: ListScope): Promise<KBArticle>
+  restoreKBVersion(id: string, version: number, actor: ListScope): Promise<KBArticle>
   publishKBArticle(id: string, actor: ListScope): Promise<KBArticle>
   rejectKBArticle(id: string, actor: ListScope, reason?: string): Promise<KBArticle>
   // KB comments — same dedicated/atomic pattern as solution comments:
@@ -201,6 +264,9 @@ export interface DataProvider {
   // ── Phase Final: Performance metrics ──────────────────────────────────────
   getEngineerMetrics(engineerId: string, scope: ListScope): Promise<EngineerMetrics>
   listAllEngineerMetrics(scope: ListScope): Promise<EngineerMetrics[]>
+  // Target (assigned by Technical Head) + achievement/pipeline, computed from
+  // that Sales Executive's own prospects and clients.
+  getSalesExecutiveMetrics(salesExecutiveId: string, scope: ListScope): Promise<SalesExecutiveMetrics>
 
   // ── Phase Final: Notification preferences ─────────────────────────────────
   getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs>
