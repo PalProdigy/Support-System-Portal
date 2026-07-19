@@ -235,9 +235,7 @@ function KBForm({ article }: { article?: KBArticle }) {
         <Button variant="ghost" size="sm" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
-        <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
-          {isEdit ? 'Edit article' : 'New KB article'}
-        </span>
+
         {isEdit && <KBStatusBadge status={article.status} />}
 
         <div className="ml-auto flex items-center gap-3">
@@ -306,7 +304,8 @@ function KBForm({ article }: { article?: KBArticle }) {
       )}
 
       {/* ── Two-column layout: meta + editor left, preview + guide right ────── */}
-      <div className={cn('grid gap-4', showPreview && 'lg:grid-cols-2', split ? 'lg:items-stretch' : 'items-start')}>
+      <div className={cn('grid gap-4', split && 'lg:grid-cols-2', split ? 'lg:items-stretch' : 'items-start')}>
+      {showEditor && (
       <div className="min-w-0 space-y-4">
       {/* ── Article meta ────────────────────────────────────────────────────── */}
       <div className="rounded-xl border bg-card p-6 space-y-3">
@@ -364,20 +363,19 @@ function KBForm({ article }: { article?: KBArticle }) {
       </div>
 
       {/* ── Editor ──────────────────────────────────────────────────────────── */}
-        {showEditor && (
-          <div className="space-y-1.5">
-            <Label>Content <span className="text-destructive">*</span></Label>
-            <div className="rounded-xl border bg-card overflow-hidden min-w-0">
-              <MarkdownEditor
-                markdown={content}
-                onChange={handleContentChange}
-                autoFocus={!isEdit}
-                className="nhq-editor-compact"
-              />
-            </div>
+        <div className="space-y-1.5">
+          <Label>Content <span className="text-destructive">*</span></Label>
+          <div className="rounded-xl border bg-card overflow-hidden min-w-0">
+            <MarkdownEditor
+              markdown={content}
+              onChange={handleContentChange}
+              autoFocus={!isEdit}
+              className="nhq-editor-compact"
+            />
           </div>
-        )}
+        </div>
       </div>
+      )}
 
         {/* ── Right column: live preview + markdown manual. In split view it is
             pinned to the form column's exact height (absolute inset in a
