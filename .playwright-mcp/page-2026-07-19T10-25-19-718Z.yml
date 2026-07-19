@@ -1,0 +1,132 @@
+- generic [active] [ref=f7e1]:
+  - generic [ref=f7e34]:
+    - complementary [ref=f7e36]:
+      - link [ref=f7e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f7e39]:
+          - generic [ref=f7e40]: NH
+          - generic [ref=f7e41]: DISTRIBUTIONS
+      - navigation [ref=f7e49]:
+        - link "Dashboard" [ref=f7e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f7e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f7e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f7e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f7e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f7e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f7e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f7e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f7e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f7e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f7e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f7e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f7e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f7e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f7e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f7e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f7e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f7e133]:
+        - generic [ref=f7e134]:
+          - generic "Arif Rahman" [ref=f7e135]:
+            - generic "Arif Rahman avatar" [ref=f7e137]: AR
+          - generic [ref=f7e138]:
+            - paragraph [ref=f7e139]: Arif Rahman
+            - paragraph [ref=f7e140]: Technical Head
+        - button "Collapse sidebar" [ref=f7e141]
+    - generic [ref=f7e144]:
+      - banner [ref=f7e146]:
+        - generic [ref=f7e147]:
+          - button "Toggle theme" [ref=f7e148] [cursor=pointer]
+          - button "Notifications" [ref=f7e149] [cursor=pointer]:
+            - generic [ref=f7e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f7e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f7e152]:
+              - generic "Arif Rahman avatar" [ref=f7e154]: AR
+            - generic [ref=f7e155]:
+              - paragraph [ref=f7e156]: Arif Rahman
+              - paragraph [ref=f7e157]: Technical Head
+      - main [ref=f7e158]:
+        - generic [ref=f7e373]:
+          - button "Back to Feedback" [ref=f7e375] [cursor=pointer]
+          - generic [ref=f7e376]:
+            - generic [ref=f7e377]:
+              - generic [ref=f7e378]:
+                - generic [ref=f7e379]:
+                  - paragraph [ref=f7e380]: Client
+                  - generic [ref=f7e385]:
+                    - generic [ref=f7e386]: AC
+                    - generic [ref=f7e387]:
+                      - paragraph [ref=f7e388]: Acme Corporation Ltd.
+                      - paragraph [ref=f7e389]: Priya Sharma
+                - generic [ref=f7e390]:
+                  - paragraph [ref=f7e391]: Support Engineer
+                  - paragraph [ref=f7e395]: Not assigned
+                - generic [ref=f7e396]:
+                  - paragraph [ref=f7e397]: Handling Team
+                  - paragraph [ref=f7e403]: No team assigned
+                - generic [ref=f7e404]:
+                  - paragraph [ref=f7e405]: Team Lead
+                  - paragraph [ref=f7e409]: No lead found
+              - generic [ref=f7e410]:
+                - generic [ref=f7e411]:
+                  - paragraph [ref=f7e412]: Rating
+                  - generic [ref=f7e413]:
+                    - generic [ref=f7e425]: "5"
+                    - generic [ref=f7e426]: / 5
+                - generic [ref=f7e427]:
+                  - paragraph [ref=f7e428]: Review Comment
+                  - paragraph [ref=f7e431]: The issue was resolved quickly once we connected with the support team. The engineer was very knowledgeable and walked us through the fix step by step. Very satisfied.
+              - generic [ref=f7e432]:
+                - paragraph [ref=f7e433]: Case Details
+                - generic [ref=f7e434]:
+                  - generic [ref=f7e435]:
+                    - generic [ref=f7e439]: Related Ticket
+                    - generic [ref=f7e440]: case11
+                  - generic [ref=f7e441]:
+                    - generic [ref=f7e446]: Support Service
+                    - generic [ref=f7e447]: —
+                  - generic [ref=f7e449]:
+                    - generic [ref=f7e453]: Case Create Time
+                    - generic [ref=f7e454]: —
+                  - generic [ref=f7e455]:
+                    - generic [ref=f7e459]: Case End Time
+                    - generic [ref=f7e460]: Not yet closed
+                  - generic [ref=f7e461]:
+                    - generic [ref=f7e466]: Duration
+                    - generic [ref=f7e467]: —
+                  - generic [ref=f7e468]:
+                    - generic [ref=f7e472]: Review Submitted
+                    - generic [ref=f7e473]: 10 Jun 2024, 17:00
+            - generic [ref=f7e475]:
+              - paragraph [ref=f7e476]: Customer Review
+              - paragraph [ref=f7e489]: 5 / 5
+              - generic [ref=f7e490]:
+                - paragraph [ref=f7e491]: Review Status
+                - generic [ref=f7e492]: Team Lead reviewed
+              - button "Mark Reviewed" [ref=f7e496] [cursor=pointer]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f7e359] [cursor=pointer]:
+    - generic [ref=f7e498]:
+      - text: Rendering
+      - generic [ref=f7e499]:
+        - generic [ref=f7e500]: .
+        - generic [ref=f7e501]: .
+        - generic [ref=f7e502]: .
+  - alert [ref=f7e358]
