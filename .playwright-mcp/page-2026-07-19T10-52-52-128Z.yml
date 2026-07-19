@@ -1,0 +1,367 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - link:
+            - /url: /dashboard
+            - img:
+              - generic: NH
+              - generic: DISTRIBUTIONS
+        - navigation:
+          - link:
+            - /url: /dashboard
+            - generic: Dashboard
+          - link:
+            - /url: /technical-head
+            - generic: TH Hub
+          - link:
+            - /url: /cases
+            - generic: Cases
+          - link:
+            - /url: /teams
+            - generic: Teams
+          - link:
+            - /url: /team-lead
+            - generic: Team Leads
+          - link:
+            - /url: /support-engineer
+            - generic: Support Engineers
+          - link:
+            - /url: /sales-executive
+            - generic: Sales Executives
+          - link:
+            - /url: /clients
+            - generic: Clients
+          - link:
+            - /url: /products
+            - generic: Products
+          - link:
+            - /url: /solutions
+            - generic: Solutions
+          - link:
+            - /url: /knowledge-base
+            - generic: Knowledge Base
+          - link:
+            - /url: /reporting
+            - generic: Reporting
+          - link:
+            - /url: /feedback
+            - generic: Feedback
+          - link:
+            - /url: /audit-log
+            - generic: Audit Log
+          - link:
+            - /url: /notifications
+            - generic: Notifications
+          - link:
+            - /url: /settings
+            - generic: Settings
+        - generic:
+          - generic:
+            - generic:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+            - button
+    - generic:
+      - generic:
+        - banner:
+          - generic:
+            - button
+            - button:
+              - generic: 9+
+            - button:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+      - main:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: Audit Log
+              - paragraph: System-wide trail of every create, update and status change across NHQ Support.
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Total Events
+                  - paragraph: "12"
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Today
+                  - paragraph: "0"
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Unique Actors
+                  - paragraph: "7"
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Sensitive Actions
+                  - paragraph: "5"
+                  - paragraph: Deletes & escalations
+          - generic:
+            - generic:
+              - textbox:
+                - /placeholder: Search by actor, entity type, entity ID or action…
+              - generic: 12 events found
+            - button [expanded]: Filters
+          - generic:
+            - generic:
+              - table:
+                - rowgroup:
+                  - row:
+                    - columnheader: When
+                    - columnheader: Actor
+                    - columnheader: Action
+                    - columnheader: Entity
+                    - columnheader: Changed fields
+                - rowgroup:
+                  - row:
+                    - cell:
+                      - paragraph: 14 Jul 2026, 13:20
+                      - paragraph: 5d ago
+                    - cell: system
+                    - cell:
+                      - generic: Escalated
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case4
+                    - cell:
+                      - generic:
+                        - generic: status
+                        - generic: is_escalated
+                  - row:
+                    - cell:
+                      - paragraph: 14 Jul 2026, 13:20
+                      - paragraph: 5d ago
+                    - cell: system
+                    - cell:
+                      - generic: Escalated
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case8
+                    - cell:
+                      - generic:
+                        - generic: status
+                        - generic: is_escalated
+                  - row:
+                    - cell:
+                      - paragraph: 14 Jul 2026, 13:20
+                      - paragraph: 5d ago
+                    - cell: system
+                    - cell:
+                      - generic: Escalated
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case13
+                    - cell:
+                      - generic:
+                        - generic: status
+                        - generic: is_escalated
+                  - row:
+                    - cell:
+                      - paragraph: 14 Jul 2026, 13:20
+                      - paragraph: 5d ago
+                    - cell: system
+                    - cell:
+                      - generic: Escalated
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case14
+                    - cell:
+                      - generic:
+                        - generic: status
+                        - generic: is_escalated
+                  - row:
+                    - cell:
+                      - paragraph: 22 Jun 2024, 13:20
+                      - paragraph: 757d ago
+                    - cell:
+                      - generic:
+                        - generic: RU
+                        - generic:
+                          - paragraph: Rafi Uddin
+                          - paragraph: support engineer
+                    - cell:
+                      - generic: Status Change
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case1
+                    - cell:
+                      - generic: status
+                  - row:
+                    - cell:
+                      - paragraph: 22 Jun 2024, 13:15
+                      - paragraph: 757d ago
+                    - cell:
+                      - generic:
+                        - generic: SI
+                        - generic:
+                          - paragraph: Sadia Islam
+                          - paragraph: team lead
+                    - cell:
+                      - generic: Assigned
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case1
+                    - cell:
+                      - generic:
+                        - generic: assignee_id
+                        - generic: status
+                  - row:
+                    - cell:
+                      - paragraph: 22 Jun 2024, 13:10
+                      - paragraph: 757d ago
+                    - cell:
+                      - generic:
+                        - generic: SI
+                        - generic:
+                          - paragraph: Sadia Islam
+                          - paragraph: team lead
+                    - cell:
+                      - generic: Status Change
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case1
+                    - cell:
+                      - generic: status
+                  - row:
+                    - cell:
+                      - paragraph: 22 Jun 2024, 13:05
+                      - paragraph: 757d ago
+                    - cell:
+                      - generic:
+                        - generic: SI
+                        - generic:
+                          - paragraph: Sadia Islam
+                          - paragraph: team lead
+                    - cell:
+                      - generic: Escalated
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case1
+                    - cell:
+                      - generic:
+                        - generic: escalation_level
+                        - generic: is_escalated
+                  - row:
+                    - cell:
+                      - paragraph: 22 Jun 2024, 13:00
+                      - paragraph: 757d ago
+                    - cell:
+                      - generic:
+                        - generic: PS
+                        - generic:
+                          - paragraph: Priya Sharma
+                          - paragraph: client
+                    - cell:
+                      - generic: Created
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case1
+                    - cell:
+                      - generic:
+                        - generic: reference_no
+                        - generic: status
+                  - row:
+                    - cell:
+                      - paragraph: 20 Jun 2024, 20:30
+                      - paragraph: 758d ago
+                    - cell:
+                      - generic:
+                        - generic: FB
+                        - generic:
+                          - paragraph: Farzana Begum
+                          - paragraph: support engineer
+                    - cell:
+                      - generic: Status Change
+                    - cell:
+                      - generic:
+                        - generic: Case
+                        - generic: case5
+                    - cell:
+                      - generic: status
+                  - row:
+                    - cell:
+                      - paragraph: 01 May 2024, 06:00
+                      - paragraph: 809d ago
+                    - cell:
+                      - generic:
+                        - generic: AR
+                        - generic:
+                          - paragraph: Arif Rahman
+                          - paragraph: technical head
+                    - cell:
+                      - generic: Updated
+                    - cell:
+                      - generic:
+                        - generic: User
+                        - generic: u12
+                    - cell:
+                      - generic: is_active
+                  - row:
+                    - cell:
+                      - paragraph: 01 Feb 2024, 06:00
+                      - paragraph: 899d ago
+                    - cell:
+                      - generic:
+                        - generic: TA
+                        - generic:
+                          - paragraph: Tanvir Ahmed
+                          - paragraph: sales executive
+                    - cell:
+                      - generic: Created
+                    - cell:
+                      - generic:
+                        - generic: Client
+                        - generic: c1
+                    - cell:
+                      - generic: company_name
+          - paragraph: Showing 12 of 12 events
+  - list
+  - button "Open Next.js Dev Tools" [ref=f9e451] [cursor=pointer]
+  - alert
+  - generic:
+    - dialog:
+      - generic:
+        - paragraph: Filter events
+      - generic:
+        - text: Action
+        - combobox [expanded]:
+          - generic: All actions
+      - generic:
+        - text: Entity type
+        - combobox:
+          - generic: All entities
+      - generic:
+        - text: Actor
+        - combobox:
+          - generic: All actors
+      - generic:
+        - text: Date
+        - textbox
+  - listbox [ref=f9e531]:
+    - option "All actions" [active] [selected] [ref=f9e532]
+    - option "Created" [ref=f9e538]
+    - option "Updated" [ref=f9e541]
+    - option "Deleted" [ref=f9e544]
+    - option "Status Change" [ref=f9e547]
+    - option "Assigned" [ref=f9e550]
+    - option "Escalated" [ref=f9e553]
+    - option "Login" [ref=f9e556]
+    - option "Logout" [ref=f9e559]

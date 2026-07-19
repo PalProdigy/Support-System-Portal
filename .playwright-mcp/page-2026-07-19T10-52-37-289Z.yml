@@ -1,0 +1,318 @@
+- generic [ref=f9e1]:
+  - generic [ref=f9e34]:
+    - complementary [ref=f9e36]:
+      - link [ref=f9e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f9e39]:
+          - generic [ref=f9e40]: NH
+          - generic [ref=f9e41]: DISTRIBUTIONS
+      - navigation [ref=f9e49]:
+        - link "Dashboard" [ref=f9e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f9e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f9e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f9e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f9e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f9e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f9e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f9e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f9e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f9e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f9e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f9e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f9e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "Audit Log" [ref=f9e114] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f9e118] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f9e123] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f9e129]:
+        - generic [ref=f9e130]:
+          - generic "Arif Rahman" [ref=f9e131]:
+            - generic "Arif Rahman avatar" [ref=f9e133]: AR
+          - generic [ref=f9e134]:
+            - paragraph [ref=f9e135]: Arif Rahman
+            - paragraph [ref=f9e136]: Technical Head
+        - button "Collapse sidebar" [ref=f9e137]
+    - generic [ref=f9e140]:
+      - banner [ref=f9e142]:
+        - generic [ref=f9e143]:
+          - button "Toggle theme" [ref=f9e144] [cursor=pointer]
+          - button "Notifications" [ref=f9e145] [cursor=pointer]:
+            - generic [ref=f9e146]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f9e147] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f9e148]:
+              - generic "Arif Rahman avatar" [ref=f9e150]: AR
+            - generic [ref=f9e151]:
+              - paragraph [ref=f9e152]: Arif Rahman
+              - paragraph [ref=f9e153]: Technical Head
+      - main [ref=f9e154]:
+        - generic [ref=f9e155]:
+          - generic [ref=f9e160]:
+            - heading "Audit Log" [level=1] [ref=f9e161]
+            - paragraph [ref=f9e162]: System-wide trail of every create, update and status change across NHQ Support.
+          - generic [ref=f9e163]:
+            - generic [ref=f9e166]:
+              - paragraph [ref=f9e167]: Total Events
+              - paragraph [ref=f9e168]: "12"
+            - generic [ref=f9e174]:
+              - paragraph [ref=f9e175]: Today
+              - paragraph [ref=f9e176]: "0"
+            - generic [ref=f9e183]:
+              - paragraph [ref=f9e184]: Unique Actors
+              - paragraph [ref=f9e185]: "7"
+            - generic [ref=f9e194]:
+              - paragraph [ref=f9e195]: Sensitive Actions
+              - paragraph [ref=f9e196]: "5"
+              - paragraph [ref=f9e197]: Deletes & escalations
+          - generic [ref=f9e202]:
+            - generic [ref=f9e203]:
+              - textbox "Search audit log" [ref=f9e204]:
+                - /placeholder: Search by actor, entity type, entity ID or action…
+              - generic [ref=f9e205]: 12 events found
+            - button "Filters" [expanded] [ref=f9e206] [cursor=pointer]
+          - table [ref=f9e209]:
+            - rowgroup [ref=f9e210]:
+              - row [ref=f9e456]:
+                - columnheader "When" [ref=f9e212]
+                - columnheader "Actor" [ref=f9e213]
+                - columnheader "Action" [ref=f9e214]
+                - columnheader "Entity" [ref=f9e215]
+                - columnheader "Changed fields" [ref=f9e457]
+            - rowgroup [ref=f9e216]:
+              - row [ref=f9e458]:
+                - cell [ref=f9e218]:
+                  - paragraph [ref=f9e219]: 14 Jul 2026, 13:20
+                  - paragraph [ref=f9e220]: 5d ago
+                - cell "system" [ref=f9e221]
+                - cell [ref=f9e222]
+                - cell "Case case4" [ref=f9e227]:
+                  - generic [ref=f9e228]:
+                    - generic [ref=f9e229]: Case
+                    - generic [ref=f9e230]: case4
+                - cell "status is_escalated" [ref=f9e459]:
+                  - generic [ref=f9e460]:
+                    - generic [ref=f9e461]: status
+                    - generic [ref=f9e462]: is_escalated
+              - row [ref=f9e463]:
+                - cell [ref=f9e232]:
+                  - paragraph [ref=f9e233]: 14 Jul 2026, 13:20
+                  - paragraph [ref=f9e234]: 5d ago
+                - cell "system" [ref=f9e235]
+                - cell [ref=f9e236]
+                - cell "Case case8" [ref=f9e241]:
+                  - generic [ref=f9e242]:
+                    - generic [ref=f9e243]: Case
+                    - generic [ref=f9e244]: case8
+                - cell "status is_escalated" [ref=f9e464]:
+                  - generic [ref=f9e465]:
+                    - generic [ref=f9e466]: status
+                    - generic [ref=f9e467]: is_escalated
+              - row [ref=f9e468]:
+                - cell [ref=f9e246]:
+                  - paragraph [ref=f9e247]: 14 Jul 2026, 13:20
+                  - paragraph [ref=f9e248]: 5d ago
+                - cell "system" [ref=f9e249]
+                - cell [ref=f9e250]
+                - cell "Case case13" [ref=f9e255]:
+                  - generic [ref=f9e256]:
+                    - generic [ref=f9e257]: Case
+                    - generic [ref=f9e258]: case13
+                - cell "status is_escalated" [ref=f9e469]:
+                  - generic [ref=f9e470]:
+                    - generic [ref=f9e471]: status
+                    - generic [ref=f9e472]: is_escalated
+              - row [ref=f9e473]:
+                - cell [ref=f9e260]:
+                  - paragraph [ref=f9e261]: 14 Jul 2026, 13:20
+                  - paragraph [ref=f9e262]: 5d ago
+                - cell "system" [ref=f9e263]
+                - cell [ref=f9e264]
+                - cell "Case case14" [ref=f9e269]:
+                  - generic [ref=f9e270]:
+                    - generic [ref=f9e271]: Case
+                    - generic [ref=f9e272]: case14
+                - cell "status is_escalated" [ref=f9e474]:
+                  - generic [ref=f9e475]:
+                    - generic [ref=f9e476]: status
+                    - generic [ref=f9e477]: is_escalated
+              - row [ref=f9e478]:
+                - cell [ref=f9e274]:
+                  - paragraph [ref=f9e275]: 22 Jun 2024, 13:20
+                  - paragraph [ref=f9e276]: 757d ago
+                - cell "Rafi Uddin avatar Rafi Uddin support engineer" [ref=f9e277]:
+                  - generic [ref=f9e278]:
+                    - generic "Rafi Uddin" [ref=f9e279]:
+                      - generic "Rafi Uddin avatar" [ref=f9e281]: RU
+                    - generic [ref=f9e282]:
+                      - paragraph [ref=f9e283]: Rafi Uddin
+                      - paragraph [ref=f9e284]: support engineer
+                - cell [ref=f9e285]
+                - cell "Case case1" [ref=f9e292]:
+                  - generic [ref=f9e293]:
+                    - generic [ref=f9e294]: Case
+                    - generic [ref=f9e295]: case1
+                - cell "status" [ref=f9e479]
+              - row [ref=f9e482]:
+                - cell [ref=f9e297]:
+                  - paragraph [ref=f9e298]: 22 Jun 2024, 13:15
+                  - paragraph [ref=f9e299]: 757d ago
+                - cell "Sadia Islam avatar Sadia Islam team lead" [ref=f9e300]:
+                  - generic [ref=f9e301]:
+                    - generic "Sadia Islam" [ref=f9e302]:
+                      - generic "Sadia Islam avatar" [ref=f9e304]: SI
+                    - generic [ref=f9e305]:
+                      - paragraph [ref=f9e306]: Sadia Islam
+                      - paragraph [ref=f9e307]: team lead
+                - cell [ref=f9e308]
+                - cell "Case case1" [ref=f9e313]:
+                  - generic [ref=f9e314]:
+                    - generic [ref=f9e315]: Case
+                    - generic [ref=f9e316]: case1
+                - cell "assignee_id status" [ref=f9e483]:
+                  - generic [ref=f9e484]:
+                    - generic [ref=f9e485]: assignee_id
+                    - generic [ref=f9e486]: status
+              - row [ref=f9e487]:
+                - cell [ref=f9e318]:
+                  - paragraph [ref=f9e319]: 22 Jun 2024, 13:10
+                  - paragraph [ref=f9e320]: 757d ago
+                - cell "Sadia Islam avatar Sadia Islam team lead" [ref=f9e321]:
+                  - generic [ref=f9e322]:
+                    - generic "Sadia Islam" [ref=f9e323]:
+                      - generic "Sadia Islam avatar" [ref=f9e325]: SI
+                    - generic [ref=f9e326]:
+                      - paragraph [ref=f9e327]: Sadia Islam
+                      - paragraph [ref=f9e328]: team lead
+                - cell [ref=f9e329]
+                - cell "Case case1" [ref=f9e336]:
+                  - generic [ref=f9e337]:
+                    - generic [ref=f9e338]: Case
+                    - generic [ref=f9e339]: case1
+                - cell "status" [ref=f9e488]
+              - row [ref=f9e491]:
+                - cell [ref=f9e341]:
+                  - paragraph [ref=f9e342]: 22 Jun 2024, 13:05
+                  - paragraph [ref=f9e343]: 757d ago
+                - cell "Sadia Islam avatar Sadia Islam team lead" [ref=f9e344]:
+                  - generic [ref=f9e345]:
+                    - generic "Sadia Islam" [ref=f9e346]:
+                      - generic "Sadia Islam avatar" [ref=f9e348]: SI
+                    - generic [ref=f9e349]:
+                      - paragraph [ref=f9e350]: Sadia Islam
+                      - paragraph [ref=f9e351]: team lead
+                - cell [ref=f9e352]
+                - cell "Case case1" [ref=f9e357]:
+                  - generic [ref=f9e358]:
+                    - generic [ref=f9e359]: Case
+                    - generic [ref=f9e360]: case1
+                - cell "escalation_level is_escalated" [ref=f9e492]:
+                  - generic [ref=f9e493]:
+                    - generic [ref=f9e494]: escalation_level
+                    - generic [ref=f9e495]: is_escalated
+              - row [ref=f9e496]:
+                - cell [ref=f9e362]:
+                  - paragraph [ref=f9e363]: 22 Jun 2024, 13:00
+                  - paragraph [ref=f9e364]: 757d ago
+                - cell "Priya Sharma avatar Priya Sharma client" [ref=f9e365]:
+                  - generic [ref=f9e366]:
+                    - generic "Priya Sharma" [ref=f9e367]:
+                      - generic "Priya Sharma avatar" [ref=f9e369]: PS
+                    - generic [ref=f9e370]:
+                      - paragraph [ref=f9e371]: Priya Sharma
+                      - paragraph [ref=f9e372]: client
+                - cell [ref=f9e373]
+                - cell "Case case1" [ref=f9e377]:
+                  - generic [ref=f9e378]:
+                    - generic [ref=f9e379]: Case
+                    - generic [ref=f9e380]: case1
+                - cell "reference_no status" [ref=f9e497]:
+                  - generic [ref=f9e498]:
+                    - generic [ref=f9e499]: reference_no
+                    - generic [ref=f9e500]: status
+              - row [ref=f9e501]:
+                - cell [ref=f9e382]:
+                  - paragraph [ref=f9e383]: 20 Jun 2024, 20:30
+                  - paragraph [ref=f9e384]: 758d ago
+                - cell "Farzana Begum avatar Farzana Begum support engineer" [ref=f9e385]:
+                  - generic [ref=f9e386]:
+                    - generic "Farzana Begum" [ref=f9e387]:
+                      - generic "Farzana Begum avatar" [ref=f9e389]: FB
+                    - generic [ref=f9e390]:
+                      - paragraph [ref=f9e391]: Farzana Begum
+                      - paragraph [ref=f9e392]: support engineer
+                - cell [ref=f9e393]
+                - cell "Case case5" [ref=f9e400]:
+                  - generic [ref=f9e401]:
+                    - generic [ref=f9e402]: Case
+                    - generic [ref=f9e403]: case5
+                - cell "status" [ref=f9e502]
+              - row [ref=f9e505]:
+                - cell [ref=f9e405]:
+                  - paragraph [ref=f9e406]: 01 May 2024, 06:00
+                  - paragraph [ref=f9e407]: 809d ago
+                - cell "Arif Rahman avatar Arif Rahman technical head" [ref=f9e408]:
+                  - generic [ref=f9e409]:
+                    - generic "Arif Rahman" [ref=f9e410]:
+                      - generic "Arif Rahman avatar" [ref=f9e412]: AR
+                    - generic [ref=f9e413]:
+                      - paragraph [ref=f9e414]: Arif Rahman
+                      - paragraph [ref=f9e415]: technical head
+                - cell [ref=f9e416]
+                - cell "User u12" [ref=f9e421]:
+                  - generic [ref=f9e422]:
+                    - generic [ref=f9e423]: User
+                    - generic [ref=f9e424]: u12
+                - cell "is_active" [ref=f9e506]
+              - row [ref=f9e509]:
+                - cell [ref=f9e426]:
+                  - paragraph [ref=f9e427]: 01 Feb 2024, 06:00
+                  - paragraph [ref=f9e428]: 899d ago
+                - cell "Tanvir Ahmed avatar Tanvir Ahmed sales executive" [ref=f9e429]:
+                  - generic [ref=f9e430]:
+                    - generic "Tanvir Ahmed" [ref=f9e431]:
+                      - generic "Tanvir Ahmed avatar" [ref=f9e433]: TA
+                    - generic [ref=f9e434]:
+                      - paragraph [ref=f9e435]: Tanvir Ahmed
+                      - paragraph [ref=f9e436]: sales executive
+                - cell [ref=f9e437]
+                - cell "Client c1" [ref=f9e441]:
+                  - generic [ref=f9e442]:
+                    - generic [ref=f9e443]: Client
+                    - generic [ref=f9e444]: c1
+                - cell "company_name" [ref=f9e510]
+          - paragraph [ref=f9e445]: Showing 12 of 12 events
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f9e451] [cursor=pointer]
+  - alert [ref=f9e455]
+  - dialog [ref=f9e514]:
+    - paragraph [ref=f9e516]: Filter events
+    - generic [ref=f9e517]:
+      - text: Action
+      - combobox [active] [ref=f9e518]:
+        - generic: All actions
+    - generic [ref=f9e521]:
+      - text: Entity type
+      - combobox [ref=f9e522]:
+        - generic: All entities
+    - generic [ref=f9e525]:
+      - text: Actor
+      - combobox [ref=f9e526]:
+        - generic: All actors
+    - generic [ref=f9e529]:
+      - text: Date
+      - textbox [ref=f9e530]

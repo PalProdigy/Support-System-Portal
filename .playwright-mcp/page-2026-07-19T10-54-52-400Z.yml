@@ -1,0 +1,256 @@
+- generic [active] [ref=f11e1]:
+  - generic [ref=f11e43]:
+    - complementary [ref=f11e45]:
+      - link [ref=f11e47] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f11e48]:
+          - generic [ref=f11e49]: NH
+          - generic [ref=f11e50]: DISTRIBUTIONS
+      - navigation [ref=f11e58]:
+        - link "Dashboard" [ref=f11e59] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f11e66] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f11e70] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f11e74] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f11e79] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f11e86] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f11e90] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f11e95] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f11e101] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f11e107] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f11e111] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f11e115] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f11e119] [cursor=pointer]:
+          - /url: /feedback
+        - link "Audit Log" [ref=f11e123] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f11e127] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f11e132] [cursor=pointer]:
+          - /url: /settings
+      - button "Expand sidebar" [ref=f11e434]
+    - generic [ref=f11e149]:
+      - banner [ref=f11e151]:
+        - generic [ref=f11e152]:
+          - button "Toggle theme" [ref=f11e153] [cursor=pointer]
+          - button "Notifications" [ref=f11e154] [cursor=pointer]:
+            - generic [ref=f11e155]: 9+
+          - button "Arif Rahman avatar" [ref=f11e156] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f11e157]:
+              - generic "Arif Rahman avatar" [ref=f11e159]: AR
+      - main [ref=f11e160]:
+        - generic [ref=f11e161]:
+          - generic [ref=f11e166]:
+            - heading "Audit Log" [level=1] [ref=f11e167]
+            - paragraph [ref=f11e168]: System-wide trail of every create, update and status change across NHQ Support.
+          - generic [ref=f11e169]:
+            - generic [ref=f11e437]:
+              - paragraph [ref=f11e438]: Total Events
+              - paragraph [ref=f11e439]: "12"
+            - generic [ref=f11e440]:
+              - paragraph [ref=f11e441]: Today
+              - paragraph [ref=f11e442]: "0"
+            - generic [ref=f11e443]:
+              - paragraph [ref=f11e444]: Unique Actors
+              - paragraph [ref=f11e445]: "7"
+            - generic [ref=f11e446]:
+              - paragraph [ref=f11e447]: Sensitive Actions
+              - paragraph [ref=f11e448]: "5"
+              - paragraph [ref=f11e449]: Deletes & escalations
+          - generic [ref=f11e195]:
+            - generic [ref=f11e196]:
+              - textbox "Search audit log" [ref=f11e197]:
+                - /placeholder: Search by actor, entity type, entity ID or action…
+              - generic [ref=f11e198]: 12 events found
+            - button "Filters" [ref=f11e199] [cursor=pointer]
+          - generic [ref=f11e200]:
+            - generic [ref=f11e201]:
+              - generic [ref=f11e202]:
+                - generic [ref=f11e203]: Escalated
+                - generic [ref=f11e207]: 5d ago
+              - generic [ref=f11e208]: system
+              - generic [ref=f11e210]:
+                - generic [ref=f11e211]: Case
+                - generic [ref=f11e212]: case4
+              - generic [ref=f11e213]:
+                - generic [ref=f11e214]: status
+                - generic [ref=f11e215]: is_escalated
+              - paragraph [ref=f11e216]: 14 Jul 2026, 13:20
+            - generic [ref=f11e217]:
+              - generic [ref=f11e218]:
+                - generic [ref=f11e219]: Escalated
+                - generic [ref=f11e223]: 5d ago
+              - generic [ref=f11e224]: system
+              - generic [ref=f11e226]:
+                - generic [ref=f11e227]: Case
+                - generic [ref=f11e228]: case8
+              - generic [ref=f11e229]:
+                - generic [ref=f11e230]: status
+                - generic [ref=f11e231]: is_escalated
+              - paragraph [ref=f11e232]: 14 Jul 2026, 13:20
+            - generic [ref=f11e233]:
+              - generic [ref=f11e234]:
+                - generic [ref=f11e235]: Escalated
+                - generic [ref=f11e239]: 5d ago
+              - generic [ref=f11e240]: system
+              - generic [ref=f11e242]:
+                - generic [ref=f11e243]: Case
+                - generic [ref=f11e244]: case13
+              - generic [ref=f11e245]:
+                - generic [ref=f11e246]: status
+                - generic [ref=f11e247]: is_escalated
+              - paragraph [ref=f11e248]: 14 Jul 2026, 13:20
+            - generic [ref=f11e249]:
+              - generic [ref=f11e250]:
+                - generic [ref=f11e251]: Escalated
+                - generic [ref=f11e255]: 5d ago
+              - generic [ref=f11e256]: system
+              - generic [ref=f11e258]:
+                - generic [ref=f11e259]: Case
+                - generic [ref=f11e260]: case14
+              - generic [ref=f11e261]:
+                - generic [ref=f11e262]: status
+                - generic [ref=f11e263]: is_escalated
+              - paragraph [ref=f11e264]: 14 Jul 2026, 13:20
+            - generic [ref=f11e265]:
+              - generic [ref=f11e266]:
+                - generic [ref=f11e267]: Status Change
+                - generic [ref=f11e273]: 757d ago
+              - generic [ref=f11e274]:
+                - generic "Rafi Uddin" [ref=f11e275]:
+                  - generic "Rafi Uddin avatar" [ref=f11e277]: RU
+                - generic [ref=f11e278]:
+                  - paragraph [ref=f11e279]: Rafi Uddin
+                  - paragraph [ref=f11e280]: support engineer
+              - generic [ref=f11e281]:
+                - generic [ref=f11e282]: Case
+                - generic [ref=f11e283]: case1
+              - generic [ref=f11e284]: status
+              - paragraph [ref=f11e286]: 22 Jun 2024, 13:20
+            - generic [ref=f11e287]:
+              - generic [ref=f11e288]:
+                - generic [ref=f11e289]: Assigned
+                - generic [ref=f11e293]: 757d ago
+              - generic [ref=f11e294]:
+                - generic "Sadia Islam" [ref=f11e295]:
+                  - generic "Sadia Islam avatar" [ref=f11e297]: SI
+                - generic [ref=f11e298]:
+                  - paragraph [ref=f11e299]: Sadia Islam
+                  - paragraph [ref=f11e300]: team lead
+              - generic [ref=f11e301]:
+                - generic [ref=f11e302]: Case
+                - generic [ref=f11e303]: case1
+              - generic [ref=f11e304]:
+                - generic [ref=f11e305]: assignee_id
+                - generic [ref=f11e306]: status
+              - paragraph [ref=f11e307]: 22 Jun 2024, 13:15
+            - generic [ref=f11e308]:
+              - generic [ref=f11e309]:
+                - generic [ref=f11e310]: Status Change
+                - generic [ref=f11e316]: 757d ago
+              - generic [ref=f11e317]:
+                - generic "Sadia Islam" [ref=f11e318]:
+                  - generic "Sadia Islam avatar" [ref=f11e320]: SI
+                - generic [ref=f11e321]:
+                  - paragraph [ref=f11e322]: Sadia Islam
+                  - paragraph [ref=f11e323]: team lead
+              - generic [ref=f11e324]:
+                - generic [ref=f11e325]: Case
+                - generic [ref=f11e326]: case1
+              - generic [ref=f11e327]: status
+              - paragraph [ref=f11e329]: 22 Jun 2024, 13:10
+            - generic [ref=f11e330]:
+              - generic [ref=f11e331]:
+                - generic [ref=f11e332]: Escalated
+                - generic [ref=f11e336]: 757d ago
+              - generic [ref=f11e337]:
+                - generic "Sadia Islam" [ref=f11e338]:
+                  - generic "Sadia Islam avatar" [ref=f11e340]: SI
+                - generic [ref=f11e341]:
+                  - paragraph [ref=f11e342]: Sadia Islam
+                  - paragraph [ref=f11e343]: team lead
+              - generic [ref=f11e344]:
+                - generic [ref=f11e345]: Case
+                - generic [ref=f11e346]: case1
+              - generic [ref=f11e347]:
+                - generic [ref=f11e348]: escalation_level
+                - generic [ref=f11e349]: is_escalated
+              - paragraph [ref=f11e350]: 22 Jun 2024, 13:05
+            - generic [ref=f11e351]:
+              - generic [ref=f11e352]:
+                - generic [ref=f11e353]: Created
+                - generic [ref=f11e356]: 757d ago
+              - generic [ref=f11e357]:
+                - generic "Priya Sharma" [ref=f11e358]:
+                  - generic "Priya Sharma avatar" [ref=f11e360]: PS
+                - generic [ref=f11e361]:
+                  - paragraph [ref=f11e362]: Priya Sharma
+                  - paragraph [ref=f11e363]: client
+              - generic [ref=f11e364]:
+                - generic [ref=f11e365]: Case
+                - generic [ref=f11e366]: case1
+              - generic [ref=f11e367]:
+                - generic [ref=f11e368]: reference_no
+                - generic [ref=f11e369]: status
+              - paragraph [ref=f11e370]: 22 Jun 2024, 13:00
+            - generic [ref=f11e371]:
+              - generic [ref=f11e372]:
+                - generic [ref=f11e373]: Status Change
+                - generic [ref=f11e379]: 758d ago
+              - generic [ref=f11e380]:
+                - generic "Farzana Begum" [ref=f11e381]:
+                  - generic "Farzana Begum avatar" [ref=f11e383]: FB
+                - generic [ref=f11e384]:
+                  - paragraph [ref=f11e385]: Farzana Begum
+                  - paragraph [ref=f11e386]: support engineer
+              - generic [ref=f11e387]:
+                - generic [ref=f11e388]: Case
+                - generic [ref=f11e389]: case5
+              - generic [ref=f11e390]: status
+              - paragraph [ref=f11e392]: 20 Jun 2024, 20:30
+            - generic [ref=f11e393]:
+              - generic [ref=f11e394]:
+                - generic [ref=f11e395]: Updated
+                - generic [ref=f11e399]: 809d ago
+              - generic [ref=f11e400]:
+                - generic "Arif Rahman" [ref=f11e401]:
+                  - generic "Arif Rahman avatar" [ref=f11e403]: AR
+                - generic [ref=f11e404]:
+                  - paragraph [ref=f11e405]: Arif Rahman
+                  - paragraph [ref=f11e406]: technical head
+              - generic [ref=f11e407]:
+                - generic [ref=f11e408]: User
+                - generic [ref=f11e409]: u12
+              - generic [ref=f11e410]: is_active
+              - paragraph [ref=f11e412]: 01 May 2024, 06:00
+            - generic [ref=f11e413]:
+              - generic [ref=f11e414]:
+                - generic [ref=f11e415]: Created
+                - generic [ref=f11e418]: 899d ago
+              - generic [ref=f11e419]:
+                - generic "Tanvir Ahmed" [ref=f11e420]:
+                  - generic "Tanvir Ahmed avatar" [ref=f11e422]: TA
+                - generic [ref=f11e423]:
+                  - paragraph [ref=f11e424]: Tanvir Ahmed
+                  - paragraph [ref=f11e425]: sales executive
+              - generic [ref=f11e426]:
+                - generic [ref=f11e427]: Client
+                - generic [ref=f11e428]: c1
+              - generic [ref=f11e429]: company_name
+              - paragraph [ref=f11e431]: 01 Feb 2024, 06:00
+          - paragraph [ref=f11e432]: Showing 12 of 12 events
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f11e39] [cursor=pointer]
+  - alert [ref=f11e433]
