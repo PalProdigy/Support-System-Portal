@@ -1,0 +1,300 @@
+- generic [ref=f4e1]:
+  - generic [ref=f4e34]:
+    - complementary [ref=f4e36]:
+      - link [ref=f4e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f4e39]:
+          - generic [ref=f4e40]: NH
+          - generic [ref=f4e41]: DISTRIBUTIONS
+      - navigation [ref=f4e49]:
+        - link "Dashboard" [ref=f4e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f4e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f4e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f4e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f4e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f4e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f4e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f4e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f4e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f4e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f4e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f4e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f4e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f4e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f4e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f4e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f4e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f4e133]:
+        - generic [ref=f4e134]:
+          - generic "Arif Rahman" [ref=f4e184]:
+            - generic "Arif Rahman avatar" [ref=f4e185]: AR
+          - generic [ref=f4e138]:
+            - paragraph [ref=f4e139]: Arif Rahman
+            - paragraph [ref=f4e140]: Technical Head
+        - button "Collapse sidebar" [ref=f4e141]
+    - generic [ref=f4e144]:
+      - banner [ref=f4e146]:
+        - generic [ref=f4e147]:
+          - button "Toggle theme" [ref=f4e148] [cursor=pointer]
+          - button "Notifications" [ref=f4e149] [cursor=pointer]:
+            - generic [ref=f4e186]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f4e187] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f4e188]:
+              - generic "Arif Rahman avatar" [ref=f4e189]: AR
+            - generic [ref=f4e154]:
+              - paragraph [ref=f4e155]: Arif Rahman
+              - paragraph [ref=f4e156]: Technical Head
+      - main [ref=f4e157]:
+        - generic [ref=f4e190]:
+          - generic [ref=f4e191]:
+            - button "Back" [ref=f4e192] [cursor=pointer]
+            - generic [ref=f4e193]: New KB article
+            - generic [ref=f4e194]:
+              - generic [ref=f4e195]: 0 words · 1 min read
+              - group "Editor view mode" [ref=f4e199]:
+                - button "Write view" [ref=f4e200]:
+                  - generic [ref=f4e203]: Write
+                - button "Split view" [pressed] [ref=f4e204]:
+                  - generic [ref=f4e207]: Split
+                - button "Preview view" [ref=f4e208]:
+                  - generic [ref=f4e212]: Preview
+              - button "Save Draft" [disabled]
+              - button "Submit for Review" [disabled]
+          - generic [ref=f4e213]:
+            - generic [ref=f4e214]:
+              - generic [ref=f4e215]:
+                - generic [ref=f4e216]:
+                  - generic [ref=f4e217]: Title *
+                  - textbox "Title *" [ref=f4e218]:
+                    - /placeholder: Article title…
+                    - text: Resetting a Locked Payroll Batch
+                - generic [ref=f4e219]:
+                  - generic [ref=f4e220]: Short description (optional)
+                  - textbox "Short description (optional)" [ref=f4e221]:
+                    - /placeholder: Short description — shown on cards, search results and as the meta description…
+                    - text: Steps to unlock and reprocess a payroll batch stuck in a locked state.
+                - generic [ref=f4e222]:
+                  - generic [ref=f4e223]:
+                    - generic [ref=f4e224]: Category (optional)
+                    - combobox "Article category" [ref=f4e225]:
+                      - generic: Troubleshooting
+                  - generic [ref=f4e228]:
+                    - generic [ref=f4e229]: Subcategory (optional)
+                    - textbox "Subcategory (optional)" [ref=f4e230]:
+                      - /placeholder: e.g. Agents, Payroll…
+                      - text: Payroll
+                  - generic [ref=f4e231]:
+                    - generic [ref=f4e232]: Tags (optional)
+                    - textbox "Add tag" [active] [ref=f4e234]:
+                      - /placeholder: Add up to 5 tags…
+              - generic [ref=f4e235]:
+                - generic [ref=f4e236]: Content *
+                - generic [ref=f4e238]:
+                  - toolbar [ref=f4e239]:
+                    - generic [ref=f4e240]:
+                      - generic [ref=f4e241]:
+                        - radiogroup [ref=f4e242]:
+                          - radio "Undo Ctrl+Z" [disabled]
+                        - radiogroup [ref=f4e243]:
+                          - radio "Redo Ctrl+Y" [disabled]
+                      - separator [ref=f4e244]
+                      - generic [ref=f4e245]:
+                        - radiogroup [ref=f4e246]:
+                          - radio "Bold" [ref=f4e247]
+                        - radiogroup [ref=f4e251]:
+                          - radio "Italic" [ref=f4e252]
+                        - radiogroup [ref=f4e256]:
+                          - radio "Underline" [ref=f4e257]
+                      - radiogroup [ref=f4e262]:
+                        - radio "Inline code format" [ref=f4e263]
+                      - radiogroup [ref=f4e268]:
+                        - radio "Strikethrough" [ref=f4e269]
+                      - separator [ref=f4e273]
+                      - combobox "Block type" [ref=f4e275]
+                      - separator [ref=f4e279]
+                      - radiogroup "toggle group" [ref=f4e281]:
+                        - radio "Bulleted list" [ref=f4e282]
+                        - radio "Numbered list" [ref=f4e286]
+                        - radio "Check list" [ref=f4e290]
+                      - separator [ref=f4e294]
+                      - button "Create link" [ref=f4e295]
+                      - button "Insert image" [ref=f4e299]
+                      - separator [ref=f4e303]
+                      - button "Insert Table" [ref=f4e304]
+                      - button "Insert Code Block" [ref=f4e308]
+                      - button "Insert thematic break" [ref=f4e312]
+                      - radiogroup "toggle group" [ref=f4e549]:
+                        - radio "Rich text" [checked] [ref=f4e550]
+                        - radio "Diff mode" [ref=f4e551]
+                        - radio "Source mode" [ref=f4e552]
+                  - generic [ref=f4e341]:
+                    - textbox "editable markdown" [ref=f4e343]:
+                      - paragraph [ref=f4e344]
+                    - generic:
+                      - paragraph: "Start writing… Markdown shortcuts work: # heading, **bold**, `code`, - list"
+            - generic [ref=f4e346]:
+              - generic [ref=f4e347]:
+                - generic [ref=f4e348]:
+                  - generic [ref=f4e349]: Live preview
+                  - generic [ref=f4e353]: rendered exactly as published
+                - generic [ref=f4e354]:
+                  - generic [ref=f4e355]:
+                    - generic [ref=f4e553]:
+                      - generic [ref=f4e554]: Troubleshooting
+                      - generic [ref=f4e558]: / Payroll
+                    - heading "Resetting a Locked Payroll Batch" [level=2] [ref=f4e510]
+                    - paragraph [ref=f4e557]: Steps to unlock and reprocess a payroll batch stuck in a locked state.
+                  - paragraph [ref=f4e357]: Start typing — your article renders here in real time.
+              - generic [ref=f4e358]:
+                - button "Markdown guide what to type to get each feature" [expanded] [ref=f4e359]:
+                  - generic [ref=f4e362]: Markdown guide
+                  - generic [ref=f4e363]: what to type to get each feature
+                - generic [ref=f4e366]:
+                  - generic [ref=f4e367]:
+                    - generic [ref=f4e368]: You type
+                    - generic [ref=f4e369]: You get
+                  - generic [ref=f4e370]:
+                    - heading "Headings" [level=4] [ref=f4e371]
+                    - generic [ref=f4e372]:
+                      - generic [ref=f4e373]:
+                        - generic [ref=f4e374]: "# Big heading ## Medium heading ### Small heading"
+                        - generic [ref=f4e376]:
+                          - heading [level=1] [ref=f4e377]:
+                            - text: Big heading
+                            - link "Link to this section" [ref=f4e378] [cursor=pointer]:
+                              - /url: "#big-heading"
+                              - text: "#"
+                          - heading [level=2] [ref=f4e379]:
+                            - text: Medium heading
+                            - link "Link to this section" [ref=f4e380] [cursor=pointer]:
+                              - /url: "#medium-heading"
+                              - text: "#"
+                          - heading [level=3] [ref=f4e381]:
+                            - text: Small heading
+                            - link "Link to this section" [ref=f4e382] [cursor=pointer]:
+                              - /url: "#small-heading"
+                              - text: "#"
+                      - paragraph [ref=f4e383]: "Start a line with #, ## or ### — more # means a smaller heading."
+                  - generic [ref=f4e384]:
+                    - heading "Text styles" [level=4] [ref=f4e385]
+                    - generic [ref=f4e386]:
+                      - generic [ref=f4e387]:
+                        - generic [ref=f4e388]: "**bold** and *italic* ~~strikethrough~~ and `inline code`"
+                        - paragraph [ref=f4e391]:
+                          - strong [ref=f4e392]: bold
+                          - text: and
+                          - emphasis [ref=f4e393]: italic
+                          - deletion [ref=f4e394]: strikethrough
+                          - text: and
+                          - code [ref=f4e395]: inline code
+                      - paragraph [ref=f4e396]: "Wrap words in ** for bold, * for italic, ~~ to strike through, backticks (`) for code."
+                  - generic [ref=f4e397]:
+                    - heading "Lists" [level=4] [ref=f4e398]
+                    - generic [ref=f4e400]:
+                      - generic [ref=f4e401]: "- Bullet point - Another point"
+                      - list [ref=f4e404]:
+                        - listitem [ref=f4e405]: Bullet point
+                        - listitem [ref=f4e406]: Another point
+                    - generic [ref=f4e408]:
+                      - generic [ref=f4e409]: 1. First step 2. Second step
+                      - list [ref=f4e412]:
+                        - listitem [ref=f4e413]: First step
+                        - listitem [ref=f4e414]: Second step
+                    - generic [ref=f4e415]:
+                      - generic [ref=f4e416]:
+                        - generic [ref=f4e417]: "- [x] Finished task - [ ] Pending task"
+                        - list [ref=f4e420]:
+                          - listitem [ref=f4e421]:
+                            - checkbox [checked] [disabled] [ref=f4e422]
+                            - text: Finished task
+                          - listitem [ref=f4e423]:
+                            - checkbox [disabled] [ref=f4e424]
+                            - text: Pending task
+                      - paragraph [ref=f4e425]: "Task lists: [x] is checked, [ ] is unchecked."
+                  - generic [ref=f4e426]:
+                    - heading "Links & images" [level=4] [ref=f4e427]
+                    - generic [ref=f4e428]:
+                      - generic [ref=f4e429]:
+                        - generic [ref=f4e430]: "[Open the docs](https://example.com)"
+                        - paragraph [ref=f4e433]:
+                          - link "Open the docs" [ref=f4e434] [cursor=pointer]:
+                            - /url: https://example.com
+                      - paragraph [ref=f4e435]: Text in [brackets] becomes the link; the (URL) is where it goes.
+                    - generic [ref=f4e436]:
+                      - generic [ref=f4e437]:
+                        - generic [ref=f4e438]: "![Logo](/globe.svg)"
+                        - paragraph [ref=f4e441]:
+                          - img "Logo" [ref=f4e442]
+                      - paragraph [ref=f4e443]: Same as a link but with ! in front — shows the image from the URL.
+                  - generic [ref=f4e444]:
+                    - heading "Quotes & dividers" [level=4] [ref=f4e445]
+                    - generic [ref=f4e447]:
+                      - generic [ref=f4e448]: "> Important note for readers"
+                      - blockquote [ref=f4e451]:
+                        - paragraph [ref=f4e452]: Important note for readers
+                    - generic [ref=f4e453]:
+                      - generic [ref=f4e454]:
+                        - generic [ref=f4e455]: Above the line --- Below the line
+                        - generic [ref=f4e457]:
+                          - paragraph [ref=f4e458]: Above the line
+                          - separator [ref=f4e459]
+                          - paragraph [ref=f4e460]: Below the line
+                      - paragraph [ref=f4e461]: "--- on its own line draws a divider."
+                  - generic [ref=f4e462]:
+                    - heading "Code blocks" [level=4] [ref=f4e463]
+                    - generic [ref=f4e464]:
+                      - generic [ref=f4e465]:
+                        - generic [ref=f4e466]: "```js const total = qty * price ```"
+                        - generic [ref=f4e469]:
+                          - generic [ref=f4e470]:
+                            - generic [ref=f4e471]: JavaScript
+                            - button "Copy code to clipboard" [ref=f4e472]: Copy
+                          - code [ref=f4e477]: const total = qty * price
+                      - paragraph [ref=f4e478]: Three backticks start and end a code block; add a language (js, py, sql…) for syntax colors.
+                  - generic [ref=f4e479]:
+                    - heading "Tables" [level=4] [ref=f4e480]
+                    - generic [ref=f4e481]:
+                      - generic [ref=f4e482]:
+                        - generic [ref=f4e483]: "| Plan | Limit | | ---- | ----- | | Free | 100/day | | Pro | 10k/day |"
+                        - table [ref=f4e487]:
+                          - rowgroup [ref=f4e488]:
+                            - row [ref=f4e489]:
+                              - columnheader "Plan" [ref=f4e490]
+                              - columnheader "Limit" [ref=f4e491]
+                          - rowgroup [ref=f4e492]:
+                            - row [ref=f4e493]:
+                              - cell "Free" [ref=f4e494]
+                              - cell "100/day" [ref=f4e495]
+                            - row [ref=f4e496]:
+                              - cell "Pro" [ref=f4e497]
+                              - cell "10k/day" [ref=f4e498]
+                      - paragraph [ref=f4e499]: Pipes (|) separate columns; the dashes row splits the header from the body.
+                  - generic [ref=f4e500]:
+                    - heading "New lines" [level=4] [ref=f4e501]
+                    - generic [ref=f4e502]:
+                      - generic [ref=f4e503]:
+                        - generic [ref=f4e504]: First line Second line
+                        - paragraph [ref=f4e507]: First line Second line
+                      - paragraph [ref=f4e508]: Press Enter once for a new line, twice for a new paragraph.
+                  - paragraph [ref=f4e509]: Everything renders live in the preview above as you type — raw HTML tags are ignored for safety.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f4e179] [cursor=pointer]
+  - alert [ref=f4e183]

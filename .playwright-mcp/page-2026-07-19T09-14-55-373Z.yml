@@ -1,0 +1,94 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e34]:
+    - complementary [ref=f3e36]:
+      - link [ref=f3e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f3e39]:
+          - generic [ref=f3e40]: NH
+          - generic [ref=f3e41]: DISTRIBUTIONS
+      - navigation [ref=f3e49]:
+        - link "Dashboard" [ref=f3e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f3e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f3e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f3e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f3e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f3e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f3e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f3e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f3e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f3e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f3e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f3e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f3e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f3e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f3e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f3e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f3e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f3e133]:
+        - generic [ref=f3e134]:
+          - generic "Arif Rahman" [ref=f3e135]:
+            - generic "Arif Rahman avatar" [ref=f3e137]: AR
+          - generic [ref=f3e138]:
+            - paragraph [ref=f3e139]: Arif Rahman
+            - paragraph [ref=f3e140]: Technical Head
+        - button "Collapse sidebar" [ref=f3e141]
+    - generic [ref=f3e144]:
+      - banner [ref=f3e146]:
+        - generic [ref=f3e147]:
+          - button "Toggle theme" [ref=f3e148] [cursor=pointer]
+          - button "Notifications" [ref=f3e149] [cursor=pointer]:
+            - generic [ref=f3e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f3e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f3e152]:
+              - generic "Arif Rahman avatar" [ref=f3e154]: AR
+            - generic [ref=f3e155]:
+              - paragraph [ref=f3e156]: Arif Rahman
+              - paragraph [ref=f3e157]: Technical Head
+      - main [ref=f3e158]:
+        - generic [ref=f3e159]:
+          - button "All categories" [ref=f3e160]
+          - generic [ref=f3e163]:
+            - generic [ref=f3e169]:
+              - heading "Product" [level=1] [ref=f3e170]
+              - paragraph [ref=f3e171]: Endpoint & Server Security · 2 products
+            - button "Add Product" [ref=f3e172] [cursor=pointer]
+          - generic [ref=f3e174]:
+            - button "McAfee Endpoint Security Endpoint & Server Security McAfee Endpoint Security Enterprise endpoint protection with anti-malware, threat prevention, firewall, and centralized ePO management for desktops and servers. Details" [ref=f3e175] [cursor=pointer]:
+              - generic [ref=f3e176]:
+                - img "McAfee Endpoint Security" [ref=f3e177]
+                - generic [ref=f3e179]: Endpoint & Server Security
+              - generic [ref=f3e184]:
+                - generic [ref=f3e185]:
+                  - paragraph [ref=f3e186]: McAfee Endpoint Security
+                  - button [ref=f3e187]
+                - paragraph [ref=f3e191]: Enterprise endpoint protection with anti-malware, threat prevention, firewall, and centralized ePO management for desktops and servers.
+                - generic [ref=f3e192]: Details
+            - button "Endpoint & Server Security Symantec Endpoint Protection Multilayered endpoint defense against ransomware and advanced threats across physical, virtual, and cloud machines. Details" [ref=f3e196] [cursor=pointer]:
+              - generic [ref=f3e197]: Endpoint & Server Security
+              - generic [ref=f3e205]:
+                - generic [ref=f3e206]:
+                  - paragraph [ref=f3e207]: Symantec Endpoint Protection
+                  - button [ref=f3e208]
+                - paragraph [ref=f3e212]: Multilayered endpoint defense against ransomware and advanced threats across physical, virtual, and cloud machines.
+                - generic [ref=f3e213]: Details
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f3e222] [cursor=pointer]
+  - alert [ref=f3e226]

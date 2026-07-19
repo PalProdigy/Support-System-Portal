@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { TagInput } from '@/components/shared/tag-input'
+import { Badge } from '@/components/ui/badge'
 import { MarkdownViewer } from '@/components/markdown/markdown-viewer'
 import { MarkdownGuide } from '@/components/markdown/markdown-guide'
 import { countWords, estimateReadingTimeMinutes, excerptFromMarkdown } from '@/lib/markdown/utils'
@@ -22,7 +23,7 @@ import { KB_CATEGORIES, canWriteKB } from './constants'
 import { KBStatusBadge } from './status-badge'
 import { cn } from '@/lib/utils'
 import {
-  ArrowLeft, Columns2, Eye, Loader2, PenLine, Save, Send, ShieldAlert, Clock, MessageSquareWarning,
+  ArrowLeft, Columns2, Eye, Loader2, PenLine, Save, Send, ShieldAlert, Clock, MessageSquareWarning, FolderOpen, Tag,
 } from 'lucide-react'
 import type { KBArticle } from '@/types'
 
@@ -157,6 +158,11 @@ function KBForm({ article }: { article?: KBArticle }) {
 
   // The preview trails typing by one idle frame; MarkdownViewer is memoized.
   const deferredContent = useDeferredValue(content)
+  const deferredTitle = useDeferredValue(title)
+  const deferredDescription = useDeferredValue(description)
+  const deferredCategory = useDeferredValue(category)
+  const deferredSubcategory = useDeferredValue(subcategory)
+  const deferredTags = useDeferredValue(tags)
   const wordCount = useMemo(() => countWords(deferredContent), [deferredContent])
   const readingTime = useMemo(() => estimateReadingTimeMinutes(deferredContent), [deferredContent])
 
@@ -388,6 +394,33 @@ function KBForm({ article }: { article?: KBArticle }) {
                 <span className="text-[11px] text-muted-foreground">rendered exactly as published</span>
               </div>
               <div className={cn('p-5 sm:p-6', split && 'lg:flex-1 lg:min-h-0 lg:overflow-y-auto')}>
+                {/* Meta preview — mirrors the published article header */}
+                <div className="space-y-2 pb-4 mb-4 border-b">
+                  <div className="flex items-center gap-2 flex-wrap text-xs">
+                    {deferredCategory && (
+                      <span className="inline-flex items-center gap-1 font-medium text-primary">
+                        <FolderOpen className="h-3.5 w-3.5" /> {deferredCategory}
+                      </span>
+                    )}
+                    {deferredSubcategory && <span className="text-muted-foreground">/ {deferredSubcategory}</span>}
+                  </div>
+                  <h2 className="text-2xl font-bold leading-tight tracking-tight">
+                    {deferredTitle.trim() || <span className="text-muted-foreground/50">Article title…</span>}
+                  </h2>
+                  {deferredDescription && (
+                    <p className="text-sm text-muted-foreground">{deferredDescription}</p>
+                  )}
+                  {deferredTags.length > 0 && (
+                    <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                      {deferredTags.map((t) => (
+                        <Badge key={t} variant="secondary" className="text-xs gap-1">
+                          <Tag className="h-2.5 w-2.5" />{t}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 {deferredContent.trim() ? (
                   <MarkdownViewer content={deferredContent} />
                 ) : (

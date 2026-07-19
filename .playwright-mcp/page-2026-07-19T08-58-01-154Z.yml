@@ -1,0 +1,126 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - link:
+            - /url: /dashboard
+            - img:
+              - generic: NH
+              - generic: DISTRIBUTIONS
+        - navigation:
+          - link:
+            - /url: /dashboard
+            - generic: Dashboard
+          - link:
+            - /url: /technical-head
+            - generic: TH Hub
+          - link:
+            - /url: /cases
+            - generic: Cases
+          - link:
+            - /url: /teams
+            - generic: Teams
+          - link:
+            - /url: /team-lead
+            - generic: Team Leads
+          - link:
+            - /url: /support-engineer
+            - generic: Support Engineers
+          - link:
+            - /url: /sales-executive
+            - generic: Sales Executives
+          - link:
+            - /url: /clients
+            - generic: Clients
+          - link:
+            - /url: /products
+            - generic: Products
+          - link:
+            - /url: /solutions
+            - generic: Solutions
+          - link:
+            - /url: /knowledge-base
+            - generic: Knowledge Base
+          - link:
+            - /url: /reporting
+            - generic: Reporting
+          - link:
+            - /url: /feedback
+            - generic: Feedback
+          - link:
+            - /url: /sla-rules
+            - generic: SLA Rules
+          - link:
+            - /url: /audit-log
+            - generic: Audit Log
+          - link:
+            - /url: /notifications
+            - generic: Notifications
+          - link:
+            - /url: /settings
+            - generic: Settings
+        - generic:
+          - generic:
+            - generic:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+            - button
+    - generic:
+      - generic:
+        - banner:
+          - generic:
+            - button
+            - button:
+              - generic: 9+
+            - button:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+      - main:
+        - generic:
+          - button: All categories
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: Product
+                - paragraph: Endpoint & Server Security · 2 products
+            - button:
+              - generic: Add Product
+          - generic:
+            - button:
+              - generic: Endpoint & Server Security
+              - generic:
+                - generic:
+                  - paragraph: McAfee Endpoint Security
+                  - button
+                - paragraph: Enterprise endpoint protection with anti-malware, threat prevention, firewall, and centralized ePO management for desktops and servers.
+                - generic: Details
+            - button:
+              - generic: Endpoint & Server Security
+              - generic:
+                - generic:
+                  - paragraph: Symantec Endpoint Protection
+                  - button
+                - paragraph: Multilayered endpoint defense against ransomware and advanced threats across physical, virtual, and cloud machines.
+                - generic: Details
+  - list
+  - button "Open Next.js Dev Tools" [ref=e297] [cursor=pointer]
+  - alert
+  - dialog [ref=e361]:
+    - heading [level=2] [ref=e363]
+    - generic [ref=e375]:
+      - generic [ref=e376]:
+        - generic [ref=e377]: Endpoint & Server Security
+        - generic [ref=e381]: Active
+      - generic [ref=e385]:
+        - paragraph [ref=e386]: Description
+        - paragraph [ref=e387]: Enterprise endpoint protection with anti-malware, threat prevention, firewall, and centralized ePO management for desktops and servers.
+      - generic [ref=e388]: Added 01 Jan 2024
+    - generic [ref=e391]:
+      - button "Edit" [active] [ref=e392] [cursor=pointer]
+      - button "Close" [ref=e393] [cursor=pointer]
+    - button "Close" [ref=e394]

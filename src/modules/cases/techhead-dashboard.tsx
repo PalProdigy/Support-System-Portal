@@ -17,18 +17,15 @@ import { cn, formatDateTime, slaRemainingMs } from '@/lib/utils'
 import {
   Ticket, AlertTriangle, CheckCircle, CheckCircle2, Clock, Users, Gauge,
   ShieldCheck, ArrowLeftRight, UserPlus, BookOpen, Star, ChevronRight,
-  Building2, Lightbulb, Package, Shield, TrendingDown, RotateCcw, TimerReset,
+  Building2, Lightbulb, Package, Shield, RotateCcw, TimerReset,
 } from 'lucide-react'
-import type { Case, User, Client, AuditLog, EngineerMetrics, Feedback, KBArticle, Notification, Team, CaseTransferRequest, TeamMemberRequest, SLARule } from '@/types'
+import type { Case, User, Client, AuditLog, Feedback, KBArticle, Team, CaseTransferRequest, TeamMemberRequest, SLARule } from '@/types'
 
 // Recharts widget — client-only so it stays out of SSR.
 const CaseSummary12m = dynamic(
   () => import('@/modules/technical-head/case-summary-12m').then((m) => m.CaseSummary12m),
   { ssr: false, loading: () => <div className="h-[336px] rounded-xl border bg-card animate-pulse" /> },
 )
-
-// Notification types the Technical Head cares about for SLA health.
-const SLA_NOTIF_TYPES = ['sla_at_risk', 'sla_breached', 'case_auto_escalated']
 
 type Tone = 'red' | 'amber' | 'violet' | 'blue'
 
@@ -74,8 +71,6 @@ export default function TechHeadDashboard() {
   const { data: clients } = useQuery({ queryKey: ['clients', session.userId], queryFn: () => dp.listClients(scope) })
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
   const { data: auditLogs } = useQuery({ queryKey: ['audit-logs', 'recent'], queryFn: () => dp.listAuditLogs({ limit: 10 }) })
-  const { data: metrics } = useQuery<EngineerMetrics[]>({ queryKey: ['all-engineer-metrics'], queryFn: () => dp.listAllEngineerMetrics(scope), staleTime: 30_000 })
-  const { data: notifications } = useQuery<Notification[]>({ queryKey: ['notifications', session.userId], queryFn: () => dp.listNotifications(session.userId) })
   const { data: transferReqs } = useQuery<CaseTransferRequest[]>({ queryKey: ['case-transfer-requests', 'pending'], queryFn: () => dp.listAllPendingCaseTransferRequests() })
   const { data: memberReqs } = useQuery<TeamMemberRequest[]>({ queryKey: ['team-member-requests', 'pending'], queryFn: () => dp.listAllPendingTeamMemberRequests() })
   const { data: pendingKB } = useQuery<KBArticle[]>({ queryKey: ['kb', 'in_review'], queryFn: () => dp.listKBArticles({ status: 'in_review' }, scope) })
@@ -134,25 +129,6 @@ export default function TechHeadDashboard() {
   const staleCases = useMemo(
     () => openCases.filter((c) => nowMs - new Date(c.closed_at ?? c.resolved_at ?? c.created_at).getTime() >= 15 * 86_400_000),
     [openCases, nowMs]
-  )
-
-  // SLA health
-  const unreadSlaNotifs = useMemo(
-    () => (notifications ?? []).filter((n) => !n.read_at && SLA_NOTIF_TYPES.includes(n.type)),
-    [notifications]
-  )
-  const slaBreached = unreadSlaNotifs.filter((n) => n.type === 'sla_breached').length
-  const slaAtRisk = unreadSlaNotifs.filter((n) => n.type === 'sla_at_risk').length
-  const slaAutoEsc = unreadSlaNotifs.filter((n) => n.type === 'case_auto_escalated').length
-  const avgSLA = useMemo(
-    () => (metrics && metrics.length ? Math.round(metrics.reduce((s, m) => s + m.sla_compliance_pct, 0) / metrics.length) : null),
-    [metrics]
-  )
-
-  // Lowest SLA-compliance engineers
-  const lowPerformers = useMemo(
-    () => [...(metrics ?? [])].sort((a, b) => a.sla_compliance_pct - b.sla_compliance_pct).slice(0, 3),
-    [metrics]
   )
 
   // Open cases per team
@@ -364,47 +340,6 @@ export default function TechHeadDashboard() {
 
         {/* Side panels */}
         <div className="space-y-4">
-          {/* SLA & performance */}
-          <Panel title="SLA & Performance" icon={Gauge} action={{ label: 'Performance', href: '/technical-head?tab=performance' }}>
-            <div className="grid grid-cols-2 gap-2 mb-3">
-              <div className="rounded-lg border p-2.5">
-                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Avg SLA</p>
-                <p className={cn('text-xl font-bold tabular-nums', avgSLA != null && avgSLA < 70 ? 'text-red-500' : 'text-foreground')}>
-                  {avgSLA != null ? `${avgSLA}%` : '—'}
-                </p>
-              </div>
-              <div className="rounded-lg border p-2.5">
-                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Breached</p>
-                <p className={cn('text-xl font-bold tabular-nums', slaBreached > 0 ? 'text-red-500' : 'text-foreground')}>{slaBreached}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-              <span>{slaAtRisk} at risk</span>
-              <span className="text-muted-foreground/40">·</span>
-              <span>{slaAutoEsc} auto-escalated</span>
-            </div>
-            {lowPerformers.length > 0 && (
-              <div className="space-y-1.5">
-                <p className="text-[11px] font-semibold text-muted-foreground flex items-center gap-1">
-                  <TrendingDown className="h-3 w-3" /> Lowest SLA compliance
-                </p>
-                {lowPerformers.map((m) => (
-                  <div key={m.engineer_id} className="flex items-center justify-between text-sm">
-                    <span className="text-foreground truncate">{usersMap[m.engineer_id]?.name ?? m.engineer_id}</span>
-                    <span className={cn(
-                      'text-xs font-semibold px-1.5 py-0.5 rounded-full shrink-0',
-                      m.sla_compliance_pct >= 90 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                        : m.sla_compliance_pct >= 70 ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                          : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                    )}>
-                      {m.sla_compliance_pct}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Panel>
-
           {/* Team workload */}
           <Panel title={`Team Workload (${workload.length})`} icon={Users} action={{ label: 'Workload', href: '/technical-head?tab=workload' }}>
             {workload.length === 0 ? (

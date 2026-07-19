@@ -1,0 +1,364 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - link:
+            - /url: /dashboard
+            - img:
+              - generic: NH
+              - generic: DISTRIBUTIONS
+        - navigation:
+          - link:
+            - /url: /dashboard
+            - generic: Dashboard
+          - link:
+            - /url: /technical-head
+            - generic: TH Hub
+          - link:
+            - /url: /cases
+            - generic: Cases
+          - link:
+            - /url: /teams
+            - generic: Teams
+          - link:
+            - /url: /team-lead
+            - generic: Team Leads
+          - link:
+            - /url: /support-engineer
+            - generic: Support Engineers
+          - link:
+            - /url: /sales-executive
+            - generic: Sales Executives
+          - link:
+            - /url: /clients
+            - generic: Clients
+          - link:
+            - /url: /products
+            - generic: Products
+          - link:
+            - /url: /solutions
+            - generic: Solutions
+          - link:
+            - /url: /knowledge-base
+            - generic: Knowledge Base
+          - link:
+            - /url: /reporting
+            - generic: Reporting
+          - link:
+            - /url: /feedback
+            - generic: Feedback
+          - link:
+            - /url: /sla-rules
+            - generic: SLA Rules
+          - link:
+            - /url: /audit-log
+            - generic: Audit Log
+          - link:
+            - /url: /notifications
+            - generic: Notifications
+          - link:
+            - /url: /settings
+            - generic: Settings
+        - generic:
+          - generic:
+            - generic:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+            - button
+    - generic:
+      - generic:
+        - banner:
+          - generic:
+            - button
+            - button:
+              - generic: 9+
+            - button:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+      - main:
+        - generic:
+          - generic:
+            - button: Back
+            - generic: New KB article
+            - generic:
+              - generic: 0 words · 1 min read
+              - group:
+                - button:
+                  - generic: Write
+                - button [pressed]:
+                  - generic: Split
+                - button:
+                  - generic: Preview
+              - button [disabled]: Save Draft
+              - button [disabled]: Submit for Review
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Title *
+                  - textbox:
+                    - /placeholder: Article title…
+                    - text: Resetting a Locked Payroll Batch
+                - generic:
+                  - generic: Short description (optional)
+                  - textbox:
+                    - /placeholder: Short description — shown on cards, search results and as the meta description…
+                    - text: Steps to unlock and reprocess a payroll batch stuck in a locked state.
+                - generic:
+                  - generic:
+                    - generic: Category (optional)
+                    - combobox [expanded]:
+                      - generic: Select a category
+                  - generic:
+                    - generic: Subcategory (optional)
+                    - textbox:
+                      - /placeholder: e.g. Agents, Payroll…
+                  - generic:
+                    - generic: Tags (optional)
+                    - generic:
+                      - textbox:
+                        - /placeholder: Add up to 5 tags…
+              - generic:
+                - generic: Content *
+                - generic:
+                  - generic:
+                    - toolbar:
+                      - generic:
+                        - generic:
+                          - radiogroup:
+                            - radio [disabled]
+                          - radiogroup:
+                            - radio [disabled]
+                        - separator
+                        - generic:
+                          - radiogroup:
+                            - radio
+                          - radiogroup:
+                            - radio
+                          - radiogroup:
+                            - radio
+                        - generic:
+                          - radiogroup:
+                            - radio
+                        - generic:
+                          - radiogroup:
+                            - radio
+                        - separator
+                        - generic:
+                          - combobox:
+                            - generic: Block type
+                        - separator
+                        - generic:
+                          - radiogroup:
+                            - radio
+                            - radio
+                            - radio
+                        - separator
+                        - button
+                        - button
+                        - separator
+                        - button
+                        - button
+                        - button
+                        - radiogroup [ref=f4e511]:
+                          - radio [checked] [ref=f4e512]
+                          - radio [ref=f4e513]
+                          - radio [ref=f4e514]
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - textbox:
+                              - paragraph
+                          - generic:
+                            - paragraph: "Start writing… Markdown shortcuts work: # heading, **bold**, `code`, - list"
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: Live preview
+                    - generic: rendered exactly as published
+                  - generic:
+                    - generic:
+                      - heading [level=2]: Resetting a Locked Payroll Batch
+                      - paragraph: Steps to unlock and reprocess a payroll batch stuck in a locked state.
+                    - paragraph: Start typing — your article renders here in real time.
+                - generic:
+                  - button [expanded]:
+                    - generic: Markdown guide
+                    - generic: what to type to get each feature
+                  - generic:
+                    - generic:
+                      - generic: You type
+                      - generic: You get
+                    - generic:
+                      - heading [level=4]: Headings
+                      - generic:
+                        - generic:
+                          - generic: "# Big heading ## Medium heading ### Small heading"
+                          - generic:
+                            - generic:
+                              - heading [level=1]:
+                                - text: Big heading
+                                - link:
+                                  - /url: "#big-heading"
+                                  - text: "#"
+                              - heading [level=2]:
+                                - text: Medium heading
+                                - link:
+                                  - /url: "#medium-heading"
+                                  - text: "#"
+                              - heading [level=3]:
+                                - text: Small heading
+                                - link:
+                                  - /url: "#small-heading"
+                                  - text: "#"
+                        - paragraph: "Start a line with #, ## or ### — more # means a smaller heading."
+                    - generic:
+                      - heading [level=4]: Text styles
+                      - generic:
+                        - generic:
+                          - generic: "**bold** and *italic* ~~strikethrough~~ and `inline code`"
+                          - generic:
+                            - generic:
+                              - paragraph:
+                                - strong: bold
+                                - text: and
+                                - emphasis: italic
+                                - deletion: strikethrough
+                                - text: and
+                                - code: inline code
+                        - paragraph: "Wrap words in ** for bold, * for italic, ~~ to strike through, backticks (`) for code."
+                    - generic:
+                      - heading [level=4]: Lists
+                      - generic:
+                        - generic:
+                          - generic: "- Bullet point - Another point"
+                          - generic:
+                            - generic:
+                              - list:
+                                - listitem: Bullet point
+                                - listitem: Another point
+                      - generic:
+                        - generic:
+                          - generic: 1. First step 2. Second step
+                          - generic:
+                            - generic:
+                              - list:
+                                - listitem: First step
+                                - listitem: Second step
+                      - generic:
+                        - generic:
+                          - generic: "- [x] Finished task - [ ] Pending task"
+                          - generic:
+                            - generic:
+                              - list:
+                                - listitem:
+                                  - checkbox [checked] [disabled]
+                                  - text: Finished task
+                                - listitem:
+                                  - checkbox [disabled]
+                                  - text: Pending task
+                        - paragraph: "Task lists: [x] is checked, [ ] is unchecked."
+                    - generic:
+                      - heading [level=4]: Links & images
+                      - generic:
+                        - generic:
+                          - generic: "[Open the docs](https://example.com)"
+                          - generic:
+                            - generic:
+                              - paragraph:
+                                - link:
+                                  - /url: https://example.com
+                                  - text: Open the docs
+                        - paragraph: Text in [brackets] becomes the link; the (URL) is where it goes.
+                      - generic:
+                        - generic:
+                          - generic: "![Logo](/globe.svg)"
+                          - generic:
+                            - generic:
+                              - paragraph
+                        - paragraph: Same as a link but with ! in front — shows the image from the URL.
+                    - generic:
+                      - heading [level=4]: Quotes & dividers
+                      - generic:
+                        - generic:
+                          - generic: "> Important note for readers"
+                          - generic:
+                            - generic:
+                              - blockquote:
+                                - paragraph: Important note for readers
+                      - generic:
+                        - generic:
+                          - generic: Above the line --- Below the line
+                          - generic:
+                            - generic:
+                              - paragraph: Above the line
+                              - separator
+                              - paragraph: Below the line
+                        - paragraph: "--- on its own line draws a divider."
+                    - generic:
+                      - heading [level=4]: Code blocks
+                      - generic:
+                        - generic:
+                          - generic: "```js const total = qty * price ```"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic: JavaScript
+                                  - button: Copy
+                                - generic:
+                                  - code: const total = qty * price
+                        - paragraph: Three backticks start and end a code block; add a language (js, py, sql…) for syntax colors.
+                    - generic:
+                      - heading [level=4]: Tables
+                      - generic:
+                        - generic:
+                          - generic: "| Plan | Limit | | ---- | ----- | | Free | 100/day | | Pro | 10k/day |"
+                          - generic:
+                            - generic:
+                              - generic:
+                                - table:
+                                  - rowgroup:
+                                    - row:
+                                      - columnheader: Plan
+                                      - columnheader: Limit
+                                  - rowgroup:
+                                    - row:
+                                      - cell: Free
+                                      - cell: 100/day
+                                    - row:
+                                      - cell: Pro
+                                      - cell: 10k/day
+                        - paragraph: Pipes (|) separate columns; the dashes row splits the header from the body.
+                    - generic:
+                      - heading [level=4]: New lines
+                      - generic:
+                        - generic:
+                          - generic: First line Second line
+                          - generic:
+                            - generic:
+                              - paragraph: First line Second line
+                        - paragraph: Press Enter once for a new line, twice for a new paragraph.
+                    - paragraph: Everything renders live in the preview above as you type — raw HTML tags are ignored for safety.
+  - list
+  - button "Open Next.js Dev Tools" [ref=f4e179] [cursor=pointer]
+  - alert
+  - listbox [ref=f4e515]:
+    - option "Installation" [active] [ref=f4e516]
+    - option "Configuration" [ref=f4e519]
+    - option "Troubleshooting" [ref=f4e522]
+    - option "Networking" [ref=f4e525]
+    - option "Authentication" [ref=f4e528]
+    - option "Performance" [ref=f4e531]
+    - option "Licensing" [ref=f4e534]
+    - option "API" [ref=f4e537]
+    - option "Security" [ref=f4e540]
+    - option "Best Practices" [ref=f4e543]
+    - option "FAQ" [ref=f4e546]

@@ -1,0 +1,136 @@
+- generic:
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - link:
+            - /url: /dashboard
+            - img:
+              - generic: NH
+              - generic: DISTRIBUTIONS
+        - navigation:
+          - link:
+            - /url: /dashboard
+            - generic: Dashboard
+          - link:
+            - /url: /technical-head
+            - generic: TH Hub
+          - link:
+            - /url: /cases
+            - generic: Cases
+          - link:
+            - /url: /teams
+            - generic: Teams
+          - link:
+            - /url: /team-lead
+            - generic: Team Leads
+          - link:
+            - /url: /support-engineer
+            - generic: Support Engineers
+          - link:
+            - /url: /sales-executive
+            - generic: Sales Executives
+          - link:
+            - /url: /clients
+            - generic: Clients
+          - link:
+            - /url: /products
+            - generic: Products
+          - link:
+            - /url: /solutions
+            - generic: Solutions
+          - link:
+            - /url: /knowledge-base
+            - generic: Knowledge Base
+          - link:
+            - /url: /reporting
+            - generic: Reporting
+          - link:
+            - /url: /feedback
+            - generic: Feedback
+          - link:
+            - /url: /sla-rules
+            - generic: SLA Rules
+          - link:
+            - /url: /audit-log
+            - generic: Audit Log
+          - link:
+            - /url: /notifications
+            - generic: Notifications
+          - link:
+            - /url: /settings
+            - generic: Settings
+        - generic:
+          - generic:
+            - generic:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+            - button
+    - generic:
+      - generic:
+        - banner:
+          - generic:
+            - button
+            - button:
+              - generic: 9+
+            - button:
+              - generic: AR
+              - generic:
+                - paragraph: Arif Rahman
+                - paragraph: Technical Head
+      - main:
+        - generic:
+          - button: All categories
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: Product
+                - paragraph: Endpoint & Server Security · 2 products
+            - button:
+              - generic: Add Product
+          - generic:
+            - button:
+              - generic:
+                - generic: Endpoint & Server Security
+                - generic: "2"
+              - generic:
+                - generic:
+                  - paragraph: McAfee Endpoint Security
+                  - button
+                - paragraph: Enterprise endpoint protection with anti-malware, threat prevention, firewall, and centralized ePO management for desktops and servers.
+                - generic: Details
+            - button:
+              - generic: Endpoint & Server Security
+              - generic:
+                - generic:
+                  - paragraph: Symantec Endpoint Protection
+                  - button
+                - paragraph: Multilayered endpoint defense against ransomware and advanced threats across physical, virtual, and cloud machines.
+                - generic: Details
+  - list
+  - button "Open Next.js Dev Tools" [ref=f1e224] [cursor=pointer]
+  - alert
+  - dialog [ref=f1e230]:
+    - heading [level=2] [ref=f1e232]
+    - generic [ref=f1e238]:
+      - generic [ref=f1e239]:
+        - img "McAfee Endpoint Security" [ref=f1e241]
+        - generic [ref=f1e242]:
+          - button [active] [ref=f1e243]:
+            - img "McAfee Endpoint Security 1" [ref=f1e244]
+          - button [ref=f1e245]:
+            - img "McAfee Endpoint Security 2" [ref=f1e246]
+      - generic [ref=f1e247]:
+        - generic [ref=f1e248]:
+          - generic [ref=f1e249]: Endpoint & Server Security
+          - generic [ref=f1e253]: Active
+        - generic [ref=f1e257]:
+          - paragraph [ref=f1e258]: Description
+          - paragraph [ref=f1e259]: Enterprise endpoint protection with anti-malware, threat prevention, firewall, and centralized ePO management for desktops and servers.
+        - generic [ref=f1e260]: Added 01 Jan 2024
+    - generic [ref=f1e263]:
+      - button "Edit" [ref=f1e264] [cursor=pointer]
+      - button "Close" [ref=f1e265] [cursor=pointer]
+    - button "Close" [ref=f1e266]
