@@ -1,0 +1,160 @@
+- generic [ref=f7e1]:
+  - generic [ref=f7e34]:
+    - complementary [ref=f7e36]:
+      - link [ref=f7e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f7e39]:
+          - generic [ref=f7e40]: NH
+          - generic [ref=f7e41]: DISTRIBUTIONS
+      - navigation [ref=f7e49]:
+        - link "Dashboard" [ref=f7e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f7e57] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f7e61] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f7e65] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f7e70] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f7e77] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f7e81] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f7e86] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f7e92] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f7e98] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f7e102] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f7e106] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f7e110] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f7e114] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f7e118] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f7e122] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f7e127] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f7e133]:
+        - generic [ref=f7e134]:
+          - generic "Arif Rahman" [ref=f7e135]:
+            - generic "Arif Rahman avatar" [ref=f7e137]: AR
+          - generic [ref=f7e138]:
+            - paragraph [ref=f7e139]: Arif Rahman
+            - paragraph [ref=f7e140]: Technical Head
+        - button "Collapse sidebar" [ref=f7e141]
+    - generic [ref=f7e144]:
+      - banner [ref=f7e146]:
+        - generic [ref=f7e147]:
+          - button "Toggle theme" [ref=f7e148] [cursor=pointer]
+          - button "Notifications" [ref=f7e149] [cursor=pointer]:
+            - generic [ref=f7e150]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f7e151] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f7e152]:
+              - generic "Arif Rahman avatar" [ref=f7e154]: AR
+            - generic [ref=f7e155]:
+              - paragraph [ref=f7e156]: Arif Rahman
+              - paragraph [ref=f7e157]: Technical Head
+      - main [ref=f7e158]:
+        - generic [ref=f7e159]:
+          - generic [ref=f7e160]:
+            - generic [ref=f7e161]:
+              - heading "Feedback" [level=1] [ref=f7e162]
+              - paragraph [ref=f7e163]: 7 responses
+            - button "Search" [ref=f7e165] [cursor=pointer]
+          - generic [ref=f7e166]:
+            - generic [ref=f7e168]:
+              - generic [ref=f7e169]:
+                - generic [ref=f7e170]: Acme Corporation Ltd.
+                - paragraph [ref=f7e183]: The issue was resolved quickly once we connected with the support team. The engineer was very knowledgeable and walked us through the fix step by step. Very satisfied.
+                - generic [ref=f7e184]:
+                  - generic [ref=f7e185]: Alpha Support Team
+                  - generic [ref=f7e186]: Farzana Begum
+                  - generic [ref=f7e187]: 10 Jun 2024
+                  - generic [ref=f7e188]: Reviewed by Team Lead
+              - generic [ref=f7e192]:
+                - button "View Case" [ref=f7e193] [cursor=pointer]
+                - button "Review" [active] [ref=f7e194] [cursor=pointer]
+            - generic [ref=f7e196]:
+              - generic [ref=f7e197]:
+                - generic [ref=f7e198]: TechWave Solutions
+                - paragraph [ref=f7e211]: Good response time and the documentation provided was thorough. Would have appreciated a video walkthrough in addition to the written guide.
+                - generic [ref=f7e212]:
+                  - generic [ref=f7e213]: Beta Support Team
+                  - generic [ref=f7e214]: 15 Jun 2024
+              - generic [ref=f7e215]:
+                - button "View Case" [ref=f7e216] [cursor=pointer]
+                - button "Review" [ref=f7e217] [cursor=pointer]
+            - generic [ref=f7e219]:
+              - generic [ref=f7e220]:
+                - generic [ref=f7e221]: TechWave Solutions
+                - paragraph [ref=f7e234]: The payroll error was very serious and could have caused legal issues for us. While the fix was correct, we feel the initial response time was too slow for a critical payroll issue.
+                - generic [ref=f7e235]:
+                  - generic [ref=f7e236]: Alpha Support Team
+                  - generic [ref=f7e237]: Farzana Begum
+                  - generic [ref=f7e238]: 21 Jun 2024
+              - generic [ref=f7e239]:
+                - button "View Case" [ref=f7e240] [cursor=pointer]
+                - button "Review" [ref=f7e241] [cursor=pointer]
+            - generic [ref=f7e243]:
+              - generic [ref=f7e244]:
+                - generic [ref=f7e245]: Acme Corporation Ltd.
+                - paragraph [ref=f7e258]: The ERP sync issue for our warehouse was handled really well. The engineer kept us updated throughout and got the inventory counts back in line by end of day. Great work.
+                - generic [ref=f7e259]:
+                  - generic [ref=f7e260]: Alpha Support Team
+                  - generic [ref=f7e261]: Rafi Uddin
+                  - generic [ref=f7e262]: 12 Jun 2024
+                  - generic [ref=f7e263]: Reviewed by ML & TH
+              - generic [ref=f7e267]:
+                - button "View Case" [ref=f7e268] [cursor=pointer]
+                - generic [ref=f7e269]: Reviewed
+            - generic [ref=f7e274]:
+              - generic [ref=f7e275]:
+                - generic [ref=f7e276]: Acme Corporation Ltd.
+                - paragraph [ref=f7e289]: Barcode scanner fix on the mobile app worked, but it took a couple of back-and-forth rounds to reproduce the Android 14 issue. Decent outcome overall.
+                - generic [ref=f7e290]:
+                  - generic [ref=f7e291]: Alpha Support Team
+                  - generic [ref=f7e292]: Rafi Uddin
+                  - generic [ref=f7e293]: 18 Jun 2024
+                  - generic [ref=f7e294]: Reviewed by Team Lead
+              - generic [ref=f7e298]:
+                - button "View Case" [ref=f7e299] [cursor=pointer]
+                - button "Review" [ref=f7e300] [cursor=pointer]
+            - generic [ref=f7e302]:
+              - generic [ref=f7e303]:
+                - generic [ref=f7e304]: Acme Corporation Ltd.
+                - paragraph [ref=f7e317]: API rate-limit problem on the ERP connector was resolved and shipment confirmations are flowing on time again. Appreciated the clear explanation of the root cause.
+                - generic [ref=f7e318]:
+                  - generic [ref=f7e319]: Alpha Support Team
+                  - generic [ref=f7e320]: Rafi Uddin
+                  - generic [ref=f7e321]: 24 Jun 2024
+              - generic [ref=f7e322]:
+                - button "View Case" [ref=f7e323] [cursor=pointer]
+                - button "Review" [ref=f7e324] [cursor=pointer]
+            - generic [ref=f7e326]:
+              - generic [ref=f7e327]:
+                - generic [ref=f7e328]: Acme Corporation Ltd.
+                - paragraph [ref=f7e341]: Database recovery after the failed migration was stressful on our end. The fix was solid and no data was lost, though we'd have liked faster initial acknowledgement given how critical it was.
+                - generic [ref=f7e342]:
+                  - generic [ref=f7e343]: Alpha Support Team
+                  - generic [ref=f7e344]: Rafi Uddin
+                  - generic [ref=f7e345]: 27 Jun 2024
+              - generic [ref=f7e346]:
+                - button "View Case" [ref=f7e347] [cursor=pointer]
+                - button "Review" [ref=f7e348] [cursor=pointer]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f7e359] [cursor=pointer]:
+    - generic [ref=f7e362]:
+      - text: Compiling
+      - generic [ref=f7e363]:
+        - generic [ref=f7e364]: .
+        - generic [ref=f7e365]: .
+        - generic [ref=f7e366]: .
+  - alert [ref=f7e358]

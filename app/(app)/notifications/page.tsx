@@ -41,7 +41,7 @@ export default function NotificationsPage() {
   const unread = (notifications ?? []).filter((n: Notification) => !n.read_at).length
 
   return (
-    <div className="p-6 max-w-2xl space-y-4">
+    <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Notifications</h1>
@@ -63,7 +63,7 @@ export default function NotificationsPage() {
             key={key}
             onClick={() => setTab(key)}
             className={cn(
-              'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors',
+              'flex flex-1 items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors',
               tab === key
                 ? 'border-primary text-primary'
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'

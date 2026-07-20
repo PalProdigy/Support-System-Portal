@@ -1,0 +1,223 @@
+[   67720ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/knowledge-base/new?_rsc=BL-f99bFQmDo5cJ3:0
+[   67724ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/knowledge-base/new?_rsc=BL-f99bFQmDo5cJ3:0
+[   67725ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/knowledge-base/new?_rsc=BL-f99bFQmDo5cJ3:0
+[   67738ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67739ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67742ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67744ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67746ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67747ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67751ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67752ms] [ERROR] ./src/modules/kb/kb-editor.tsx:381:9
+Expected '</', got '{'
+  379 |       </div>
+  380 |
+> 381 |         {/* ── Right column: live preview + markdown manual. In split view it is
+      |         ^
+  382 |             pinned to the form column's exact height (absolute inset in a
+  383 |             stretched cell) so both columns share the same bottom edge; the
+  384 |             preview and the manual scroll inside themselves. ─────────────────── */}
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/modules/kb/kb-editor.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component Browser]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/modules/kb/kb-editor.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Client Component SSR]
+    ./app/(app)/knowledge-base/new/page.tsx [Server Component] @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[   67753ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   67925ms] [LOG] [Fast Refresh] done in 85ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   68033ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   69793ms] [LOG] [Fast Refresh] done in 1862ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   70140ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   70484ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   77924ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   78204ms] [LOG] [Fast Refresh] done in 386ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   81921ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   82091ms] [LOG] [Fast Refresh] done in 283ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   89064ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   89344ms] [LOG] [Fast Refresh] done in 389ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   94809ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   95062ms] [LOG] [Fast Refresh] done in 366ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  100206ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  100485ms] [LOG] [Fast Refresh] done in 384ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  103910ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  104070ms] [LOG] [Fast Refresh] done in 261ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  288467ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  288904ms] [LOG] [Fast Refresh] done in 539ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  289043ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  289131ms] [LOG] [Fast Refresh] done in 198ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  289305ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  289313ms] [LOG] [Fast Refresh] done in 121ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  289507ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  291014ms] [LOG] [Fast Refresh] done in 1618ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  291285ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  292191ms] [LOG] [Fast Refresh] done in 1018ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  292422ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  293305ms] [LOG] [Fast Refresh] done in 987ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  410905ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  412777ms] [LOG] [Fast Refresh] done in 1972ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  600912ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  607902ms] [LOG] [Fast Refresh] done in 7097ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  609748ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  619447ms] [LOG] [Fast Refresh] done in 9815ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  621393ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  624670ms] [LOG] [Fast Refresh] done in 3533ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  625294ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  625462ms] [LOG] [Fast Refresh] done in 278ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  646345ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  647660ms] [LOG] [Fast Refresh] done in 2111ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  647828ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[  648265ms] [LOG] [Fast Refresh] done in 565ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477

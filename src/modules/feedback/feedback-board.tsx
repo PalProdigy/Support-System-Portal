@@ -233,6 +233,11 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
             const relatedCase = casesMap[f.case_id]
             const team = relatedCase?.team_id ? teamsMap[relatedCase.team_id] : undefined
             const engineer = relatedCase?.assignee_id ? usersMap[relatedCase.assignee_id] : undefined
+            // Whether *this* viewer's role has already reviewed the feedback —
+            // team leads and technical heads each track their own review flag.
+            const reviewedByMe = scope.role === 'team_lead' ? f.ml_reviewed
+              : scope.role === 'technical_head' ? f.th_reviewed
+              : false
 
             return (
               <div key={f.id} className="rounded-xl border bg-card p-4">
@@ -281,14 +286,20 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
                       View Case
                     </Button>
                     {canReview && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 text-xs px-3 text-primary"
-                        onClick={() => router.push(`/feedback/${f.id}/reviews/${f.id}`)}
-                      >
-                        Review
-                      </Button>
+                      reviewedByMe ? (
+                        <span className="h-7 flex items-center gap-1 text-xs px-3 font-medium text-emerald-600">
+                          <CheckCircle2 className="h-3.5 w-3.5" /> Reviewed
+                        </span>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 text-xs px-3 text-primary"
+                          onClick={() => router.push(`/feedback/${f.id}/reviews/${f.id}`)}
+                        >
+                          Review
+                        </Button>
+                      )
                     )}
                   </div>
                 </div>

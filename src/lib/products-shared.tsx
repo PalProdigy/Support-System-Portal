@@ -1,6 +1,10 @@
-import type { CSSProperties } from 'react'
-import { Pencil, ArrowRight, Package, ShieldCheck, Network, ShieldAlert, ScanSearch, DatabaseBackup, Cloud, Server, Layers, Images, type LucideIcon } from 'lucide-react'
+'use client'
+
+import { useEffect, useState, type CSSProperties } from 'react'
+import { Pencil, ArrowRight, Package, ShieldCheck, Network, ShieldAlert, ScanSearch, DatabaseBackup, Cloud, Server, Layers, type LucideIcon } from 'lucide-react'
 import type { Product } from '@/types'
+
+const CAROUSEL_INTERVAL_MS = 2800
 
 export type CategoryStyle = { color: string; tint: string; shade: string }
 export type CategoryMeta = CategoryStyle & { mono: string; icon: LucideIcon }
@@ -59,7 +63,17 @@ export function ProductCard({
 }) {
   const Icon = meta.icon
   const images = product.image_urls ?? []
-  const cover = images[0]
+  const [activeImage, setActiveImage] = useState(0)
+
+  useEffect(() => {
+    if (images.length < 2) return
+    const id = setInterval(() => {
+      setActiveImage((i) => (i + 1) % images.length)
+    }, CAROUSEL_INTERVAL_MS)
+    return () => clearInterval(id)
+  }, [images.length])
+
+  const cover = images[activeImage]
   return (
     <div
       role="button"
@@ -93,9 +107,16 @@ export function ProductCard({
           <span className="absolute right-3.5 top-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[11px] font-semibold text-red-600">Inactive</span>
         )}
         {images.length > 1 && (
-          <span className="absolute bottom-2.5 right-3 inline-flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
-            <Images className="h-3 w-3" /> {images.length}
-          </span>
+          <div className="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 items-center gap-1">
+            {images.map((_, i) => (
+              <span
+                key={i}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === activeImage ? 'w-4 bg-white' : 'w-1.5 bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2.5 p-5">

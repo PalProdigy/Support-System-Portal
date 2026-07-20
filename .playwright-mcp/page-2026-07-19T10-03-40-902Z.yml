@@ -1,0 +1,292 @@
+- generic [ref=f5e1]:
+  - generic [ref=f5e26]:
+    - complementary [ref=f5e28]:
+      - link [ref=f5e30] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f5e31]:
+          - generic [ref=f5e32]: NH
+          - generic [ref=f5e33]: DISTRIBUTIONS
+      - navigation [ref=f5e41]:
+        - link "Dashboard" [ref=f5e42] [cursor=pointer]:
+          - /url: /dashboard
+        - link "TH Hub" [ref=f5e49] [cursor=pointer]:
+          - /url: /technical-head
+        - link "Cases" [ref=f5e53] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f5e57] [cursor=pointer]:
+          - /url: /teams
+        - link "Team Leads" [ref=f5e62] [cursor=pointer]:
+          - /url: /team-lead
+        - link "Support Engineers" [ref=f5e69] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f5e73] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f5e78] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f5e84] [cursor=pointer]:
+          - /url: /products
+        - link "Solutions" [ref=f5e90] [cursor=pointer]:
+          - /url: /solutions
+        - link "Knowledge Base" [ref=f5e94] [cursor=pointer]:
+          - /url: /knowledge-base
+        - link "Reporting" [ref=f5e98] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f5e102] [cursor=pointer]:
+          - /url: /feedback
+        - link "SLA Rules" [ref=f5e106] [cursor=pointer]:
+          - /url: /sla-rules
+        - link "Audit Log" [ref=f5e110] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Notifications" [ref=f5e114] [cursor=pointer]:
+          - /url: /notifications
+        - link "Settings" [ref=f5e119] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f5e125]:
+        - generic [ref=f5e126]:
+          - generic "Arif Rahman" [ref=f5e127]:
+            - generic "Arif Rahman avatar" [ref=f5e129]: AR
+          - generic [ref=f5e130]:
+            - paragraph [ref=f5e131]: Arif Rahman
+            - paragraph [ref=f5e132]: Technical Head
+        - button "Collapse sidebar" [ref=f5e133]
+    - generic [ref=f5e136]:
+      - banner [ref=f5e138]:
+        - generic [ref=f5e139]:
+          - button "Toggle theme" [ref=f5e140] [cursor=pointer]
+          - button "Notifications" [ref=f5e141] [cursor=pointer]:
+            - generic [ref=f5e142]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f5e143] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f5e144]:
+              - generic "Arif Rahman avatar" [ref=f5e146]: AR
+            - generic [ref=f5e147]:
+              - paragraph [ref=f5e148]: Arif Rahman
+              - paragraph [ref=f5e149]: Technical Head
+      - main [ref=f5e150]:
+        - generic [ref=f5e151]:
+          - generic [ref=f5e152]:
+            - button "Back" [ref=f5e153] [cursor=pointer]
+            - generic [ref=f5e154]:
+              - generic [ref=f5e155]: 0 words · 1 min read
+              - group "Editor view mode" [ref=f5e159]:
+                - button "Write view" [ref=f5e160]:
+                  - generic [ref=f5e163]: Write
+                - button "Split view" [active] [pressed] [ref=f5e164]:
+                  - generic [ref=f5e167]: Split
+                - button "Preview view" [ref=f5e168]:
+                  - generic [ref=f5e172]: Preview
+              - button "Save Draft" [disabled]
+              - button "Submit for Review" [disabled]
+          - generic [ref=f5e173]:
+            - generic [ref=f5e480]:
+              - generic [ref=f5e481]:
+                - generic [ref=f5e482]:
+                  - generic [ref=f5e483]: Title *
+                  - textbox "Title *" [ref=f5e484]:
+                    - /placeholder: Article title…
+                - generic [ref=f5e485]:
+                  - generic [ref=f5e486]: Short description (optional)
+                  - textbox "Short description (optional)" [ref=f5e487]:
+                    - /placeholder: Short description — shown on cards, search results and as the meta description…
+                - generic [ref=f5e488]:
+                  - generic [ref=f5e489]:
+                    - generic [ref=f5e490]: Category (optional)
+                    - combobox "Article category" [ref=f5e491]:
+                      - generic: Select a category
+                  - generic [ref=f5e494]:
+                    - generic [ref=f5e495]: Subcategory (optional)
+                    - textbox "Subcategory (optional)" [ref=f5e496]:
+                      - /placeholder: e.g. Agents, Payroll…
+                  - generic [ref=f5e497]:
+                    - generic [ref=f5e498]: Tags (optional)
+                    - textbox "Add tag" [ref=f5e500]:
+                      - /placeholder: Add up to 5 tags…
+              - generic [ref=f5e501]:
+                - generic [ref=f5e502]: Content *
+                - generic [ref=f5e504]:
+                  - toolbar [ref=f5e505]:
+                    - generic [ref=f5e506]:
+                      - generic [ref=f5e507]:
+                        - radiogroup [ref=f5e508]:
+                          - radio "Undo Ctrl+Z" [disabled]
+                        - radiogroup [ref=f5e509]:
+                          - radio "Redo Ctrl+Y" [disabled]
+                      - separator [ref=f5e510]
+                      - generic [ref=f5e511]:
+                        - radiogroup [ref=f5e512]:
+                          - radio "Bold" [ref=f5e513]
+                        - radiogroup [ref=f5e517]:
+                          - radio "Italic" [ref=f5e518]
+                        - radiogroup [ref=f5e522]:
+                          - radio "Underline" [ref=f5e523]
+                      - radiogroup [ref=f5e528]:
+                        - radio "Inline code format" [ref=f5e529]
+                      - radiogroup [ref=f5e534]:
+                        - radio "Strikethrough" [ref=f5e535]
+                      - separator [ref=f5e539]
+                      - combobox "Block type" [ref=f5e541]:
+                        - generic: Paragraph
+                      - separator [ref=f5e545]
+                      - radiogroup "toggle group" [ref=f5e547]:
+                        - radio "Bulleted list" [ref=f5e548]
+                        - radio "Numbered list" [ref=f5e552]
+                        - radio "Check list" [ref=f5e556]
+                      - separator [ref=f5e560]
+                      - button "Create link" [ref=f5e561]
+                      - button "Insert image" [ref=f5e565]
+                      - separator [ref=f5e569]
+                      - button "Insert Table" [ref=f5e570]
+                      - button "Insert Code Block" [ref=f5e574]
+                      - button "Insert thematic break" [ref=f5e578]
+                      - radiogroup "toggle group" [ref=f5e584]:
+                        - radio "Rich text" [checked] [ref=f5e585]
+                        - radio "Diff mode" [ref=f5e592]
+                        - radio "Source mode" [ref=f5e599]
+                  - generic [ref=f5e607]:
+                    - textbox "editable markdown" [ref=f5e609]:
+                      - paragraph [ref=f5e610]
+                    - generic:
+                      - paragraph: "Start writing… Markdown shortcuts work: # heading, **bold**, `code`, - list"
+            - generic [ref=f5e306]:
+              - generic [ref=f5e611]:
+                - generic [ref=f5e612]:
+                  - generic [ref=f5e613]: Live preview
+                  - generic [ref=f5e617]: rendered exactly as published
+                - generic [ref=f5e618]:
+                  - heading "Article title…" [level=2] [ref=f5e620]
+                  - paragraph [ref=f5e621]: Start typing — your article renders here in real time.
+              - generic [ref=f5e318]:
+                - button "Markdown guide what to type to get each feature" [expanded] [ref=f5e319]:
+                  - generic [ref=f5e322]: Markdown guide
+                  - generic [ref=f5e323]: what to type to get each feature
+                - generic [ref=f5e326]:
+                  - generic [ref=f5e327]:
+                    - generic [ref=f5e328]: You type
+                    - generic [ref=f5e329]: You get
+                  - generic [ref=f5e330]:
+                    - heading "Headings" [level=4] [ref=f5e331]
+                    - generic [ref=f5e332]:
+                      - generic [ref=f5e333]:
+                        - generic [ref=f5e334]: "# Big heading ## Medium heading ### Small heading"
+                        - generic [ref=f5e336]:
+                          - heading [level=1] [ref=f5e337]:
+                            - text: Big heading
+                            - link "Link to this section" [ref=f5e338] [cursor=pointer]:
+                              - /url: "#big-heading"
+                              - text: "#"
+                          - heading [level=2] [ref=f5e339]:
+                            - text: Medium heading
+                            - link "Link to this section" [ref=f5e340] [cursor=pointer]:
+                              - /url: "#medium-heading"
+                              - text: "#"
+                          - heading [level=3] [ref=f5e341]:
+                            - text: Small heading
+                            - link "Link to this section" [ref=f5e342] [cursor=pointer]:
+                              - /url: "#small-heading"
+                              - text: "#"
+                      - paragraph [ref=f5e343]: "Start a line with #, ## or ### — more # means a smaller heading."
+                  - generic [ref=f5e344]:
+                    - heading "Text styles" [level=4] [ref=f5e345]
+                    - generic [ref=f5e346]:
+                      - generic [ref=f5e347]:
+                        - generic [ref=f5e348]: "**bold** and *italic* ~~strikethrough~~ and `inline code`"
+                        - paragraph [ref=f5e351]:
+                          - strong [ref=f5e352]: bold
+                          - text: and
+                          - emphasis [ref=f5e353]: italic
+                          - deletion [ref=f5e354]: strikethrough
+                          - text: and
+                          - code [ref=f5e355]: inline code
+                      - paragraph [ref=f5e356]: "Wrap words in ** for bold, * for italic, ~~ to strike through, backticks (`) for code."
+                  - generic [ref=f5e357]:
+                    - heading "Lists" [level=4] [ref=f5e358]
+                    - generic [ref=f5e360]:
+                      - generic [ref=f5e361]: "- Bullet point - Another point"
+                      - list [ref=f5e364]:
+                        - listitem [ref=f5e365]: Bullet point
+                        - listitem [ref=f5e366]: Another point
+                    - generic [ref=f5e368]:
+                      - generic [ref=f5e369]: 1. First step 2. Second step
+                      - list [ref=f5e372]:
+                        - listitem [ref=f5e373]: First step
+                        - listitem [ref=f5e374]: Second step
+                    - generic [ref=f5e375]:
+                      - generic [ref=f5e376]:
+                        - generic [ref=f5e377]: "- [x] Finished task - [ ] Pending task"
+                        - list [ref=f5e380]:
+                          - listitem [ref=f5e381]:
+                            - checkbox [checked] [disabled] [ref=f5e382]
+                            - text: Finished task
+                          - listitem [ref=f5e383]:
+                            - checkbox [disabled] [ref=f5e384]
+                            - text: Pending task
+                      - paragraph [ref=f5e385]: "Task lists: [x] is checked, [ ] is unchecked."
+                  - generic [ref=f5e386]:
+                    - heading "Links & images" [level=4] [ref=f5e387]
+                    - generic [ref=f5e388]:
+                      - generic [ref=f5e389]:
+                        - generic [ref=f5e390]: "[Open the docs](https://example.com)"
+                        - paragraph [ref=f5e393]:
+                          - link "Open the docs" [ref=f5e394] [cursor=pointer]:
+                            - /url: https://example.com
+                      - paragraph [ref=f5e395]: Text in [brackets] becomes the link; the (URL) is where it goes.
+                    - generic [ref=f5e396]:
+                      - generic [ref=f5e397]:
+                        - generic [ref=f5e398]: "![Logo](/globe.svg)"
+                        - paragraph [ref=f5e401]:
+                          - img "Logo" [ref=f5e402]
+                      - paragraph [ref=f5e403]: Same as a link but with ! in front — shows the image from the URL.
+                  - generic [ref=f5e404]:
+                    - heading "Quotes & dividers" [level=4] [ref=f5e405]
+                    - generic [ref=f5e407]:
+                      - generic [ref=f5e408]: "> Important note for readers"
+                      - blockquote [ref=f5e411]:
+                        - paragraph [ref=f5e412]: Important note for readers
+                    - generic [ref=f5e413]:
+                      - generic [ref=f5e414]:
+                        - generic [ref=f5e415]: Above the line --- Below the line
+                        - generic [ref=f5e417]:
+                          - paragraph [ref=f5e418]: Above the line
+                          - separator [ref=f5e419]
+                          - paragraph [ref=f5e420]: Below the line
+                      - paragraph [ref=f5e421]: "--- on its own line draws a divider."
+                  - generic [ref=f5e422]:
+                    - heading "Code blocks" [level=4] [ref=f5e423]
+                    - generic [ref=f5e424]:
+                      - generic [ref=f5e425]:
+                        - generic [ref=f5e426]: "```js const total = qty * price ```"
+                        - generic [ref=f5e429]:
+                          - generic [ref=f5e430]:
+                            - generic [ref=f5e431]: JavaScript
+                            - button "Copy code to clipboard" [ref=f5e432]: Copy
+                          - code [ref=f5e437]: const total = qty * price
+                      - paragraph [ref=f5e438]: Three backticks start and end a code block; add a language (js, py, sql…) for syntax colors.
+                  - generic [ref=f5e439]:
+                    - heading "Tables" [level=4] [ref=f5e440]
+                    - generic [ref=f5e441]:
+                      - generic [ref=f5e442]:
+                        - generic [ref=f5e443]: "| Plan | Limit | | ---- | ----- | | Free | 100/day | | Pro | 10k/day |"
+                        - table [ref=f5e447]:
+                          - rowgroup [ref=f5e448]:
+                            - row [ref=f5e449]:
+                              - columnheader "Plan" [ref=f5e450]
+                              - columnheader "Limit" [ref=f5e451]
+                          - rowgroup [ref=f5e452]:
+                            - row [ref=f5e453]:
+                              - cell "Free" [ref=f5e454]
+                              - cell "100/day" [ref=f5e455]
+                            - row [ref=f5e456]:
+                              - cell "Pro" [ref=f5e457]
+                              - cell "10k/day" [ref=f5e458]
+                      - paragraph [ref=f5e459]: Pipes (|) separate columns; the dashes row splits the header from the body.
+                  - generic [ref=f5e460]:
+                    - heading "New lines" [level=4] [ref=f5e461]
+                    - generic [ref=f5e462]:
+                      - generic [ref=f5e463]:
+                        - generic [ref=f5e464]: First line Second line
+                        - paragraph [ref=f5e467]: First line Second line
+                      - paragraph [ref=f5e468]: Press Enter once for a new line, twice for a new paragraph.
+                  - paragraph [ref=f5e469]: Everything renders live in the preview above as you type — raw HTML tags are ignored for safety.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f5e475] [cursor=pointer]
+  - alert [ref=f5e479]
