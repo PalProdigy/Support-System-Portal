@@ -279,6 +279,9 @@ export interface DataProvider {
   // ── Phase Final: Account security ──────────────────────────────────────────
   // Throws if currentPassword doesn't match what's on file for the user.
   changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void>
+  // Forgot-password recovery — sets a new password without requiring the old
+  // one (the identity check happens earlier, via the emailed verification code).
+  resetPassword(userId: string, newPassword: string): Promise<void>
 
   // Creates Client + linked User + ClientSolution rows atomically
   createClientAccount(

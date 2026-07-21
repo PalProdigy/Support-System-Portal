@@ -2179,6 +2179,19 @@ class MockDataProvider implements DataProvider {
     return delay(undefined)
   }
 
+  async resetPassword(userId: string, newPassword: string): Promise<void> {
+    const all = load<{ user_id: string; password: string }>(STORAGE_KEYS.passwords)
+    const idx = all.findIndex((p) => p.user_id === userId)
+    const record = { user_id: userId, password: newPassword }
+    if (idx === -1) {
+      save(STORAGE_KEYS.passwords, [...all, record])
+    } else {
+      all[idx] = record
+      save(STORAGE_KEYS.passwords, all)
+    }
+    return delay(undefined)
+  }
+
   // ── Case Transfer Requests ─────────────────────────────────────────────────
   async listCaseTransferRequests(teamId: string): Promise<CaseTransferRequest[]> {
     const all = load<CaseTransferRequest>(STORAGE_KEYS.caseTransferRequests)

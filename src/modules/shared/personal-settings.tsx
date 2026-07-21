@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { NotificationPreferences } from '@/modules/shared/notification-preferences'
 import { ChangePasswordCard } from '@/modules/shared/change-password'
-import { Moon, User, ArrowRight, Settings, Shield } from 'lucide-react'
+import { Moon, User, ArrowRight, Settings, Shield, Bell } from 'lucide-react'
 
 function AppearanceCard() {
   const [dark, setDark] = useState(false)
@@ -78,7 +78,7 @@ export function PersonalSettings() {
       </div>
 
       <div className="space-y-3">
-        <NotificationPreferences section="channels" />
+        <NotificationPreferences />
       </div>
 
       <AccountProfileCard />
@@ -87,13 +87,13 @@ export function PersonalSettings() {
 }
 
 // Team Lead settings — same underlying cards as PersonalSettings, organized
-// into General / Security tabs. Notification Types is managed centrally on
-// the Technical Head's Settings page, not per-role here.
+// into General / Notifications / Security tabs.
 export function TeamLeadSettings() {
   return (
     <Tabs defaultValue="general">
       <TabsList className="mb-4">
         <TabsTrigger value="general"><Settings className="h-3.5 w-3.5" /> General</TabsTrigger>
+        <TabsTrigger value="notifications"><Bell className="h-3.5 w-3.5" /> Notifications</TabsTrigger>
         <TabsTrigger value="security"><Shield className="h-3.5 w-3.5" /> Security</TabsTrigger>
       </TabsList>
 
@@ -104,6 +104,10 @@ export function TeamLeadSettings() {
         </div>
         <AccountProfileCard />
         <NotificationPreferences section="channels" />
+      </TabsContent>
+
+      <TabsContent value="notifications">
+        <NotificationPreferences section="types" />
       </TabsContent>
 
       <TabsContent value="security">

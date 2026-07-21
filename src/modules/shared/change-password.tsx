@@ -10,10 +10,11 @@ import { Label } from '@/components/ui/label'
 import { toast } from '@/hooks/use-toast'
 import { KeyRound, Eye, EyeOff } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ForgotPasswordDialog } from './forgot-password-dialog'
 
 const MIN_LENGTH = 8
 
-function PasswordInput({ id, value, onChange, placeholder }: {
+export function PasswordInput({ id, value, onChange, placeholder }: {
   id: string
   value: string
   onChange: (v: string) => void
@@ -50,6 +51,7 @@ export function ChangePasswordCard() {
   const [current, setCurrent] = useState('')
   const [next, setNext] = useState('')
   const [confirm, setConfirm] = useState('')
+  const [forgotOpen, setForgotOpen] = useState(false)
 
   const mutation = useMutation({
     mutationFn: () => dp.changePassword(session.userId, current, next),
@@ -103,18 +105,27 @@ export function ChangePasswordCard() {
           )}
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => setForgotOpen(true)}
+            className="text-xs text-muted-foreground hover:underline self-start sm:self-auto"
+          >
+            Forgot Password?
+          </button>
           <Button
             size="sm"
             variant={canSubmit ? 'default' : 'outline'}
             disabled={!canSubmit || mutation.isPending}
             onClick={() => mutation.mutate()}
-            className={cn(!canSubmit && 'text-muted-foreground')}
+            className={cn('w-full sm:w-auto', !canSubmit && 'text-muted-foreground')}
           >
             {mutation.isPending ? 'Updating…' : 'Update Password'}
           </Button>
         </div>
       </div>
+
+      <ForgotPasswordDialog open={forgotOpen} onOpenChange={setForgotOpen} />
     </div>
   )
 }
