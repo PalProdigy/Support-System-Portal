@@ -20,9 +20,9 @@ export default function NotificationsPage() {
   const qc = useQueryClient()
   const [tab, setTab] = useState<Tab>('inbox')
 
-  // Support Engineers manage notification preferences from their dedicated
-  // Settings page (/my-settings) instead of a tab here.
-  const showPreferencesTab = session.role !== 'support_engineer'
+  // Support Engineers and Technical Heads manage notification preferences from
+  // their dedicated Settings pages (/my-settings, /settings) instead of a tab here.
+  const showPreferencesTab = session.role !== 'support_engineer' && session.role !== 'technical_head'
 
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications', session.userId],

@@ -462,6 +462,9 @@ export interface UserNotificationPrefs {
   channels: NotificationChannel[]
   sms_phone?: string
   whatsapp_phone?: string
+  // Notification `type` values (see src/lib/notification-types.ts) the user
+  // has muted — suppressed across every channel, including in-app.
+  disabled_types?: string[]
 }
 
 // ── Phase 1: Sales Executive / Pre-sales ──────────────────────────────────────

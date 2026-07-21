@@ -1886,13 +1886,20 @@ class MockDataProvider implements DataProvider {
   }
 
   async createNotification(input: Omit<Notification, 'id'>): Promise<Notification> {
-    const notifications = load<Notification>(STORAGE_KEYS.notifications)
     const notification: Notification = { ...input, id: genId() }
+
+    const allPrefs = load<UserNotificationPrefs>(STORAGE_KEYS.notifPrefs)
+    const userPrefs = allPrefs.find((p) => p.user_id === input.user_id)
+
+    // User has muted this notification type — suppress entirely, including in-app.
+    if (userPrefs?.disabled_types?.includes(input.type)) {
+      return delay(notification)
+    }
+
+    const notifications = load<Notification>(STORAGE_KEYS.notifications)
     save(STORAGE_KEYS.notifications, [...notifications, notification])
 
     // Multi-channel dispatch — fire stub adapters for non-in_app channels the user enabled
-    const allPrefs = load<UserNotificationPrefs>(STORAGE_KEYS.notifPrefs)
-    const userPrefs = allPrefs.find((p) => p.user_id === input.user_id)
     if (userPrefs && userPrefs.channels.length > 1) {
       const message = String((input.payload as Record<string, unknown>).message ?? input.type.replace(/_/g, ' '))
       dispatchToChannels(ALL_ADAPTERS, userPrefs.channels, {
@@ -2132,7 +2139,7 @@ class MockDataProvider implements DataProvider {
   async updateUserNotifPrefs(
     userId: string,
     channels: NotificationChannel[],
-    phones?: { sms_phone?: string; whatsapp_phone?: string }
+    extra?: { sms_phone?: string; whatsapp_phone?: string; disabled_types?: string[] }
   ): Promise<UserNotificationPrefs> {
     const all = load<UserNotificationPrefs>(STORAGE_KEYS.notifPrefs)
     const idx = all.findIndex((p) => p.user_id === userId)
@@ -2140,8 +2147,9 @@ class MockDataProvider implements DataProvider {
     const prefs: UserNotificationPrefs = {
       user_id: userId,
       channels: ['in_app', ...channels.filter((c) => c !== 'in_app')],
-      sms_phone: phones?.sms_phone ?? existing?.sms_phone,
-      whatsapp_phone: phones?.whatsapp_phone ?? existing?.whatsapp_phone,
+      sms_phone: extra?.sms_phone ?? existing?.sms_phone,
+      whatsapp_phone: extra?.whatsapp_phone ?? existing?.whatsapp_phone,
+      disabled_types: extra?.disabled_types ?? existing?.disabled_types,
     }
     if (idx === -1) {
       save(STORAGE_KEYS.notifPrefs, [...all, prefs])

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -13,6 +13,7 @@ import { toast } from '@/hooks/use-toast'
 import { Bell, Mail, MessageSquare, Phone, Monitor } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { COUNTRY_CODES, DEFAULT_COUNTRY, splitPhone, joinPhone, isValidNationalNumber, nationalNumberMaxLength, type CountryCode } from '@/lib/country-codes'
+import { NOTIFICATION_TYPE_CATEGORIES } from '@/lib/notification-types'
 import type { NotificationChannel } from '@/types'
 
 type PhoneChannel = 'sms' | 'whatsapp'
@@ -26,7 +27,22 @@ const CHANNELS: { key: NotificationChannel; label: string; description: string; 
   { key: 'web_push', label: 'Web Push', description: 'Browser push notifications when the app is not open', icon: Monitor },
 ]
 
-export function NotificationPreferences() {
+export interface NotificationPreferencesHandle {
+  save: () => void
+  isDirty: boolean
+  isPending: boolean
+}
+
+interface NotificationPreferencesProps {
+  section?: 'all' | 'channels' | 'types'
+  hideSaveButton?: boolean
+  onStateChange?: (state: { isDirty: boolean; isPending: boolean }) => void
+  extraChannelItem?: React.ReactNode
+  extraTypeItem?: React.ReactNode
+}
+
+export const NotificationPreferences = forwardRef<NotificationPreferencesHandle, NotificationPreferencesProps>(
+  function NotificationPreferences({ section = 'all', hideSaveButton = false, onStateChange, extraChannelItem, extraTypeItem }, ref) {
   const session = useSession()
   const dp = getDataProvider()
   const qc = useQueryClient()
@@ -39,9 +55,14 @@ export function NotificationPreferences() {
   const [enabled, setEnabled] = useState<Set<NotificationChannel>>(new Set(['in_app']))
   const [phones, setPhones] = useState<Record<PhoneChannel, string>>({ sms: '', whatsapp: '' })
   const [countries, setCountries] = useState<Record<PhoneChannel, CountryCode>>({ sms: DEFAULT_COUNTRY, whatsapp: DEFAULT_COUNTRY })
+  const [disabledTypes, setDisabledTypes] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     if (prefs) setEnabled(new Set(prefs.channels))
+  }, [prefs])
+
+  useEffect(() => {
+    if (prefs) setDisabledTypes(new Set(prefs.disabled_types ?? []))
   }, [prefs])
 
   useEffect(() => {
@@ -56,6 +77,7 @@ export function NotificationPreferences() {
     mutationFn: () => dp.updateUserNotifPrefs(session.userId, Array.from(enabled), {
       sms_phone: prefs?.sms_phone,
       whatsapp_phone: prefs?.whatsapp_phone,
+      disabled_types: Array.from(disabledTypes),
     }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['notif-prefs', session.userId] })
@@ -86,14 +108,40 @@ export function NotificationPreferences() {
     })
   }
 
-  const isDirty = prefs ? JSON.stringify([...enabled].sort()) !== JSON.stringify([...prefs.channels].sort()) : false
+  function toggleCategory(types: string[], turnOn: boolean) {
+    setDisabledTypes((prev) => {
+      const next = new Set(prev)
+      types.forEach((t) => (turnOn ? next.delete(t) : next.add(t)))
+      return next
+    })
+  }
+
+  const isDirty = prefs
+    ? JSON.stringify([...enabled].sort()) !== JSON.stringify([...prefs.channels].sort())
+      || JSON.stringify([...disabledTypes].sort()) !== JSON.stringify([...(prefs.disabled_types ?? [])].sort())
+    : false
+
+  useImperativeHandle(ref, () => ({
+    save: () => saveMutation.mutate(),
+    isDirty,
+    isPending: saveMutation.isPending,
+  }), [isDirty, saveMutation])
+
+  useEffect(() => {
+    onStateChange?.({ isDirty, isPending: saveMutation.isPending })
+  }, [isDirty, saveMutation.isPending, onStateChange])
 
   if (isLoading) {
     return <div className="space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="h-14 rounded-xl bg-muted animate-pulse" />)}</div>
   }
 
+  const showChannels = section === 'all' || section === 'channels'
+  const showTypes = section === 'all' || section === 'types'
+
   return (
     <div className="space-y-3">
+      {showChannels && (
+      <>
       <div>
         <h3 className="text-sm font-semibold text-foreground">Notification Channels</h3>
         <p className="text-xs text-muted-foreground mt-0.5">Choose how you want to receive notifications. In-app is always enabled.</p>
@@ -197,13 +245,57 @@ export function NotificationPreferences() {
             </div>
           )
         })}
+        {extraChannelItem}
       </div>
+      </>
+      )}
 
-      <div className="flex justify-end">
+      {showTypes && (
+      <div className="space-y-3 pt-2">
+        <div>
+          <h3 className="text-sm font-semibold text-foreground">Notification Types</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">Choose which events notify you at all. Turning one off silences it on every channel, including in-app.</p>
+        </div>
+
+        <div className="space-y-2">
+          {NOTIFICATION_TYPE_CATEGORIES.map(({ key, label, description, icon: Icon, types }) => {
+            const on = !types.every((t) => disabledTypes.has(t))
+            return (
+              <div
+                key={key}
+                className={cn(
+                  'flex items-center gap-3 rounded-xl border p-3.5 transition-all',
+                  on ? 'border-primary/40 bg-primary/5' : 'border-border bg-card'
+                )}
+              >
+                <div className={cn('rounded-lg p-2 shrink-0', on ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground')}>
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">{label}</p>
+                  <p className="text-xs text-muted-foreground">{description}</p>
+                </div>
+                <Switch
+                  checked={on}
+                  onCheckedChange={(v) => toggleCategory(types, v)}
+                  aria-label={`Turn ${label} notifications ${on ? 'off' : 'on'}`}
+                  className="shrink-0"
+                />
+              </div>
+            )
+          })}
+          {extraTypeItem}
+        </div>
+      </div>
+      )}
+
+      {!hideSaveButton && (
+      <div className="flex justify-end pt-4">
         <Button size="sm" disabled={!isDirty || saveMutation.isPending} onClick={() => saveMutation.mutate()}>
           {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
         </Button>
       </div>
+      )}
     </div>
   )
-}
+})

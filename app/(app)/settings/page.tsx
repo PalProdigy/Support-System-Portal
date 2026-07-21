@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -13,17 +13,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { toast } from '@/hooks/use-toast'
 import { EmptyState } from '@/components/shared/empty-state'
-import { NotificationPreferences } from '@/modules/shared/notification-preferences'
+import { NotificationPreferences, type NotificationPreferencesHandle } from '@/modules/shared/notification-preferences'
 import { ChangePasswordCard } from '@/modules/shared/change-password'
-import { Settings, Bell, Smartphone, Shield, Save } from 'lucide-react'
+import { Settings, Bell, Smartphone, Shield, Save, AlertTriangle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'nhq_system_settings'
 
 interface SystemSettings {
   portal_name: string
   support_email: string
-  escalation_threshold_hours: number
-  auto_close_days: number
   sla_breach_alert: boolean
   session_timeout_minutes: number
   max_login_attempts: number
@@ -46,8 +45,6 @@ function defaults(): SystemSettings {
   return {
     portal_name: 'NHQ Support Portal',
     support_email: 'support@nhqdistributions.com',
-    escalation_threshold_hours: 4,
-    auto_close_days: 7,
     sla_breach_alert: true,
     session_timeout_minutes: 60,
     max_login_attempts: 5,
@@ -64,7 +61,15 @@ export default function SettingsPage() {
   const scope = { userId: session.userId, role: session.role }
 
   const [settings, setSettings] = useState<SystemSettings>(loadSettings)
+  const [savedSettings, setSavedSettings] = useState<SystemSettings>(loadSettings)
   const set = (patch: Partial<SystemSettings>) => setSettings((s) => ({ ...s, ...patch }))
+  const generalDirty = JSON.stringify(settings) !== JSON.stringify(savedSettings)
+
+  const notifChannelsRef = useRef<NotificationPreferencesHandle>(null)
+  const [notifChannelsState, setNotifChannelsState] = useState({ isDirty: false, isPending: false })
+
+  const notifTypesRef = useRef<NotificationPreferencesHandle>(null)
+  const [notifTypesState, setNotifTypesState] = useState({ isDirty: false, isPending: false })
 
   if (!canAccess(scope, 'update', 'system_settings')) {
     return <EmptyState icon={Shield} title="Access Denied" description="Only Technical Heads can manage system settings." />
@@ -83,6 +88,7 @@ export default function SettingsPage() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['settings'] })
+      setSavedSettings(settings)
       toast({ title: 'Settings saved', variant: 'success' })
     },
     onError: () => toast({ title: 'Failed to save settings', variant: 'destructive' }),
@@ -97,12 +103,34 @@ export default function SettingsPage() {
 
   const SaveChangesButton = () => (
     <div className="flex justify-end">
-      <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+      <Button size="sm" onClick={() => saveMutation.mutate()} disabled={!generalDirty || saveMutation.isPending}>
         <Save className="h-4 w-4" />
         {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
       </Button>
     </div>
   )
+
+  const generalIsDirty = generalDirty || notifChannelsState.isDirty
+  const generalIsPending = saveMutation.isPending || notifChannelsState.isPending
+
+  const GeneralSaveChangesButton = () => (
+    <div className="flex justify-end">
+      <Button
+        size="sm"
+        onClick={() => {
+          if (generalDirty) saveMutation.mutate()
+          if (notifChannelsState.isDirty) notifChannelsRef.current?.save()
+        }}
+        disabled={!generalIsDirty || generalIsPending}
+      >
+        <Save className="h-4 w-4" />
+        {generalIsPending ? 'Saving…' : 'Save Changes'}
+      </Button>
+    </div>
+  )
+
+  const notificationsIsDirty = generalDirty || notifTypesState.isDirty
+  const notificationsIsPending = saveMutation.isPending || notifTypesState.isPending
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
@@ -130,34 +158,62 @@ export default function SettingsPage() {
               <Label>Support Email</Label>
               <Input type="email" value={settings.support_email} onChange={(e) => set({ support_email: e.target.value })} />
             </div>
-            <Field label="Escalation threshold (hours)">
-              <Input
-                type="number"
-                className="w-24 text-right"
-                min={1}
-                value={settings.escalation_threshold_hours}
-                onChange={(e) => set({ escalation_threshold_hours: +e.target.value })}
-              />
-            </Field>
-            <Field label="Auto-close after resolved (days)">
-              <Input
-                type="number"
-                className="w-24 text-right"
-                min={1}
-                value={settings.auto_close_days}
-                onChange={(e) => set({ auto_close_days: +e.target.value })}
-              />
-            </Field>
-            <Field label="SLA breach alert">
-              <Switch checked={settings.sla_breach_alert} onCheckedChange={(v) => set({ sla_breach_alert: v })} />
-            </Field>
           </div>
-          <SaveChangesButton />
+
+          <NotificationPreferences
+            section="channels"
+            ref={notifChannelsRef}
+            hideSaveButton
+            onStateChange={setNotifChannelsState}
+          />
+
+          <GeneralSaveChangesButton />
         </TabsContent>
 
         {/* Notifications */}
-        <TabsContent value="notifications">
-          <NotificationPreferences />
+        <TabsContent value="notifications" className="space-y-4">
+          <NotificationPreferences
+            section="types"
+            ref={notifTypesRef}
+            hideSaveButton
+            onStateChange={setNotifTypesState}
+            extraTypeItem={
+              <div
+                className={cn(
+                  'flex items-center gap-3 rounded-xl border p-3.5 transition-all',
+                  settings.sla_breach_alert ? 'border-primary/40 bg-primary/5' : 'border-border bg-card'
+                )}
+              >
+                <div className={cn('rounded-lg p-2 shrink-0', settings.sla_breach_alert ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground')}>
+                  <AlertTriangle className="h-4 w-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">SLA Breach Alert</p>
+                  <p className="text-xs text-muted-foreground">Notify when a case is at risk of breaching its SLA</p>
+                </div>
+                <Switch
+                  checked={settings.sla_breach_alert}
+                  onCheckedChange={(v) => set({ sla_breach_alert: v })}
+                  aria-label={`Turn SLA breach alert ${settings.sla_breach_alert ? 'off' : 'on'}`}
+                  className="shrink-0"
+                />
+              </div>
+            }
+          />
+
+          <div className="flex justify-end">
+            <Button
+              size="sm"
+              onClick={() => {
+                if (generalDirty) saveMutation.mutate()
+                if (notifTypesState.isDirty) notifTypesRef.current?.save()
+              }}
+              disabled={!notificationsIsDirty || notificationsIsPending}
+            >
+              <Save className="h-4 w-4" />
+              {notificationsIsPending ? 'Saving…' : 'Save Changes'}
+            </Button>
+          </div>
         </TabsContent>
 
         {/* Security */}

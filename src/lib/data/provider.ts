@@ -273,7 +273,7 @@ export interface DataProvider {
   updateUserNotifPrefs(
     userId: string,
     channels: NotificationChannel[],
-    phones?: { sms_phone?: string; whatsapp_phone?: string }
+    extra?: { sms_phone?: string; whatsapp_phone?: string; disabled_types?: string[] }
   ): Promise<UserNotificationPrefs>
 
   // ── Phase Final: Account security ──────────────────────────────────────────

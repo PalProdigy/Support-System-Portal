@@ -166,7 +166,7 @@ export class ApiDataProvider implements DataProvider {
   async getSalesExecutiveMetrics(salesExecutiveId: string, _scope: ListScope): Promise<SalesExecutiveMetrics> { return http(`/sales-executives/${salesExecutiveId}/metrics`) }
 
   async getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`) }
-  async updateUserNotifPrefs(userId: string, channels: NotificationChannel[], phones?: { sms_phone?: string; whatsapp_phone?: string }): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`, { method: 'PUT', body: JSON.stringify({ channels, ...phones }) }) }
+  async updateUserNotifPrefs(userId: string, channels: NotificationChannel[], extra?: { sms_phone?: string; whatsapp_phone?: string; disabled_types?: string[] }): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`, { method: 'PUT', body: JSON.stringify({ channels, ...extra }) }) }
 
   async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> { return http(`/users/${userId}/password`, { method: 'PUT', body: JSON.stringify({ currentPassword, newPassword }) }) }
 
