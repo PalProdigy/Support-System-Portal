@@ -37,7 +37,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Lead Hub', href: '/lead', icon: Users, roles: ['team_lead'] },
   { label: 'AM Hub', href: '/sales-executive', icon: Briefcase, roles: ['sales_executive'] },
   { label: 'My Performance', href: '/my-performance', icon: TrendingUp, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
-  { label: 'My Cases', href: '/my-case', icon: Wrench, roles: ['support_engineer'] },
+  { label: 'Cases', href: '/my-case', icon: Wrench, roles: ['support_engineer'] },
 
 // Case Management
   { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead', 'sales_executive'] },
