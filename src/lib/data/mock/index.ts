@@ -57,6 +57,7 @@ const STORAGE_KEYS = {
   salesTargets: 'nhq_sales_targets',
   slaEvents: 'nhq_sla_events',
   notifPrefs: 'nhq_notif_prefs',
+  passwords: 'nhq_user_passwords',
   teamMemberRequests: 'nhq_team_member_requests',
   caseTransferRequests: 'nhq_case_transfer_requests',
   engineerChangeRequests: 'nhq_engineer_change_requests',
@@ -2149,6 +2150,25 @@ class MockDataProvider implements DataProvider {
       save(STORAGE_KEYS.notifPrefs, all)
     }
     return delay(prefs)
+  }
+
+  // ── Phase Final: Account security ──────────────────────────────────────────
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+    const all = load<{ user_id: string; password: string }>(STORAGE_KEYS.passwords)
+    const idx = all.findIndex((p) => p.user_id === userId)
+    // No password set yet for this user (demo account) — accept whatever they
+    // typed as "current", matching the login screen's any-password demo mode.
+    if (idx !== -1 && all[idx].password !== currentPassword) {
+      throw new Error('Current password is incorrect')
+    }
+    const record = { user_id: userId, password: newPassword }
+    if (idx === -1) {
+      save(STORAGE_KEYS.passwords, [...all, record])
+    } else {
+      all[idx] = record
+      save(STORAGE_KEYS.passwords, all)
+    }
+    return delay(undefined)
   }
 
   // ── Case Transfer Requests ─────────────────────────────────────────────────

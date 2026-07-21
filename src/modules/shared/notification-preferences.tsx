@@ -201,7 +201,7 @@ export function NotificationPreferences() {
 
       <div className="flex justify-end">
         <Button size="sm" disabled={!isDirty || saveMutation.isPending} onClick={() => saveMutation.mutate()}>
-          {saveMutation.isPending ? 'Saving…' : 'Save preferences'}
+          {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
         </Button>
       </div>
     </div>

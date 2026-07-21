@@ -13,7 +13,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { toast } from '@/hooks/use-toast'
 import { EmptyState } from '@/components/shared/empty-state'
-import { Settings, Mail, MessageSquare, Bell, Smartphone, Shield, Save } from 'lucide-react'
+import { NotificationPreferences } from '@/modules/shared/notification-preferences'
+import { ChangePasswordCard } from '@/modules/shared/change-password'
+import { Settings, Bell, Smartphone, Shield, Save } from 'lucide-react'
 
 const STORAGE_KEY = 'nhq_system_settings'
 
@@ -23,10 +25,6 @@ interface SystemSettings {
   escalation_threshold_hours: number
   auto_close_days: number
   sla_breach_alert: boolean
-  email_notifications: boolean
-  sms_notifications: boolean
-  whatsapp_notifications: boolean
-  web_push_notifications: boolean
   session_timeout_minutes: number
   max_login_attempts: number
   require_2fa: boolean
@@ -51,10 +49,6 @@ function defaults(): SystemSettings {
     escalation_threshold_hours: 4,
     auto_close_days: 7,
     sla_breach_alert: true,
-    email_notifications: true,
-    sms_notifications: false,
-    whatsapp_notifications: false,
-    web_push_notifications: false,
     session_timeout_minutes: 60,
     max_login_attempts: 5,
     require_2fa: false,
@@ -101,17 +95,20 @@ export default function SettingsPage() {
     </div>
   )
 
+  const SaveChangesButton = () => (
+    <div className="flex justify-end">
+      <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+        <Save className="h-4 w-4" />
+        {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
+      </Button>
+    </div>
+  )
+
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">System Settings</h1>
-          <p className="text-sm text-muted-foreground">Configure portal-wide behaviour and integrations.</p>
-        </div>
-        <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
-          <Save className="h-4 w-4" />
-          {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
-        </Button>
+      <div>
+        <h1 className="text-2xl font-bold">System Settings</h1>
+        <p className="text-sm text-muted-foreground">Configure portal-wide behaviour and integrations.</p>
       </div>
 
       <Tabs defaultValue="general">
@@ -123,7 +120,7 @@ export default function SettingsPage() {
         </TabsList>
 
         {/* General */}
-        <TabsContent value="general">
+        <TabsContent value="general" className="space-y-4">
           <div className="rounded-xl border bg-card p-5 space-y-1 divide-y">
             <div className="space-y-1.5 pb-4">
               <Label>Portal Name</Label>
@@ -155,29 +152,16 @@ export default function SettingsPage() {
               <Switch checked={settings.sla_breach_alert} onCheckedChange={(v) => set({ sla_breach_alert: v })} />
             </Field>
           </div>
+          <SaveChangesButton />
         </TabsContent>
 
         {/* Notifications */}
         <TabsContent value="notifications">
-          <div className="rounded-xl border bg-card p-5 divide-y">
-            <Field label={<span className="flex items-center gap-2"><Mail className="h-4 w-4 text-muted-foreground" />Email notifications</span>}>
-              <Switch checked={settings.email_notifications} onCheckedChange={(v) => set({ email_notifications: v })} />
-            </Field>
-            <Field label={<span className="flex items-center gap-2"><Smartphone className="h-4 w-4 text-muted-foreground" />SMS notifications</span>}>
-              <Switch checked={settings.sms_notifications} onCheckedChange={(v) => set({ sms_notifications: v })} />
-            </Field>
-            <Field label={<span className="flex items-center gap-2"><MessageSquare className="h-4 w-4 text-muted-foreground" />WhatsApp notifications</span>}>
-              <Switch checked={settings.whatsapp_notifications} onCheckedChange={(v) => set({ whatsapp_notifications: v })} />
-            </Field>
-            <Field label={<span className="flex items-center gap-2"><Bell className="h-4 w-4 text-muted-foreground" />Web push notifications</span>}>
-              <Switch checked={settings.web_push_notifications} onCheckedChange={(v) => set({ web_push_notifications: v })} />
-            </Field>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">Email, SMS, WhatsApp and Web Push connectors plug in via ApiDataProvider in Phase 1.</p>
+          <NotificationPreferences />
         </TabsContent>
 
         {/* Security */}
-        <TabsContent value="security">
+        <TabsContent value="security" className="space-y-4">
           <div className="rounded-xl border bg-card p-5 divide-y">
             <Field label="Session timeout (minutes)">
               <Input
@@ -201,10 +185,12 @@ export default function SettingsPage() {
               <Switch checked={settings.require_2fa} onCheckedChange={(v) => set({ require_2fa: v })} />
             </Field>
           </div>
+          <SaveChangesButton />
+          <ChangePasswordCard />
         </TabsContent>
 
         {/* Maintenance */}
-        <TabsContent value="maintenance">
+        <TabsContent value="maintenance" className="space-y-4">
           <div className="rounded-xl border bg-card p-5 space-y-4">
             <Field label="Maintenance mode">
               <Switch checked={settings.maintenance_mode} onCheckedChange={(v) => set({ maintenance_mode: v })} />
@@ -225,6 +211,7 @@ export default function SettingsPage() {
               </>
             )}
           </div>
+          <SaveChangesButton />
         </TabsContent>
       </Tabs>
     </div>

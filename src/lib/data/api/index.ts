@@ -168,6 +168,8 @@ export class ApiDataProvider implements DataProvider {
   async getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`) }
   async updateUserNotifPrefs(userId: string, channels: NotificationChannel[], phones?: { sms_phone?: string; whatsapp_phone?: string }): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`, { method: 'PUT', body: JSON.stringify({ channels, ...phones }) }) }
 
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> { return http(`/users/${userId}/password`, { method: 'PUT', body: JSON.stringify({ currentPassword, newPassword }) }) }
+
   async listCaseTransferRequests(teamId: string): Promise<CaseTransferRequest[]> { return http(`/teams/${teamId}/case-transfer-requests`) }
   async listAllPendingCaseTransferRequests(): Promise<CaseTransferRequest[]> { return http('/case-transfer-requests?status=pending') }
   async createCaseTransferRequest(input: Omit<CaseTransferRequest, 'id' | 'created_at'>): Promise<CaseTransferRequest> { return http(`/teams/${input.team_id}/case-transfer-requests`, { method: 'POST', body: JSON.stringify(input) }) }

@@ -7,6 +7,7 @@ import { useSession } from '@/lib/auth/context'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { NotificationPreferences } from '@/modules/shared/notification-preferences'
+import { ChangePasswordCard } from '@/modules/shared/change-password'
 import { Settings, Moon, User, ArrowRight } from 'lucide-react'
 
 function Guard() {
@@ -63,6 +64,11 @@ export default function MySettingsPage() {
       <div className="space-y-3">
         <h2 className="text-sm font-semibold text-foreground">Appearance</h2>
         <AppearanceCard />
+      </div>
+
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold text-foreground">Security</h2>
+        <ChangePasswordCard />
       </div>
 
       <div className="space-y-3">
