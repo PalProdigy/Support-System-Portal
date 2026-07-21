@@ -1899,7 +1899,7 @@ class MockDataProvider implements DataProvider {
         type: input.type,
         message,
         meta: input.payload,
-      })
+      }, { sms: userPrefs.sms_phone, whatsapp: userPrefs.whatsapp_phone })
     }
 
     return delay(notification)
@@ -2128,10 +2128,20 @@ class MockDataProvider implements DataProvider {
     return delay(all.find((p) => p.user_id === userId) ?? { user_id: userId, channels: ['in_app'] })
   }
 
-  async updateUserNotifPrefs(userId: string, channels: NotificationChannel[]): Promise<UserNotificationPrefs> {
+  async updateUserNotifPrefs(
+    userId: string,
+    channels: NotificationChannel[],
+    phones?: { sms_phone?: string; whatsapp_phone?: string }
+  ): Promise<UserNotificationPrefs> {
     const all = load<UserNotificationPrefs>(STORAGE_KEYS.notifPrefs)
     const idx = all.findIndex((p) => p.user_id === userId)
-    const prefs: UserNotificationPrefs = { user_id: userId, channels: ['in_app', ...channels.filter((c) => c !== 'in_app')] }
+    const existing = idx !== -1 ? all[idx] : undefined
+    const prefs: UserNotificationPrefs = {
+      user_id: userId,
+      channels: ['in_app', ...channels.filter((c) => c !== 'in_app')],
+      sms_phone: phones?.sms_phone ?? existing?.sms_phone,
+      whatsapp_phone: phones?.whatsapp_phone ?? existing?.whatsapp_phone,
+    }
     if (idx === -1) {
       save(STORAGE_KEYS.notifPrefs, [...all, prefs])
     } else {

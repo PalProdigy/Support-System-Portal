@@ -1,7 +1,8 @@
 import type { ChannelAdapter, ChannelPayload } from './dispatcher'
 
 function stub(channel: string, payload: ChannelPayload) {
-  console.log(`[${channel.toUpperCase()}] → user:${payload.userId} type:${payload.type} — "${payload.message}"`, payload.meta ?? '')
+  const target = payload.phone ? ` → ${payload.phone}` : ''
+  console.log(`[${channel.toUpperCase()}]${target} user:${payload.userId} type:${payload.type} — "${payload.message}"`, payload.meta ?? '')
 }
 
 export const emailAdapter: ChannelAdapter = {

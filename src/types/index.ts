@@ -460,6 +460,8 @@ export interface SalesExecutiveMetrics {
 export interface UserNotificationPrefs {
   user_id: string
   channels: NotificationChannel[]
+  sms_phone?: string
+  whatsapp_phone?: string
 }
 
 // ── Phase 1: Sales Executive / Pre-sales ──────────────────────────────────────

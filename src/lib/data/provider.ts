@@ -270,7 +270,11 @@ export interface DataProvider {
 
   // ── Phase Final: Notification preferences ─────────────────────────────────
   getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs>
-  updateUserNotifPrefs(userId: string, channels: NotificationChannel[]): Promise<UserNotificationPrefs>
+  updateUserNotifPrefs(
+    userId: string,
+    channels: NotificationChannel[],
+    phones?: { sms_phone?: string; whatsapp_phone?: string }
+  ): Promise<UserNotificationPrefs>
 
   // Creates Client + linked User + ClientSolution rows atomically
   createClientAccount(

@@ -5,10 +5,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { CountryFlag } from '@/components/shared/country-flag'
 import { toast } from '@/hooks/use-toast'
 import { Bell, Mail, MessageSquare, Phone, Monitor } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { COUNTRY_CODES, DEFAULT_COUNTRY, splitPhone, joinPhone, isValidNationalNumber, nationalNumberMaxLength, type CountryCode } from '@/lib/country-codes'
 import type { NotificationChannel } from '@/types'
+
+type PhoneChannel = 'sms' | 'whatsapp'
+const PHONE_CHANNELS: PhoneChannel[] = ['sms', 'whatsapp']
 
 const CHANNELS: { key: NotificationChannel; label: string; description: string; icon: React.ComponentType<{ className?: string }>; always?: boolean }[] = [
   { key: 'in_app', label: 'In-App', description: 'Notifications in the notification centre (always on)', icon: Bell, always: true },
@@ -29,18 +37,43 @@ export function NotificationPreferences() {
   })
 
   const [enabled, setEnabled] = useState<Set<NotificationChannel>>(new Set(['in_app']))
+  const [phones, setPhones] = useState<Record<PhoneChannel, string>>({ sms: '', whatsapp: '' })
+  const [countries, setCountries] = useState<Record<PhoneChannel, CountryCode>>({ sms: DEFAULT_COUNTRY, whatsapp: DEFAULT_COUNTRY })
 
   useEffect(() => {
     if (prefs) setEnabled(new Set(prefs.channels))
   }, [prefs])
 
+  useEffect(() => {
+    if (!prefs) return
+    const sms = splitPhone(prefs.sms_phone)
+    const whatsapp = splitPhone(prefs.whatsapp_phone)
+    setPhones({ sms: sms.national, whatsapp: whatsapp.national })
+    setCountries({ sms: sms.country, whatsapp: whatsapp.country })
+  }, [prefs])
+
   const saveMutation = useMutation({
-    mutationFn: () => dp.updateUserNotifPrefs(session.userId, Array.from(enabled)),
+    mutationFn: () => dp.updateUserNotifPrefs(session.userId, Array.from(enabled), {
+      sms_phone: prefs?.sms_phone,
+      whatsapp_phone: prefs?.whatsapp_phone,
+    }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['notif-prefs', session.userId] })
       toast({ title: 'Notification preferences saved', variant: 'success' })
     },
     onError: () => toast({ title: 'Failed to save preferences', variant: 'destructive' }),
+  })
+
+  const savePhoneMutation = useMutation({
+    mutationFn: (channel: PhoneChannel) => dp.updateUserNotifPrefs(session.userId, Array.from(enabled), {
+      sms_phone: channel === 'sms' ? joinPhone(countries.sms, phones.sms) : prefs?.sms_phone,
+      whatsapp_phone: channel === 'whatsapp' ? joinPhone(countries.whatsapp, phones.whatsapp) : prefs?.whatsapp_phone,
+    }),
+    onSuccess: (_data, channel) => {
+      qc.invalidateQueries({ queryKey: ['notif-prefs', session.userId] })
+      toast({ title: `${channel === 'sms' ? 'SMS' : 'WhatsApp'} number saved`, variant: 'success' })
+    },
+    onError: () => toast({ title: 'Failed to save phone number', variant: 'destructive' }),
   })
 
   function toggle(ch: NotificationChannel) {
@@ -69,35 +102,99 @@ export function NotificationPreferences() {
       <div className="space-y-2">
         {CHANNELS.map(({ key, label, description, icon: Icon, always }) => {
           const on = enabled.has(key)
+          const isPhoneChannel = PHONE_CHANNELS.includes(key as PhoneChannel)
+          const phoneKey = key as PhoneChannel
+          const savedPhone = key === 'sms' ? prefs?.sms_phone : key === 'whatsapp' ? prefs?.whatsapp_phone : undefined
+          const phoneDirty = isPhoneChannel && joinPhone(countries[phoneKey], phones[phoneKey]) !== (savedPhone ?? '')
+          const phoneValid = isPhoneChannel && isValidNationalNumber(countries[phoneKey], phones[phoneKey])
+
           return (
-            <button
+            <div
               key={key}
-              type="button"
-              disabled={always}
-              onClick={() => toggle(key)}
               className={cn(
-                'w-full flex items-center gap-3 rounded-xl border p-3.5 text-left transition-all',
-                on ? 'border-primary/40 bg-primary/5' : 'border-border bg-card',
-                always ? 'opacity-70 cursor-default' : 'hover:bg-accent/30 cursor-pointer'
+                'rounded-xl border p-3.5 transition-all',
+                on ? 'border-primary/40 bg-primary/5' : 'border-border bg-card'
               )}
             >
-              <div className={cn('rounded-lg p-2 shrink-0', on ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground')}>
-                <Icon className="h-4 w-4" />
+              <div className="flex items-center gap-3">
+                <div className={cn('rounded-lg p-2 shrink-0', on ? 'bg-primary/15 text-primary' : 'bg-muted text-muted-foreground')}>
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">{label}</p>
+                  <p className="text-xs text-muted-foreground">{description}</p>
+                </div>
+                <Switch
+                  checked={on}
+                  onCheckedChange={() => toggle(key)}
+                  disabled={always}
+                  aria-label={`Turn ${label} ${on ? 'off' : 'on'}`}
+                  className="shrink-0"
+                />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground">{label}</p>
-                <p className="text-xs text-muted-foreground">{description}</p>
-              </div>
-              <div className={cn(
-                'h-5 w-9 rounded-full shrink-0 transition-colors relative',
-                on ? 'bg-primary' : 'bg-muted-foreground/30'
-              )}>
-                <span className={cn(
-                  'absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform',
-                  on ? 'translate-x-4' : 'translate-x-0.5'
-                )} />
-              </div>
-            </button>
+
+              {isPhoneChannel && (
+                <div className="mt-3 pl-11 space-y-1">
+                <div className="flex items-center gap-2">
+                  <Select
+                    value={countries[phoneKey].iso2}
+                    onValueChange={(iso2) => {
+                      const country = COUNTRY_CODES.find((c) => c.iso2 === iso2)
+                      if (country) setCountries((c) => ({ ...c, [phoneKey]: country }))
+                    }}
+                  >
+                    <SelectTrigger className="h-8 w-[104px] shrink-0 text-sm px-2">
+                      <SelectValue>
+                        <span className="flex items-center gap-1.5">
+                          <CountryFlag iso2={countries[phoneKey].iso2} />
+                          <span>{countries[phoneKey].dial}</span>
+                        </span>
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COUNTRY_CODES.map((c) => (
+                        <SelectItem key={c.iso2} value={c.iso2}>
+                          <span className="flex items-center gap-2">
+                            <CountryFlag iso2={c.iso2} />
+                            <span>{c.name}</span>
+                            <span className="text-muted-foreground">{c.dial}</span>
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    type="tel"
+                    inputMode="numeric"
+                    placeholder="Phone number"
+                    value={phones[phoneKey]}
+                    maxLength={nationalNumberMaxLength(countries[phoneKey])}
+                    onChange={(e) => {
+                      const digitsOnly = e.target.value.replace(/\D/g, '')
+                      setPhones((p) => ({ ...p, [phoneKey]: digitsOnly }))
+                    }}
+                    className="h-8 text-sm"
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={phoneValid ? 'default' : 'outline'}
+                    disabled={!phoneDirty || !phoneValid || (savePhoneMutation.isPending && savePhoneMutation.variables === phoneKey)}
+                    onClick={() => savePhoneMutation.mutate(phoneKey)}
+                  >
+                    {savePhoneMutation.isPending && savePhoneMutation.variables === phoneKey ? 'Saving…' : 'Save'}
+                  </Button>
+                </div>
+                {phones[phoneKey].length > 0 && !phoneValid && (
+                  <p className="text-xs text-red-500">
+                    {countries[phoneKey].iso2 === 'BD'
+                      ? 'Enter a valid 10-digit number, no country code'
+                      : 'Enter a valid phone number'}
+                  </p>
+                )}
+                </div>
+              )}
+            </div>
           )
         })}
       </div>

@@ -166,7 +166,7 @@ export class ApiDataProvider implements DataProvider {
   async getSalesExecutiveMetrics(salesExecutiveId: string, _scope: ListScope): Promise<SalesExecutiveMetrics> { return http(`/sales-executives/${salesExecutiveId}/metrics`) }
 
   async getUserNotifPrefs(userId: string): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`) }
-  async updateUserNotifPrefs(userId: string, channels: NotificationChannel[]): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`, { method: 'PUT', body: JSON.stringify({ channels }) }) }
+  async updateUserNotifPrefs(userId: string, channels: NotificationChannel[], phones?: { sms_phone?: string; whatsapp_phone?: string }): Promise<UserNotificationPrefs> { return http(`/users/${userId}/notif-prefs`, { method: 'PUT', body: JSON.stringify({ channels, ...phones }) }) }
 
   async listCaseTransferRequests(teamId: string): Promise<CaseTransferRequest[]> { return http(`/teams/${teamId}/case-transfer-requests`) }
   async listAllPendingCaseTransferRequests(): Promise<CaseTransferRequest[]> { return http('/case-transfer-requests?status=pending') }
