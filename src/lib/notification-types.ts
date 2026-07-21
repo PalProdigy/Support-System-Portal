@@ -1,5 +1,5 @@
 import {
-  UserPlus, AlertTriangle, Gauge, Clock, Hand, ShieldCheck, UserCog, MessageCircle, TrendingUp,
+  UserPlus, AlertTriangle, Gauge, Clock, Hand, ShieldCheck, UserCog, MessageCircle, TrendingUp, KeyRound,
 } from 'lucide-react'
 
 export interface NotificationTypeCategory {
@@ -79,6 +79,13 @@ export const NOTIFICATION_TYPE_CATEGORIES: NotificationTypeCategory[] = [
     description: 'When a sales prospect moves to a new pipeline stage',
     icon: TrendingUp,
     types: ['prospect_stage_changed'],
+  },
+  {
+    key: 'password_expiration',
+    label: 'Password Expiration',
+    description: 'Reminders to change your password before the scheduled expiration date',
+    icon: KeyRound,
+    types: ['password_expiration_reminder'],
   },
 ]
 

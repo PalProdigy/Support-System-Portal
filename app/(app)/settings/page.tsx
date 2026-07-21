@@ -16,7 +16,9 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { NotificationPreferences, type NotificationPreferencesHandle } from '@/modules/shared/notification-preferences'
 import { ChangePasswordCard } from '@/modules/shared/change-password'
 import { PersonalSettings, TeamLeadSettings } from '@/modules/shared/personal-settings'
-import { Settings, Bell, Smartphone, Shield, Save, AlertTriangle } from 'lucide-react'
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+import { Calendar, toDateKey } from '@/components/ui/calendar'
+import { Settings, Bell, Smartphone, Shield, Save, AlertTriangle, KeyRound, CalendarDays } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'nhq_system_settings'
@@ -30,6 +32,15 @@ interface SystemSettings {
   require_2fa: boolean
   maintenance_mode: boolean
   maintenance_message: string
+  // 'YYYY-MM-DD' (local), or null when no expiration is scheduled.
+  // Reminders fire 20/10/5/1 days before this date — see
+  // src/lib/security/password-expiry-runner.ts.
+  password_expiration_date: string | null
+}
+
+function formatDDMMYY(dateKey: string): string {
+  const [y, m, d] = dateKey.split('-')
+  return `${d}/${m}/${y.slice(2)}`
 }
 
 function loadSettings(): SystemSettings {
@@ -52,6 +63,7 @@ function defaults(): SystemSettings {
     require_2fa: false,
     maintenance_mode: false,
     maintenance_message: 'The portal is currently under maintenance. Please check back later.',
+    password_expiration_date: null,
   }
 }
 
@@ -98,6 +110,8 @@ function SystemSettingsView() {
 
   const notifTypesRef = useRef<NotificationPreferencesHandle>(null)
   const [notifTypesState, setNotifTypesState] = useState({ isDirty: false, isPending: false })
+
+  const [calendarOpen, setCalendarOpen] = useState(false)
 
   if (!canAccess(scope, 'update', 'system_settings')) {
     return <EmptyState icon={Shield} title="Access Denied" description="Only Technical Heads can manage system settings." />
@@ -246,6 +260,45 @@ function SystemSettingsView() {
 
         {/* Security */}
         <TabsContent value="security" className="space-y-4">
+          <div className="rounded-xl border bg-card p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="rounded-lg bg-muted p-2 text-muted-foreground shrink-0">
+                  <KeyRound className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground">Password Expiration Date</p>
+                  <p className="text-xs text-muted-foreground">
+                    Everyone is reminded to change their password 20, 10, 5 and 1 day(s) before this date
+                  </p>
+                </div>
+              </div>
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex flex-col items-center gap-1 shrink-0 rounded-lg px-2 py-1.5 hover:bg-muted transition-colors"
+                    aria-label="Select password expiration date"
+                  >
+                    <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-[11px] font-medium text-muted-foreground tabular-nums whitespace-nowrap">
+                      {settings.password_expiration_date ? formatDDMMYY(settings.password_expiration_date) : 'dd/mm/yy'}
+                    </span>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-auto p-0">
+                  <Calendar
+                    selected={settings.password_expiration_date ? new Date(`${settings.password_expiration_date}T00:00:00`) : undefined}
+                    onSelect={(date) => {
+                      set({ password_expiration_date: toDateKey(date) })
+                      setCalendarOpen(false)
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
           <div className="rounded-xl border bg-card p-5 divide-y">
             <Field label="Session timeout (minutes)">
               <Input
