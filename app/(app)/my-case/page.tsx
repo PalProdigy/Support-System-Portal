@@ -1,12 +1,11 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import { useSession } from '@/lib/auth/context'
 import { canAccess } from '@/lib/rbac'
 import { redirect } from 'next/navigation'
-import { Wrench, ClipboardList, TrendingUp } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Wrench } from 'lucide-react'
 
 function ListSkeleton() {
   return (
@@ -29,10 +28,6 @@ const MyCases = dynamic(
   () => import('@/modules/engineer/my-cases').then((m) => m.MyCases),
   { loading: () => <ListSkeleton /> }
 )
-const PerformanceDashboard = dynamic(
-  () => import('@/modules/engineer/performance-dashboard').then((m) => m.PerformanceDashboard),
-  { loading: () => <ListSkeleton /> }
-)
 
 function Guard() {
   const session = useSession()
@@ -41,16 +36,7 @@ function Guard() {
   return null
 }
 
-type Tab = 'cases' | 'performance'
-
-const TABS: { key: Tab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { key: 'cases',       label: 'My Cases',       icon: ClipboardList },
-  { key: 'performance', label: 'My Performance', icon: TrendingUp    },
-]
-
 export default function EngineerHubPage() {
-  const [tab, setTab] = useState<Tab>('cases')
-
   return (
     <div className="p-6 space-y-6">
       <Guard />
@@ -60,31 +46,12 @@ export default function EngineerHubPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
-          <p className="text-sm text-muted-foreground">Every case assigned to you, and how you're performing</p>
+          <p className="text-sm text-muted-foreground">Every case assigned to you</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-1 border-b">
-        {TABS.map(({ key, label, icon: Icon }) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={cn(
-              'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors',
-              tab === key
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </button>
-        ))}
-      </div>
-
       <Suspense fallback={<ListSkeleton />}>
-        {tab === 'cases'       && <MyCases />}
-        {tab === 'performance' && <PerformanceDashboard />}
+        <MyCases />
       </Suspense>
     </div>
   )

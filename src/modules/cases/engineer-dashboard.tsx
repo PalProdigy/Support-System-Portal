@@ -18,7 +18,7 @@ import {
 } from '@/lib/utils'
 import {
   Ticket, LayoutList, CheckCircle, Gauge, Clock, Star,
-  Wrench, TrendingUp, ArrowRight, Inbox,
+  Wrench, TrendingUp, ArrowRight, Inbox, Trophy,
 } from 'lucide-react'
 import type { Case, Client, EngineerMetrics } from '@/types'
 
@@ -88,16 +88,16 @@ export default function EngineerDashboard() {
             <Wrench className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">My Workspace</h1>
-            <p className="text-sm text-muted-foreground">
-              {myTeam ? myTeam.name : 'Support Engineer'}
-              {teamLead && <> · Reporting to <span className="font-medium text-foreground">{teamLead.name}</span></>}
-              {unreadCount > 0 && (
-                <span className="ml-2 inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/40 px-2 py-0.5 text-xs font-semibold text-red-700 dark:text-red-400">
-                  {unreadCount} new
-                </span>
-              )}
-            </p>
+            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+            {/*<p className="text-sm text-muted-foreground">*/}
+            {/*  {myTeam ? myTeam.name : 'Support Engineer'}*/}
+            {/*  /!*{teamLead && <> · Reporting to <span className="font-medium text-foreground">{teamLead.name}</span></>}*!/*/}
+            {/*  /!*{unreadCount > 0 && (*!/*/}
+            {/*  /!*  <span className="ml-2 inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/40 px-2 py-0.5 text-xs font-semibold text-red-700 dark:text-red-400">*!/*/}
+            {/*  /!*    {unreadCount} new*!/*/}
+            {/*  /!*  </span>*!/*/}
+            {/*  /!*)}*!/*/}
+            {/*</p>*/}
           </div>
         </div>
       </div>
@@ -182,7 +182,7 @@ export default function EngineerDashboard() {
               </div>
             ) : metrics ? (
               <div className="grid grid-cols-2 gap-2.5">
-                <PerfTile icon={<Gauge className="h-3.5 w-3.5 text-emerald-500" />} label="SLA Compliance" value={`${metrics.sla_compliance_pct}%`} />
+                <PerfTile icon={<Trophy className="h-3.5 w-3.5 text-yellow-500" />} label="Points Earned" value={String(metrics.points)} />
                 <PerfTile icon={<Clock className="h-3.5 w-3.5 text-blue-400" />} label="Avg Resolution" value={metrics.avg_resolution_hours != null ? `${metrics.avg_resolution_hours}h` : '—'} />
                 <PerfTile icon={<Star className="h-3.5 w-3.5 text-amber-400" />} label="Satisfaction" value={metrics.satisfaction_score != null ? `${metrics.satisfaction_score}/5` : '—'} />
                 <PerfTile icon={<CheckCircle className="h-3.5 w-3.5 text-emerald-500" />} label="Resolved" value={String(metrics.total_resolved)} />
