@@ -64,8 +64,7 @@ const NAV_ITEMS: NavItem[] = [
 //   { label: 'SLA Rules', href: '/sla-rules', icon: Shield, roles: ['technical_head'] },
   { label: 'Audit Log', href: '/audit-log', icon: Shield, roles: ['technical_head', 'team_lead'] },
   { label: 'Notifications', href: '/notifications', icon: Bell, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
-  { label: 'Settings', href: '/settings', icon: Settings, roles: ['technical_head'] },
-  { label: 'Settings', href: '/my-settings', icon: Settings, roles: ['support_engineer'] },
+  { label: 'Settings', href: '/settings', icon: Settings, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
 
 // ==============================
 // Client Portal

@@ -15,6 +15,7 @@ import { toast } from '@/hooks/use-toast'
 import { EmptyState } from '@/components/shared/empty-state'
 import { NotificationPreferences, type NotificationPreferencesHandle } from '@/modules/shared/notification-preferences'
 import { ChangePasswordCard } from '@/modules/shared/change-password'
+import { PersonalSettings, TeamLeadSettings } from '@/modules/shared/personal-settings'
 import { Settings, Bell, Smartphone, Shield, Save, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -54,7 +55,34 @@ function defaults(): SystemSettings {
   }
 }
 
+// Settings is a single shared route for every role — content below is
+// branched by role rather than split across separate pages/URLs.
 export default function SettingsPage() {
+  const session = useSession()
+
+  if (session.role === 'technical_head') return <SystemSettingsView />
+
+  if (session.role === 'team_lead' || session.role === 'support_engineer' || session.role === 'sales_executive') {
+    return (
+      <div className="p-4 sm:p-6 space-y-6 max-w-3xl mx-auto">
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl bg-primary/10 p-2.5">
+            <Settings className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+            <p className="text-sm text-muted-foreground">Manage your appearance, security and notification preferences</p>
+          </div>
+        </div>
+        {session.role === 'team_lead' ? <TeamLeadSettings /> : <PersonalSettings />}
+      </div>
+    )
+  }
+
+  return <EmptyState icon={Shield} title="Access Denied" description="You don't have access to settings." />
+}
+
+function SystemSettingsView() {
   const session = useSession()
   const dp = getDataProvider()
   const qc = useQueryClient()
