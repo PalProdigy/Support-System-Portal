@@ -20,6 +20,11 @@ export default function NotificationsPage() {
   const qc = useQueryClient()
   const [tab, setTab] = useState<Tab>('inbox')
 
+  // Technical Heads, Team Leads, Support Engineers, and Sales Executives manage
+  // notification preferences from the shared /settings page instead of a tab here.
+  const SETTINGS_ROLES: typeof session.role[] = ['technical_head', 'team_lead', 'support_engineer', 'sales_executive']
+  const showPreferencesTab = !SETTINGS_ROLES.includes(session.role)
+
   const { data: notifications, isLoading } = useQuery({
     queryKey: ['notifications', session.userId],
     queryFn: () => dp.listNotifications(session.userId),
@@ -54,30 +59,32 @@ export default function NotificationsPage() {
         )}
       </div>
 
-      <div className="flex items-center gap-1 border-b">
-        {([
-          { key: 'inbox' as Tab, label: 'Inbox', icon: Bell },
-          { key: 'preferences' as Tab, label: 'Preferences', icon: Settings2 },
-        ] as const).map(({ key, label, icon: Icon }) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={cn(
-              'flex flex-1 items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors',
-              tab === key
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </button>
-        ))}
-      </div>
+      {showPreferencesTab && (
+        <div className="flex items-center gap-1 border-b">
+          {([
+            { key: 'inbox' as Tab, label: 'Inbox', icon: Bell },
+            { key: 'preferences' as Tab, label: 'Preferences', icon: Settings2 },
+          ] as const).map(({ key, label, icon: Icon }) => (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className={cn(
+                'flex flex-1 items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors',
+                tab === key
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
 
-      {tab === 'preferences' && <NotificationPreferences />}
+      {showPreferencesTab && tab === 'preferences' && <NotificationPreferences />}
 
-      {tab === 'inbox' && (
+      {(!showPreferencesTab || tab === 'inbox') && (
         isLoading ? (
           <div className="space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="h-16 rounded-xl bg-muted animate-pulse" />)}</div>
         ) : (notifications ?? []).length === 0 ? (

@@ -11,6 +11,7 @@ import { getDataProvider } from '@/lib/data'
 import { useState } from 'react'
 import type { User } from '@/types'
 import { SLAEngineProvider } from '@/lib/sla/provider'
+import { PasswordExpiryProvider } from '@/lib/security/provider'
 
 interface AppShellProps {
   children: React.ReactNode
@@ -40,6 +41,7 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <SLAEngineProvider>
+      <PasswordExpiryProvider>
       {/* print: hide the app chrome and unlock the scroll containers so the
           full page content (e.g. a KB article) prints, not just one viewport */}
       <div className="flex h-screen overflow-hidden bg-background print:h-auto print:overflow-visible">
@@ -62,6 +64,7 @@ export function AppShell({ children }: AppShellProps) {
           </div>
         </div>
       </div>
+      </PasswordExpiryProvider>
     </SLAEngineProvider>
   )
 }

@@ -4,6 +4,7 @@ export interface ChannelPayload {
   userId: string
   type: string
   message: string
+  phone?: string
   meta?: Record<string, unknown>
 }
 
@@ -17,12 +18,13 @@ export interface ChannelAdapter {
 export function dispatchToChannels(
   adapters: ChannelAdapter[],
   enabledChannels: NotificationChannel[],
-  payload: ChannelPayload
+  payload: ChannelPayload,
+  phoneByChannel?: Partial<Record<NotificationChannel, string | undefined>>
 ): void {
   for (const adapter of adapters) {
     if (adapter.channel !== 'in_app' && enabledChannels.includes(adapter.channel)) {
       try {
-        adapter.send(payload)
+        adapter.send({ ...payload, phone: phoneByChannel?.[adapter.channel] })
       } catch (err) {
         console.warn(`[Dispatcher] ${adapter.channel} adapter error:`, err)
       }

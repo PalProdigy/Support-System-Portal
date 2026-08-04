@@ -24,15 +24,20 @@ interface SystemSettings {
   escalation_threshold_hours: number
   auto_close_days: number
   sla_breach_alert: boolean
-  email_notifications: boolean
-  sms_notifications: boolean
-  whatsapp_notifications: boolean
-  web_push_notifications: boolean
   session_timeout_minutes: number
   max_login_attempts: number
   require_2fa: boolean
   maintenance_mode: boolean
   maintenance_message: string
+  // 'YYYY-MM-DD' (local), or null when no expiration is scheduled.
+  // Reminders fire 20/10/5/1 days before this date — see
+  // src/lib/security/password-expiry-runner.ts.
+  password_expiration_date: string | null
+}
+
+function formatDDMMYY(dateKey: string): string {
+  const [y, m, d] = dateKey.split('-')
+  return `${d}/${m}/${y.slice(2)}`
 }
 
 function loadSettings(): SystemSettings {
@@ -50,15 +55,12 @@ function defaults(): SystemSettings {
     escalation_threshold_hours: 4,
     auto_close_days: 7,
     sla_breach_alert: true,
-    email_notifications: true,
-    sms_notifications: false,
-    whatsapp_notifications: false,
-    web_push_notifications: false,
     session_timeout_minutes: 60,
     max_login_attempts: 5,
     require_2fa: false,
     maintenance_mode: false,
     maintenance_message: 'The portal is currently under maintenance. Please check back later.',
+    password_expiration_date: null,
   }
 }
 
@@ -90,6 +92,31 @@ function Field({
 
 export default function SettingsPage() {
   const session = useSession()
+
+  if (session.role === 'technical_head') return <SystemSettingsView />
+
+  if (session.role === 'team_lead' || session.role === 'support_engineer' || session.role === 'sales_executive') {
+    return (
+      <div className="p-4 sm:p-6 space-y-6 max-w-3xl mx-auto">
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl bg-primary/10 p-2.5">
+            <Settings className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+            <p className="text-sm text-muted-foreground">Manage your appearance, security and notification preferences</p>
+          </div>
+        </div>
+        {session.role === 'team_lead' ? <TeamLeadSettings /> : <PersonalSettings />}
+      </div>
+    )
+  }
+
+  return <EmptyState icon={Shield} title="Access Denied" description="You don't have access to settings." />
+}
+
+function SystemSettingsView() {
+  const session = useSession()
   const dp = getDataProvider()
   const qc = useQueryClient()
 
@@ -97,7 +124,17 @@ export default function SettingsPage() {
   const isAdmin = canAccess(scope, 'update', 'system_settings')
 
   const [settings, setSettings] = useState<SystemSettings>(loadSettings)
+  const [savedSettings, setSavedSettings] = useState<SystemSettings>(loadSettings)
   const set = (patch: Partial<SystemSettings>) => setSettings((s) => ({ ...s, ...patch }))
+  const generalDirty = JSON.stringify(settings) !== JSON.stringify(savedSettings)
+
+  const notifChannelsRef = useRef<NotificationPreferencesHandle>(null)
+  const [notifChannelsState, setNotifChannelsState] = useState({ isDirty: false, isPending: false })
+
+  const notifTypesRef = useRef<NotificationPreferencesHandle>(null)
+  const [notifTypesState, setNotifTypesState] = useState({ isDirty: false, isPending: false })
+
+  const [calendarOpen, setCalendarOpen] = useState(false)
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -112,6 +149,7 @@ export default function SettingsPage() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['settings'] })
+      setSavedSettings(settings)
       toast({ title: 'Settings saved', variant: 'success' })
     },
     onError: () => toast({ title: 'Failed to save settings', variant: 'destructive' }),
@@ -136,6 +174,37 @@ export default function SettingsPage() {
       <p className="text-xs text-muted-foreground px-1">Email, SMS, WhatsApp and Web Push connectors plug in via ApiDataProvider in Phase 1.</p>
     </div>
   )
+
+  const SaveChangesButton = () => (
+    <div className="flex justify-end">
+      <Button size="sm" onClick={() => saveMutation.mutate()} disabled={!generalDirty || saveMutation.isPending}>
+        <Save className="h-4 w-4" />
+        {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
+      </Button>
+    </div>
+  )
+
+  const generalIsDirty = generalDirty || notifChannelsState.isDirty
+  const generalIsPending = saveMutation.isPending || notifChannelsState.isPending
+
+  const GeneralSaveChangesButton = () => (
+    <div className="flex justify-end">
+      <Button
+        size="sm"
+        onClick={() => {
+          if (generalDirty) saveMutation.mutate()
+          if (notifChannelsState.isDirty) notifChannelsRef.current?.save()
+        }}
+        disabled={!generalIsDirty || generalIsPending}
+      >
+        <Save className="h-4 w-4" />
+        {generalIsPending ? 'Saving…' : 'Save Changes'}
+      </Button>
+    </div>
+  )
+
+  const notificationsIsDirty = generalDirty || notifTypesState.isDirty
+  const notificationsIsPending = saveMutation.isPending || notifTypesState.isPending
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">

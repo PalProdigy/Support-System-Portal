@@ -61,6 +61,7 @@ const STORAGE_KEYS = {
   salesTargets: 'nhq_sales_targets',
   slaEvents: 'nhq_sla_events',
   notifPrefs: 'nhq_notif_prefs',
+  passwords: 'nhq_user_passwords',
   teamMemberRequests: 'nhq_team_member_requests',
   caseTransferRequests: 'nhq_case_transfer_requests',
   engineerChangeRequests: 'nhq_engineer_change_requests',
@@ -2520,13 +2521,20 @@ class MockDataProvider implements DataProvider {
   }
 
   async createNotification(input: Omit<Notification, 'id'>): Promise<Notification> {
-    const notifications = load<Notification>(STORAGE_KEYS.notifications)
     const notification: Notification = { ...input, id: genId() }
+
+    const allPrefs = load<UserNotificationPrefs>(STORAGE_KEYS.notifPrefs)
+    const userPrefs = allPrefs.find((p) => p.user_id === input.user_id)
+
+    // User has muted this notification type — suppress entirely, including in-app.
+    if (userPrefs?.disabled_types?.includes(input.type)) {
+      return delay(notification)
+    }
+
+    const notifications = load<Notification>(STORAGE_KEYS.notifications)
     save(STORAGE_KEYS.notifications, [...notifications, notification])
 
     // Multi-channel dispatch — fire stub adapters for non-in_app channels the user enabled
-    const allPrefs = load<UserNotificationPrefs>(STORAGE_KEYS.notifPrefs)
-    const userPrefs = allPrefs.find((p) => p.user_id === input.user_id)
     if (userPrefs && userPrefs.channels.length > 1) {
       const message = String((input.payload as Record<string, unknown>).message ?? input.type.replace(/_/g, ' '))
       dispatchToChannels(ALL_ADAPTERS, userPrefs.channels, {
@@ -2534,7 +2542,7 @@ class MockDataProvider implements DataProvider {
         type: input.type,
         message,
         meta: input.payload,
-      })
+      }, { sms: userPrefs.sms_phone, whatsapp: userPrefs.whatsapp_phone })
     }
 
     return delay(notification)
@@ -2763,10 +2771,21 @@ class MockDataProvider implements DataProvider {
     return delay(all.find((p) => p.user_id === userId) ?? { user_id: userId, channels: ['in_app'] })
   }
 
-  async updateUserNotifPrefs(userId: string, channels: NotificationChannel[]): Promise<UserNotificationPrefs> {
+  async updateUserNotifPrefs(
+    userId: string,
+    channels: NotificationChannel[],
+    extra?: { sms_phone?: string; whatsapp_phone?: string; disabled_types?: string[] }
+  ): Promise<UserNotificationPrefs> {
     const all = load<UserNotificationPrefs>(STORAGE_KEYS.notifPrefs)
     const idx = all.findIndex((p) => p.user_id === userId)
-    const prefs: UserNotificationPrefs = { user_id: userId, channels: ['in_app', ...channels.filter((c) => c !== 'in_app')] }
+    const existing = idx !== -1 ? all[idx] : undefined
+    const prefs: UserNotificationPrefs = {
+      user_id: userId,
+      channels: ['in_app', ...channels.filter((c) => c !== 'in_app')],
+      sms_phone: extra?.sms_phone ?? existing?.sms_phone,
+      whatsapp_phone: extra?.whatsapp_phone ?? existing?.whatsapp_phone,
+      disabled_types: extra?.disabled_types ?? existing?.disabled_types,
+    }
     if (idx === -1) {
       save(STORAGE_KEYS.notifPrefs, [...all, prefs])
     } else {
@@ -2774,6 +2793,38 @@ class MockDataProvider implements DataProvider {
       save(STORAGE_KEYS.notifPrefs, all)
     }
     return delay(prefs)
+  }
+
+  // ── Phase Final: Account security ──────────────────────────────────────────
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+    const all = load<{ user_id: string; password: string }>(STORAGE_KEYS.passwords)
+    const idx = all.findIndex((p) => p.user_id === userId)
+    // No password set yet for this user (demo account) — accept whatever they
+    // typed as "current", matching the login screen's any-password demo mode.
+    if (idx !== -1 && all[idx].password !== currentPassword) {
+      throw new Error('Current password is incorrect')
+    }
+    const record = { user_id: userId, password: newPassword }
+    if (idx === -1) {
+      save(STORAGE_KEYS.passwords, [...all, record])
+    } else {
+      all[idx] = record
+      save(STORAGE_KEYS.passwords, all)
+    }
+    return delay(undefined)
+  }
+
+  async resetPassword(userId: string, newPassword: string): Promise<void> {
+    const all = load<{ user_id: string; password: string }>(STORAGE_KEYS.passwords)
+    const idx = all.findIndex((p) => p.user_id === userId)
+    const record = { user_id: userId, password: newPassword }
+    if (idx === -1) {
+      save(STORAGE_KEYS.passwords, [...all, record])
+    } else {
+      all[idx] = record
+      save(STORAGE_KEYS.passwords, all)
+    }
+    return delay(undefined)
   }
 
   // ── Case Transfer Requests ─────────────────────────────────────────────────

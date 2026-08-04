@@ -48,16 +48,16 @@ export default function EngineerDashboard() {
             <Wrench className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">My Workspace</h1>
-            <p className="text-sm text-muted-foreground">
-              {myTeam ? myTeam.name : 'Support Engineer'}
-              {teamLead && <> · Reporting to <span className="font-medium text-foreground">{teamLead.name}</span></>}
-              {unreadCount > 0 && (
-                <span className="ml-2 inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/40 px-2 py-0.5 text-xs font-semibold text-red-700 dark:text-red-400">
-                  {unreadCount} new
-                </span>
-              )}
-            </p>
+            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+            {/*<p className="text-sm text-muted-foreground">*/}
+            {/*  {myTeam ? myTeam.name : 'Support Engineer'}*/}
+            {/*  /!*{teamLead && <> · Reporting to <span className="font-medium text-foreground">{teamLead.name}</span></>}*!/*/}
+            {/*  /!*{unreadCount > 0 && (*!/*/}
+            {/*  /!*  <span className="ml-2 inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/40 px-2 py-0.5 text-xs font-semibold text-red-700 dark:text-red-400">*!/*/}
+            {/*  /!*    {unreadCount} new*!/*/}
+            {/*  /!*  </span>*!/*/}
+            {/*  /!*)}*!/*/}
+            {/*</p>*/}
           </div>
         </div>
         <Button onClick={() => setNewCaseOpen(true)}>

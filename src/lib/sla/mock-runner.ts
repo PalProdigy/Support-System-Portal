@@ -4,7 +4,7 @@
 
 import type { SLAEngineRunner, SLARunResult, SLAEvent, SLAEventType } from './engine'
 import { SLA_EVENTS_STORAGE_KEY, UNASSIGNED_TIMEOUT_MS, IDLE_THRESHOLD_MS, AT_RISK_PCT } from './engine'
-import type { Case, User, Team, Notification, AuditLog } from '@/types'
+import type { Case, User, Team, Notification, AuditLog, UserNotificationPrefs } from '@/types'
 
 // Storage key constants — must stay in sync with mock/index.ts STORAGE_KEYS
 const KEYS = {
@@ -14,6 +14,7 @@ const KEYS = {
   notifications: 'nhq_notifications',
   auditLogs:     'nhq_audit_logs',
   slaEvents:     SLA_EVENTS_STORAGE_KEY,
+  notifPrefs:    'nhq_notif_prefs',
 } as const
 
 function read<T>(key: string): T[] {
@@ -148,7 +149,13 @@ export function makeSLARunner(): SLAEngineRunner {
         write(KEYS.slaEvents, [...fired, ...newEvents])
       }
       if (newNotifs.length > 0) {
-        write(KEYS.notifications, [...read<Notification>(KEYS.notifications), ...newNotifs])
+        const prefs = read<UserNotificationPrefs>(KEYS.notifPrefs)
+        const isMuted = (n: Notification) =>
+          prefs.find((p) => p.user_id === n.user_id)?.disabled_types?.includes(n.type) ?? false
+        const allowedNotifs = newNotifs.filter((n) => !isMuted(n))
+        if (allowedNotifs.length > 0) {
+          write(KEYS.notifications, [...read<Notification>(KEYS.notifications), ...allowedNotifs])
+        }
       }
 
       return { fired: newEvents }
