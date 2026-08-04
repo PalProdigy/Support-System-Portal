@@ -1,25 +1,26 @@
 'use client'
 
 import { useState } from 'react'
+import type { ComponentType } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
-import { canAccess } from '@/lib/rbac'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Separator } from '@/components/ui/separator'
 import { toast } from '@/hooks/use-toast'
-import { EmptyState } from '@/components/shared/empty-state'
-import { Settings, Mail, MessageSquare, Bell, Smartphone, Shield, Save } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { canAccess } from '@/lib/rbac'
+import {
+  Settings, Mail, MessageSquare, Bell, Smartphone, Shield, Save,
+  Clock, CalendarClock, AlertTriangle, KeyRound, LogIn, ShieldCheck, Wrench,
+} from 'lucide-react'
 
 const STORAGE_KEY = 'nhq_system_settings'
 
 interface SystemSettings {
-  portal_name: string
-  support_email: string
   escalation_threshold_hours: number
   auto_close_days: number
   sla_breach_alert: boolean
@@ -46,8 +47,6 @@ function loadSettings(): SystemSettings {
 
 function defaults(): SystemSettings {
   return {
-    portal_name: 'NHQ Support Portal',
-    support_email: 'support@nhqdistributions.com',
     escalation_threshold_hours: 4,
     auto_close_days: 7,
     sla_breach_alert: true,
@@ -63,18 +62,42 @@ function defaults(): SystemSettings {
   }
 }
 
+function Field({
+  icon: Icon, label, description, children,
+}: {
+  icon?: ComponentType<{ className?: string }>
+  label: React.ReactNode
+  description?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 px-5 py-3.5 hover:bg-accent/20 transition-colors">
+      <div className="flex items-center gap-3 min-w-0">
+        {Icon && (
+          <div className="rounded-lg bg-primary/10 p-2 shrink-0">
+            <Icon className="h-4 w-4 text-primary" />
+          </div>
+        )}
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-foreground">{label}</p>
+          {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
+        </div>
+      </div>
+      <div className="shrink-0">{children}</div>
+    </div>
+  )
+}
+
 export default function SettingsPage() {
   const session = useSession()
   const dp = getDataProvider()
   const qc = useQueryClient()
+
   const scope = { userId: session.userId, role: session.role }
+  const isAdmin = canAccess(scope, 'update', 'system_settings')
 
   const [settings, setSettings] = useState<SystemSettings>(loadSettings)
   const set = (patch: Partial<SystemSettings>) => setSettings((s) => ({ ...s, ...patch }))
-
-  if (!canAccess(scope, 'update', 'system_settings')) {
-    return <EmptyState icon={Shield} title="Access Denied" description="Only Technical Heads can manage system settings." />
-  }
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -94,139 +117,142 @@ export default function SettingsPage() {
     onError: () => toast({ title: 'Failed to save settings', variant: 'destructive' }),
   })
 
-  const Field = ({ label, children }: { label: React.ReactNode; children: React.ReactNode }) => (
-    <div className="flex items-center justify-between gap-4 py-3">
-      <span className="text-sm font-medium">{label}</span>
-      {children}
+  const notificationsCard = (
+    <div className="space-y-2">
+      <div className="rounded-xl border bg-card divide-y overflow-hidden">
+        <Field icon={Mail} label="Email notifications">
+          <Switch checked={settings.email_notifications} onCheckedChange={(v) => set({ email_notifications: v })} />
+        </Field>
+        <Field icon={Smartphone} label="SMS notifications">
+          <Switch checked={settings.sms_notifications} onCheckedChange={(v) => set({ sms_notifications: v })} />
+        </Field>
+        <Field icon={MessageSquare} label="WhatsApp notifications">
+          <Switch checked={settings.whatsapp_notifications} onCheckedChange={(v) => set({ whatsapp_notifications: v })} />
+        </Field>
+        <Field icon={Bell} label="Web push notifications">
+          <Switch checked={settings.web_push_notifications} onCheckedChange={(v) => set({ web_push_notifications: v })} />
+        </Field>
+      </div>
+      <p className="text-xs text-muted-foreground px-1">Email, SMS, WhatsApp and Web Push connectors plug in via ApiDataProvider in Phase 1.</p>
     </div>
   )
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">System Settings</h1>
-          <p className="text-sm text-muted-foreground">Configure portal-wide behaviour and integrations.</p>
+      {/* Hero header */}
+      <div className="relative overflow-hidden rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center justify-between gap-4 flex-wrap">
+        <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/20 blur-3xl" />
+        <div className="relative flex items-center gap-4">
+          <div className="rounded-xl bg-primary/15 p-3 shrink-0">
+            <Settings className="h-7 w-7 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">{isAdmin ? 'System Settings' : 'Notification Settings'}</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {isAdmin ? 'Configure portal-wide behaviour and integrations.' : 'Choose how you want to be notified.'}
+            </p>
+          </div>
         </div>
-        <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+        <Button className="relative" onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
           <Save className="h-4 w-4" />
           {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
         </Button>
       </div>
 
-      <Tabs defaultValue="general">
-        <TabsList className="mb-4">
-          <TabsTrigger value="general"><Settings className="h-3.5 w-3.5" /> General</TabsTrigger>
-          <TabsTrigger value="notifications"><Bell className="h-3.5 w-3.5" /> Notifications</TabsTrigger>
-          <TabsTrigger value="security"><Shield className="h-3.5 w-3.5" /> Security</TabsTrigger>
-          <TabsTrigger value="maintenance"><Smartphone className="h-3.5 w-3.5" /> Maintenance</TabsTrigger>
-        </TabsList>
+      {!isAdmin ? (
+        notificationsCard
+      ) : (
+        <Tabs defaultValue="general">
+          <TabsList className="mb-4">
+            <TabsTrigger value="general"><Settings className="h-3.5 w-3.5" /> General</TabsTrigger>
+            <TabsTrigger value="notifications"><Bell className="h-3.5 w-3.5" /> Notifications</TabsTrigger>
+            <TabsTrigger value="security"><Shield className="h-3.5 w-3.5" /> Security</TabsTrigger>
+            <TabsTrigger value="maintenance"><Wrench className="h-3.5 w-3.5" /> Maintenance</TabsTrigger>
+          </TabsList>
 
-        {/* General */}
-        <TabsContent value="general">
-          <div className="rounded-xl border bg-card p-5 space-y-1 divide-y">
-            <div className="space-y-1.5 pb-4">
-              <Label>Portal Name</Label>
-              <Input value={settings.portal_name} onChange={(e) => set({ portal_name: e.target.value })} />
+          {/* General */}
+          <TabsContent value="general" className="space-y-4">
+            <div className="rounded-xl border bg-card divide-y overflow-hidden">
+              <Field icon={Clock} label="Escalation threshold" description="Hours before an unattended case escalates">
+                <Input
+                  type="number"
+                  className="w-20 text-right"
+                  min={1}
+                  value={settings.escalation_threshold_hours}
+                  onChange={(e) => set({ escalation_threshold_hours: +e.target.value })}
+                />
+              </Field>
+              <Field icon={CalendarClock} label="Auto-close after resolved" description="Days before a resolved case closes automatically">
+                <Input
+                  type="number"
+                  className="w-20 text-right"
+                  min={1}
+                  value={settings.auto_close_days}
+                  onChange={(e) => set({ auto_close_days: +e.target.value })}
+                />
+              </Field>
+              <Field icon={AlertTriangle} label="SLA breach alert" description="Notify the team when a case breaches its SLA">
+                <Switch checked={settings.sla_breach_alert} onCheckedChange={(v) => set({ sla_breach_alert: v })} />
+              </Field>
             </div>
-            <div className="space-y-1.5 py-4">
-              <Label>Support Email</Label>
-              <Input type="email" value={settings.support_email} onChange={(e) => set({ support_email: e.target.value })} />
+          </TabsContent>
+
+          {/* Notifications */}
+          <TabsContent value="notifications">
+            {notificationsCard}
+          </TabsContent>
+
+          {/* Security */}
+          <TabsContent value="security">
+            <div className="rounded-xl border bg-card divide-y overflow-hidden">
+              <Field icon={LogIn} label="Session timeout" description="Minutes of inactivity before automatic sign-out">
+                <Input
+                  type="number"
+                  className="w-20 text-right"
+                  min={5}
+                  value={settings.session_timeout_minutes}
+                  onChange={(e) => set({ session_timeout_minutes: +e.target.value })}
+                />
+              </Field>
+              <Field icon={KeyRound} label="Max failed login attempts" description="Lock the account after this many failures">
+                <Input
+                  type="number"
+                  className="w-20 text-right"
+                  min={1}
+                  value={settings.max_login_attempts}
+                  onChange={(e) => set({ max_login_attempts: +e.target.value })}
+                />
+              </Field>
+              <Field icon={ShieldCheck} label="Require 2FA" description="Enforce two-factor authentication for all users">
+                <Switch checked={settings.require_2fa} onCheckedChange={(v) => set({ require_2fa: v })} />
+              </Field>
             </div>
-            <Field label="Escalation threshold (hours)">
-              <Input
-                type="number"
-                className="w-24 text-right"
-                min={1}
-                value={settings.escalation_threshold_hours}
-                onChange={(e) => set({ escalation_threshold_hours: +e.target.value })}
-              />
-            </Field>
-            <Field label="Auto-close after resolved (days)">
-              <Input
-                type="number"
-                className="w-24 text-right"
-                min={1}
-                value={settings.auto_close_days}
-                onChange={(e) => set({ auto_close_days: +e.target.value })}
-              />
-            </Field>
-            <Field label="SLA breach alert">
-              <Switch checked={settings.sla_breach_alert} onCheckedChange={(v) => set({ sla_breach_alert: v })} />
-            </Field>
-          </div>
-        </TabsContent>
+          </TabsContent>
 
-        {/* Notifications */}
-        <TabsContent value="notifications">
-          <div className="rounded-xl border bg-card p-5 divide-y">
-            <Field label={<span className="flex items-center gap-2"><Mail className="h-4 w-4 text-muted-foreground" />Email notifications</span>}>
-              <Switch checked={settings.email_notifications} onCheckedChange={(v) => set({ email_notifications: v })} />
-            </Field>
-            <Field label={<span className="flex items-center gap-2"><Smartphone className="h-4 w-4 text-muted-foreground" />SMS notifications</span>}>
-              <Switch checked={settings.sms_notifications} onCheckedChange={(v) => set({ sms_notifications: v })} />
-            </Field>
-            <Field label={<span className="flex items-center gap-2"><MessageSquare className="h-4 w-4 text-muted-foreground" />WhatsApp notifications</span>}>
-              <Switch checked={settings.whatsapp_notifications} onCheckedChange={(v) => set({ whatsapp_notifications: v })} />
-            </Field>
-            <Field label={<span className="flex items-center gap-2"><Bell className="h-4 w-4 text-muted-foreground" />Web push notifications</span>}>
-              <Switch checked={settings.web_push_notifications} onCheckedChange={(v) => set({ web_push_notifications: v })} />
-            </Field>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">Email, SMS, WhatsApp and Web Push connectors plug in via ApiDataProvider in Phase 1.</p>
-        </TabsContent>
-
-        {/* Security */}
-        <TabsContent value="security">
-          <div className="rounded-xl border bg-card p-5 divide-y">
-            <Field label="Session timeout (minutes)">
-              <Input
-                type="number"
-                className="w-24 text-right"
-                min={5}
-                value={settings.session_timeout_minutes}
-                onChange={(e) => set({ session_timeout_minutes: +e.target.value })}
-              />
-            </Field>
-            <Field label="Max failed login attempts">
-              <Input
-                type="number"
-                className="w-24 text-right"
-                min={1}
-                value={settings.max_login_attempts}
-                onChange={(e) => set({ max_login_attempts: +e.target.value })}
-              />
-            </Field>
-            <Field label="Require 2FA">
-              <Switch checked={settings.require_2fa} onCheckedChange={(v) => set({ require_2fa: v })} />
-            </Field>
-          </div>
-        </TabsContent>
-
-        {/* Maintenance */}
-        <TabsContent value="maintenance">
-          <div className="rounded-xl border bg-card p-5 space-y-4">
-            <Field label="Maintenance mode">
-              <Switch checked={settings.maintenance_mode} onCheckedChange={(v) => set({ maintenance_mode: v })} />
-            </Field>
-            {settings.maintenance_mode && (
-              <>
-                <Separator />
-                <div className="space-y-1.5">
-                  <Label>Maintenance message</Label>
-                  <Input
-                    value={settings.maintenance_message}
-                    onChange={(e) => set({ maintenance_message: e.target.value })}
-                  />
+          {/* Maintenance */}
+          <TabsContent value="maintenance">
+            <div className="rounded-xl border bg-card overflow-hidden">
+              <Field icon={Wrench} label="Maintenance mode" description="Show a maintenance banner to all users">
+                <Switch checked={settings.maintenance_mode} onCheckedChange={(v) => set({ maintenance_mode: v })} />
+              </Field>
+              {settings.maintenance_mode && (
+                <div className="border-t px-5 py-4 space-y-3 bg-amber-500/5">
+                  <div className="space-y-1.5">
+                    <Label>Maintenance message</Label>
+                    <Input
+                      value={settings.maintenance_message}
+                      onChange={(e) => set({ maintenance_message: e.target.value })}
+                    />
+                  </div>
+                  <p className={cn('flex items-center gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-400')}>
+                    <AlertTriangle className="h-3.5 w-3.5" /> Enabling maintenance mode will show a banner to all users.
+                  </p>
                 </div>
-                <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                  Warning: enabling maintenance mode will show a banner to all users.
-                </p>
-              </>
-            )}
-          </div>
-        </TabsContent>
-      </Tabs>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
+      )}
     </div>
   )
 }

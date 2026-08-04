@@ -1,160 +1,117 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { cn } from '@/lib/utils'
 import { StatCard } from '@/components/shared/stat-card'
-import { SLABreachWidget } from '@/components/shared/sla-breach-widget'
-import { CaseCard } from '@/components/shared/case-card'
-import { CertificationCard } from '@/components/shared/certification-card'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
-import { RecentActivity, type ActivityItem } from '@/components/shared/recent-activity'
 import { Button } from '@/components/ui/button'
 import {
-  Ticket, Building2, CheckCircle2, AlertTriangle, PlusCircle, Target,
-  Trophy, RefreshCcw, Briefcase, TrendingUp,
+  Building2, FolderKanban, Handshake, BadgeAlert, AlertTriangle,
+  ShieldX, CheckCircle2, Ticket, Star, XCircle,
 } from 'lucide-react'
-import type { Case, Client, Prospect, ProspectStage } from '@/types'
+import type { Client, Engagement, Project, ProductLicense, Product, Case, Solution, Feedback } from '@/types'
 
-const STAGE_LABELS: Record<ProspectStage, string> = {
-  discovery: 'Discovery',
-  proposal: 'Proposal',
-  negotiation: 'Negotiation',
-  closed_won: 'Closed Won',
-  closed_lost: 'Closed Lost',
-}
+const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
 
-function fmtCurrency(n: number) {
-  return n >= 1_000_000 ? `৳${(n / 1_000_000).toFixed(1)}M` : n >= 1_000 ? `৳${(n / 1_000).toFixed(0)}K` : `৳${n}`
-}
+const DAY_MS = 86_400_000
+const EXPIRY_SOON_DAYS = 90
 
+// Sales Executive's dashboard — mirrors exactly what's on their sidebar
+// (Clients, Products, Projects, Engagements, License & SLA Monitoring), so
+// every number here is a snapshot of a page they can actually navigate to.
+// No Cases or Pipeline content — neither has a sidebar entry for this role.
 export default function AMDashboard() {
   const session = useSession()
   const dp = getDataProvider()
   const router = useRouter()
   const scope = { userId: session.userId, role: session.role }
+  const [nowMs] = useState(() => Date.now())
 
-  const { data: casesData, isLoading: casesLoading, error, refetch } = useQuery({
-    queryKey: ['cases', 'am', session.userId],
-    queryFn: () => dp.listCases(scope, { pageSize: 50 }),
-  })
-
-  const { data: clients, isLoading: clientsLoading } = useQuery({
+  const { data: clients, isLoading: clientsLoading, error, refetch } = useQuery({
     queryKey: ['clients', session.userId],
     queryFn: () => dp.listClients(scope),
   })
 
-  const { data: prospects } = useQuery({
-    queryKey: ['prospects', session.userId],
-    queryFn: () => dp.listProspects(scope),
+  const { data: engagements, isLoading: engagementsLoading } = useQuery({
+    queryKey: ['engagements', session.userId, session.role],
+    queryFn: () => dp.listEngagements(scope),
   })
 
-  const { data: myUser } = useQuery({
-    queryKey: ['user', session.userId],
-    queryFn: () => dp.getUser(session.userId),
+  const { data: allProjects, isLoading: projectsLoading } = useQuery({
+    queryKey: ['projects'],
+    queryFn: () => dp.listProjects(scope),
   })
 
-  const cases = useMemo(() => casesData?.items ?? [], [casesData])
+  const { data: licenses, isLoading: licensesLoading } = useQuery({
+    queryKey: ['product-licenses'],
+    queryFn: () => dp.listProductLicenses(),
+  })
+
+  const { data: products } = useQuery({ queryKey: ['products'], queryFn: () => dp.listProducts() })
+
+  // View-only — sales_executive can see their clients' queuing cases but has
+  // no assign action here (that's technical_head / team_lead territory).
+  const { data: casesData, isLoading: casesLoading } = useQuery({
+    queryKey: ['cases', 'am-queuing', session.userId],
+    queryFn: () => dp.listCases(scope, { pageSize: 500, top_level_only: true }),
+  })
+  const { data: solutions } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
+  const { data: feedback, isLoading: feedbackLoading } = useQuery({
+    queryKey: ['feedback', 'am', session.userId],
+    queryFn: () => dp.listFeedback(scope),
+  })
+
   const clientList: Client[] = useMemo(() => clients ?? [], [clients])
-  const prospectList: Prospect[] = useMemo(() => prospects ?? [], [prospects])
   const clientsMap = Object.fromEntries(clientList.map((c) => [c.id, c]))
+  const myClientIds = useMemo(() => new Set(clientList.map((c) => c.id)), [clientList])
+  const productsMap = Object.fromEntries((products ?? []).map((p: Product) => [p.id, p.name]))
 
-  const open = cases.filter((c: Case) => !['closed', 'resolved', 'pending_closure'].includes(c.status))
+  const projects = useMemo(() => allProjects ?? [], [allProjects])
+  const activeProjects = projects.filter((p: Project) => !['completed', 'cancelled'].includes(p.status))
 
-  // Performance metrics — sales-executive KPIs: pipeline conversion (win rate,
-  // deals won, open pipeline value) plus account-management quality (case
-  // resolution rate across their clients' cases).
-  const wonDeals = prospectList.filter((p) => p.stage === 'closed_won')
-  const lostDeals = prospectList.filter((p) => p.stage === 'closed_lost')
-  const closedDeals = wonDeals.length + lostDeals.length
-  const winRatePct = closedDeals > 0 ? Math.round((wonDeals.length / closedDeals) * 100) : null
-  const openPipelineValue = prospectList
-    .filter((p) => !['closed_won', 'closed_lost'].includes(p.stage))
-    .reduce((sum, p) => sum + (p.estimated_value ?? 0), 0)
-  const resolvedCases = cases.filter((c: Case) => ['resolved', 'closed'].includes(c.status))
-  const resolutionRatePct = cases.length > 0 ? Math.round((resolvedCases.length / cases.length) * 100) : null
+  const engagementList: Engagement[] = useMemo(() => engagements ?? [], [engagements])
 
-  // Last month's conversion — successful sales (deals won) closed in the
-  // previous calendar month, and the win rate among everything decided that month.
-  const now = new Date()
-  const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-  const closedLastMonth = prospectList.filter((p) => {
-    if (p.stage !== 'closed_won' && p.stage !== 'closed_lost') return false
-    const d = new Date(p.updated_at)
-    return d >= lastMonthStart && d < thisMonthStart
-  })
-  const wonLastMonth = closedLastMonth.filter((p) => p.stage === 'closed_won')
-  const lastMonthConversionPct = closedLastMonth.length > 0 ? Math.round((wonLastMonth.length / closedLastMonth.length) * 100) : null
+  const licenseRows = useMemo(() => {
+    return (licenses ?? [])
+      .filter((l: ProductLicense) => myClientIds.has(l.client_id))
+      .flatMap((l: ProductLicense) => [
+        { kind: 'License' as const, expires_at: l.license_expires_at, client_id: l.client_id, product_id: l.product_id },
+        { kind: 'SLA' as const, expires_at: l.sla_expires_at, client_id: l.client_id, product_id: l.product_id },
+      ])
+      .map((r) => ({ ...r, days: Math.floor((new Date(r.expires_at).getTime() - nowMs) / DAY_MS) }))
+      .sort((a, b) => a.days - b.days)
+  }, [licenses, myClientIds, nowMs])
+  const expiringSoon = licenseRows.filter((r) => r.days >= 0 && r.days <= EXPIRY_SOON_DAYS)
+  const expired = licenseRows.filter((r) => r.days < 0)
 
-  // Recent activity — synthesized from the AM's own cases, clients, and
-  // pipeline (all already scope-filtered by the data provider), so it never
-  // needs audit-log access the sales_executive role isn't granted.
-  const activityItems: ActivityItem[] = useMemo(() => {
-    const items: ActivityItem[] = []
+  const solutionsMap = Object.fromEntries((solutions ?? []).map((s: Solution) => [s.id, s.name]))
+  const queuingCases = useMemo(
+    () => (casesData?.items ?? []).filter((c: Case) => !c.assignee_id && ACTIVE_STATUSES.has(c.status)),
+    [casesData]
+  )
+  const closureRejectedCases = useMemo(
+    () => (casesData?.items ?? []).filter((c: Case) => !!c.closure_rejected),
+    [casesData]
+  )
 
-    for (const c of cases) {
-      const client = clientsMap[c.client_id]
-      const description = [c.reference_no, client?.company_name].filter(Boolean).join(' · ')
-      items.push({
-        id: `${c.id}-created`, icon: PlusCircle,
-        iconColor: 'text-blue-600 dark:text-blue-400', iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-        title: 'New case opened', description, timestamp: c.created_at, href: `/cases/${c.id}`,
-      })
-      const doneAt = c.closed_at ?? c.resolved_at
-      if (doneAt) {
-        items.push({
-          id: `${c.id}-resolved`, icon: CheckCircle2,
-          iconColor: 'text-emerald-600 dark:text-emerald-400', iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
-          title: c.status === 'closed' ? 'Case closed' : 'Case resolved', description, timestamp: doneAt, href: `/cases/${c.id}`,
-        })
-      }
-      if (c.is_escalated) {
-        items.push({
-          id: `${c.id}-escalated`, icon: AlertTriangle,
-          iconColor: 'text-red-600 dark:text-red-400', iconBg: 'bg-red-100 dark:bg-red-900/30',
-          title: 'Case escalated', description, timestamp: c.approval_escalated_at ?? c.created_at, href: `/cases/${c.id}`,
-        })
-      }
-    }
-
-    for (const cl of clientList) {
-      items.push({
-        id: `${cl.id}-added`, icon: Building2,
-        iconColor: 'text-cyan-600 dark:text-cyan-400', iconBg: 'bg-cyan-100 dark:bg-cyan-900/30',
-        title: 'New client onboarded', description: cl.company_name, timestamp: cl.created_at, href: `/clients/${cl.id}`,
-      })
-    }
-
-    for (const p of prospectList) {
-      items.push({
-        id: `${p.id}-added`, icon: Target,
-        iconColor: 'text-amber-600 dark:text-amber-400', iconBg: 'bg-amber-100 dark:bg-amber-900/30',
-        title: 'New prospect added', description: p.company_name, timestamp: p.created_at,
-      })
-      if (p.updated_at !== p.created_at) {
-        const won = p.stage === 'closed_won'
-        const lost = p.stage === 'closed_lost'
-        items.push({
-          id: `${p.id}-updated`,
-          icon: won ? Trophy : lost ? AlertTriangle : RefreshCcw,
-          iconColor: won ? 'text-emerald-600 dark:text-emerald-400' : lost ? 'text-red-600 dark:text-red-400' : 'text-violet-600 dark:text-violet-400',
-          iconBg: won ? 'bg-emerald-100 dark:bg-emerald-900/30' : lost ? 'bg-red-100 dark:bg-red-900/30' : 'bg-violet-100 dark:bg-violet-900/30',
-          title: won ? 'Deal won' : lost ? 'Deal lost' : 'Pipeline stage updated',
-          description: `${p.company_name} · ${STAGE_LABELS[p.stage]}`,
-          timestamp: p.updated_at,
-        })
-      }
-    }
-
-    return items
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-      .slice(0, 25)
-  }, [cases, clientList, prospectList, clientsMap])
+  // listFeedback isn't scoped server-side (only 'client' role is) — scope here.
+  const feedbackList: Feedback[] = useMemo(
+    () => (feedback ?? []).filter((f: Feedback) => myClientIds.has(f.client_id)),
+    [feedback, myClientIds]
+  )
+  const feedbackRatings = feedbackList.map((f) => f.rating).filter((r): r is number => r != null)
+  const avgFeedbackRating = feedbackRatings.length > 0
+    ? feedbackRatings.reduce((a, b) => a + b, 0) / feedbackRatings.length
+    : null
+  const recentFeedback = useMemo(
+    () => [...feedbackList].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 5),
+    [feedbackList]
+  )
 
   if (error) return <ErrorState onRetry={refetch} />
 
@@ -164,118 +121,185 @@ export default function AMDashboard() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Account Overview</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Your clients, cases, and pipeline at a glance</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Your clients, orders, and license health at a glance</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => router.push('/sales-executive')}>
-            <Briefcase className="h-4 w-4" />
-            Pipeline
-          </Button>
-          <Button onClick={() => router.push('/cases/new')}>
-            <PlusCircle className="h-4 w-4" />
-            New Case
-          </Button>
-        </div>
+        <Button variant="outline" onClick={() => router.push('/clients')}>
+          <Building2 className="h-4 w-4" />
+          View Clients
+        </Button>
       </div>
 
-      {/* KPI strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      {/* KPI strip — one card per sidebar section */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         <StatCard title="Total Clients" value={clientList.length} icon={Building2} loading={clientsLoading} />
-        <StatCard title="Open Cases" value={open.length} icon={Ticket} loading={casesLoading} />
-        <SLABreachWidget cases={cases} isLoading={casesLoading} onRefresh={() => refetch()} inline />
-        <CertificationCard level={myUser?.certification_level} years={myUser?.years_of_experience} />
+        <StatCard title="Active Projects" value={activeProjects.length} icon={FolderKanban} iconColor="text-blue-500" loading={projectsLoading} />
+        <StatCard title="Orders" value={engagementList.length} icon={Handshake} iconColor="text-violet-500" loading={engagementsLoading} />
+        <StatCard title="Queuing Cases" value={queuingCases.length} icon={Ticket} iconColor="text-sky-500" loading={casesLoading} />
+        <StatCard title="Closure Rejected" value={closureRejectedCases.length} icon={XCircle} iconColor="text-rose-500" loading={casesLoading} />
         <StatCard
-          title="Monthly Conversion"
-          value={lastMonthConversionPct !== null ? `${lastMonthConversionPct}%` : '—'}
-          subtitle={`${wonLastMonth.length} won last month`}
-          icon={TrendingUp}
+          title="Client Feedback"
+          value={avgFeedbackRating != null ? `${avgFeedbackRating.toFixed(1)} / 5` : '—'}
+          subtitle={`${feedbackList.length} review${feedbackList.length !== 1 ? 's' : ''}`}
+          icon={Star}
+          iconColor="text-yellow-500"
+          loading={feedbackLoading}
         />
+        <StatCard title="Expiring Soon" value={expiringSoon.length} subtitle={`within ${EXPIRY_SOON_DAYS} days`} icon={BadgeAlert} iconColor="text-amber-500" loading={licensesLoading} />
+        <StatCard title="Expired" value={expired.length} icon={AlertTriangle} iconColor="text-red-500" loading={licensesLoading} />
       </div>
 
-      {/* Main layout: content (left) + activity rail (right) */}
+      {/* Main layout: content (left) + license/SLA rail (right) */}
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_360px] gap-6 items-start">
         {/* Left column */}
         <div className="space-y-6 min-w-0">
-          {/* Recent cases */}
+          {/* Queuing cases — view only, no assign action for this role */}
           <div>
-            <h2 className="text-base font-semibold mb-3">Recent Cases</h2>
-            <div className="space-y-3">
-              {cases.length === 0 ? (
-                <EmptyState icon={Ticket} title="No cases" description="No cases for your clients yet." />
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base font-semibold">Queuing Cases</h2>
+              <span className="text-xs text-muted-foreground">{queuingCases.length} unassigned</span>
+            </div>
+            <div className="space-y-2.5">
+              {casesLoading ? (
+                <div className="space-y-2.5">{[...Array(3)].map((_, i) => <div key={i} className="h-16 rounded-xl bg-muted animate-pulse" />)}</div>
+              ) : queuingCases.length === 0 ? (
+                <EmptyState icon={Ticket} title="No queuing cases" description="Unassigned cases for your clients will appear here." />
               ) : (
-                cases.slice(0, 6).map((c: Case) => (
-                  <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} href={`/cases/${c.id}`} compact />
+                queuingCases.map((c: Case) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => router.push(`/cases/${c.id}`)}
+                    className="w-full flex items-center gap-3 rounded-xl border bg-card p-3.5 text-left hover:border-primary/40 hover:shadow-md transition-all"
+                  >
+                    <div className="rounded-xl bg-primary/10 p-2.5 shrink-0">
+                      <Ticket className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        <span className="font-mono">{c.reference_no}</span>
+                        {' · '}{clientsMap[c.client_id]?.company_name ?? '—'}
+                        {' · '}{solutionsMap[c.solution_id] ?? '—'}
+                      </p>
+                    </div>
+                  </button>
                 ))
               )}
             </div>
           </div>
+
+          {/* Closure rejected — client bounced the resolution back */}
+          {closureRejectedCases.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-base font-semibold">Closure Rejected</h2>
+                <span className="text-xs text-muted-foreground">{closureRejectedCases.length} case{closureRejectedCases.length !== 1 ? 's' : ''}</span>
+              </div>
+              <div className="space-y-2.5">
+                {closureRejectedCases.map((c: Case) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => router.push(`/cases/${c.id}`)}
+                    className="w-full flex items-center gap-3 rounded-xl border bg-card p-3.5 text-left hover:border-rose-400/50 hover:shadow-md transition-all"
+                  >
+                    <div className="rounded-xl bg-rose-500/10 p-2.5 shrink-0">
+                      <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        <span className="font-mono">{c.reference_no}</span>
+                        {' · '}{clientsMap[c.client_id]?.company_name ?? '—'}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
 
-        {/* Right column: performance summary + recent activity rail */}
+        {/* Right column: client feedback + license/SLA health */}
         <div className="space-y-6 xl:sticky xl:top-6">
-          {/* My Performance */}
-          <div className="rounded-xl border bg-card shadow-sm p-4 space-y-4">
-            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-muted-foreground" />
-              My Performance
-            </h3>
-
-            {/* Win rate */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Win Rate</span>
-                <span className={cn(
-                  'text-xs font-bold',
-                  winRatePct === null ? 'text-muted-foreground'
-                    : winRatePct >= 60 ? 'text-emerald-600' : winRatePct >= 30 ? 'text-amber-600' : 'text-red-600'
-                )}>
-                  {winRatePct !== null ? `${winRatePct}%` : '—'}
-                </span>
-              </div>
-              <div className="h-2 rounded-full bg-muted overflow-hidden">
-                <div
-                  className={cn(
-                    'h-full rounded-full transition-all',
-                    winRatePct === null ? 'bg-muted-foreground/30'
-                      : winRatePct >= 60 ? 'bg-emerald-500' : winRatePct >= 30 ? 'bg-amber-500' : 'bg-red-500'
-                  )}
-                  style={{ width: `${Math.min(winRatePct ?? 0, 100)}%` }}
-                />
-              </div>
-              <p className="text-[11px] text-muted-foreground">
-                {closedDeals > 0 ? `${wonDeals.length} won of ${closedDeals} closed deals` : 'No closed deals yet'}
-              </p>
+          {/* Client feedback — view only */}
+          <div className="rounded-xl border bg-card shadow-sm">
+            <div className="flex items-center justify-between px-4 py-3.5 border-b">
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <Star className="h-4 w-4 text-muted-foreground" />
+                Client Feedback
+              </h3>
             </div>
-
-            {/* Metric rows */}
-            <div className="divide-y">
-              <div className="flex items-center justify-between py-2.5">
-                <span className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Trophy className="h-3.5 w-3.5 text-amber-500" />
-                  Deals Won
-                </span>
-                <span className="text-sm font-semibold text-foreground tabular-nums">{wonDeals.length}</span>
-              </div>
-              <div className="flex items-center justify-between py-2.5">
-                <span className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Target className="h-3.5 w-3.5 text-violet-500" />
-                  Pipeline Value
-                </span>
-                <span className="text-sm font-semibold text-foreground tabular-nums">{fmtCurrency(openPipelineValue)}</span>
-              </div>
-              <div className="flex items-center justify-between py-2.5">
-                <span className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                  Case Resolution
-                </span>
-                <span className="text-sm font-semibold text-foreground tabular-nums">
-                  {resolutionRatePct !== null ? `${resolutionRatePct}%` : '—'}
-                </span>
-              </div>
+            <div className="p-3 space-y-1.5">
+              {feedbackLoading ? (
+                <div className="space-y-1.5 p-1">{[...Array(3)].map((_, i) => <div key={i} className="h-14 rounded-lg bg-muted animate-pulse" />)}</div>
+              ) : recentFeedback.length === 0 ? (
+                <p className="text-xs text-muted-foreground py-4 text-center">No feedback yet.</p>
+              ) : (
+                recentFeedback.map((f) => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => router.push(`/cases/${f.case_id}`)}
+                    className="w-full rounded-lg px-2 py-2 text-left hover:bg-accent/30 transition-colors"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-medium text-foreground truncate">
+                        {clientsMap[f.client_id]?.company_name ?? '—'}
+                      </span>
+                      <div className="flex gap-0.5 shrink-0">
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <Star key={n} className={cn('h-3 w-3', f.rating && n <= f.rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30')} />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground truncate mt-0.5">{f.feedback_text}</p>
+                  </button>
+                ))
+              )}
             </div>
           </div>
 
-          <RecentActivity items={activityItems} isLoading={casesLoading || clientsLoading} height={560} />
+          {/* License & SLA health */}
+          <div className="rounded-xl border bg-card shadow-sm">
+            <div className="flex items-center justify-between px-4 py-3.5 border-b">
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <ShieldX className="h-4 w-4 text-muted-foreground" />
+                License &amp; SLA Health
+              </h3>
+              <Button variant="ghost" size="sm" className="h-6 text-xs gap-1 text-primary" onClick={() => router.push('/license-sla')}>
+                View all
+              </Button>
+            </div>
+            <div className="p-3 space-y-1.5">
+              {licensesLoading ? (
+                <div className="space-y-1.5 p-1">{[...Array(3)].map((_, i) => <div key={i} className="h-10 rounded-lg bg-muted animate-pulse" />)}</div>
+              ) : expiringSoon.length === 0 && expired.length === 0 ? (
+                <p className="flex items-center gap-2 text-xs text-muted-foreground py-4 justify-center">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" /> All licenses healthy
+                </p>
+              ) : (
+                [...expired, ...expiringSoon].slice(0, 5).map((r, i) => (
+                  <div key={i} className="flex items-center gap-2.5 rounded-lg px-2 py-2 hover:bg-accent/30 transition-colors">
+                    <span className={cn(
+                      'text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0',
+                      r.days < 0 ? 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400'
+                    )}>
+                      {r.kind}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-foreground truncate">{productsMap[r.product_id] ?? r.product_id}</p>
+                      <p className="text-[11px] text-muted-foreground truncate">{clientsMap[r.client_id]?.company_name ?? '—'}</p>
+                    </div>
+                    <span className={cn('text-[11px] font-semibold shrink-0', r.days < 0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400')}>
+                      {r.days < 0 ? `${-r.days}d ago` : `${r.days}d left`}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

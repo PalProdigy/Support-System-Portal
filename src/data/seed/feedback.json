@@ -7,7 +7,7 @@
     "rating": 5,
     "ml_reviewed": true,
     "th_reviewed": false,
-    "created_at": "2024-06-10T11:00:00Z"
+    "hours_ago": 900
   },
   {
     "id": "fb2",
@@ -17,7 +17,7 @@
     "rating": 4,
     "ml_reviewed": false,
     "th_reviewed": false,
-    "created_at": "2024-06-15T10:00:00Z"
+    "hours_ago": 550
   },
   {
     "id": "fb3",
@@ -27,7 +27,7 @@
     "rating": 3,
     "ml_reviewed": false,
     "th_reviewed": false,
-    "created_at": "2024-06-21T09:00:00Z"
+    "hours_ago": 450
   },
   {
     "id": "fb4",
@@ -37,7 +37,7 @@
     "rating": 5,
     "ml_reviewed": true,
     "th_reviewed": true,
-    "created_at": "2024-06-12T14:30:00Z"
+    "hours_ago": 43
   },
   {
     "id": "fb5",
@@ -47,17 +47,17 @@
     "rating": 4,
     "ml_reviewed": true,
     "th_reviewed": false,
-    "created_at": "2024-06-18T09:15:00Z"
+    "hours_ago": 72
   },
   {
     "id": "fb6",
     "case_id": "case10",
     "client_id": "c1",
-    "feedback_text": "API rate-limit problem on the ERP connector was resolved and shipment confirmations are flowing on time again. Appreciated the clear explanation of the root cause.",
-    "rating": 5,
+    "feedback_text": "The rate-limit errors dropped off for about a day but they're already creeping back during peak hours. This doesn't feel fully resolved yet — please have someone take another look before we close this out.",
+    "rating": 2,
     "ml_reviewed": false,
     "th_reviewed": false,
-    "created_at": "2024-06-24T16:45:00Z"
+    "hours_ago": 122
   },
   {
     "id": "fb7",
@@ -67,6 +67,16 @@
     "rating": 3,
     "ml_reviewed": false,
     "th_reviewed": false,
-    "created_at": "2024-06-27T08:20:00Z"
+    "hours_ago": 310
+  },
+  {
+    "id": "fb8",
+    "case_id": "case23",
+    "client_id": "c2",
+    "feedback_text": "Dashboard loads noticeably faster now even with a full quarter selected. Nasrin explained the indexing change clearly. Happy with the fix.",
+    "rating": 5,
+    "ml_reviewed": false,
+    "th_reviewed": false,
+    "hours_ago": 185
   }
 ]

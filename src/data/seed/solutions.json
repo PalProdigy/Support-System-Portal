@@ -6,7 +6,10 @@
     "details": "The ERP Integration Suite provides a comprehensive set of APIs and middleware connectors that allow seamless data exchange between your existing ERP system (SAP, Oracle, Microsoft Dynamics) and third-party platforms including e-commerce, logistics, and CRM. Features include real-time sync, error recovery, audit trails, and a no-code mapping interface. Supports REST, SOAP, and EDI protocols. SLA-backed uptime of 99.9%.",
     "category": "Integration",
     "is_active": true,
-    "created_at": "2024-01-01T00:00:00Z"
+    "created_at": "2024-01-01T00:00:00Z",
+    "author_id": "u1",
+    "author_name": "Arif Rahman",
+    "author_role": "technical_head"
   },
   {
     "id": "s2",
@@ -24,7 +27,10 @@
     "details": "CRM Pro is a sales-focused CRM designed for SMEs. It includes lead management, contact management, pipeline tracking, email integration (Gmail/Outlook), automated follow-up sequences, sales forecasting, and a mobile app. Integrates with WhatsApp Business API for customer communication. Supports unlimited contacts on the Enterprise tier. Custom fields, workflows, and reports are available.",
     "category": "CRM",
     "is_active": true,
-    "created_at": "2024-01-01T00:00:00Z"
+    "created_at": "2024-01-01T00:00:00Z",
+    "author_id": "u2",
+    "author_name": "Sadia Islam",
+    "author_role": "team_lead"
   },
   {
     "id": "s4",

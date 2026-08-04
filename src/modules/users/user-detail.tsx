@@ -17,17 +17,18 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+
 import { ROLE_LABELS } from '@/lib/rbac'
 import { cn, formatDateTime, formatDuration } from '@/lib/utils'
 import {
   ArrowLeft, Mail, Calendar, Ticket, CheckCircle2,
   AlertTriangle, Clock, Star, TrendingUp, ArrowRightLeft,
-  ExternalLink, MessageSquare, Eye, Award, Users, Trophy,
+  ExternalLink, MessageSquare, Eye, Award, Users, Trophy, BadgeCheck,
+  LayoutGrid, FileText, Download, Newspaper, Lightbulb, BookOpen, Briefcase, Medal, Pencil,
 } from 'lucide-react'
-import type { Case, Feedback, AuditLog, CertificationLevel } from '@/types'
-import { SupportEngineerProfile } from '@/modules/profile/support-engineer-profile'
-import { TeamLeadProfile } from '@/modules/profile/team-lead-profile'
+import type { Case, Feedback, AuditLog, CertificationLevel, SolutionArticle, KBArticle } from '@/types'
+import { InfoCard } from '@/modules/profile/shared'
+import { EditProfileDialog } from '@/modules/profile/edit-profile-dialog'
 
 const CERT_COLORS: Record<CertificationLevel, string> = {
   L1: 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-600',
@@ -42,7 +43,7 @@ export function UserDetail({ id }: { id: string }) {
   const dp = getDataProvider()
   const router = useRouter()
   const scope = { userId: session.userId, role: session.role }
-  const [showProfile, setShowProfile] = useState(false)
+  const [showEdit, setShowEdit] = useState(false)
 
   const { data: users, isLoading: loadingUser } = useQuery({
     queryKey: ['users'],
@@ -95,6 +96,18 @@ export function UserDetail({ id }: { id: string }) {
   const { data: auditLogs } = useQuery({
     queryKey: ['audit-logs-cases'],
     queryFn: () => dp.listAuditLogs({ entity_type: 'case', limit: 2000 }),
+    enabled: isEngineer,
+  })
+
+  const { data: solutionArticles } = useQuery({
+    queryKey: ['solution-articles'],
+    queryFn: () => dp.listSolutionArticles({ status: 'published' }),
+    enabled: isEngineer,
+  })
+
+  const { data: kbArticlesAll } = useQuery({
+    queryKey: ['kb', 'index', session.userId, ''],
+    queryFn: () => dp.listKBArticles({}, scope),
     enabled: isEngineer,
   })
 
@@ -156,6 +169,16 @@ export function UserDetail({ id }: { id: string }) {
   const casesWithFeedback = useMemo(
     () => cases.filter((c) => feedbackMap[c.id]),
     [cases, feedbackMap]
+  )
+
+  // Articles authored by this user — solution articles + published KB articles.
+  const myArticles: SolutionArticle[] = useMemo(
+    () => (solutionArticles ?? []).filter((a) => a.created_by === id),
+    [solutionArticles, id]
+  )
+  const myKbArticles: KBArticle[] = useMemo(
+    () => (kbArticlesAll ?? []).filter((a) => a.author_id === id && a.status === 'published'),
+    [kbArticlesAll, id]
   )
 
   // Monthly resolution data for bar chart (last 6 months)
@@ -274,16 +297,15 @@ export function UserDetail({ id }: { id: string }) {
       </Button>
 
       {/* Profile header */}
-      <div className="rounded-xl border bg-card p-6 flex items-start gap-5 flex-wrap">
-        <UserAvatar name={user.name} avatarUrl={user.avatar} size="lg" />
+      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-start gap-5 flex-wrap">
+        <UserAvatar name={user.name} avatarUrl={user.avatar} size="lg" border shadow />
         <div className="flex-1 min-w-0 space-y-2">
           <div className="flex items-start justify-between gap-3 flex-wrap">
             <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
             <div className="flex items-center gap-2 shrink-0">
-
-              {(user.role === 'support_engineer' || user.role === 'team_lead') && (
-                <Button variant="outline" size="sm" onClick={() => setShowProfile(true)}>
-                  <Eye className="h-3.5 w-3.5" /> View
+              {session.userId === user.id && (
+                <Button variant="outline" size="sm" onClick={() => setShowEdit(true)}>
+                  <Pencil className="h-3.5 w-3.5" /> Edit Profile
                 </Button>
               )}
             </div>
@@ -327,312 +349,182 @@ export function UserDetail({ id }: { id: string }) {
       )}
 
       {isEngineer && (
-        <>
-          {/* KPI strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <KpiCard icon={<Ticket className="h-5 w-5 text-blue-500" />} label="Total Engaged" value={String(cases.length)} />
-            <KpiCard icon={<CheckCircle2 className="h-5 w-5 text-emerald-500" />} label="Total Solved" value={String(resolvedCases.length)} />
-            <KpiCard icon={<AlertTriangle className="h-5 w-5 text-red-500" />} label="Escalated" value={String(escalatedCases.length)} />
-            <KpiCard icon={<ArrowRightLeft className="h-5 w-5 text-violet-500" />} label="Shifted Away" value={String(shiftedCaseIds.size)} />
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <KpiCard icon={<AlertTriangle className="h-5 w-5 text-amber-500" />} label="SLA Breached" value={String(slaBreachedCases.length)} />
-            <KpiCard icon={<Ticket className="h-5 w-5 text-slate-400" />} label="Open Now" value={String(openCases.length)} />
-            <KpiCard
-              icon={<Clock className="h-5 w-5 text-blue-400" />}
-              label="Avg Resolution"
-              value={metrics?.avg_resolution_hours != null
-                ? formatDuration(metrics.avg_resolution_hours * 3_600_000)
-                : '—'}
-            />
-            <KpiCard
-              icon={<Star className="h-5 w-5 text-yellow-500" />}
-              label="Satisfaction"
-              value={metrics?.satisfaction_score != null
-                ? `${metrics.satisfaction_score.toFixed(1)} / 5`
-                : '—'}
-              sub={metrics?.total_feedback_count ? `${metrics.total_feedback_count} reviews` : undefined}
-            />
-          </div>
+        <Tabs defaultValue="overview">
+          <TabsList className="h-auto flex-wrap gap-1 p-1">
+            <TabsTrigger value="overview" className="gap-1.5"><LayoutGrid className="h-3.5 w-3.5" /> Overview</TabsTrigger>
+            <TabsTrigger value="certification" className="gap-1.5"><Award className="h-3.5 w-3.5" /> Certification</TabsTrigger>
+            <TabsTrigger value="cases" className="gap-1.5"><Ticket className="h-3.5 w-3.5" /> Cases ({cases.length})</TabsTrigger>
+            <TabsTrigger value="articles" className="gap-1.5"><Newspaper className="h-3.5 w-3.5" /> Articles ({myArticles.length + myKbArticles.length})</TabsTrigger>
+          </TabsList>
 
-          {/* SLA compliance bar */}
-          {metrics && (
-            <div className="rounded-xl border bg-card p-4 space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-emerald-500" />
-                  <span className="text-sm font-semibold">SLA Compliance</span>
-                </div>
-                <span className={`text-sm font-bold ${
-                  metrics.sla_compliance_pct >= 90 ? 'text-emerald-600'
-                  : metrics.sla_compliance_pct >= 70 ? 'text-amber-600'
-                  : 'text-red-600'}`}>
-                  {metrics.sla_compliance_pct.toFixed(0)}%
-                </span>
-              </div>
-              <div className="h-3 rounded-full bg-muted overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all ${
-                    metrics.sla_compliance_pct >= 90 ? 'bg-emerald-500'
-                    : metrics.sla_compliance_pct >= 70 ? 'bg-amber-500'
-                    : 'bg-red-500'}`}
-                  style={{ width: `${Math.min(metrics.sla_compliance_pct, 100)}%` }}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {metrics.sla_compliance_pct >= 90
-                  ? 'Excellent — consistently within SLA'
-                  : metrics.sla_compliance_pct >= 70
-                    ? 'Good — occasional SLA misses'
-                    : 'Needs improvement — frequent SLA breaches'}
-              </p>
+          {/* ── Overview tab ──────────────────────────────────────────────── */}
+          <TabsContent value="overview" className="mt-4 space-y-6">
+            {/* KPI strip */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              <KpiCard icon={<Ticket className="h-5 w-5" />} color="blue" label="Total Engaged" value={String(cases.length)} />
+              <KpiCard icon={<CheckCircle2 className="h-5 w-5" />} color="emerald" label="Total Solved" value={String(resolvedCases.length)} />
+              <KpiCard icon={<AlertTriangle className="h-5 w-5" />} color="red" label="Escalated" value={String(escalatedCases.length)} />
+              <KpiCard icon={<ArrowRightLeft className="h-5 w-5" />} color="violet" label="Shifted Away" value={String(shiftedCaseIds.size)} />
+              <KpiCard icon={<Ticket className="h-5 w-5" />} color="slate" label="Open Now" value={String(openCases.length)} />
+              <KpiCard
+                icon={<Star className="h-5 w-5" />}
+                color="yellow"
+                label="Satisfaction"
+                value={metrics?.satisfaction_score != null
+                  ? `${metrics.satisfaction_score.toFixed(1)} / 5`
+                  : '—'}
+                sub={metrics?.total_feedback_count ? `${metrics.total_feedback_count} reviews` : undefined}
+              />
+              <KpiCard
+                icon={<BadgeCheck className="h-5 w-5" />}
+                color="primary"
+                label="Certification"
+                value={user.certification_level ?? '—'}
+                sub={user.certifications?.length ? `${user.certifications.length} certificate${user.certifications.length !== 1 ? 's' : ''}` : undefined}
+              />
             </div>
-          )}
 
-          {/* Charts */}
-          {cases.length > 0 && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Pie: case distribution */}
-              <div className="rounded-xl border bg-card p-4 space-y-3">
-                <p className="text-sm font-semibold">Case Distribution</p>
-                {pieData.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={220}>
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={55}
-                        outerRadius={85}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={index} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip contentStyle={{ fontSize: 12 }} />
-                      <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p className="text-sm text-muted-foreground text-center py-8">No case data</p>
-                )}
-              </div>
-
-              {/* Bar: monthly resolutions */}
-              <div className="rounded-xl border bg-card p-4 space-y-3">
-                <p className="text-sm font-semibold">Monthly Activity (last 6 months)</p>
-                <ResponsiveContainer width="100%" height={220}>
-                  <BarChart data={monthlyData} barSize={14} barGap={4}>
-                    <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-                    <YAxis allowDecimals={false} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
-                    <Tooltip contentStyle={{ fontSize: 12 }} />
-                    <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-                    <Bar dataKey="Resolved" fill="#10b981" radius={[3, 3, 0, 0]} />
-                    <Bar dataKey="Escalated" fill="#ef4444" radius={[3, 3, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          )}
-
-          {/* Team-wide rollup — team lead's own cases + every case owned by their team */}
-          {user.role === 'team_lead' && ledTeam && (
-            <div className="space-y-4 pt-2">
-              <h2 className="text-base font-semibold flex items-center gap-2">
-                <Users className="h-4 w-4 text-muted-foreground" />
-                Team Performance — {ledTeam.name}
-              </h2>
-
-              {/* Success rate (line bar) across every case he and his team handled */}
-              {teamSuccessRatePct != null && (
-                <div className="rounded-xl border bg-card p-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-indigo-500" />
-                      <span className="text-sm font-semibold">Team Success Rate</span>
-                    </div>
-                    <span className={`text-sm font-bold ${
-                      teamSuccessRatePct >= 90 ? 'text-emerald-600'
-                      : teamSuccessRatePct >= 70 ? 'text-amber-600'
-                      : 'text-red-600'}`}>
-                      {teamSuccessRatePct.toFixed(0)}%
-                    </span>
-                  </div>
-                  <div className="h-3 rounded-full bg-muted overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${
-                        teamSuccessRatePct >= 90 ? 'bg-emerald-500'
-                        : teamSuccessRatePct >= 70 ? 'bg-amber-500'
-                        : 'bg-red-500'}`}
-                      style={{ width: `${Math.min(teamSuccessRatePct, 100)}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {combinedResolvedCases.length} resolved out of {combinedCases.length} case{combinedCases.length !== 1 ? 's' : ''} handled by him and his team
-                  </p>
-                </div>
-              )}
-
-              {combinedCases.length > 0 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Pie: team case distribution */}
-                  <div className="rounded-xl border bg-card p-4 space-y-3">
-                    <p className="text-sm font-semibold">Case Distribution</p>
-                    {teamPieData.length > 0 ? (
-                      <ResponsiveContainer width="100%" height={220}>
-                        <PieChart>
-                          <Pie
-                            data={teamPieData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={55}
-                            outerRadius={85}
-                            paddingAngle={3}
-                            dataKey="value"
-                          >
-                            {teamPieData.map((entry, index) => (
-                              <Cell key={index} fill={entry.color} />
-                            ))}
-                          </Pie>
-                          <Tooltip contentStyle={{ fontSize: 12 }} />
-                          <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    ) : (
-                      <p className="text-sm text-muted-foreground text-center py-8">No case data</p>
-                    )}
-                  </div>
-
-                  {/* Bar: monthly team activity */}
-                  <div className="rounded-xl border bg-card p-4 space-y-3">
-                    <p className="text-sm font-semibold">Monthly Case Activity (last 6 months)</p>
+            {/* Charts */}
+            {cases.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Pie: case distribution */}
+                <div className="rounded-xl border bg-card p-4 space-y-3">
+                  <p className="text-sm font-semibold flex items-center gap-1.5"><Ticket className="h-4 w-4 text-muted-foreground" /> Case Distribution</p>
+                  {pieData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={220}>
-                      <BarChart data={teamMonthlyData} barSize={14} barGap={4}>
-                        <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-                        <YAxis allowDecimals={false} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
+                      <PieChart>
+                        <Pie
+                          data={pieData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={55}
+                          outerRadius={85}
+                          paddingAngle={3}
+                          dataKey="value"
+                        >
+                          {pieData.map((entry, index) => (
+                            <Cell key={index} fill={entry.color} />
+                          ))}
+                        </Pie>
                         <Tooltip contentStyle={{ fontSize: 12 }} />
                         <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-                        <Bar dataKey="Resolved" fill="#10b981" radius={[3, 3, 0, 0]} />
-                        <Bar dataKey="Escalated" fill="#ef4444" radius={[3, 3, 0, 0]} />
-                      </BarChart>
+                      </PieChart>
                     </ResponsiveContainer>
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center py-8">No case data</p>
+                  )}
+                </div>
+
+                {/* Bar: monthly resolutions */}
+                <div className="rounded-xl border bg-card p-4 space-y-3">
+                  <p className="text-sm font-semibold flex items-center gap-1.5"><TrendingUp className="h-4 w-4 text-muted-foreground" /> Monthly Activity (last 6 months)</p>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <BarChart data={monthlyData} barSize={14} barGap={4}>
+                      <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                      <YAxis allowDecimals={false} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
+                      <Tooltip contentStyle={{ fontSize: 12 }} />
+                      <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+                      <Bar dataKey="Resolved" fill="#10b981" radius={[3, 3, 0, 0]} />
+                      <Bar dataKey="Escalated" fill="#ef4444" radius={[3, 3, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
+
+            {/* Team-wide rollup — team lead's own cases + every case owned by their team */}
+            {user.role === 'team_lead' && ledTeam && (
+              <div className="space-y-4 pt-2">
+                <h2 className="text-base font-semibold flex items-center gap-2">
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                  Team Performance — {ledTeam.name}
+                </h2>
+
+                {/* Success rate (line bar) across every case he and his team handled */}
+                {teamSuccessRatePct != null && (
+                  <div className="rounded-xl border bg-card p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-indigo-500" />
+                        <span className="text-sm font-semibold">Team Success Rate</span>
+                      </div>
+                      <span className={`text-sm font-bold ${
+                        teamSuccessRatePct >= 90 ? 'text-emerald-600'
+                        : teamSuccessRatePct >= 70 ? 'text-amber-600'
+                        : 'text-red-600'}`}>
+                        {teamSuccessRatePct.toFixed(0)}%
+                      </span>
+                    </div>
+                    <div className="h-3 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          teamSuccessRatePct >= 90 ? 'bg-emerald-500'
+                          : teamSuccessRatePct >= 70 ? 'bg-amber-500'
+                          : 'bg-red-500'}`}
+                        style={{ width: `${Math.min(teamSuccessRatePct, 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {combinedResolvedCases.length} resolved out of {combinedCases.length} case{combinedCases.length !== 1 ? 's' : ''} handled by him and his team
+                    </p>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                )}
 
-          {/* Tabbed: Feedback + Cases */}
-          <Tabs defaultValue="cases">
-            <TabsList>
-              <TabsTrigger value="cases" className="gap-1.5">
-                <Ticket className="h-3.5 w-3.5" />
-                All Assigned Cases ({cases.length})
-              </TabsTrigger>
-              <TabsTrigger value="feedback" className="gap-1.5">
-                <MessageSquare className="h-3.5 w-3.5" />
-                Client Feedback ({casesWithFeedback.length})
-              </TabsTrigger>
-            </TabsList>
+                {combinedCases.length > 0 && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Pie: team case distribution */}
+                    <div className="rounded-xl border bg-card p-4 space-y-3">
+                      <p className="text-sm font-semibold flex items-center gap-1.5"><Ticket className="h-4 w-4 text-muted-foreground" /> Case Distribution</p>
+                      {teamPieData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height={220}>
+                          <PieChart>
+                            <Pie
+                              data={teamPieData}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={55}
+                              outerRadius={85}
+                              paddingAngle={3}
+                              dataKey="value"
+                            >
+                              {teamPieData.map((entry, index) => (
+                                <Cell key={index} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip contentStyle={{ fontSize: 12 }} />
+                            <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      ) : (
+                        <p className="text-sm text-muted-foreground text-center py-8">No case data</p>
+                      )}
+                    </div>
 
-            {/* ── Cases tab ─────────────────────────────────────────────────── */}
-            <TabsContent value="cases" className="mt-4">
-              {cases.length === 0 ? (
-                <div className="rounded-xl border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
-                  No cases have been assigned to this engineer yet.
-                </div>
-              ) : (
-                <div className="rounded-xl border overflow-hidden">
-                  <table className="w-full text-sm">
-                    <thead className="bg-muted/50 border-b">
-                      <tr>
-                        <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Ref</th>
-                        <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Title</th>
-                        <th className="px-4 py-2.5 text-xs font-medium text-muted-foreground hidden md:table-cell">Priority</th>
-                        <th className="px-4 py-2.5 text-xs font-medium text-muted-foreground">Status</th>
-                        <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground hidden lg:table-cell">Client Feedback</th>
-                        <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground hidden lg:table-cell">Resolution</th>
-                        <th className="px-4 py-2.5" />
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      {cases.map((c) => {
-                        const resTime = c.resolved_at
-                          ? new Date(c.resolved_at).getTime() - new Date(c.created_at).getTime()
-                          : null
-                        const isSLABreached = c.sla_due_at &&
-                          (c.resolved_at
-                            ? new Date(c.resolved_at).getTime() > new Date(c.sla_due_at).getTime()
-                            : Date.now() > new Date(c.sla_due_at).getTime())
-                        const fb = feedbackMap[c.id]
-                        return (
-                          <tr
-                            key={c.id}
-                            className="hover:bg-muted/30 transition-colors cursor-pointer align-top"
-                            onClick={() => router.push(`/users/${id}/cases/${c.id}`)}
-                          >
-                            <td className="px-4 py-3">
-                              <span className="text-[10px] font-mono text-muted-foreground">{c.reference_no}</span>
-                            </td>
-                            <td className="px-4 py-3 max-w-[200px]">
-                              <p className="truncate text-sm font-medium text-foreground">{c.title}</p>
-                              {isSLABreached && (
-                                <span className="text-[10px] text-amber-600 font-medium">SLA Breached</span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 hidden md:table-cell">
-                              <PriorityChip priority={c.priority} />
-                            </td>
-                            <td className="px-4 py-3">
-                              <StatusBadge status={c.status} />
-                            </td>
-                            <td className="px-4 py-3 hidden lg:table-cell max-w-[220px]">
-                              {fb ? (
-                                <div className="space-y-1">
-                                  {fb.rating != null && (
-                                    <div className="flex items-center gap-1">
-                                      {[0,1,2,3,4].map((i) => (
-                                        <Star
-                                          key={i}
-                                          className={`h-3 w-3 ${i < fb.rating! ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/25'}`}
-                                        />
-                                      ))}
-                                      <span className="text-[10px] font-semibold text-foreground ml-0.5">{fb.rating}/5</span>
-                                    </div>
-                                  )}
-                                  {fb.feedback_text ? (
-                                    <p className="text-[11px] text-muted-foreground italic leading-snug line-clamp-2">
-                                      &ldquo;{fb.feedback_text}&rdquo;
-                                    </p>
-                                  ) : (
-                                    <p className="text-[11px] text-muted-foreground/50 italic">No comment</p>
-                                  )}
-                                </div>
-                              ) : (
-                                <span className="text-[11px] text-muted-foreground/40 italic">No feedback</span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-right text-xs text-muted-foreground hidden lg:table-cell">
-                              {resTime != null
-                                ? <span className="text-emerald-600">{formatDuration(resTime)}</span>
-                                : <span className="text-muted-foreground/50">—</span>}
-                            </td>
-                            <td className="px-4 py-3">
-                              <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-                            </td>
-                          </tr>
-                        )
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </TabsContent>
+                    {/* Bar: monthly team activity */}
+                    <div className="rounded-xl border bg-card p-4 space-y-3">
+                      <p className="text-sm font-semibold flex items-center gap-1.5"><TrendingUp className="h-4 w-4 text-muted-foreground" /> Monthly Case Activity (last 6 months)</p>
+                      <ResponsiveContainer width="100%" height={220}>
+                        <BarChart data={teamMonthlyData} barSize={14} barGap={4}>
+                          <XAxis dataKey="name" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                          <YAxis allowDecimals={false} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
+                          <Tooltip contentStyle={{ fontSize: 12 }} />
+                          <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+                          <Bar dataKey="Resolved" fill="#10b981" radius={[3, 3, 0, 0]} />
+                          <Bar dataKey="Escalated" fill="#ef4444" radius={[3, 3, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
-            {/* ── Feedback tab ───────────────────────────────────────────────── */}
-            <TabsContent value="feedback" className="mt-4">
+            {/* Client feedback */}
+            <div className="space-y-3 pt-2">
+              <h2 className="text-base font-semibold flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                Client Feedback <span className="text-sm font-normal text-muted-foreground">({casesWithFeedback.length})</span>
+              </h2>
               {casesWithFeedback.length === 0 ? (
                 <div className="rounded-xl border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
                   No client feedback received yet.
@@ -643,7 +535,7 @@ export function UserDetail({ id }: { id: string }) {
                     const fb = feedbackMap[c.id]!
                     const clientName = clientsMap[c.client_id]?.company_name
                     return (
-                      <div key={c.id} className="rounded-xl border bg-card p-4 space-y-3">
+                      <div key={c.id} className="rounded-xl border bg-card p-4 space-y-3 transition-all hover:border-primary/40 hover:shadow-md">
                         <div className="flex items-start justify-between gap-2 flex-wrap">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-[10px] font-mono text-muted-foreground">{c.reference_no}</span>
@@ -704,36 +596,277 @@ export function UserDetail({ id }: { id: string }) {
                   })}
                 </div>
               )}
-            </TabsContent>
-          </Tabs>
-        </>
+            </div>
+          </TabsContent>
+
+          {/* ── Certification tab ─────────────────────────────────────────── */}
+          <TabsContent value="certification" className="mt-4 space-y-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <KpiCard
+                icon={<Award className="h-5 w-5" />}
+                color="primary"
+                label="Certification Level"
+                value={user.certification_level ?? '—'}
+              />
+              <KpiCard
+                icon={<Briefcase className="h-5 w-5" />}
+                color="sky"
+                label="Experience"
+                value={user.years_of_experience != null ? `${user.years_of_experience} yr` : '—'}
+              />
+              <KpiCard
+                icon={<FileText className="h-5 w-5" />}
+                color="violet"
+                label="Documents"
+                value={String(user.certifications?.length ?? 0)}
+              />
+            </div>
+
+            <InfoCard title="Certifications" icon={<Award className="h-3.5 w-3.5" />}>
+              {user.certifications && user.certifications.length > 0 ? (
+                <div className="space-y-2.5">
+                  {user.certifications.map((c) => (
+                    <div key={c.id} className="rounded-lg border p-3 flex items-start gap-3 transition-all hover:border-primary/40 hover:shadow-sm">
+                      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-500">
+                        <Award className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-foreground">{c.title}</p>
+                        {c.description && <p className="text-xs text-muted-foreground mt-0.5">{c.description}</p>}
+                        {c.file_name && (
+                          <div className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <FileText className="h-3.5 w-3.5" /> {c.file_name}
+                          </div>
+                        )}
+                      </div>
+                      {c.file_url && (
+                        <a href={c.file_url} download={c.file_name} className="text-muted-foreground hover:text-primary p-1 shrink-0" title="Download">
+                          <Download className="h-4 w-4" />
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : <p className="text-sm text-muted-foreground">No certifications added yet.</p>}
+            </InfoCard>
+
+            <InfoCard title="Achievements" icon={<Trophy className="h-3.5 w-3.5" />}>
+              {user.achievements && user.achievements.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {user.achievements.map((a) => (
+                    <div key={a.id} className="flex items-start gap-3 rounded-lg border bg-muted/20 p-3">
+                      <Medal className="h-5 w-5 shrink-0 text-violet-500" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground leading-tight">{a.title}</p>
+                        {a.description && <p className="text-[11px] text-muted-foreground mt-0.5">{a.description}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : <p className="text-sm text-muted-foreground">No achievements recorded yet.</p>}
+            </InfoCard>
+          </TabsContent>
+
+          {/* ── Cases tab ─────────────────────────────────────────────────── */}
+          <TabsContent value="cases" className="mt-4">
+            {cases.length === 0 ? (
+              <div className="rounded-xl border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+                No cases have been assigned to this engineer yet.
+              </div>
+            ) : (
+              <div className="rounded-xl border overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/50 border-b">
+                    <tr>
+                      <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Ref</th>
+                      <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Title</th>
+                      <th className="px-4 py-2.5 text-xs font-medium text-muted-foreground hidden md:table-cell">Priority</th>
+                      <th className="px-4 py-2.5 text-xs font-medium text-muted-foreground">Status</th>
+                      <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground hidden lg:table-cell">Client Feedback</th>
+                      <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground hidden lg:table-cell">Resolution</th>
+                      <th className="px-4 py-2.5" />
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {cases.map((c) => {
+                      const resTime = c.resolved_at
+                        ? new Date(c.resolved_at).getTime() - new Date(c.created_at).getTime()
+                        : null
+                      const isSLABreached = c.sla_due_at &&
+                        (c.resolved_at
+                          ? new Date(c.resolved_at).getTime() > new Date(c.sla_due_at).getTime()
+                          : Date.now() > new Date(c.sla_due_at).getTime())
+                      const fb = feedbackMap[c.id]
+                      return (
+                        <tr
+                          key={c.id}
+                          className="hover:bg-muted/30 transition-colors cursor-pointer align-top"
+                          onClick={() => router.push(`/users/${id}/cases/${c.id}`)}
+                        >
+                          <td className="px-4 py-3">
+                            <span className="text-[10px] font-mono text-muted-foreground">{c.reference_no}</span>
+                          </td>
+                          <td className="px-4 py-3 max-w-[200px]">
+                            <p className="truncate text-sm font-medium text-foreground">{c.title}</p>
+                            {isSLABreached && (
+                              <span className="text-[10px] text-amber-600 font-medium">SLA Breached</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 hidden md:table-cell">
+                            <PriorityChip priority={c.priority} />
+                          </td>
+                          <td className="px-4 py-3">
+                            <StatusBadge status={c.status} />
+                          </td>
+                          <td className="px-4 py-3 hidden lg:table-cell max-w-[220px]">
+                            {fb ? (
+                              <div className="space-y-1">
+                                {fb.rating != null && (
+                                  <div className="flex items-center gap-1">
+                                    {[0,1,2,3,4].map((i) => (
+                                      <Star
+                                        key={i}
+                                        className={`h-3 w-3 ${i < fb.rating! ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/25'}`}
+                                      />
+                                    ))}
+                                    <span className="text-[10px] font-semibold text-foreground ml-0.5">{fb.rating}/5</span>
+                                  </div>
+                                )}
+                                {fb.feedback_text ? (
+                                  <p className="text-[11px] text-muted-foreground italic leading-snug line-clamp-2">
+                                    &ldquo;{fb.feedback_text}&rdquo;
+                                  </p>
+                                ) : (
+                                  <p className="text-[11px] text-muted-foreground/50 italic">No comment</p>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-[11px] text-muted-foreground/40 italic">No feedback</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-right text-xs text-muted-foreground hidden lg:table-cell">
+                            {resTime != null
+                              ? <span className="text-emerald-600">{formatDuration(resTime)}</span>
+                              : <span className="text-muted-foreground/50">—</span>}
+                          </td>
+                          <td className="px-4 py-3">
+                            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* ── Articles tab ──────────────────────────────────────────────── */}
+          <TabsContent value="articles" className="mt-4">
+            <Tabs defaultValue="solution-articles">
+              <TabsList className="h-auto flex-wrap gap-1 p-1">
+                <TabsTrigger value="solution-articles" className="gap-1.5">
+                  <Lightbulb className="h-3.5 w-3.5" /> Solution Articles ({myArticles.length})
+                </TabsTrigger>
+                <TabsTrigger value="kb-articles" className="gap-1.5">
+                  <BookOpen className="h-3.5 w-3.5" /> Knowledge Base Articles ({myKbArticles.length})
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="solution-articles" className="mt-4">
+                {myArticles.length === 0 ? (
+                  <div className="rounded-xl border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+                    No solution articles written yet.
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {myArticles.map((a) => (
+                      <div key={a.id} className="rounded-lg border p-3 flex items-start justify-between gap-3 transition-all hover:border-primary/40 hover:shadow-sm">
+                        <div className="flex items-start gap-3 min-w-0 flex-1">
+                          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                            <Lightbulb className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">{a.title}</p>
+                            {a.category && <p className="text-xs text-muted-foreground mt-0.5">{a.category}</p>}
+                            <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{a.description}</p>
+                          </div>
+                        </div>
+                        <Button variant="outline" size="sm" className="shrink-0" onClick={() => router.push(`/solutions/articles/${a.slug}`)}>
+                          <Eye className="h-3.5 w-3.5" /> View
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="kb-articles" className="mt-4">
+                {myKbArticles.length === 0 ? (
+                  <div className="rounded-xl border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+                    No knowledge base articles published yet.
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    {myKbArticles.map((a) => (
+                      <div key={a.id} className="rounded-lg border p-3 flex items-start justify-between gap-3 transition-all hover:border-primary/40 hover:shadow-sm">
+                        <div className="flex items-start gap-3 min-w-0 flex-1">
+                          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-sky-500">
+                            <BookOpen className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-foreground truncate">{a.title}</p>
+                            {a.category && <p className="text-xs text-muted-foreground mt-0.5">{a.category}</p>}
+                            {a.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{a.description}</p>}
+                          </div>
+                        </div>
+                        <Button variant="outline" size="sm" className="shrink-0" onClick={() => router.push(`/knowledge-base/${a.slug}`)}>
+                          <Eye className="h-3.5 w-3.5" /> View
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+          </TabsContent>
+        </Tabs>
       )}
 
-      {/* Full profile modal — mounted only while open so it always fetches fresh data */}
-      {showProfile && (user.role === 'support_engineer' || user.role === 'team_lead') && (
-        <Dialog open onOpenChange={setShowProfile}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{user.role === 'team_lead' ? 'Team Lead Profile' : 'Support Engineer Profile'}</DialogTitle>
-            </DialogHeader>
-            {user.role === 'team_lead'
-              ? <TeamLeadProfile user={user} teamName={teamName} />
-              : <SupportEngineerProfile user={user} teamName={teamName} />}
-          </DialogContent>
-        </Dialog>
+      {/* Edit profile — mounted only while open, own profile only */}
+      {showEdit && session.userId === user.id && (
+        <EditProfileDialog user={user} open onOpenChange={setShowEdit} />
       )}
     </div>
   )
 }
 
-function KpiCard({ icon, label, value, sub }: { icon: React.ReactNode; label: string; value: string; sub?: string }) {
+const KPI_COLORS = {
+  blue: 'bg-blue-500/10 text-blue-500',
+  emerald: 'bg-emerald-500/10 text-emerald-500',
+  red: 'bg-red-500/10 text-red-500',
+  violet: 'bg-violet-500/10 text-violet-500',
+  slate: 'bg-slate-500/10 text-slate-400',
+  yellow: 'bg-yellow-500/10 text-yellow-500',
+  amber: 'bg-amber-500/10 text-amber-500',
+  sky: 'bg-sky-500/10 text-sky-500',
+  primary: 'bg-primary/10 text-primary',
+} as const
+
+function KpiCard({ icon, label, value, sub, color = 'slate' }: {
+  icon: React.ReactNode
+  label: string
+  value: string
+  sub?: string
+  color?: keyof typeof KPI_COLORS
+}) {
   return (
-    <div className="rounded-xl border bg-card p-4 flex items-center gap-3">
-      <div className="shrink-0">{icon}</div>
-      <div>
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-xl font-bold text-foreground leading-tight">{value}</p>
-        {sub && <p className="text-[10px] text-muted-foreground">{sub}</p>}
+    <div className="rounded-xl border bg-card p-4 flex items-center gap-3 transition-all hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5">
+      <div className={cn('shrink-0 rounded-lg p-2.5', KPI_COLORS[color])}>{icon}</div>
+      <div className="min-w-0">
+        <p className="text-xs text-muted-foreground truncate">{label}</p>
+        <p className="text-xl font-bold text-foreground leading-tight truncate">{value}</p>
+        {sub && <p className="text-[10px] text-muted-foreground truncate">{sub}</p>}
       </div>
     </div>
   )

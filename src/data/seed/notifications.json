@@ -4,47 +4,47 @@
     "user_id": "u6",
     "channel": "in_app",
     "type": "case_assigned",
-    "payload": { "case_id": "case1", "case_ref": "NHQ-2024-0001", "title": "ERP sync failing for Acme warehouse #3" },
-    "sent_at": "2024-06-22T07:00:00Z"
+    "payload": { "case_id": "case1", "case_ref": "NHQ-2026-0001", "title": "ERP sync failing for Acme warehouse #3" },
+    "hours_ago": 48
   },
   {
     "id": "n2",
     "user_id": "u6",
     "channel": "in_app",
     "type": "case_escalated",
-    "payload": { "case_id": "case1", "case_ref": "NHQ-2024-0001", "message": "Case escalated to Level 1" },
-    "sent_at": "2024-06-22T07:05:00Z"
+    "payload": { "case_id": "case1", "case_ref": "NHQ-2026-0001", "message": "Case escalated to Level 1" },
+    "hours_ago": 47.9
   },
   {
     "id": "n3",
     "user_id": "u2",
     "channel": "in_app",
     "type": "case_escalated",
-    "payload": { "case_id": "case1", "case_ref": "NHQ-2024-0001", "message": "Case escalated — requires your attention" },
-    "sent_at": "2024-06-22T07:05:00Z"
+    "payload": { "case_id": "case1", "case_ref": "NHQ-2026-0001", "message": "Case escalated — requires your attention" },
+    "hours_ago": 47.9
   },
   {
     "id": "n4",
     "user_id": "u8",
     "channel": "in_app",
     "type": "case_assigned",
-    "payload": { "case_id": "case2", "case_ref": "NHQ-2024-0002", "title": "Unable to generate monthly financial report" },
-    "sent_at": "2024-06-21T09:30:00Z"
+    "payload": { "case_id": "case2", "case_ref": "NHQ-2026-0002", "title": "Unable to generate monthly financial report" },
+    "hours_ago": 71.5
   },
   {
     "id": "n5",
     "user_id": "u10",
     "channel": "in_app",
     "type": "case_update",
-    "payload": { "case_id": "case2", "case_ref": "NHQ-2024-0002", "message": "Pending your input — please check the latest comment" },
-    "sent_at": "2024-06-21T11:30:00Z"
+    "payload": { "case_id": "case2", "case_ref": "NHQ-2026-0002", "message": "Pending your input — please check the latest comment" },
+    "hours_ago": 69.5
   },
   {
     "id": "n6",
     "user_id": "u1",
     "channel": "in_app",
     "type": "sla_breach",
-    "payload": { "case_id": "case12", "case_ref": "NHQ-2024-0012", "message": "Critical case SLA breach imminent" },
-    "sent_at": "2024-06-22T09:00:00Z"
+    "payload": { "case_id": "case12", "case_ref": "NHQ-2026-0012", "message": "Critical case SLA breach imminent" },
+    "hours_ago": 23.5
   }
 ]

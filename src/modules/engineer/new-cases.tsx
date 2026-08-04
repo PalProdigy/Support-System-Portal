@@ -130,7 +130,7 @@ export function NewCases({ clientsMap }: { clientsMap: Record<string, Client> })
     <div className="rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/10 p-4">
       <div className="flex items-center gap-2 mb-3">
         {/*<Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />*/}
-        <h2 className="text-sm font-semibold">New Assignments</h2>
+        <h2 className="text-sm font-semibold">Queuing Cases</h2>
       </div>
 
       <div className="space-y-2.5">

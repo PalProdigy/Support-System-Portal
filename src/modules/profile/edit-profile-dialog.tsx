@@ -13,8 +13,8 @@ import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { toast } from '@/hooks/use-toast'
 import { getInitials, formatBytes } from '@/lib/utils'
-import { Camera, Plus, X, Upload, FileText, Trash2, Phone, GraduationCap, Award } from 'lucide-react'
-import type { User, EducationEntry, CertificationDoc } from '@/types'
+import { Camera, Plus, X, Upload, FileText, Trash2, Phone, Award } from 'lucide-react'
+import type { User, CertificationDoc } from '@/types'
 
 const IMG_MAX = 2 * 1024 * 1024   // 2 MB avatar cap (kept small so it persists in localStorage)
 const DOC_MAX = 3 * 1024 * 1024   // 3 MB certification file cap
@@ -91,7 +91,6 @@ export function EditProfileDialog({ user, open, onOpenChange }: {
   const [languages, setLanguages] = useState<string[]>(user.languages ?? [])
   const [skills, setSkills] = useState<string[]>(user.technical_skills ?? [])
   const [expertise, setExpertise] = useState<string[]>(user.expertise ?? [])
-  const [education, setEducation] = useState<EducationEntry[]>(user.education ?? [])
   const [certs, setCerts] = useState<CertificationDoc[]>(user.certifications ?? [])
 
   const save = useMutation({
@@ -103,7 +102,6 @@ export function EditProfileDialog({ user, open, onOpenChange }: {
       languages,
       technical_skills: skills,
       expertise,
-      education: education.filter((e) => e.degree.trim() || e.institution.trim()),
       certifications: certs.filter((c) => c.title.trim()),
     }),
     onSuccess: () => {
@@ -188,29 +186,6 @@ export function EditProfileDialog({ user, open, onOpenChange }: {
                 <Plus className="h-3.5 w-3.5" /> Add Number
               </Button>
             </div>
-          </div>
-
-          {/* Education */}
-          <div className="space-y-2">
-            <Label className="flex items-center gap-1.5"><GraduationCap className="h-3.5 w-3.5" /> Education</Label>
-            {education.map((e) => (
-              <div key={e.id} className="rounded-lg border p-3 space-y-2">
-                <div className="flex items-start gap-2">
-                  <Input value={e.degree} onChange={(ev) => setEducation(education.map((x) => x.id === e.id ? { ...x, degree: ev.target.value } : x))} placeholder="Degree / qualification (e.g. BSc in CSE)" />
-                  <Button type="button" variant="ghost" size="icon" onClick={() => setEducation(education.filter((x) => x.id !== e.id))}>
-                    <Trash2 className="h-4 w-4 text-muted-foreground" />
-                  </Button>
-                </div>
-                <Input value={e.institution} onChange={(ev) => setEducation(education.map((x) => x.id === e.id ? { ...x, institution: ev.target.value } : x))} placeholder="Institution" />
-                <div className="grid grid-cols-2 gap-2">
-                  <Input value={e.year ?? ''} onChange={(ev) => setEducation(education.map((x) => x.id === e.id ? { ...x, year: ev.target.value } : x))} placeholder="Year" />
-                  <Input value={e.gpa ?? ''} onChange={(ev) => setEducation(education.map((x) => x.id === e.id ? { ...x, gpa: ev.target.value } : x))} placeholder="CGPA / GPA (e.g. 3.85)" />
-                </div>
-              </div>
-            ))}
-            <Button type="button" variant="outline" size="sm" onClick={() => setEducation([...education, { id: newId(), degree: '', institution: '', year: '' }])}>
-              <Plus className="h-3.5 w-3.5" /> Add Education
-            </Button>
           </div>
 
           {/* Certifications */}

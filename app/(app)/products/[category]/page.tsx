@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared/empty-state'
-import { ArrowLeft, Package, PlusCircle, Pencil, CalendarDays, Tag, CheckCircle2, XCircle } from 'lucide-react'
+import { UserAvatar } from '@/components/shared/user-avatar'
+import { ArrowLeft, Package, PlusCircle, Pencil, CalendarDays, Tag, CheckCircle2, XCircle, Mail, Phone, IdCard, Contact } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
 import type { Product } from '@/types'
 import { accentVars, getCategoryMeta, ProductCard } from '@/lib/products-shared'
@@ -41,7 +42,6 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
   const visible = useMemo(() => (products ?? []).filter((p) => canManage || p.is_active), [products, canManage])
   const items = useMemo(() => visible.filter((p) => (p.category || 'Other') === categoryName), [visible, categoryName])
   const meta = useMemo(() => getCategoryMeta(categoryName), [categoryName])
-  const Icon = meta.icon
 
   function startEdit(e: React.MouseEvent | React.KeyboardEvent, p: Product) {
     e.stopPropagation()
@@ -56,19 +56,19 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
         style={accentVars(meta)}
         className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
       >
-        <ArrowLeft className="h-4 w-4" /> All categories
+        <ArrowLeft className="h-4 w-4" /> All OEMs
       </button>
 
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div
-            className="flex h-11 w-11 items-center justify-center rounded-xl"
-            style={{ background: meta.tint }}
+            className="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold tracking-wide"
+            style={{ background: meta.tint, color: meta.color }}
           >
-            <Icon className="h-5 w-5" style={{ color: meta.color }} />
+            {meta.mono}
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Product</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products</h1>
             <p className="text-sm text-muted-foreground">{categoryName} · {items.length} {items.length === 1 ? 'product' : 'products'}</p>
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{[...Array(6)].map((_, i) => <div key={i} className="h-36 animate-pulse rounded-2xl bg-muted" />)}</div>
       ) : items.length === 0 ? (
-        <EmptyState icon={Package} title="No products found" description="This category doesn't have any products yet." />
+        <EmptyState icon={Package} title="No products found" description="This OEM doesn't have any products yet." />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((product) => (
@@ -93,23 +93,18 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
 
       {/* Product detail dialog */}
       <Dialog open={!!viewing} onOpenChange={(o) => !o && setViewing(null)}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <div className="rounded-lg bg-primary/10 p-1.5">
-                <Package className="h-4 w-4 text-primary" />
-              </div>
-              {viewing?.name}
-            </DialogTitle>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto p-0 gap-0">
+          <DialogHeader className="sr-only">
+            <DialogTitle>{viewing?.name}</DialogTitle>
           </DialogHeader>
 
           {viewing && (
-            <div className="space-y-4">
-              {/* Picture(s) */}
+            <div>
+              {/* Hero banner */}
               {(viewing.image_urls?.length ?? 0) > 0 ? (
-                <div className="space-y-2">
+                <div className="space-y-2 p-4 pb-0">
                   <div
-                    className="relative flex h-56 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted"
+                    className="relative flex h-52 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted"
                     style={accentVars(meta)}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -140,48 +135,105 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
                 </div>
               ) : (
                 <div
-                  className="flex h-40 items-center justify-center rounded-xl"
+                  className="relative flex h-40 items-center justify-center overflow-hidden"
                   style={{ background: `linear-gradient(135deg, ${meta.color} 0%, ${meta.shade} 100%)` }}
                 >
+                  <div className="absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/10" />
+                  <div className="absolute -bottom-10 -left-6 h-28 w-28 rounded-full border border-white/15" />
                   <Package className="h-10 w-10 text-white/90" />
                 </div>
               )}
 
-              {/* Details */}
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  {viewing.category && (
-                    <Badge variant="secondary" className="inline-flex items-center gap-1">
-                      <Tag className="h-3 w-3" /> {viewing.category}
-                    </Badge>
-                  )}
-                  <Badge
-                    variant="secondary"
-                    className={
-                      viewing.is_active
-                        ? 'inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                        : 'inline-flex items-center gap-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                    }
-                  >
-                    {viewing.is_active ? <CheckCircle2 className="h-3 w-3" /> : <XCircle className="h-3 w-3" />}
-                    {viewing.is_active ? 'Active' : 'Inactive'}
-                  </Badge>
+              <div className="p-5 space-y-4">
+                {/* Title + status */}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className="text-lg font-bold text-foreground leading-snug">{viewing.name}</h2>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      {viewing.category && (
+                        <Badge
+                          variant="secondary"
+                          className="inline-flex items-center gap-1 font-medium"
+                          style={{ background: meta.tint, color: meta.color }}
+                        >
+                          <Tag className="h-3 w-3" /> {viewing.category}
+                        </Badge>
+                      )}
+                      <Badge
+                        variant="secondary"
+                        className={
+                          viewing.is_active
+                            ? 'inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                            : 'inline-flex items-center gap-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                        }
+                      >
+                        {viewing.is_active ? <CheckCircle2 className="h-3 w-3" /> : <XCircle className="h-3 w-3" />}
+                        {viewing.is_active ? 'Active' : 'Inactive'}
+                      </Badge>
+                    </div>
+                  </div>
+                  <span className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+                    <CalendarDays className="h-3 w-3" /> {formatDate(viewing.created_at)}
+                  </span>
                 </div>
 
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">Description</p>
+                {/* Description */}
+                <div className="rounded-xl border bg-muted/30 p-3.5">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1.5">Description</p>
                   <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{viewing.description || '—'}</p>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <CalendarDays className="h-3.5 w-3.5" />
-                  Added {formatDate(viewing.created_at)}
-                </div>
+                {/* Product Manager */}
+                {viewing.manager?.name && (
+                  <div className="rounded-xl border overflow-hidden">
+                    <div className="h-[3px]" style={{ background: `linear-gradient(90deg, ${meta.color}, ${meta.shade})` }} />
+                    <div className="p-3.5 space-y-3">
+                      <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        <Contact className="h-3.5 w-3.5" /> Product Manager
+                      </p>
+                      <div className="flex items-center gap-3">
+                        <UserAvatar name={viewing.manager.name} size="md" border shadow />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold text-foreground truncate">{viewing.manager.name}</p>
+                          {(viewing.manager.designation || viewing.manager.employee_id) && (
+                            <p className="text-xs text-muted-foreground truncate">
+                              {viewing.manager.designation}
+                              {viewing.manager.designation && viewing.manager.employee_id ? ' · ' : ''}
+                              {viewing.manager.employee_id}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                        {viewing.manager.email && (
+                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                            <Mail className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {viewing.manager.email}
+                          </span>
+                        )}
+                        {viewing.manager.phone && (
+                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                            <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {viewing.manager.phone}
+                          </span>
+                        )}
+                        {viewing.manager.employee_id && (
+                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                            <IdCard className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {viewing.manager.employee_id}
+                          </span>
+                        )}
+                        {viewing.manager.joining_date && (
+                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                            <CalendarDays className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> Joined {formatDate(viewing.manager.joining_date)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
-          <DialogFooter>
+          <DialogFooter className="px-5 py-4 border-t bg-muted/20">
             {canManage && viewing && (
               <Button variant="outline" size="sm" onClick={() => { setEditing({ ...viewing }); setViewing(null) }}>
                 <Pencil className="h-3.5 w-3.5" /> Edit

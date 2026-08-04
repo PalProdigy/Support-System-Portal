@@ -124,12 +124,7 @@ export function CaseApprovalQueue({ cases, users, teamId }: CaseApprovalQueuePro
     return (
       <div
         key={c.id}
-        className={cn(
-          'rounded-lg border p-3',
-          isOverdue
-            ? 'border-red-300 bg-red-50/70 dark:border-red-900 dark:bg-red-950/30'
-            : 'bg-card',
-        )}
+        className="rounded-lg border bg-card p-3"
       >
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">

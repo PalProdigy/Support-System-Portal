@@ -8,9 +8,8 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ErrorState } from '@/components/shared/error-state'
 import { ArrowLeft } from 'lucide-react'
+import { UserDetail } from '@/modules/users/user-detail'
 import { TechnicalHeadProfile } from '@/modules/profile/technical-head-profile'
-import { TeamLeadProfile } from '@/modules/profile/team-lead-profile'
-import { SupportEngineerProfile } from '@/modules/profile/support-engineer-profile'
 import { SalesExecutiveProfile } from '@/modules/profile/sales-executive-profile'
 import { ClientProfile } from '@/modules/profile/client-profile'
 
@@ -19,11 +18,21 @@ export default function ProfilePage() {
   const dp = getDataProvider()
   const router = useRouter()
 
-  const { data: users, isLoading } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
-  const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
+  // Support engineers & team leads get the full tabbed engineer profile
+  // (Overview / Certification / Cases / Articles) with editing enabled —
+  // the same page used at /users/[id], which self-detects "own profile" via session
+  // and fetches its own data, so the queries below are skipped for them.
+  const isEngineerProfile = session.role === 'support_engineer' || session.role === 'team_lead'
+
+  const { data: users, isLoading } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers(), enabled: !isEngineerProfile })
+  const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams(), enabled: !isEngineerProfile })
 
   const user = (users ?? []).find((u) => u.id === session.userId) ?? null
   const teamName = user?.team_id ? (teams ?? []).find((t) => t.id === user.team_id)?.name : undefined
+
+  if (isEngineerProfile) {
+    return <UserDetail id={session.userId} />
+  }
 
   if (isLoading) {
     return (
@@ -53,8 +62,6 @@ export default function ProfilePage() {
       </Button>
 
       {session.role === 'technical_head' && <TechnicalHeadProfile user={user} teamName={teamName} />}
-      {session.role === 'team_lead' && <TeamLeadProfile user={user} teamName={teamName} />}
-      {session.role === 'support_engineer' && <SupportEngineerProfile user={user} teamName={teamName} />}
       {session.role === 'sales_executive' && <SalesExecutiveProfile user={user} teamName={teamName} />}
       {session.role === 'client' && <ClientProfile user={user} />}
     </div>

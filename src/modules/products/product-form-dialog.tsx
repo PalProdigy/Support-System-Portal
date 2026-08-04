@@ -9,9 +9,10 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
+import { IconField } from '@/components/shared/icon-field'
 import { toast } from '@/hooks/use-toast'
 import { formatBytes } from '@/lib/utils'
-import { ImagePlus, X, Loader2, FolderKanban } from 'lucide-react'
+import { ImagePlus, X, Loader2, FolderKanban, User, Mail, Phone, Briefcase, IdCard, CalendarDays } from 'lucide-react'
 import { accentVars, getCategoryMeta } from '@/lib/products-shared'
 import type { Product } from '@/types'
 
@@ -49,6 +50,14 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
   const [images, setImages] = useState<string[]>(product?.image_urls ?? [])
   const [dragOver, setDragOver] = useState(false)
 
+  // Product manager — the OEM/vendor-side point of contact for this product.
+  const [managerName, setManagerName] = useState(product?.manager?.name ?? '')
+  const [managerEmail, setManagerEmail] = useState(product?.manager?.email ?? '')
+  const [managerPhone, setManagerPhone] = useState(product?.manager?.phone ?? '')
+  const [managerDesignation, setManagerDesignation] = useState(product?.manager?.designation ?? '')
+  const [managerEmployeeId, setManagerEmployeeId] = useState(product?.manager?.employee_id ?? '')
+  const [managerJoiningDate, setManagerJoiningDate] = useState(product?.manager?.joining_date ?? '')
+
   async function onPickImages(fileList?: FileList | File[] | null) {
     if (!fileList || fileList.length === 0) return
     const files = Array.from(fileList)
@@ -70,12 +79,24 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
     setImages((prev) => prev.filter((_, i) => i !== index))
   }
 
+  const manager = managerName.trim()
+    ? {
+        name: managerName.trim(),
+        email: managerEmail.trim(),
+        phone: managerPhone.trim(),
+        designation: managerDesignation.trim(),
+        employee_id: managerEmployeeId.trim(),
+        joining_date: managerJoiningDate,
+      }
+    : undefined
+
   const saveMutation = useMutation({
     mutationFn: () => mode === 'edit' && product
       ? dp.updateProduct(product.id, {
           name: name.trim(),
           description: description.trim(),
           image_urls: images.length ? images : undefined,
+          manager,
         })
       : dp.createProduct({
           name: name.trim(),
@@ -83,6 +104,7 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
           category,
           is_active: true,
           image_urls: images.length ? images : undefined,
+          manager,
         }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['products'] })
@@ -173,6 +195,20 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
           <div className="space-y-1.5">
             <Label>Description</Label>
             <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="A short description of this product…" />
+          </div>
+
+          <div className="space-y-3 rounded-xl border bg-muted/20 p-3.5">
+            <Label className="text-sm font-semibold">Product Manager</Label>
+            <IconField icon={User} label="Name" value={managerName} onChange={(e) => setManagerName(e.target.value)} placeholder="Full name" />
+            <IconField icon={Mail} label="Email" type="email" value={managerEmail} onChange={(e) => setManagerEmail(e.target.value)} placeholder="email@company.com" />
+            <div className="grid grid-cols-2 gap-3">
+              <IconField icon={Phone} label="Mobile Number" type="tel" value={managerPhone} onChange={(e) => setManagerPhone(e.target.value)} placeholder="+880 …" />
+              <IconField icon={Briefcase} label="Designation" value={managerDesignation} onChange={(e) => setManagerDesignation(e.target.value)} placeholder="Product Manager" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <IconField icon={IdCard} label="Employee ID" value={managerEmployeeId} onChange={(e) => setManagerEmployeeId(e.target.value)} placeholder="EMP-1024" />
+              <IconField icon={CalendarDays} label="Joining Date" type="date" value={managerJoiningDate} onChange={(e) => setManagerJoiningDate(e.target.value)} />
+            </div>
           </div>
         </div>
 

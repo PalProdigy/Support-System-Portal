@@ -19,16 +19,20 @@ import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { CaseAttachments } from '@/components/shared/case-attachments'
-import { SubCasesSection } from '@/modules/cases/sub-cases-section'
+import { ExternalMembersCard } from '@/components/shared/external-members-card'
+
+import { AddSubCaseDialog } from '@/modules/cases/add-sub-case-dialog'
 import { ResolveCaseDialog } from '@/modules/cases/resolve-case-dialog'
 import { RequestClientInfoDialog } from '@/modules/cases/request-client-info-dialog'
 import { UpdateProgressDialog } from '@/modules/cases/update-progress-dialog'
 import { EngineerChangePanel } from '@/modules/cases/engineer-change-panel'
 import { toast } from '@/hooks/use-toast'
-import { canAccess, ROLE_LABELS } from '@/lib/rbac'
+import { canAccess, canCreateSubCase, ROLE_LABELS } from '@/lib/rbac'
 import { formatDateTime, formatDuration, PRIORITY_LABELS } from '@/lib/utils'
-import { ArrowLeft, Send, Lock, AlertTriangle, Star, CheckCircle2, Users, Clock, Calendar, Plus, X, Reply, RotateCcw, UserCog, Activity, HelpCircle, PlayCircle, CheckSquare, ArrowRightLeft, Flag } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { FEEDBACK_QUESTIONS } from '@/lib/feedback-questions'
+import { RatingGauge } from '@/components/shared/rating-gauge'
+import { ArrowLeft, Send, Lock, AlertTriangle, Star, CheckCircle2, Users, Clock, Calendar, Plus, X, Reply, RotateCcw, UserCog, Activity, HelpCircle, PlayCircle, CheckSquare, ArrowRightLeft, Flag, Paperclip, Mail, History, ChevronDown, ChevronRight, Eye, MessageCircle, XCircle } from 'lucide-react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import type { CaseStatus, CaseComment, Feedback, User, Priority } from '@/types'
 
 // Cap how deep replies keep indenting so very deep threads don't run off-screen.
@@ -153,13 +157,20 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
   const dp = getDataProvider()
   const qc = useQueryClient()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
   const scope = { userId: session.userId, role: session.role }
 
   const [commentBody, setCommentBody] = useState('')
   const [isInternal, setIsInternal] = useState(false)
+  const [wfCommentBody, setWfCommentBody] = useState('')
   const [resolveOpen, setResolveOpen] = useState(false)
   const [clientInfoOpen, setClientInfoOpen] = useState(false)
   const [progressOpen, setProgressOpen] = useState(false)
+  const [wfExpanded, setWfExpanded] = useState<string | null>('fix')
+  const [addOpen, setAddOpen] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
+  const tab = searchParams.get('tab') || 'progress'
 
   const { data: case_, isLoading, error, refetch } = useQuery({
     queryKey: ['case', caseId],
@@ -200,17 +211,9 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
     enabled: !!case_?.parent_case_id,
   })
 
-  // Reopen lineage: if this case was created by reopening a previously-closed
-  // case, load that original case (and its RCA) so its old data can be shown.
-  // Genuinely-new cases have no reopened_from_case_id, so nothing is fetched.
   const { data: previousCase } = useQuery({
     queryKey: ['case', 'reopened-from', case_?.reopened_from_case_id],
     queryFn: () => dp.getCase(case_!.reopened_from_case_id!, scope),
-    enabled: !!case_?.reopened_from_case_id,
-  })
-  const { data: previousRCA } = useQuery({
-    queryKey: ['rca', case_?.reopened_from_case_id],
-    queryFn: () => dp.getRCA(case_!.reopened_from_case_id!),
     enabled: !!case_?.reopened_from_case_id,
   })
 
@@ -276,6 +279,18 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
     onError: (e) => toast({ title: String(e), variant: 'destructive' }),
   })
 
+  const claimCaseMutation = useMutation({
+    mutationFn: () => dp.claimCase(caseId, scope),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['case', caseId] })
+      qc.invalidateQueries({ queryKey: ['cases'] })
+      qc.invalidateQueries({ queryKey: ['claimable-cases'] })
+      qc.invalidateQueries({ queryKey: ['notifications'] })
+      toast({ title: 'Case assigned to you', variant: 'success' })
+    },
+    onError: (e) => toast({ title: String(e), variant: 'destructive' }),
+  })
+
   const addCommentMutation = useMutation({
     mutationFn: (vars: { body: string; parentId: string | null; isInternal: boolean }) =>
       dp.addComment(
@@ -290,6 +305,31 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
     onError: (err) => toast({ title: String(err), variant: 'destructive' }),
   })
 
+  // Uploads a file from either comment box (floating widget or workflow reply)
+  // straight to the case's Attachments — mirrors CaseAttachments' own upload flow.
+  const attachMutation = useMutation({
+    mutationFn: (file: File) =>
+      dp.addAttachment({
+        case_id: caseId,
+        uploaded_by: session.userId,
+        file_url: URL.createObjectURL(file),
+        file_name: file.name,
+        file_type: file.type || 'application/octet-stream',
+        category: 'comment',
+        size: file.size,
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['attachments', caseId] })
+      toast({ title: 'File attached', variant: 'success' })
+    },
+    onError: () => toast({ title: 'Failed to attach file', variant: 'destructive' }),
+  })
+
+  function handleCommentFiles(fileList: FileList | null) {
+    if (!fileList || fileList.length === 0) return
+    Array.from(fileList).forEach((f) => attachMutation.mutate(f))
+  }
+
   if (isLoading) return null
   if (error || !case_) return <ErrorState message="Case not found or access denied." onRetry={refetch} />
 
@@ -297,13 +337,20 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
   const assignee = case_.assignee_id ? usersMap[case_.assignee_id] : null
   const solution = solutionsMap[case_.solution_id]
   const isSubCase = !!case_.parent_case_id
+  const showFeedbackTab = !isSubCase && ['resolved', 'closed', 'pending_closure'].includes(case_.status)
+  // A brand-new, untouched case has no workflow progress or attachments/emails
+  // to show yet, and definitely isn't ready to close.
+  const isNewCase = case_.status === 'new'
+  const effectiveTab = isNewCase && (tab === 'progress' || tab === 'related') ? 'activity' : tab
   const approvalStatus = case_.approval_status
   const approver = case_.approval_user_id ? usersMap[case_.approval_user_id] : undefined
+  const canGrabCase = session.role === 'support_engineer' && !case_.assignee_id && ['new', 'triaged'].includes(case_.status)
   const canRespondApproval = !!approvalStatus && approvalStatus !== 'accepted' &&
     (session.userId === case_.approval_user_id || session.role === 'technical_head')
   const canChangeStatus = canAccess(scope, 'change_status', 'case')
   const canComment = canAccess(scope, 'create', 'comment')
   const canInternalNote = canAccess(scope, 'create', 'internal_comment')
+  const canAddSubTask = canCreateSubCase(session.role)
 
   // ── Role-based workflow flags (spec Button Visibility) ──────────────────────
   const isLead = session.role === 'team_lead' || session.role === 'technical_head'
@@ -327,7 +374,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Back — a sub task returns to its parent case; otherwise browser back */}
       {isSubCase ? (
         <Button variant="ghost" size="sm" onClick={() => router.push(`/cases/${case_.parent_case_id}`)}>
@@ -340,15 +387,23 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
       )}
 
       {/* Header */}
-      <div className="rounded-xl border bg-card p-5 space-y-4">
+      <div className="rounded-xl border bg-gradient-to-br from-card to-muted/30 shadow-sm p-5 space-y-4">
         <div className="flex items-start gap-3 flex-wrap">
           <span className="text-xs font-mono text-muted-foreground mt-1">{case_.reference_no}</span>
+          {case_.reopened_from_case_id && previousCase && (
+            <button
+              onClick={() => router.push(`/cases/${previousCase.id}`)}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline mt-0.5"
+            >
+              <RotateCcw className="h-3 w-3" /> Follow-up to {previousCase.reference_no}
+            </button>
+          )}
           {isSubCase && (
             <button
               onClick={() => router.push(`/cases/${case_.parent_case_id}`)}
               className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline mt-0.5"
             >
-              <ArrowLeft className="h-3 w-3" /> Sub task of {parentCase?.reference_no ?? 'parent case'}
+              <ArrowLeft className="h-3 w-3" /> Case Update of {parentCase?.reference_no ?? 'parent case'}
             </button>
           )}
           {case_.is_escalated && (
@@ -371,72 +426,45 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
           </div>
         )}
         <p className="text-sm text-muted-foreground whitespace-pre-wrap">{case_.description}</p>
-        <p className="text-xs text-muted-foreground">Created {formatDateTime(case_.created_at)}</p>
-
-        <Separator />
-        <CaseAttachments caseId={caseId} canManage={case_.status !== 'closed'} />
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <Calendar className="h-3 w-3" />
+            Created {formatDateTime(case_.created_at)}
+          </span>
+          {case_.updated_at && (
+            <>
+              <span className="text-muted-foreground/30">·</span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="h-3 w-3" />
+                Updated {formatDateTime(case_.updated_at)}
+              </span>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Reopen lineage — only rendered when this case was reopened from a
-          previously-closed one. New cases have no previous data, so nothing shows. */}
-      {case_.reopened_from_case_id && (
-        <div className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20 p-5 space-y-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <RotateCcw className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
-            <h2 className="text-sm font-semibold text-amber-800 dark:text-amber-300">Reopened from a previous case</h2>
-            {previousCase && (
-              <button
-                onClick={() => router.push(`/cases/${previousCase.id}`)}
-                className="ml-auto inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-              >
-                View previous case <ArrowLeft className="h-3 w-3 rotate-180" />
-              </button>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            This case carries data forward from a case that was previously closed and reopened.
-          </p>
 
-          {previousCase ? (
-            <div className="rounded-lg border bg-card p-4 space-y-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-mono text-muted-foreground">{previousCase.reference_no}</span>
-                <PriorityChip priority={previousCase.priority} size="sm" />
-                <StatusBadge status={previousCase.status} size="sm" />
-                {previousCase.closed_at && (
-                  <span className="text-xs text-muted-foreground">Closed {formatDateTime(previousCase.closed_at)}</span>
-                )}
-              </div>
-              <div>
-                <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">Original title</p>
-                <p className="text-sm font-medium text-foreground">{previousCase.title}</p>
-              </div>
-              {previousCase.description && (
-                <div>
-                  <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">Original description</p>
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">{previousCase.description}</p>
-                </div>
-              )}
-              {previousRCA && (previousRCA.root_cause || previousRCA.resolution) && (
-                <div className="space-y-1.5">
-                  <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">Previous resolution</p>
-                  {previousRCA.root_cause && (
-                    <p className="text-sm"><span className="font-medium text-foreground">Root cause:</span> <span className="text-muted-foreground">{previousRCA.root_cause}</span></p>
-                  )}
-                  {previousRCA.resolution && (
-                    <p className="text-sm"><span className="font-medium text-foreground">Resolution:</span> <span className="text-muted-foreground">{previousRCA.resolution}</span></p>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <p className="text-xs text-muted-foreground">Loading previous case…</p>
-          )}
+      {/* Unassigned, new/triaged case — a support engineer can grab it themselves */}
+      {canGrabCase && (
+        <div className="rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/10 p-4 flex items-center justify-between gap-3 flex-wrap">
+          <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+            <Users className="h-4 w-4" /> This case isn&apos;t assigned yet — you can grab it.
+          </p>
+          <Button
+            size="sm"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            disabled={claimCaseMutation.isPending}
+            onClick={() => claimCaseMutation.mutate()}
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" /> {claimCaseMutation.isPending ? 'Grabbing…' : 'Grab Case'}
+          </Button>
         </div>
       )}
 
-      {/* Service-routing approval banner */}
-      {approvalStatus && (
+      {/* Service-routing approval banner — irrelevant to a support engineer who
+          can just grab the case directly, so it's suppressed in that case to
+          avoid contradicting the Grab Case banner above. */}
+      {approvalStatus && !canGrabCase && (
         <div className={`rounded-xl border p-4 flex items-start gap-3 flex-wrap ${
           approvalStatus === 'accepted'
             ? 'border-emerald-200 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/20'
@@ -481,222 +509,378 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Main — Timeline + Comments */}
         <div className="lg:col-span-2 space-y-4">
-          <Tabs defaultValue="comments">
+          <Tabs value={effectiveTab} onValueChange={(v) => router.replace(`/cases/${caseId}?tab=${v}`, { scroll: false })}>
             <TabsList>
-              {!isSubCase && <TabsTrigger value="progress">Progress</TabsTrigger>}
-              <TabsTrigger value="comments">Comments ({comments?.length ?? 0})</TabsTrigger>
-              {canChangeStatus && <TabsTrigger value="actions">Actions</TabsTrigger>}
+              {!isNewCase && (
+                <>
+                  <TabsTrigger value="progress">Progress</TabsTrigger>
+                  <TabsTrigger value="related">Related</TabsTrigger>
+                </>
+              )}
+              <TabsTrigger value="activity">Activity</TabsTrigger>
+              {showFeedbackTab && <TabsTrigger value="feedback">Feedback</TabsTrigger>}
             </TabsList>
 
-            {!isSubCase && (
-              <TabsContent value="progress" className="mt-4 space-y-4">
-                <CaseProgressTimeline case_={case_} auditLogs={auditLogs} />
-                <SLAProgress case_={case_} />
-              </TabsContent>
-            )}
-
-            <TabsContent value="comments" className="mt-4 space-y-4">
-              {/* Comment list (threaded) */}
-              <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
-                {(comments ?? []).length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-6">No comments yet.</p>
-                )}
-                {(comments ?? [])
-                  .filter((c: CaseComment) => (c.parent_id ?? null) === null)
-                  .map((c: CaseComment) => (
-                    <CommentNode
-                      key={c.id}
-                      comment={c}
-                      allComments={comments ?? []}
-                      usersMap={usersMap}
-                      depth={0}
-                      canReply={canComment && !['closed'].includes(case_.status)}
-                      onReply={(parentId, body) => addCommentMutation.mutate({ body, parentId, isInternal: false })}
-                      busyReply={addCommentMutation.isPending}
-                    />
-                  ))}
-              </div>
-
-              {/* Add comment */}
-              {canComment && !['closed'].includes(case_.status) && (
-                <div className="rounded-xl border bg-card p-4 space-y-3">
-                  <Textarea
-                    placeholder="Write a comment..."
-                    value={commentBody}
-                    onChange={(e) => setCommentBody(e.target.value)}
-                    rows={3}
-                  />
+            <TabsContent value="progress" className="mt-4 space-y-4">
+              {/* Sub-task workflow items */}
+              {!isSubCase && (
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    {canInternalNote && (
-                      <div className="flex items-center gap-2">
-                        <Switch id="internal" checked={isInternal} onCheckedChange={setIsInternal} />
-                        <Label htmlFor="internal" className="text-sm cursor-pointer">Internal note</Label>
-                      </div>
+                    <h3 className="text-sm font-semibold">Workflow</h3>
+                    {canAddSubTask && (
+                      <Button size="sm" variant="outline" className="h-8" onClick={() => setAddOpen(true)}>
+                        <Plus className="h-3.5 w-3.5" /> Add Case Update
+                      </Button>
                     )}
-                    <Button
-                      className="ml-auto"
-                      size="sm"
-                      disabled={!commentBody.trim() || addCommentMutation.isPending}
-                      onClick={() => addCommentMutation.mutate({ body: commentBody, parentId: null, isInternal })}
-                    >
-                      <Send className="h-3.5 w-3.5" />
-                      {addCommentMutation.isPending ? 'Posting...' : 'Post'}
-                    </Button>
                   </div>
+
+                  {([
+                    { id: 'triage', label: 'Triage & reproduce', time: '1h 10m', done: true,
+                      comments: ['Initial triage completed. Confirmed issue on all affected endpoints.'] },
+                    { id: 'rca', label: 'Root-cause analysis', time: '2h 25m', done: true,
+                      comments: ['Checked logs — root cause identified as kernel driver mismatch.'] },
+                    { id: 'fix', label: 'Apply fix & verify', time: 'running', done: false,
+                      comments: ['Re-registration script prepared. Awaiting maintenance window.'] },
+                  ]).map((item) => {
+                    const isActive = item.id === 'fix'
+                    const isOpen = wfExpanded === item.id
+
+                    return (
+                      <div key={item.id} className={`rounded-xl border overflow-hidden transition-all ${
+                        isActive
+                          ? 'border-blue-400 dark:border-blue-500 bg-card shadow-[0_0_14px_-3px] shadow-blue-400/50 dark:shadow-blue-600/50'
+                          : 'bg-card hover:shadow-sm'
+                      }`}>
+                        <button
+                          onClick={() => setWfExpanded((v) => v === item.id ? null : item.id)}
+                          className={`w-full flex items-center justify-between text-left p-3 hover:bg-accent/20 transition-colors`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className={`h-2 w-2 rounded-full ${isActive ? 'bg-blue-500 animate-pulse' : item.done ? 'bg-emerald-500' : 'bg-muted-foreground/30'}`} />
+                            <p className="text-sm font-medium">{item.label}</p>
+                            {item.done && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
+                          </div>
+                          <span className={`text-xs flex items-center gap-1 ${isActive ? 'font-medium text-blue-600 dark:text-blue-400' : 'text-muted-foreground'}`}>
+                            <Clock className={`h-3 w-3 ${isActive ? 'animate-pulse' : ''}`} />
+                            {item.time}
+                            {isOpen ? <ChevronDown className="h-3.5 w-3.5 ml-1" /> : <ChevronRight className="h-3.5 w-3.5 ml-1" />}
+                          </span>
+                        </button>
+
+                        {isOpen && (
+                          <div className="border-t border-border px-3 pb-3 pt-2 space-y-3">
+                            <div className="flex items-center gap-2">
+                              <UserAvatar name="Reza Karim" size="sm" />
+                              <span className="text-xs font-medium">Reza Karim</span>
+                            </div>
+                            <div className="space-y-2 pl-4 border-l-2 border-muted">
+                              {item.comments.map((body, i) => (
+                                <div key={i} className="text-xs text-muted-foreground leading-relaxed">
+                                  <span className="font-medium text-foreground">Reza Karim</span>
+                                  <span className="text-muted-foreground/50 ml-1">28 Jun · 14:20</span>
+                                  <p className="mt-0.5">{body}</p>
+                                </div>
+                              ))}
+                            </div>
+                            {isActive && canComment && !['closed'].includes(case_.status) && (
+                              <div className="flex items-end gap-1.5 pt-1 bg-muted/30 dark:bg-muted/5 rounded-lg p-1.5 ring-1 ring-border focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+                                <input
+                                  type="file"
+                                  multiple
+                                  className="hidden"
+                                  id="wf-comment-attach"
+                                  onChange={(e) => { handleCommentFiles(e.target.files); e.target.value = '' }}
+                                />
+                                <label
+                                  htmlFor="wf-comment-attach"
+                                  className="shrink-0 flex items-center justify-center h-7 w-7 rounded-md hover:bg-muted-foreground/10 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+                                >
+                                  <Paperclip className="h-3.5 w-3.5" />
+                                </label>
+                                <Textarea
+                                  placeholder="Reply to your engineer…"
+                                  rows={1}
+                                  value={wfCommentBody}
+                                  onChange={(e) => setWfCommentBody(e.target.value)}
+                                  className="flex-1 min-h-0 border-0 bg-transparent resize-none px-1 py-1.5 text-xs shadow-none focus-visible:ring-0"
+                                />
+                                <Button
+                                  size="icon"
+                                  className="shrink-0 h-7 w-7 rounded-md"
+                                  disabled={!wfCommentBody.trim() || addCommentMutation.isPending}
+                                  onClick={() => {
+                                    addCommentMutation.mutate({ body: wfCommentBody, parentId: null, isInternal: false })
+                                    setWfCommentBody('')
+                                  }}
+                                >
+                                  <Send className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               )}
+
+              {/* Sub-cases dialog */}
+              {canAddSubTask && addOpen && <AddSubCaseDialog parentCase={case_} open={addOpen} onOpenChange={setAddOpen} />}
             </TabsContent>
 
-            {canChangeStatus && (
-              <TabsContent value="actions" className="mt-4 space-y-4">
-                {/* Engineer Change Request — TL/TH decision */}
-                {pendingChange && isLead && (
-                  <EngineerChangePanel request={pendingChange} caseId={caseId} usersMap={usersMap} engineers={eligibleEngineers} />
-                )}
+            <TabsContent value="related" className="mt-4 space-y-4">
+              <Tabs defaultValue="attachments">
+                <TabsList>
+                  <TabsTrigger value="attachments">Attachments</TabsTrigger>
+                  <TabsTrigger value="emails">Emails</TabsTrigger>
+                </TabsList>
+                <TabsContent value="attachments" className="mt-4">
+                  <div className="rounded-xl border bg-card p-4 space-y-3">
+                    <CaseAttachments caseId={caseId} canManage={case_.status !== 'closed' && canAccess(scope, 'create', 'attachment')} />
+                  </div>
+                </TabsContent>
+                <TabsContent value="emails" className="mt-4">
+                  <div className="rounded-xl border bg-card overflow-hidden">
+                    <div className="p-4 pb-0 flex items-center justify-between">
+                      <h3 className="text-sm font-semibold flex items-center gap-1.5">
+                        <Mail className="h-4 w-4 text-muted-foreground" /> Emails
+                      </h3>
+                      <span className="text-xs text-muted-foreground">9 items</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs mt-2">
+                        <thead>
+                          <tr className="border-y bg-muted/30">
+                            <th className="text-left font-medium text-muted-foreground px-4 py-2.5 min-w-[200px]">Subject</th>
+                            <th className="text-left font-medium text-muted-foreground px-4 py-2.5">From</th>
+                            <th className="text-left font-medium text-muted-foreground px-4 py-2.5 hidden sm:table-cell">To</th>
+                            <th className="text-left font-medium text-muted-foreground px-4 py-2.5">Date</th>
+                            <th className="text-right font-medium text-muted-foreground px-4 py-2.5 w-16">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {[
+                            { subject: 'Survey from NetWitness Technical Support', from: 'nw.cx@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/27/2025, 6:10 PM' },
+                            { subject: 'RE: Netwitness | NHQ DISTRIBUTIONS LTD | 00519568 | S2 | 12.5.1.3 | How to Integration Delinea PAM with NetWitness', from: 'caseupdate@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/27/2025, 6:07 PM' },
+                            { subject: 'RE: Netwitness | NHQ DISTRIBUTIONS LTD | 00519568 | S2 | 12.5.1.3 | How to Integration Delinea PAM with NetWitness', from: 'caseupdate@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/26/2025, 8:16 PM' },
+                            { subject: 'RE: Netwitness | NHQ DISTRIBUTIONS LTD | 00519568 | S2 | 12.5.1.3 | How to Integration Delinea PAM with NetWitness', from: 'caseupdate@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/20/2025, 1:33 AM' },
+                            { subject: 'RE: Netwitness | NHQ DISTRIBUTIONS LTD | 00519568 | S2 | 12.5.1.3 | How to Integration Delinea PAM with NetWitness', from: 'sidratul@nhqbd.com', to: 'caseupdate@netwitness.com', date: '11/19/2025, 11:22 PM' },
+                            { subject: 'RE: Netwitness | NHQ DISTRIBUTIONS LTD | 00519568 | S2 | 12.5.1.3 | How to Integration Delinea PAM with NetWitness', from: 'caseupdate@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/19/2025, 10:02 PM' },
+                            { subject: 'Welcome to NetWitness Support Portal', from: 'support@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/15/2025, 9:00 AM' },
+                            { subject: 'RE: License renewal for NHD-4381', from: 'licensing@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/14/2025, 3:45 PM' },
+                            { subject: 'RE: Netwitness | NHQ DISTRIBUTIONS LTD | 00519568 | S2 | FW log ingestion delay', from: 'caseupdate@netwitness.com', to: 'sidratul@nhqbd.com', date: '11/13/2025, 12:30 PM' },
+                          ].map((email, i) => (
+                            <tr key={i} className="hover:bg-muted/20 transition-colors">
+                              <td className="px-4 py-2.5">
+                                <p className="font-medium text-foreground truncate max-w-[300px]">{email.subject}</p>
+                              </td>
+                              <td className="px-4 py-2.5 text-muted-foreground">{email.from}</td>
+                              <td className="px-4 py-2.5 text-muted-foreground hidden sm:table-cell">{email.to}</td>
+                              <td className="px-4 py-2.5 text-muted-foreground whitespace-nowrap">{email.date}</td>
+                              <td className="px-4 py-2.5 text-right">
+                                <button className="h-7 w-7 rounded-md hover:bg-muted-foreground/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors mx-auto" title="View email">
+                                  <Eye className="h-3.5 w-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </TabsContent>
 
-                <div className="rounded-xl border bg-card p-4 space-y-4">
-                  <h3 className="text-sm font-semibold">Actions</h3>
-
-                  {/* NEW → Triaged (Team Lead / Technical Head) */}
-                  {case_.status === 'new' && isLead && (
-                    <Button size="sm" disabled={updateStatusMutation.isPending} onClick={() => updateStatusMutation.mutate('triaged')}>
-                      <Flag className="h-3.5 w-3.5" /> Mark as Triaged
-                    </Button>
-                  )}
-
-                  {/* TRIAGED → Assign Engineer / Change Priority / Transfer Department */}
-                  {case_.status === 'triaged' && (isLead || canAssign) && (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="space-y-1.5">
-                        <Label className="text-xs">Assign Engineer</Label>
-                        <Select
-                          value={case_.assignee_id ?? ''}
-                          onValueChange={(uid) => {
-                            dp.assignCase(caseId, uid, scope).then(() => {
-                              qc.invalidateQueries({ queryKey: ['case', caseId] })
-                              qc.invalidateQueries({ queryKey: ['cases'] })
-                              qc.invalidateQueries({ queryKey: ['notifications'] })
-                              toast({ title: 'Engineer assigned', variant: 'success' })
-                            }).catch((e: unknown) => toast({ title: String(e), variant: 'destructive' }))
-                          }}
-                        >
-                          <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Select engineer…" /></SelectTrigger>
-                          <SelectContent>
-                            {eligibleEngineers.map((u) => (<SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>))}
-                          </SelectContent>
-                        </Select>
+            <TabsContent value="activity" className="mt-4 space-y-4">
+              <div className="rounded-xl border bg-card p-5 space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="h-6 w-1 rounded-full bg-primary" />
+                  <h3 className="text-sm font-semibold">Timeline</h3>
+                </div>
+                <div className="space-y-0">
+                  <div className="flex gap-3.5">
+                    <div className="flex flex-col items-center">
+                      <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center shrink-0">
+                        <div className="h-2 w-2 rounded-full bg-muted-foreground/40" />
                       </div>
-                      <div className="space-y-1.5">
-                        <Label className="text-xs">Change Priority</Label>
-                        <Select value={case_.priority} onValueChange={(v) => patchCase({ priority: v as Priority }, 'Priority updated')}>
-                          <SelectTrigger className="h-9 text-sm"><SelectValue /></SelectTrigger>
-                          <SelectContent>
-                            {(Object.entries(PRIORITY_LABELS) as [Priority, string][]).map(([k, v]) => (<SelectItem key={k} value={k}>{v}</SelectItem>))}
-                          </SelectContent>
-                        </Select>
+                      <div className="w-0.5 flex-1 bg-border min-h-[32px]" />
+                    </div>
+                    <div className="pb-4">
+                      <p className="text-sm font-medium text-foreground">Case opened</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Raised against {solution?.name ?? 'case'}.</p>
+                      <p className="text-[11px] text-muted-foreground/60 mt-1">2d ago</p>
+                    </div>
+                  </div>
+
+                  {case_.assignee_id && (
+                    <div className="flex gap-3.5">
+                      <div className="flex flex-col items-center">
+                        <div className="h-6 w-6 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center shrink-0">
+                          <CheckCircle2 className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div className="w-0.5 flex-1 bg-border min-h-[32px]" />
                       </div>
-                      <div className="space-y-1.5">
-                        <Label className="text-xs">Transfer Department</Label>
-                        <Select value={case_.team_id ?? ''} onValueChange={(v) => patchCase({ team_id: v }, 'Case transferred')}>
-                          <SelectTrigger className="h-9 text-sm"><SelectValue placeholder="Select team…" /></SelectTrigger>
-                          <SelectContent>
-                            {(teams ?? []).map((t) => (<SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>))}
-                          </SelectContent>
-                        </Select>
+                      <div className="pb-4">
+                        <p className="text-sm font-medium text-foreground">Reza Karim assigned</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">Picked up by your support engineer.</p>
+                        <p className="text-[11px] text-muted-foreground/60 mt-1">2d ago</p>
                       </div>
                     </div>
                   )}
 
-                  {/* ASSIGNED → Start Working (Support Engineer) */}
-                  {case_.status === 'assigned' && (
-                    <Button size="sm" disabled={updateStatusMutation.isPending} onClick={() => updateStatusMutation.mutate('in_progress')}>
-                      <PlayCircle className="h-3.5 w-3.5" /> Start Working
-                    </Button>
-                  )}
-
-                  {/* IN PROGRESS → Update Progress / Request Client Info / Mark Resolved */}
-                  {(case_.status === 'in_progress' || case_.status === 'escalated') && (
-                    <div className="flex flex-wrap gap-2">
-                      <Button size="sm" variant="outline" onClick={() => setProgressOpen(true)}>
-                        <Activity className="h-3.5 w-3.5" /> Update Progress
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => setClientInfoOpen(true)}>
-                        <HelpCircle className="h-3.5 w-3.5" /> Request Client Information
-                      </Button>
-                      {canResolve && (
-                        <Button size="sm" onClick={() => setResolveOpen(true)} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                          <CheckSquare className="h-3.5 w-3.5" /> Mark Resolved
-                        </Button>
-                      )}
-                      {canEscalate && case_.status !== 'escalated' && (
-                        <Button size="sm" variant="outline" disabled={updateStatusMutation.isPending}
-                          onClick={() => updateStatusMutation.mutate('escalated')}
-                          className="text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950/30">
-                          <ArrowRightLeft className="h-3.5 w-3.5" /> Escalate
-                        </Button>
-                      )}
+                  {(comments ?? []).length > 0 && (
+                    <div className="flex gap-3.5">
+                      <div className="flex flex-col items-center">
+                        <div className="h-6 w-6 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0">
+                          <Activity className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Update from engineer</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">Investigating sensor re-registration after the OS patch.</p>
+                        <p className="text-[11px] text-muted-foreground/60 mt-1">30 Jun · 10:40</p>
+                      </div>
                     </div>
-                  )}
-
-                  {/* PENDING CLIENT → waiting */}
-                  {case_.status === 'pending_client' && (
-                    <div className="space-y-3">
-                      <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-                        <Clock className="h-4 w-4" /> Waiting for the client to respond. The case returns to In Progress automatically once they reply.
-                      </p>
-                      <Button size="sm" variant="outline" onClick={() => setProgressOpen(true)}>
-                        <Activity className="h-3.5 w-3.5" /> Update Progress
-                      </Button>
-                    </div>
-                  )}
-
-                  {/* RESOLVED → awaiting client confirmation */}
-                  {case_.status === 'resolved' && (
-                    <div className="space-y-3">
-                      <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-500" /> Resolved — awaiting client confirmation. The client will confirm the solution (closing the case) or reopen it.
-                      </p>
-                      {canAccess(scope, 'reopen', 'case') && (
-                        <Button size="sm" variant="outline" disabled={updateStatusMutation.isPending} onClick={() => updateStatusMutation.mutate('in_progress')}>
-                          <RotateCcw className="h-3.5 w-3.5" /> Reopen (send back to engineer)
-                        </Button>
-                      )}
-                    </div>
-                  )}
-
-                  {/* CLOSED → read only */}
-                  {case_.status === 'closed' && (
-                    <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-                      <Lock className="h-4 w-4" /> This case is closed. No further actions are available.
-                    </p>
                   )}
                 </div>
+              </div>
+            </TabsContent>
+
+            {showFeedbackTab && (
+              <TabsContent value="feedback" className="mt-4 space-y-4">
+                {feedback ? (
+                  <>
+                    <div className="rounded-xl border bg-gradient-to-br from-card to-muted/20 p-5 space-y-4">
+                      <div className="flex items-start justify-between gap-2">
+                        <RatingGauge rating={feedback.rating ?? 0} />
+                        {feedback.ml_reviewed && (
+                          <Badge variant="secondary" className="text-[10px] gap-1 h-5 px-1.5 shrink-0">
+                            <CheckCircle2 className="h-2.5 w-2.5" /> Reviewed
+                          </Badge>
+                        )}
+                      </div>
+                      {feedback.feedback_text && (
+                        <div>
+                          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Comment</p>
+                          <p className="text-sm text-foreground leading-relaxed italic">&ldquo;{feedback.feedback_text}&rdquo;</p>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between flex-wrap gap-1 pt-1 border-t">
+                        {client && <p className="text-xs font-medium text-foreground">{client.company_name}</p>}
+                        <p className="text-[11px] text-muted-foreground">{formatDateTime(feedback.created_at)}</p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border bg-card p-5">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-3">Question Breakdown</p>
+                      {!feedback.question_ratings && (
+                        <p className="text-xs text-muted-foreground mb-3">Submitted before per-question ratings existed — only the overall score above is available.</p>
+                      )}
+                      <div className="divide-y">
+                        {FEEDBACK_QUESTIONS.map((q) => (
+                          <div key={q.key} className="flex items-center justify-between gap-3 py-2">
+                            <span className="text-sm text-foreground">{q.label}</span>
+                            <div className="flex items-center gap-0.5">
+                              {Array.from({ length: 5 }, (_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-3.5 w-3.5 ${(feedback.question_ratings?.[q.key] ?? 0) > i ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/20'}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="rounded-xl border bg-card p-8 text-center">
+                    <div className="flex justify-center gap-0.5 mb-2">
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <Star key={i} className="h-5 w-5 text-muted-foreground/15" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground">Awaiting client feedback</p>
+                  </div>
+                )}
               </TabsContent>
             )}
           </Tabs>
-
-          {/* Sub tasks (not shown on a sub task itself) */}
-          {!isSubCase && <SubCasesSection parentCase={case_} />}
         </div>
 
         {/* Side panel */}
         <div className="space-y-4">
+          {/* Submit for closure — engineer marks the case resolved; the client then
+              gives feedback and accepts or reopens it from their own case view. */}
+          {canResolve && !isNewCase && !['resolved', 'pending_closure', 'closed'].includes(case_.status) && (
+            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 space-y-3">
+              <h3 className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5" /> Ready to Close?
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Submit your resolution. The client will review it, give feedback, and either accept the closure or reopen the case.
+              </p>
+              <Button
+                size="sm"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                onClick={() => setResolveOpen(true)}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5" /> Submit for Closure
+              </Button>
+            </div>
+          )}
+
+          {case_.status === 'resolved' && (
+            <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-4 space-y-1">
+              <h3 className="text-[11px] font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5" /> Awaiting Client Response
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Resolution submitted — waiting for the client to give feedback and accept or reopen the case.
+              </p>
+            </div>
+          )}
+
           {/* Client */}
           {client && session.role !== 'client' && (
-            <div className="rounded-xl border bg-card p-4">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Client</h3>
-              <p className="text-sm font-semibold">{client.company_name}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{client.contact_person}</p>
-              <p className="text-xs text-muted-foreground">{client.phone}</p>
+            <div className="rounded-xl border bg-gradient-to-br from-card to-muted/20 p-4 space-y-2.5">
+              <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                <Users className="h-3.5 w-3.5" /> Client
+              </h3>
+              <div className="flex items-start gap-2.5">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-sm font-bold text-primary">{client.company_name.charAt(0)}</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground truncate">{client.company_name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{client.contact_person}</p>
+                  <p className="text-xs text-muted-foreground">{client.phone}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => router.push(`/cases?search=${encodeURIComponent(client.company_name)}`)}
+                className="w-full text-center text-xs font-medium text-primary bg-primary/5 hover:bg-primary/10 rounded-lg py-1.5 transition-colors"
+              >
+                View all cases for {client.company_name} &rarr;
+              </button>
             </div>
           )}
 
           {/* Solution */}
           {solution && (
-            <div className="rounded-xl border bg-card p-4">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Solution</h3>
-              <p className="text-sm font-medium">{solution.name}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{solution.category}</p>
+            <div className="rounded-xl border bg-gradient-to-br from-card to-muted/20 p-4 space-y-2.5">
+              <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Solution</h3>
+              <div className="flex items-start gap-2.5">
+                <div className="h-8 w-8 rounded-lg bg-sky-50 dark:bg-sky-950/30 flex items-center justify-center shrink-0">
+                  <span className="text-sm font-bold text-sky-600 dark:text-sky-400">{solution.name.charAt(0)}</span>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-foreground">{solution.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{solution.category}</p>
+                </div>
+              </div>
             </div>
           )}
 
@@ -707,15 +891,17 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
             const isClosed = case_.status === 'closed'
 
             return (
-              <div className="rounded-xl border bg-card p-4 space-y-4">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+              <div className="rounded-xl border bg-gradient-to-br from-card to-muted/20 p-4 space-y-4">
+                <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5" /> Assigned
                 </h3>
 
                 {/* Team row */}
                 {team && (
-                  <div className="space-y-0.5">
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Team</p>
+                  <div className="rounded-lg bg-muted/30 p-2.5 space-y-1">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide flex items-center gap-1">
+                      <Users className="h-3 w-3" /> Team
+                    </p>
                     <p className="text-sm font-semibold text-foreground">{team.name}</p>
                   </div>
                 )}
@@ -724,10 +910,10 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
                 {lead && (
                   <div className="space-y-1.5">
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Team Lead</p>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5 rounded-lg bg-muted/20 p-2">
                       <UserAvatar name={lead.name} size="sm" />
                       <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{lead.name}</p>
+                        <p className="text-sm font-medium truncate text-foreground">{lead.name}</p>
                         <p className="text-[10px] text-muted-foreground">{ROLE_LABELS[lead.role] ?? lead.role}</p>
                       </div>
                     </div>
@@ -768,25 +954,42 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
 
                       {/* Currently assigned engineers */}
                       {allCurrentEngineers.length > 0 ? (
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                           {allCurrentEngineers.map((eng) => {
-                            const isPrimary = eng.id === case_.assignee_id
+                            const isOwner = eng.id === case_.assignee_id
                             const isCoAssignee = (case_.co_assignee_ids ?? []).includes(eng.id)
                             return (
-                              <div key={eng.id} className="flex items-center gap-2">
-                                <UserAvatar name={eng.name} size="sm" />
+                              <div key={eng.id} className={`flex items-center gap-2.5 rounded-lg p-2 ${
+                                isOwner
+                                  ? 'bg-muted/20 border-l-2 border-l-blue-500 dark:border-l-blue-400'
+                                  : 'bg-muted/20'
+                              }`}>
+                                <div className={`flex h-8 w-8 items-center justify-center rounded-full shrink-0 ${
+                                  isOwner
+                                    ? 'bg-blue-500 text-white text-xs font-bold'
+                                    : ''
+                                }`}>
+                                  {isOwner ? (
+                                    eng.name.charAt(0).toUpperCase()
+                                  ) : (
+                                    <UserAvatar name={eng.name} size="sm" />
+                                  )}
+                                </div>
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium truncate">{eng.name}</p>
+                                  <div className="flex items-center gap-1.5">
+                                    <p className="text-sm font-medium truncate text-foreground">{eng.name}</p>
+                                    {isOwner && !isClosed && (
+                                      <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/50 px-1.5 py-0.5 text-[9px] font-medium text-blue-700 dark:text-blue-300">Owner</span>
+                                    )}
+                                  </div>
                                   <p className="text-[10px] text-muted-foreground">
                                     {ROLE_LABELS[eng.role] ?? eng.role}
                                   </p>
                                 </div>
                                 <div className="flex items-center gap-1 shrink-0">
                                   {isClosed
-                                    ? <Badge variant="secondary" className="text-[10px]">{isPrimary ? 'Lead' : 'Support'}</Badge>
-                                    : <Badge variant={isPrimary ? 'default' : 'secondary'} className="text-[10px]">
-                                        {isPrimary ? 'Primary' : 'Co-assignee'}
-                                      </Badge>
+                                    ? <Badge variant="secondary" className="text-[10px]">{isOwner ? 'Lead' : 'Support'}</Badge>
+                                    : !isOwner && <Badge variant="secondary" className="text-[10px]">Co-assignee</Badge>
                                   }
                                   {!isClosed && isCoAssignee && canAccess(scope, 'assign', 'case') && (
                                     <button
@@ -810,19 +1013,19 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
                       {!isClosed && canAccess(scope, 'assign', 'case') && (
                         <div className="space-y-1.5 pt-1">
                           {/* Primary assignee */}
-                          <p className="text-[10px] text-muted-foreground">Set primary</p>
+                          <p className="text-[10px] text-muted-foreground">Set owner</p>
                           <Select
                             value={case_.assignee_id ?? ''}
                             onValueChange={(uid) => {
                               dp.assignCase(caseId, uid, scope).then(() => {
                                 qc.invalidateQueries({ queryKey: ['case', caseId] })
                                 qc.invalidateQueries({ queryKey: ['notifications'] })
-                                toast({ title: 'Primary assignee updated', variant: 'success' })
+                                toast({ title: 'Owner updated', variant: 'success' })
                               }).catch((e: unknown) => toast({ title: String(e), variant: 'destructive' }))
                             }}
                           >
                             <SelectTrigger className="h-8 text-xs">
-                              <SelectValue placeholder="Assign primary..." />
+                              <SelectValue placeholder="Assign owner..." />
                             </SelectTrigger>
                             <SelectContent>
                               {eligibleEngineers.map((u) => (
@@ -871,10 +1074,10 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
             )
           })()}
 
-          {/* Client Feedback — hidden for sub tasks */}
-          {!isSubCase && (
-          <div className="rounded-xl border bg-card p-4 space-y-3">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+          {/* Client Feedback — only after resolution */}
+          {!isSubCase && ['resolved', 'closed', 'pending_closure'].includes(case_.status) && (
+          <div className="rounded-xl border bg-gradient-to-br from-card to-muted/20 p-4 space-y-3">
+            <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
               <Star className="h-3.5 w-3.5 text-yellow-500" /> Client Feedback
             </h3>
 
@@ -882,42 +1085,41 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
               <>
                 {/* Star rating */}
                 {feedback.rating != null ? (
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-1.5">
+                  <div className="rounded-lg bg-muted/30 p-3 space-y-2">
+                    <div className="flex items-center gap-1">
                       {Array.from({ length: 5 }, (_, i) => (
                         <Star
                           key={i}
-                          className={`h-5 w-5 ${i < feedback.rating! ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/20'}`}
+                          className={`h-4 w-4 ${i < feedback.rating! ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/20'}`}
                         />
                       ))}
-                      <span className="text-sm font-bold ml-1">
+                      <span className="text-sm font-bold ml-1.5 text-foreground">
                         {feedback.rating}
                         <span className="text-xs font-normal text-muted-foreground"> / 5</span>
                       </span>
                     </div>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] font-medium text-muted-foreground">
                       {feedback.rating >= 4 ? 'Excellent' : feedback.rating === 3 ? 'Satisfactory' : 'Needs improvement'}
                     </p>
                   </div>
                 ) : (
-                  <div className="flex">
+                  <div className="flex items-center gap-1 rounded-lg bg-muted/30 p-2.5">
                     {Array.from({ length: 5 }, (_, i) => (
-                      <Star key={i} className="h-5 w-5 text-muted-foreground/20" />
+                      <Star key={i} className="h-4 w-4 text-muted-foreground/20" />
                     ))}
                     <span className="text-xs text-muted-foreground ml-2">No rating given</span>
                   </div>
                 )}
 
                 {/* Feedback text */}
-                <blockquote className="border-l-2 border-primary/30 pl-2.5 italic text-xs leading-relaxed">
-                  {feedback.feedback_text
-                    ? <span className="text-muted-foreground">&ldquo;{feedback.feedback_text}&rdquo;</span>
-                    : <span className="text-muted-foreground/50 not-italic">No comment provided</span>
-                  }
-                </blockquote>
+                {feedback.feedback_text && (
+                  <div className="relative pl-3 border-l-2 border-yellow-300 dark:border-yellow-700">
+                    <p className="text-xs text-muted-foreground italic leading-relaxed">&ldquo;{feedback.feedback_text}&rdquo;</p>
+                  </div>
+                )}
 
                 {/* Client + timestamp + reviewed badge */}
-                <div className="flex items-center justify-between flex-wrap gap-1 border-t pt-2.5">
+                <div className="flex items-center justify-between flex-wrap gap-1 pt-1">
                   <div className="space-y-0.5">
                     {client && (
                       <p className="text-xs font-medium text-foreground">{client.company_name}</p>
@@ -925,110 +1127,26 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
                     <p className="text-[10px] text-muted-foreground">{formatDateTime(feedback.created_at)}</p>
                   </div>
                   {feedback.ml_reviewed && (
-                    <Badge variant="secondary" className="text-[10px] gap-1 h-4">
+                    <Badge variant="secondary" className="text-[10px] gap-1 h-5 px-1.5">
                       <CheckCircle2 className="h-2.5 w-2.5" /> Reviewed
                     </Badge>
                   )}
                 </div>
               </>
             ) : (
-              <div className="text-center py-3 space-y-2">
+              <div className="rounded-lg bg-muted/30 py-4 space-y-2">
                 <div className="flex justify-center gap-0.5">
                   {Array.from({ length: 5 }, (_, i) => (
-                    <Star key={i} className="h-6 w-6 text-muted-foreground/15" />
+                    <Star key={i} className="h-5 w-5 text-muted-foreground/15" />
                   ))}
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  {['resolved', 'closed', 'pending_closure'].includes(case_.status)
-                    ? 'Awaiting client feedback'
-                    : 'Feedback available after resolution'}
-                </p>
+                <p className="text-xs text-muted-foreground text-center">Awaiting client feedback</p>
               </div>
             )}
           </div>
           )}
 
-          {/* Timeline (time tracker) — hidden for sub tasks */}
-          {!isSubCase && (() => {
-            const createdMs  = new Date(case_.created_at).getTime()
-            const endMs      = case_.resolved_at
-              ? new Date(case_.resolved_at).getTime()
-              : Date.now()
-            const durationMs = endMs - createdMs
-            const daysOpen   = Math.ceil(durationMs / 86_400_000)
-            const slaMs      = case_.sla_due_at ? new Date(case_.sla_due_at).getTime() : null
-            const slaBreached = slaMs
-              ? (case_.resolved_at
-                  ? new Date(case_.resolved_at).getTime() > slaMs
-                  : Date.now() > slaMs)
-              : false
-
-            return (
-              <div className="rounded-xl border bg-card p-4 space-y-3">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Timeline</h3>
-
-                {/* Duration + Days stat tiles */}
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="rounded-lg bg-muted/40 p-2.5 space-y-0.5">
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                      <Clock className="h-3 w-3" /> Duration
-                    </div>
-                    <p className="text-sm font-bold text-foreground">{formatDuration(durationMs)}</p>
-                  </div>
-                  <div className="rounded-lg bg-muted/40 p-2.5 space-y-0.5">
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                      <Calendar className="h-3 w-3" /> Days {case_.resolved_at ? 'Taken' : 'Open'}
-                    </div>
-                    <p className="text-sm font-bold text-foreground">{daysOpen} day{daysOpen !== 1 ? 's' : ''}</p>
-                  </div>
-                </div>
-
-                {/* Date rows */}
-                <div className="space-y-2 border-t pt-2.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground flex items-center gap-1.5">
-                      <Clock className="h-3 w-3" /> Created
-                    </span>
-                    <span className="text-foreground font-medium">{formatDateTime(case_.created_at)}</span>
-                  </div>
-
-                  {slaMs && (
-                    <div className="flex items-center justify-between text-xs">
-                      <span className={`flex items-center gap-1.5 ${slaBreached ? 'text-red-500' : 'text-muted-foreground'}`}>
-                        <AlertTriangle className="h-3 w-3" /> SLA Due
-                      </span>
-                      <div className="text-right">
-                        <p className={`font-medium ${slaBreached ? 'text-red-500' : 'text-foreground'}`}>
-                          {formatDateTime(case_.sla_due_at!)}
-                        </p>
-                        {slaBreached && (
-                          <p className="text-[10px] text-red-500">Breached</p>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {case_.resolved_at && (
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-emerald-600 flex items-center gap-1.5">
-                        <CheckCircle2 className="h-3 w-3" /> Resolved
-                      </span>
-                      <span className="text-emerald-600 font-medium">{formatDateTime(case_.resolved_at)}</span>
-                    </div>
-                  )}
-
-                  {case_.closed_at && (
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground flex items-center gap-1.5">
-                        <CheckCircle2 className="h-3 w-3" /> Closed
-                      </span>
-                      <span className="text-foreground font-medium">{formatDateTime(case_.closed_at)}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )
-          })()}
+          <ExternalMembersCard caseId={caseId} readOnly={session.role === 'sales_executive'} />
         </div>
       </div>
 
@@ -1036,6 +1154,109 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
       <ResolveCaseDialog caseId={caseId} open={resolveOpen} onOpenChange={setResolveOpen} />
       <RequestClientInfoDialog caseId={caseId} open={clientInfoOpen} onOpenChange={setClientInfoOpen} />
       <UpdateProgressDialog caseId={caseId} open={progressOpen} onOpenChange={setProgressOpen} />
+
+      {/* Floating comment widget */}
+      {canComment && !['closed'].includes(case_.status) && (
+        <>
+          {/* Toggle button */}
+          <button
+            onClick={() => setChatOpen((v) => !v)}
+            className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all flex items-center justify-center"
+          >
+            {chatOpen ? <XCircle className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+            {!chatOpen && (
+              <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center shadow">1</span>
+            )}
+          </button>
+
+          {/* Comment panel */}
+          {chatOpen && (
+            <div className="fixed bottom-24 right-6 z-50 w-[380px] rounded-xl border bg-card shadow-2xl flex flex-col h-[480px] animate-in slide-in-from-bottom-5 fade-in duration-200">
+              <div className="px-4 pt-3 pb-1 flex items-center justify-between border-b">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Comments</h3>
+                <button onClick={() => setChatOpen(false)} className="h-6 w-6 rounded-md hover:bg-muted-foreground/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <div className="flex-1 px-4 pb-2 space-y-3 overflow-y-auto min-h-0 py-3">
+                <div className="flex items-start gap-2">
+                  <UserAvatar name="Reza Karim" size="sm" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-medium">Reza Karim</span>
+                      <span className="text-[10px] text-muted-foreground">30 Jun · 10:40</span>
+                    </div>
+                    <p className="text-xs text-foreground mt-0.5">Investigating sensor re-registration after the OS patch. Need a maintenance window to proceed.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 flex-row-reverse">
+                  <UserAvatar name="You" size="sm" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-row-reverse">
+                      <span className="text-xs font-medium">You</span>
+                      <span className="text-[10px] text-muted-foreground">30 Jun · 11:15</span>
+                    </div>
+                    <p className="text-xs text-foreground mt-0.5 bg-primary/10 rounded-lg px-3 py-1.5">We can schedule it tonight after 11 PM. Let me know what you need from our side.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <UserAvatar name="Reza Karim" size="sm" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-medium">Reza Karim</span>
+                      <span className="text-[10px] text-muted-foreground">30 Jun · 11:42</span>
+                    </div>
+                    <p className="text-xs text-foreground mt-0.5">Perfect. I'll prepare the script and be ready at 11 PM. Will send a confirmation once done.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="border-t border-border p-3 space-y-2">
+                <div className="flex items-end gap-2 bg-muted/40 dark:bg-muted/10 rounded-xl p-1.5 ring-1 ring-border focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    id="comment-attach"
+                    onChange={(e) => { handleCommentFiles(e.target.files); e.target.value = '' }}
+                  />
+                  <label htmlFor="comment-attach" className="shrink-0 flex items-center justify-center h-9 w-9 rounded-lg hover:bg-muted-foreground/10 text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                    <Paperclip className="h-4 w-4" />
+                  </label>
+                  <Textarea
+                    placeholder="Reply to your engineer…"
+                    value={commentBody}
+                    onChange={(e) => setCommentBody(e.target.value)}
+                    rows={1}
+                    className="flex-1 min-h-0 border-0 bg-transparent resize-none px-1 py-2 text-sm shadow-none focus-visible:ring-0"
+                  />
+                  <Button
+                    size="icon"
+                    className="shrink-0 h-9 w-9 rounded-lg"
+                    disabled={!commentBody.trim() || addCommentMutation.isPending}
+                    onClick={() => addCommentMutation.mutate({ body: commentBody, parentId: null, isInternal })}
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex items-center gap-3 px-1">
+                  <button
+                    type="button"
+                    onClick={() => setIsInternal((v) => !v)}
+                    className={`inline-flex items-center gap-1.5 text-xs rounded-full px-2.5 py-1 transition-colors ${
+                      isInternal
+                        ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <Lock className="h-3 w-3" />
+                    {isInternal ? 'Internal' : 'External'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }

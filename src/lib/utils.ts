@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import type { Priority, CaseStatus, ClientInfoReason } from '@/types'
+import type { Priority, CaseStatus, ClientInfoReason, Case } from '@/types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -36,6 +36,26 @@ export function slaPercent(createdAt: string, dueAt: string): number {
 
 export function slaRemainingMs(dueAt: string): number {
   return new Date(dueAt).getTime() - Date.now()
+}
+
+// TH dashboard attention buckets — also consumed by the Cases page as the
+// `?quick=` deep-link filter so a bucket click lands on the real, searchable,
+// paginated list instead of a second copy of it.
+export const OPEN_CASE_STATUSES = new Set<CaseStatus>(['new', 'triaged', 'assigned', 'in_progress', 'pending_client', 'escalated'])
+export const QUICK_FILTER_LONG_QUEUE_MS = 24 * 60 * 60 * 1000   // unassigned this long = queuing too long
+export const QUICK_FILTER_LONG_RUNNING_MS = 90 * 86_400_000     // open > 3 months
+
+export type CaseQuickFilter = 'escalated' | 'reopened' | 'closure_rejected' | 'long_queue' | 'long_running'
+
+export function matchesQuickFilter(c: Case, quick: CaseQuickFilter, nowMs: number = Date.now()): boolean {
+  const isOpen = OPEN_CASE_STATUSES.has(c.status)
+  switch (quick) {
+    case 'escalated':        return isOpen && (c.is_escalated || c.status === 'escalated')
+    case 'reopened':         return isOpen && !!c.reopened_from_case_id
+    case 'closure_rejected': return isOpen && !!c.closure_rejected
+    case 'long_queue':       return isOpen && !c.assignee_id && nowMs - new Date(c.created_at).getTime() > QUICK_FILTER_LONG_QUEUE_MS
+    case 'long_running':     return isOpen && nowMs - new Date(c.created_at).getTime() > QUICK_FILTER_LONG_RUNNING_MS
+  }
 }
 
 export function formatDuration(ms: number): string {

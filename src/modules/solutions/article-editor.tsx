@@ -248,9 +248,14 @@ function ArticleForm({ article }: { article?: SolutionArticle }) {
         <Button variant="ghost" size="sm" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
-        <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
-          {isEdit ? 'Edit article' : 'New article'}
-        </span>
+        <div className="hidden sm:flex items-center gap-2">
+          <div className="rounded-lg bg-primary/10 p-1.5">
+            <PenLine className="h-3.5 w-3.5 text-primary" />
+          </div>
+          <span className="text-sm font-semibold text-foreground">
+            {isEdit ? 'Edit Article' : 'New Article'}
+          </span>
+        </div>
 
         <div className="ml-auto flex items-center gap-3">
           <span className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground tabular-nums">
@@ -422,7 +427,9 @@ function EditorBlockedState({ title, message, onBack }: { title: string; message
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <div className="rounded-xl border bg-card p-10 text-center space-y-3">
-        <ShieldAlert className="h-10 w-10 text-muted-foreground mx-auto" />
+        <div className="rounded-full bg-muted p-3 w-fit mx-auto">
+          <ShieldAlert className="h-8 w-8 text-muted-foreground" />
+        </div>
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="text-sm text-muted-foreground">{message}</p>
         <Button variant="outline" onClick={onBack}>Go back</Button>

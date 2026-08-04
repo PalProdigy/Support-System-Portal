@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Theme is toggled by adding/removing a `.dark` class on <html> (see
+   topbar.tsx's toggleTheme), independent of the OS color-scheme preference.
+   Tailwind v4's `dark:` variant defaults to `prefers-color-scheme` unless
+   remapped — without this, every `dark:` utility in the app is inert
+   whenever the OS scheme doesn't match the in-app toggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --background: 0 0% 100%;

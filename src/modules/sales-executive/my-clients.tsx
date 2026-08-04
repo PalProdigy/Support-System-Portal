@@ -152,7 +152,7 @@ export function MyClients() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <Button variant="ghost" size="icon" className="h-7 w-7" title="Edit notes" onClick={() => { setEditingClient(client); setNotes(client.business_context) }}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7" title="Edit notes" onClick={() => { setEditingClient(client); setNotes(client.business_context ?? '') }}>
                       <Pencil className="h-3 w-3" />
                     </Button>
                     <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => router.push(`/clients/${client.id}`)}>

@@ -1,15 +1,16 @@
 'use client'
 
-import type { DataProvider, ListScope, CaseFilters, KBArticleFilters, Paginated, SolutionArticleFilters, CreateSolutionArticleInput } from '../provider'
+import type { DataProvider, ListScope, CaseFilters, KBArticleFilters, Paginated, SolutionArticleFilters, CreateSolutionArticleInput, ProjectFilters, EngagementFilters, ClientContactFilters } from '../provider'
 import type {
-  User, Client, Solution, SolutionComment, ThreadComment, ClientSolution, Team, Product, Role,
+  User, Client, Solution, SolutionComment, ThreadComment, ClientSolution, Team, Product, ProductLicense, Role,
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle, KBArticleStatus, KBArticleVersion,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
   EngineerMetrics, SalesTarget, SalesExecutiveMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
   ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
-  SolutionArticle,
+  SolutionArticle, Project, ProjectComment, ProjectAttachment, Engagement, EngagementProductLine, EngagementType, ClientContact, ExternalMember,
+  PermissionOverride,
 } from '@/types'
 import { slugify } from '@/lib/markdown/utils'
 import { canAccess, requireAccess, canCreateSubCase } from '@/lib/rbac'
@@ -26,19 +27,22 @@ import seedProducts from '@/data/seed/products.json'
 import seedClients from '@/data/seed/clients.json'
 import seedClientSolutions from '@/data/seed/client_solutions.json'
 import seedSLARules from '@/data/seed/sla_rules.json'
-import seedCases from '@/data/seed/cases.json'
-import seedComments from '@/data/seed/case_comments.json'
+import seedCasesRaw from '@/data/seed/cases.json'
+import seedCommentsRaw from '@/data/seed/case_comments.json'
 import seedKBArticles from '@/data/seed/kb_articles.json'
-import seedFeedback from '@/data/seed/feedback.json'
-import seedNotifications from '@/data/seed/notifications.json'
-import seedAuditLogs from '@/data/seed/audit_logs.json'
+import seedFeedbackRaw from '@/data/seed/feedback.json'
+import seedNotificationsRaw from '@/data/seed/notifications.json'
+import seedAuditLogsRaw from '@/data/seed/audit_logs.json'
 import seedProspects from '@/data/seed/prospects.json'
 import seedSolutionArticles from '@/data/seed/solution_articles.json'
 import seedSalesTargets from '@/data/seed/sales_targets.json'
+import seedProductLicensesRaw from '@/data/seed/product_licenses.json'
+import seedProjects from '@/data/seed/projects.json'
 
 const STORAGE_KEYS = {
   users: 'nhq_users',
   clients: 'nhq_clients',
+  productLicenses: 'nhq_product_licenses',
   solutions: 'nhq_solutions',
   solutionArticles: 'nhq_solution_articles',
   clientSolutions: 'nhq_client_solutions',
@@ -61,6 +65,13 @@ const STORAGE_KEYS = {
   caseTransferRequests: 'nhq_case_transfer_requests',
   engineerChangeRequests: 'nhq_engineer_change_requests',
   caseClaims: 'nhq_case_claims',
+  projects: 'nhq_projects',
+  projectComments: 'nhq_project_comments',
+  projectAttachments: 'nhq_project_attachments',
+  engagements: 'nhq_engagements',
+  clientContacts: 'nhq_client_contacts',
+  externalMembers: 'nhq_external_members',
+  permissionOverrides: 'nhq_permission_overrides',
   seeded: 'nhq_seeded',
 }
 
@@ -91,7 +102,67 @@ function save<T>(key: string, data: T[]): void {
   localStorage.setItem(key, JSON.stringify(data))
 }
 
-const SEED_VERSION = '17' // bump when seed schema changes
+// Loads engagements and self-heals product lines saved before `types` (a
+// list) replaced the old single `type` field — a stale localStorage entry
+// (or a tab that hasn't reloaded past a SEED_VERSION bump) would otherwise
+// have `types === undefined` and crash every `.types.includes(...)` call.
+function loadEngagements(): Engagement[] {
+  return load<Engagement>(STORAGE_KEYS.engagements).map((e) => ({
+    ...e,
+    products: (e.products ?? []).map((p) => {
+      const legacyType = (p as unknown as { type?: EngagementType }).type
+      return Array.isArray(p.types) ? p : { ...p, types: legacyType ? [legacyType] : ['installation'] }
+    }),
+  }))
+}
+
+const SEED_VERSION = '42' // bump when seed schema changes
+
+// License, case, comment, notification, feedback and audit-log seed rows store
+// dates as day/hour offsets from "now" and are re-based at seed time, so the
+// dashboards always show a realistic, varied spread of ages (some cases hours
+// old, some months old) instead of a single stale historical date.
+const daysFromNow = (d: number) => new Date(Date.now() + d * 86_400_000).toISOString()
+const hoursFromNow = (h: number) => new Date(Date.now() - h * 3_600_000).toISOString()
+const seedProductLicenses: ProductLicense[] = seedProductLicensesRaw.map(
+  ({ license_days, sla_days, ...r }) => ({
+    ...r,
+    license_expires_at: daysFromNow(license_days),
+    sla_expires_at: daysFromNow(sla_days),
+  })
+)
+
+const seedCases: Case[] = seedCasesRaw.map((c) => {
+  const { created_hours_ago, due_hours_ago, resolved_hours_ago, closed_hours_ago, closure_rejected_hours_ago, ...rest } = c
+  return {
+    ...rest,
+    created_at: hoursFromNow(created_hours_ago),
+    sla_due_at: hoursFromNow(due_hours_ago),
+    resolved_at: resolved_hours_ago != null ? hoursFromNow(resolved_hours_ago) : undefined,
+    closed_at: closed_hours_ago != null ? hoursFromNow(closed_hours_ago) : undefined,
+    closure_rejected_at: closure_rejected_hours_ago != null ? hoursFromNow(closure_rejected_hours_ago) : undefined,
+  } as Case
+})
+
+const seedComments: CaseComment[] = seedCommentsRaw.map(({ hours_ago, ...rest }) => ({
+  ...rest,
+  created_at: hoursFromNow(hours_ago),
+}))
+
+const seedFeedback: Feedback[] = seedFeedbackRaw.map(({ hours_ago, ...rest }) => ({
+  ...rest,
+  created_at: hoursFromNow(hours_ago),
+}))
+
+const seedNotifications: Notification[] = seedNotificationsRaw.map(({ hours_ago, ...rest }) => ({
+  ...rest,
+  sent_at: hoursFromNow(hours_ago),
+} as Notification))
+
+const seedAuditLogs: AuditLog[] = seedAuditLogsRaw.map(({ hours_ago, ...rest }) => ({
+  ...rest,
+  created_at: hoursFromNow(hours_ago),
+} as AuditLog))
 
 function ensureSeeded(): void {
   if (typeof window === 'undefined') return
@@ -109,7 +180,18 @@ function ensureSeeded(): void {
   save(STORAGE_KEYS.slaRules, seedSLARules)
   save(STORAGE_KEYS.cases, seedCases)
   save(STORAGE_KEYS.comments, seedComments)
-  save(STORAGE_KEYS.attachments, [])
+  save(STORAGE_KEYS.attachments, [
+    { id: 'att1', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot1.png', file_name: 'image001.png', file_type: 'image/png', category: 'attachment', source: 'Email #00519568', size: 245760, created_at: hoursFromNow(-48) },
+    { id: 'att2', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot2.jpg', file_name: 'image002.jpg', file_type: 'image/jpeg', category: 'attachment', source: 'Email', size: 180224, created_at: hoursFromNow(-47) },
+    { id: 'att3', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot3.png', file_name: 'image001.png', file_type: 'image/png', category: 'attachment', source: 'Email #00519568', size: 315392, created_at: hoursFromNow(-24) },
+    { id: 'att4', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot4.jpg', file_name: 'image002.jpg', file_type: 'image/jpeg', category: 'attachment', source: 'Email #00519568', size: 198656, created_at: hoursFromNow(-23) },
+    { id: 'att5', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot5.png', file_name: 'image001.png', file_type: 'image/png', category: 'attachment', source: 'Email', size: 278528, created_at: hoursFromNow(-12) },
+    { id: 'att6', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot6.jpg', file_name: 'image002.jpg', file_type: 'image/jpeg', category: 'attachment', source: 'Email', size: 163840, created_at: hoursFromNow(-11) },
+    { id: 'att7', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot7.png', file_name: 'image001.png', file_type: 'image/png', category: 'attachment', source: 'Email #00519568', size: 352256, created_at: hoursFromNow(-6) },
+    { id: 'att8', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot8.jpg', file_name: 'image002.jpg', file_type: 'image/jpeg', category: 'attachment', source: 'Email #00519568', size: 212992, created_at: hoursFromNow(-5) },
+    { id: 'att9', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot9.png', file_name: 'image001.png', file_type: 'image/png', category: 'attachment', source: 'Email', size: 294912, created_at: hoursFromNow(-3) },
+    { id: 'att10', case_id: 'case1', uploaded_by: 'u2', uploaded_by_name: 'Neil.Cerna', file_url: '/mock/screenshot10.jpg', file_name: 'image002.jpg', file_type: 'image/jpeg', category: 'attachment', source: 'Email', size: 176128, created_at: hoursFromNow(-2) },
+  ])
   save(STORAGE_KEYS.rcas, [])
   save(STORAGE_KEYS.kbArticles, seedKBArticles)
   save(STORAGE_KEYS.feedback, seedFeedback)
@@ -117,6 +199,19 @@ function ensureSeeded(): void {
   save(STORAGE_KEYS.auditLogs, seedAuditLogs)
   save(STORAGE_KEYS.prospects, seedProspects)
   save(STORAGE_KEYS.salesTargets, seedSalesTargets)
+  save(STORAGE_KEYS.productLicenses, seedProductLicenses)
+  save(STORAGE_KEYS.projects, seedProjects)
+  save(STORAGE_KEYS.permissionOverrides, [])
+  save(STORAGE_KEYS.clientContacts, [
+    { id: 'cc1', client_id: 'c1', name: 'Priya Sharma', email: 'priya@acmecorp.com', phone: '+8801711000001', designation: 'IT Manager', created_at: hoursFromNow(720) },
+    { id: 'cc2', client_id: 'c2', name: 'Rahim Molla', email: 'rahim@deltatrade.com', phone: '+8801711000002', designation: 'CFO', created_at: hoursFromNow(720) },
+    { id: 'cc3', client_id: 'c3', name: 'Laila Hossain', email: 'laila@techwave.com', phone: '+8801711000003', designation: 'Operations Head', created_at: hoursFromNow(720) },
+  ])
+  save(STORAGE_KEYS.engagements, [
+    { id: 'eng1', client_id: 'c1', customer_po: 'PO-2024-011', products: [{ id: 'ep1', type: 'installation', oem: 'Microsoft', product_id: 'p10', placed_at: '2024-02-01', expires_at: '2025-02-01', contact_ids: ['cc1'] }], status: 'open', created_by: 'u4', created_at: hoursFromNow(72) },
+    { id: 'eng2', client_id: 'c2', products: [{ id: 'ep2', type: 'poc', oem: 'Palo Alto Networks', product_id: 'p3', placed_at: '2024-03-01', contact_ids: ['cc2'] }], status: 'open', created_by: 'u4', created_at: hoursFromNow(24) },
+    { id: 'eng3', client_id: 'c3', customer_po: 'PO-2024-055', products: [{ id: 'ep3', type: 'support', oem: 'RSA', product_id: 'p6', placed_at: '2024-02-10', expires_at: '2025-02-10', contact_ids: ['cc3'] }], status: 'open', created_by: 'u5', created_at: hoursFromNow(240) },
+  ])
   localStorage.setItem(STORAGE_KEYS.seeded, SEED_VERSION)
 }
 
@@ -157,6 +252,53 @@ class MockDataProvider implements DataProvider {
   async deleteUser(id: string): Promise<void> {
     const users = load<User>(STORAGE_KEYS.users).filter((u) => u.id !== id)
     save(STORAGE_KEYS.users, users)
+    return delay(undefined)
+  }
+
+  // ── Permission overrides ─────────────────────────────────────────────────────
+  async listPermissionOverrides(userId?: string): Promise<PermissionOverride[]> {
+    const overrides = load<PermissionOverride>(STORAGE_KEYS.permissionOverrides)
+    return delay(userId ? overrides.filter((o) => o.user_id === userId) : overrides)
+  }
+
+  async setPermissionOverride(input: {
+    user_id: string
+    resource: PermissionOverride['resource']
+    action: PermissionOverride['action']
+    effect: 'allow' | 'deny'
+    granted_by: string
+  }): Promise<PermissionOverride> {
+    const overrides = load<PermissionOverride>(STORAGE_KEYS.permissionOverrides)
+    const idx = overrides.findIndex(
+      (o) => o.user_id === input.user_id && o.resource === input.resource && o.action === input.action
+    )
+    const override: PermissionOverride = idx === -1
+      ? { ...input, id: genId(), created_at: now() }
+      : { ...overrides[idx], effect: input.effect, granted_by: input.granted_by, created_at: now() }
+    const next = idx === -1 ? [...overrides, override] : overrides.map((o, i) => (i === idx ? override : o))
+    save(STORAGE_KEYS.permissionOverrides, next)
+
+    await this.writeAuditLog({
+      actor_id: input.granted_by, action: idx === -1 ? 'create' : 'update',
+      entity_type: 'permission_override', entity_id: override.id,
+      before: idx === -1 ? undefined : { effect: overrides[idx].effect },
+      after: { user_id: input.user_id, resource: input.resource, action: input.action, effect: input.effect },
+    })
+
+    return delay(override)
+  }
+
+  async removePermissionOverride(id: string): Promise<void> {
+    const overrides = load<PermissionOverride>(STORAGE_KEYS.permissionOverrides)
+    const existing = overrides.find((o) => o.id === id)
+    save(STORAGE_KEYS.permissionOverrides, overrides.filter((o) => o.id !== id))
+    if (existing) {
+      await this.writeAuditLog({
+        actor_id: existing.granted_by, action: 'delete',
+        entity_type: 'permission_override', entity_id: id,
+        before: { user_id: existing.user_id, resource: existing.resource, action: existing.action, effect: existing.effect },
+      })
+    }
     return delay(undefined)
   }
 
@@ -214,6 +356,348 @@ class MockDataProvider implements DataProvider {
   }
 
   // ── Solutions ──────────────────────────────────────────────────────────────
+  // ── Projects ──────────────────────────────────────────────────────────────
+  async listProjects(scope: ListScope, filters: ProjectFilters = {}): Promise<Project[]> {
+    // Sub tasks are only ever reached through their parent's Workflow section —
+    // the main list is top-level projects only.
+    let projects = load<Project>(STORAGE_KEYS.projects).filter((p) => !p.parent_project_id)
+
+    // Scope filtering — mirrors listCases/listClients so a role only sees the
+    // projects it's actually meant to touch, not every project org-wide.
+    if (scope.role === 'support_engineer') {
+      projects = projects.filter((p) => p.handler_ids.includes(scope.userId))
+    } else if (scope.role === 'team_lead') {
+      const user = load<User>(STORAGE_KEYS.users).find((u) => u.id === scope.userId)
+      if (user?.team_id) {
+        const teamClientIds = new Set(
+          load<Case>(STORAGE_KEYS.cases).filter((c) => c.team_id === user.team_id).map((c) => c.client_id)
+        )
+        // A project spawned straight from an engagement (no case involved) has
+        // no client-overlap signal, so also match on team membership directly.
+        const teamEngineerIds = new Set(
+          load<User>(STORAGE_KEYS.users).filter((u) => u.team_id === user.team_id).map((u) => u.id)
+        )
+        projects = projects.filter((p) =>
+          teamClientIds.has(p.client_id) || p.handler_ids.some((h) => teamEngineerIds.has(h))
+        )
+      } else {
+        projects = []
+      }
+    } else if (scope.role === 'sales_executive') {
+      const myClientIds = new Set(
+        load<Client>(STORAGE_KEYS.clients).filter((c) => c.created_by === scope.userId).map((c) => c.id)
+      )
+      projects = projects.filter((p) => myClientIds.has(p.client_id))
+    }
+    // technical_head: no filter — sees all projects
+
+    if (filters.status) projects = projects.filter((p) => p.status === filters.status)
+    if (filters.client_id) projects = projects.filter((p) => p.client_id === filters.client_id)
+    if (filters.handler_id) projects = projects.filter((p) => p.handler_ids.includes(filters.handler_id!))
+    if (filters.search) {
+      const q = filters.search.toLowerCase()
+      projects = projects.filter((p) => p.title.toLowerCase().includes(q) || (p.description ?? '').toLowerCase().includes(q))
+    }
+    return delay([...projects].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()))
+  }
+
+  async getProject(id: string): Promise<Project | null> {
+    return delay(load<Project>(STORAGE_KEYS.projects).find((p) => p.id === id) ?? null)
+  }
+
+  async createProject(input: Omit<Project, 'id' | 'created_at'>): Promise<Project> {
+    const projects = load<Project>(STORAGE_KEYS.projects)
+    const project: Project = { ...input, id: genId(), created_at: now() }
+    save(STORAGE_KEYS.projects, [...projects, project])
+    return delay(project)
+  }
+
+  async updateProject(id: string, patch: Partial<Project>): Promise<Project> {
+    const projects = load<Project>(STORAGE_KEYS.projects)
+    const idx = projects.findIndex((p) => p.id === id)
+    if (idx === -1) throw new Error(`Project ${id} not found`)
+    projects[idx] = { ...projects[idx], ...patch, updated_at: now() }
+    save(STORAGE_KEYS.projects, projects)
+    return delay(projects[idx])
+  }
+
+  async deleteProject(id: string): Promise<void> {
+    save(STORAGE_KEYS.projects, load<Project>(STORAGE_KEYS.projects).filter((p) => p.id !== id))
+    return delay(undefined)
+  }
+
+  async listProjectComments(projectId: string): Promise<ProjectComment[]> {
+    const comments = load<ProjectComment>(STORAGE_KEYS.projectComments).filter((c) => c.project_id === projectId)
+    return delay(comments.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
+  }
+
+  async addProjectComment(input: Omit<ProjectComment, 'id' | 'created_at'>): Promise<ProjectComment> {
+    const comments = load<ProjectComment>(STORAGE_KEYS.projectComments)
+    const comment: ProjectComment = { ...input, id: genId(), created_at: now() }
+    save(STORAGE_KEYS.projectComments, [...comments, comment])
+    return delay(comment)
+  }
+
+  async listProjectAttachments(projectId: string): Promise<ProjectAttachment[]> {
+    const attachments = load<ProjectAttachment>(STORAGE_KEYS.projectAttachments).filter((a) => a.project_id === projectId)
+    return delay(attachments.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
+  }
+
+  async addProjectAttachment(input: Omit<ProjectAttachment, 'id' | 'created_at'>): Promise<ProjectAttachment> {
+    const attachments = load<ProjectAttachment>(STORAGE_KEYS.projectAttachments)
+    const attachment: ProjectAttachment = { ...input, id: genId(), created_at: now() }
+    save(STORAGE_KEYS.projectAttachments, [...attachments, attachment])
+    return delay(attachment)
+  }
+
+  async listSubProjects(parentProjectId: string): Promise<Project[]> {
+    const projects = load<Project>(STORAGE_KEYS.projects).filter((p) => p.parent_project_id === parentProjectId)
+    return delay(projects.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
+  }
+
+  async createSubProject(parentProjectId: string, input: Partial<Project>): Promise<Project> {
+    const projects = load<Project>(STORAGE_KEYS.projects)
+    const parent = projects.find((p) => p.id === parentProjectId)
+    if (!parent) throw new Error(`Parent project ${parentProjectId} not found`)
+    if (parent.parent_project_id) throw new Error('Cannot add a sub task to a sub task')
+    const sub: Project = {
+      // Inherit context from the parent, override with provided fields.
+      client_id: parent.client_id,
+      product_id: parent.product_id,
+      priority: input.priority ?? parent.priority,
+      title: input.title ?? '',
+      handler_ids: input.handler_ids ?? [],
+      status: 'planning',
+      created_by: input.created_by ?? parent.created_by,
+      ...input,
+      id: genId(),
+      created_at: now(),
+      parent_project_id: parentProjectId,
+    }
+    save(STORAGE_KEYS.projects, [...projects, sub])
+    return delay(sub)
+  }
+
+  // ── External members (non-portal people on a Case or a Project) ────────────
+  async listExternalMembers(filters: { case_id?: string; project_id?: string }): Promise<ExternalMember[]> {
+    let members = load<ExternalMember>(STORAGE_KEYS.externalMembers)
+    if (filters.case_id) members = members.filter((m) => m.case_id === filters.case_id)
+    if (filters.project_id) members = members.filter((m) => m.project_id === filters.project_id)
+    return delay(members.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
+  }
+
+  async addExternalMember(input: Omit<ExternalMember, 'id' | 'created_at'>): Promise<ExternalMember> {
+    const members = load<ExternalMember>(STORAGE_KEYS.externalMembers)
+    const member: ExternalMember = { ...input, id: genId(), created_at: now() }
+    save(STORAGE_KEYS.externalMembers, [...members, member])
+    return delay(member)
+  }
+
+  async deleteExternalMember(id: string): Promise<void> {
+    save(STORAGE_KEYS.externalMembers, load<ExternalMember>(STORAGE_KEYS.externalMembers).filter((m) => m.id !== id))
+    return delay(undefined)
+  }
+
+  // ── Engagements ───────────────────────────────────────────────────────────
+  async listEngagements(scope: ListScope, filters: EngagementFilters = {}): Promise<Engagement[]> {
+    let engagements = loadEngagements()
+    if (scope.role === 'sales_executive') {
+      const myClientIds = new Set(
+        load<Client>(STORAGE_KEYS.clients).filter((c) => c.created_by === scope.userId).map((c) => c.id)
+      )
+      engagements = engagements.filter((e) => myClientIds.has(e.client_id))
+    }
+    if (filters.type) engagements = engagements.filter((e) => e.products.some((p) => p.types.includes(filters.type!)))
+    if (filters.status) engagements = engagements.filter((e) => e.status === filters.status)
+    if (filters.client_id) engagements = engagements.filter((e) => e.client_id === filters.client_id)
+    if (filters.search) {
+      const q = filters.search.toLowerCase()
+      engagements = engagements.filter((e) =>
+        (e.customer_po ?? '').toLowerCase().includes(q) ||
+        e.products.some((p) => p.oem.toLowerCase().includes(q))
+      )
+    }
+    return delay([...engagements].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()))
+  }
+
+  async getEngagement(id: string): Promise<Engagement | null> {
+    return delay(loadEngagements().find((e) => e.id === id) ?? null)
+  }
+
+  async createEngagement(input: Omit<Engagement, 'id' | 'created_at'>): Promise<Engagement> {
+    const engagements = loadEngagements()
+    const engagement: Engagement = { ...input, id: genId(), created_at: now() }
+    save(STORAGE_KEYS.engagements, [...engagements, engagement])
+
+    // The Technical Head "receives" every new engagement so its product lines
+    // can be assigned — same broadcast shape as case escalation.
+    const client = load<Client>(STORAGE_KEYS.clients).find((c) => c.id === engagement.client_id)
+    const techHeads = load<User>(STORAGE_KEYS.users).filter((u) => u.role === 'technical_head' && u.is_active)
+    await Promise.all(techHeads.map((th) =>
+      this.createNotification({
+        user_id: th.id, channel: 'in_app', type: 'engagement_created',
+        payload: {
+          engagement_id: engagement.id, client_id: engagement.client_id,
+          message: `New engagement from ${client?.company_name ?? 'a client'} needs product assignment`,
+        },
+        sent_at: now(),
+      })
+    ))
+
+    return delay(engagement)
+  }
+
+  async updateEngagement(id: string, patch: Partial<Engagement>): Promise<Engagement> {
+    const engagements = loadEngagements()
+    const idx = engagements.findIndex((e) => e.id === id)
+    if (idx === -1) throw new Error(`Engagement ${id} not found`)
+    engagements[idx] = { ...engagements[idx], ...patch, updated_at: now() }
+    save(STORAGE_KEYS.engagements, engagements)
+    return delay(engagements[idx])
+  }
+
+  async deleteEngagement(id: string): Promise<void> {
+    save(STORAGE_KEYS.engagements, loadEngagements().filter((e) => e.id !== id))
+    return delay(undefined)
+  }
+
+  // Technical Head assigns a product line. A line can carry more than one
+  // type at once (e.g. Installation + Support), so the two halves are
+  // independent and both may be set in the same call: the poc/support portion
+  // → a Team; the installation portion → one-or-more engineers directly
+  // (first = Primary), which also spawns a real Project so the work shows up
+  // on /projects.
+  async assignEngagementProductLine(
+    engagementId: string, lineId: string,
+    input: { team_id?: string; handler_ids?: string[] },
+    scope: ListScope
+  ): Promise<Engagement> {
+    const engagements = loadEngagements()
+    const eIdx = engagements.findIndex((e) => e.id === engagementId)
+    if (eIdx === -1) throw new Error(`Engagement ${engagementId} not found`)
+    const engagement = engagements[eIdx]
+    const lIdx = engagement.products.findIndex((p) => p.id === lineId)
+    if (lIdx === -1) throw new Error(`Product line ${lineId} not found`)
+    const line = engagement.products[lIdx]
+
+    const needsTeam = line.types.some((t) => t === 'poc' || t === 'support') && !line.assigned_team_id
+    const needsHandlers = line.types.includes('installation') && !line.assigned_handler_ids?.length
+    if (!needsTeam && !needsHandlers) throw new Error('This product line is already fully assigned')
+    if (input.team_id && !needsTeam) throw new Error('This line has no poc/support portion left to assign')
+    if (input.handler_ids?.length && !needsHandlers) throw new Error('This line has no installation portion left to assign')
+    if (needsTeam && !input.team_id) throw new Error('Select a team for this product line')
+    if (needsHandlers && !input.handler_ids?.length) throw new Error('Select at least one engineer for this product line')
+
+    const client = load<Client>(STORAGE_KEYS.clients).find((c) => c.id === engagement.client_id)
+    const product = load<Product>(STORAGE_KEYS.products).find((p) => p.id === line.product_id)
+    const assignedAt = now()
+
+    let updatedLine: EngagementProductLine = line
+    const notifyTargets: { user_id: string; message: string }[] = []
+
+    if (input.team_id) {
+      const team = load<Team>(STORAGE_KEYS.teams).find((t) => t.id === input.team_id)
+      if (!team) throw new Error(`Team ${input.team_id} not found`)
+      updatedLine = { ...updatedLine, assigned_team_id: input.team_id, assigned_at: assignedAt }
+      if (team.lead_user_id) {
+        notifyTargets.push({
+          user_id: team.lead_user_id,
+          message: `${product?.name ?? line.oem} (${client?.company_name ?? 'client'}) assigned to your team`,
+        })
+      }
+    }
+
+    if (input.handler_ids?.length) {
+      const project = await this.createProject({
+        title: `${product?.name ?? line.oem} Installation — ${client?.company_name ?? 'Client'}`,
+        description: `Auto-created from engagement product line (${line.oem}).`,
+        client_id: engagement.client_id,
+        product_id: line.product_id,
+        handler_ids: input.handler_ids,
+        status: 'planning',
+        created_by: scope.userId,
+      })
+      updatedLine = { ...updatedLine, assigned_handler_ids: input.handler_ids, assigned_at: assignedAt, project_id: project.id }
+      for (const uid of input.handler_ids) {
+        notifyTargets.push({ user_id: uid, message: `You've been assigned to a new installation project: ${project.title}` })
+      }
+    }
+
+    const products = [...engagement.products]
+    products[lIdx] = updatedLine
+    engagements[eIdx] = { ...engagement, products, updated_at: assignedAt }
+    save(STORAGE_KEYS.engagements, engagements)
+
+    await this.writeAuditLog({
+      actor_id: scope.userId, action: 'update', entity_type: 'engagement', entity_id: engagementId,
+      before: { line_id: lineId, assigned: false },
+      after: { line_id: lineId, assigned: true, types: line.types },
+    })
+
+    await Promise.all(notifyTargets.map((t) =>
+      this.createNotification({
+        user_id: t.user_id, channel: 'in_app', type: 'engagement_assigned',
+        payload: { engagement_id: engagementId, line_id: lineId, message: t.message },
+        sent_at: now(),
+      })
+    ))
+
+    // Keep the AM who created the engagement in the loop.
+    if (engagement.created_by) {
+      await this.createNotification({
+        user_id: engagement.created_by, channel: 'in_app', type: 'engagement_assigned',
+        payload: {
+          engagement_id: engagementId, line_id: lineId,
+          message: `${product?.name ?? line.oem} for ${client?.company_name ?? 'your client'} has been assigned`,
+        },
+        sent_at: now(),
+      })
+    }
+
+    return delay(engagements[eIdx])
+  }
+
+  async setEngagementLinePocOutcome(
+    engagementId: string, lineId: string, outcome: 'running' | 'success' | 'failed', scope: ListScope
+  ): Promise<Engagement> {
+    const engagements = loadEngagements()
+    const eIdx = engagements.findIndex((e) => e.id === engagementId)
+    if (eIdx === -1) throw new Error(`Engagement ${engagementId} not found`)
+    const engagement = engagements[eIdx]
+    const lIdx = engagement.products.findIndex((p) => p.id === lineId)
+    if (lIdx === -1) throw new Error(`Product line ${lineId} not found`)
+
+    const products = [...engagement.products]
+    products[lIdx] = { ...products[lIdx], poc_outcome: outcome }
+    engagements[eIdx] = { ...engagement, products, updated_at: now() }
+    save(STORAGE_KEYS.engagements, engagements)
+
+    await this.writeAuditLog({
+      actor_id: scope.userId, action: 'update', entity_type: 'engagement', entity_id: engagementId,
+      before: { line_id: lineId }, after: { line_id: lineId, poc_outcome: outcome },
+    })
+
+    return delay(engagements[eIdx])
+  }
+
+  // ── Client Contacts (representatives) ───────────────────────────────────────
+  async listClientContacts(filters: ClientContactFilters = {}): Promise<ClientContact[]> {
+    let contacts = load<ClientContact>(STORAGE_KEYS.clientContacts)
+    if (filters.client_id) contacts = contacts.filter((c) => c.client_id === filters.client_id)
+    if (filters.search) {
+      const q = filters.search.toLowerCase()
+      contacts = contacts.filter((c) => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q))
+    }
+    return delay(contacts)
+  }
+
+  async createClientContact(input: Omit<ClientContact, 'id' | 'created_at'>): Promise<ClientContact> {
+    const contacts = load<ClientContact>(STORAGE_KEYS.clientContacts)
+    const contact: ClientContact = { ...input, id: genId(), created_at: now() }
+    save(STORAGE_KEYS.clientContacts, [...contacts, contact])
+    return delay(contact)
+  }
+
   async listSolutions(): Promise<Solution[]> {
     return delay(load<Solution>(STORAGE_KEYS.solutions))
   }
@@ -226,6 +710,23 @@ class MockDataProvider implements DataProvider {
     const solutions = load<Solution>(STORAGE_KEYS.solutions)
     const solution: Solution = { ...input, id: genId(), created_at: now() }
     save(STORAGE_KEYS.solutions, [...solutions, solution])
+
+    // Every solution gets a matching article — that's where its full write-up
+    // lives and where the catalogue links out to (/solutions/articles/:slug).
+    await this.createSolutionArticle({
+      title: solution.name,
+      description: solution.description,
+      content: solution.details || solution.description,
+      category: solution.category,
+      product_id: solution.product_id,
+      tags: [],
+      status: 'published',
+      created_by: solution.author_id ?? '',
+      created_by_name: solution.author_name,
+      created_by_role: solution.author_role,
+      solution_id: solution.id,
+    })
+
     return delay(solution)
   }
 
@@ -235,6 +736,19 @@ class MockDataProvider implements DataProvider {
     if (idx === -1) throw new Error(`Solution ${id} not found`)
     solutions[idx] = { ...solutions[idx], ...patch }
     save(STORAGE_KEYS.solutions, solutions)
+
+    // Keep the linked article's title/description/content/category in sync.
+    const articles = load<SolutionArticle>(STORAGE_KEYS.solutionArticles)
+    const linked = articles.find((a) => a.solution_id === id)
+    if (linked) {
+      await this.updateSolutionArticle(linked.id, {
+        title: solutions[idx].name,
+        description: solutions[idx].description,
+        content: solutions[idx].details || solutions[idx].description,
+        category: solutions[idx].category,
+      })
+    }
+
     return delay(solutions[idx])
   }
 
@@ -393,6 +907,80 @@ class MockDataProvider implements DataProvider {
     return delay(undefined)
   }
 
+  private mutateSolutionArticle(id: string, fn: (a: SolutionArticle) => SolutionArticle): Promise<SolutionArticle> {
+    const articles = load<SolutionArticle>(STORAGE_KEYS.solutionArticles)
+    const idx = articles.findIndex((a) => a.id === id)
+    if (idx === -1) throw new Error(`Solution article ${id} not found`)
+    articles[idx] = fn(articles[idx])
+    save(STORAGE_KEYS.solutionArticles, articles)
+    return delay(articles[idx])
+  }
+
+  async toggleSolutionArticleLike(id: string, userId: string): Promise<SolutionArticle> {
+    return this.mutateSolutionArticle(id, (a) => {
+      const likes = new Set(a.likes ?? [])
+      const dislikes = new Set(a.dislikes ?? [])
+      if (likes.has(userId)) { likes.delete(userId) } else { likes.add(userId); dislikes.delete(userId) }
+      return { ...a, likes: [...likes], dislikes: [...dislikes] }
+    })
+  }
+
+  async toggleSolutionArticleDislike(id: string, userId: string): Promise<SolutionArticle> {
+    return this.mutateSolutionArticle(id, (a) => {
+      const likes = new Set(a.likes ?? [])
+      const dislikes = new Set(a.dislikes ?? [])
+      if (dislikes.has(userId)) { dislikes.delete(userId) } else { dislikes.add(userId); likes.delete(userId) }
+      return { ...a, likes: [...likes], dislikes: [...dislikes] }
+    })
+  }
+
+  async addSolutionArticleComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<SolutionArticle> {
+    return this.mutateSolutionArticle(id, (a) => {
+      const comment: SolutionComment = {
+        id: genId(),
+        parent_id: input.parent_id ?? null,
+        author_id: input.author_id,
+        author_name: input.author_name,
+        author_role: input.author_role,
+        body: input.body.trim(),
+        created_at: now(),
+        likes: [],
+        dislikes: [],
+      }
+      return { ...a, comments: [...(a.comments ?? []), comment] }
+    })
+  }
+
+  async deleteSolutionArticleComment(id: string, commentId: string): Promise<SolutionArticle> {
+    return this.mutateSolutionArticle(id, (a) => {
+      const all = a.comments ?? []
+      const toRemove = new Set<string>()
+      const collect = (cid: string) => {
+        toRemove.add(cid)
+        all.filter((c) => (c.parent_id ?? null) === cid).forEach((child) => collect(child.id))
+      }
+      collect(commentId)
+      return { ...a, comments: all.filter((c) => !toRemove.has(c.id)) }
+    })
+  }
+
+  async toggleSolutionArticleCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<SolutionArticle> {
+    return this.mutateSolutionArticle(id, (a) => ({
+      ...a,
+      comments: (a.comments ?? []).map((c) => {
+        if (c.id !== commentId) return c
+        const likes = new Set(c.likes ?? [])
+        const dislikes = new Set(c.dislikes ?? [])
+        if (reaction === 'like') {
+          if (likes.has(userId)) { likes.delete(userId) } else { likes.add(userId); dislikes.delete(userId) }
+        } else {
+          if (dislikes.has(userId)) { dislikes.delete(userId) } else { dislikes.add(userId); likes.delete(userId) }
+        }
+        return { ...c, likes: [...likes], dislikes: [...dislikes] }
+      }),
+    }))
+  }
+
   // ── Client Solutions ───────────────────────────────────────────────────────
   async listClientSolutions(clientId?: string): Promise<ClientSolution[]> {
     let cs = load<ClientSolution>(STORAGE_KEYS.clientSolutions)
@@ -462,6 +1050,10 @@ class MockDataProvider implements DataProvider {
     return delay(products[idx])
   }
 
+  async listProductLicenses(): Promise<ProductLicense[]> {
+    return delay(load<ProductLicense>(STORAGE_KEYS.productLicenses))
+  }
+
   // ── SLA Rules ──────────────────────────────────────────────────────────────
   async listSLARules(): Promise<SLARule[]> {
     return delay(load<SLARule>(STORAGE_KEYS.slaRules))
@@ -516,6 +1108,15 @@ class MockDataProvider implements DataProvider {
     if (filters.client_id) cases = cases.filter((c) => c.client_id === filters.client_id)
     if (filters.assignee_id) cases = cases.filter((c) => c.assignee_id === filters.assignee_id)
     if (filters.team_id) cases = cases.filter((c) => c.team_id === filters.team_id)
+    if (filters.date_from) {
+      const from = new Date(filters.date_from).getTime()
+      cases = cases.filter((c) => new Date(c.created_at).getTime() >= from)
+    }
+    if (filters.date_to) {
+      // Inclusive of the whole end day.
+      const to = new Date(filters.date_to).getTime() + 86_400_000
+      cases = cases.filter((c) => new Date(c.created_at).getTime() < to)
+    }
     if (filters.search) {
       const q = filters.search.toLowerCase()
       cases = cases.filter(
@@ -626,7 +1227,7 @@ class MockDataProvider implements DataProvider {
     const idx = cases.findIndex((c) => c.id === id)
     if (idx === -1) throw new Error(`Case ${id} not found`)
     const beforeStatus = cases[idx].status
-    cases[idx] = { ...cases[idx], ...patch }
+    cases[idx] = { ...cases[idx], ...patch, updated_at: now() }
     save(STORAGE_KEYS.cases, cases)
 
     if (patch.status && patch.status !== beforeStatus) {
@@ -641,6 +1242,22 @@ class MockDataProvider implements DataProvider {
 
   async assignCase(caseId: string, assigneeId: string, scope: ListScope): Promise<Case> {
     requireAccess(scope, 'assign', 'case')
+    return this.performAssign(caseId, assigneeId, scope)
+  }
+
+  // A Support Engineer grabbing an unassigned case routed to their team —
+  // self-service, no Team Lead / Technical Head approval required. Distinct
+  // from assignCase (which requires the general 'assign' permission) since
+  // this only ever assigns the caller to themselves.
+  async claimCase(caseId: string, scope: ListScope): Promise<Case> {
+    if (scope.role !== 'support_engineer') throw new Error('Only a Support Engineer can grab a case')
+    const existing = load<Case>(STORAGE_KEYS.cases).find((c) => c.id === caseId)
+    if (!existing) throw new Error(`Case ${caseId} not found`)
+    if (existing.assignee_id) throw new Error('This case has already been assigned')
+    return this.performAssign(caseId, scope.userId, scope)
+  }
+
+  private async performAssign(caseId: string, assigneeId: string, scope: ListScope): Promise<Case> {
     const cases = load<Case>(STORAGE_KEYS.cases)
     const idx = cases.findIndex((c) => c.id === caseId)
     if (idx === -1) throw new Error(`Case ${caseId} not found`)
@@ -1114,7 +1731,13 @@ class MockDataProvider implements DataProvider {
       return delay(reopened)
     }
 
-    cases[idx] = { ...old, status: 'in_progress', closed_at: undefined }
+    // Sending a pending_closure case back to work is a closure rejection —
+    // flagged so the TH dashboard can surface it.
+    const rejected = old.status === 'pending_closure'
+    cases[idx] = {
+      ...old, status: 'in_progress', closed_at: undefined,
+      ...(rejected ? { closure_rejected: true, closure_rejected_at: now() } : {}),
+    }
     save(STORAGE_KEYS.cases, cases)
     await this.writeAuditLog({ actor_id: scope.userId, action: 'status_change', entity_type: 'case', entity_id: caseId, before: { status: old.status }, after: { status: 'in_progress' } })
     await this.notifyForCase(cases[idx], 'case_reopened', ['lead', 'engineer'])
@@ -1224,7 +1847,7 @@ class MockDataProvider implements DataProvider {
   }
 
   // ── Client confirm / reopen ─────────────────────────────────────────────────
-  async confirmSolution(caseId: string, feedback: { rating: number; feedback_text: string }, scope: ListScope): Promise<Case> {
+  async confirmSolution(caseId: string, feedback: { rating: number; feedback_text: string; question_ratings?: Record<string, number> }, scope: ListScope): Promise<Case> {
     if (scope.role !== 'client') throw new Error('Only the client can confirm the solution')
     if (!feedback.rating || feedback.rating < 1) throw new Error('A rating is required to confirm and close the case')
     const cases = load<Case>(STORAGE_KEYS.cases)
@@ -1235,7 +1858,10 @@ class MockDataProvider implements DataProvider {
 
     // Record the mandatory feedback + rating.
     await this.submitFeedback(
-      { case_id: caseId, client_id: old.client_id, feedback_text: feedback.feedback_text, rating: feedback.rating, ml_reviewed: false },
+      {
+        case_id: caseId, client_id: old.client_id, feedback_text: feedback.feedback_text, rating: feedback.rating,
+        question_ratings: feedback.question_ratings, ml_reviewed: false,
+      },
       scope,
     )
 
@@ -1255,7 +1881,8 @@ class MockDataProvider implements DataProvider {
     const old = cases[idx]
     if (old.status !== 'resolved') throw new Error('Only a resolved case can be reopened here')
 
-    cases[idx] = { ...old, status: 'in_progress', resolved_at: undefined }
+    // Client rejecting the solution instead of confirming = closure rejection.
+    cases[idx] = { ...old, status: 'in_progress', resolved_at: undefined, closure_rejected: true, closure_rejected_at: now() }
     save(STORAGE_KEYS.cases, cases)
     // Reason becomes a client comment in the conversation.
     await this.addComment(
@@ -1342,7 +1969,7 @@ class MockDataProvider implements DataProvider {
         payload: {
           case_id: subCase.id, reference_no: subCase.reference_no, title: subCase.title,
           parent_case_id: parentCaseId, parent_reference_no: parent.reference_no,
-          message: `You were assigned to sub task ${subCase.reference_no} "${subCase.title}" under case ${parent.reference_no}`
+          message: `You were assigned to case update ${subCase.reference_no} "${subCase.title}" under case ${parent.reference_no}`
             + (isNewToCase ? ' — you now have access to the full case' : ''),
         },
         sent_at: now(),
@@ -1422,6 +2049,14 @@ class MockDataProvider implements DataProvider {
       comments = comments.filter((c) => !c.is_internal)
     }
     return delay(comments.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()))
+  }
+
+  async listRecentComments(scope: ListScope): Promise<CaseComment[]> {
+    const { items: visibleCases } = await this.listCases(scope, { pageSize: 1000 })
+    const visibleCaseIds = new Set(visibleCases.map((c) => c.id))
+    let comments = load<CaseComment>(STORAGE_KEYS.comments).filter((c) => visibleCaseIds.has(c.case_id))
+    if (scope.role === 'client') comments = comments.filter((c) => !c.is_internal)
+    return delay(comments.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 50))
   }
 
   async addComment(input: Omit<CaseComment, 'id' | 'created_at'>, scope: ListScope): Promise<CaseComment> {

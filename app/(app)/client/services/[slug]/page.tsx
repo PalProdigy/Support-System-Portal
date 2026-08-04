@@ -1,25 +1,20 @@
 'use client'
 
-import { use } from 'react'
+import { use, useState } from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronLeft, CheckCircle2, PlusCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { NewCaseDialog } from '@/modules/cases/new-case-dialog'
 import { getService } from '@/data/services'
 
 export default function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
   const service = getService(slug)
+  const [newCaseOpen, setNewCaseOpen] = useState(false)
 
   if (!service) notFound()
   const Icon = service.icon
-
-  // Hand off to the standard "New Case" page, prefilled with this service's context.
-  // The service name is passed through as the solution.
-  const createCaseHref =
-    `/cases/new?title=${encodeURIComponent(`Service Request: ${service.title}`)}` +
-    `&description=${encodeURIComponent(`Request for the "${service.title}" service.\n\n${service.overview}`)}` +
-    `&solution=${encodeURIComponent(service.title)}`
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -62,15 +57,23 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
 
       {/* CTA */}
       <div className="flex flex-wrap gap-2">
-        <Button asChild>
-          <Link href={createCaseHref}>
-            <PlusCircle className="h-4 w-4" /> Create Case
-          </Link>
+        <Button onClick={() => setNewCaseOpen(true)}>
+          <PlusCircle className="h-4 w-4" /> Create Case
         </Button>
         <Button asChild variant="outline">
           <Link href="/client/services">Back to Services</Link>
         </Button>
       </div>
+
+      <NewCaseDialog
+        open={newCaseOpen}
+        onOpenChange={setNewCaseOpen}
+        prefill={{
+          title: `Service Request: ${service.title}`,
+          description: `Request for the "${service.title}" service.\n\n${service.overview}`,
+          solutionName: service.title,
+        }}
+      />
     </div>
   )
 }

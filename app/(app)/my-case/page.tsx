@@ -2,11 +2,13 @@
 
 import dynamic from 'next/dynamic'
 import { Suspense, useState } from 'react'
+
+import { redirect } from 'next/navigation'
 import { useSession } from '@/lib/auth/context'
 import { canAccess } from '@/lib/rbac'
-import { redirect } from 'next/navigation'
-import { Wrench, ClipboardList, TrendingUp } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { NewCaseDialog } from '@/modules/cases/new-case-dialog'
+import { Wrench, PlusCircle } from 'lucide-react'
 
 function ListSkeleton() {
   return (
@@ -29,10 +31,7 @@ const MyCases = dynamic(
   () => import('@/modules/engineer/my-cases').then((m) => m.MyCases),
   { loading: () => <ListSkeleton /> }
 )
-const PerformanceDashboard = dynamic(
-  () => import('@/modules/engineer/performance-dashboard').then((m) => m.PerformanceDashboard),
-  { loading: () => <ListSkeleton /> }
-)
+
 
 function Guard() {
   const session = useSession()
@@ -41,51 +40,39 @@ function Guard() {
   return null
 }
 
-type Tab = 'cases' | 'performance'
-
-const TABS: { key: Tab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { key: 'cases',       label: 'My Cases',       icon: ClipboardList },
-  { key: 'performance', label: 'My Performance', icon: TrendingUp    },
-]
-
-export default function EngineerHubPage() {
-  const [tab, setTab] = useState<Tab>('cases')
-
+function EngineerHubContent() {
+  const [newCaseOpen, setNewCaseOpen] = useState(false)
   return (
     <div className="p-6 space-y-6">
       <Guard />
-      <div className="flex items-center gap-3">
-        <div className="rounded-xl bg-primary/10 p-2.5">
-          <Wrench className="h-5 w-5 text-primary" />
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl bg-primary/10 p-2.5">
+            <Wrench className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
+            <p className="text-sm text-muted-foreground">Every case assigned to you</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
-          <p className="text-sm text-muted-foreground">Every case assigned to you, and how you're performing</p>
-        </div>
+        <Button onClick={() => setNewCaseOpen(true)}>
+          <PlusCircle className="h-4 w-4" /> New Case
+        </Button>
       </div>
 
-      <div className="flex items-center gap-1 border-b">
-        {TABS.map(({ key, label, icon: Icon }) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={cn(
-              'flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors',
-              tab === key
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </button>
-        ))}
-      </div>
+      <NewCaseDialog open={newCaseOpen} onOpenChange={setNewCaseOpen} />
 
       <Suspense fallback={<ListSkeleton />}>
-        {tab === 'cases'       && <MyCases />}
-        {tab === 'performance' && <PerformanceDashboard />}
+        <MyCases />
       </Suspense>
     </div>
+  )
+}
+
+export default function EngineerHubPage() {
+  return (
+    <Suspense fallback={<div className="p-6"><ListSkeleton /></div>}>
+      <EngineerHubContent />
+    </Suspense>
   )
 }
