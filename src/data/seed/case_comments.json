@@ -5,7 +5,7 @@
     "author_id": "u6",
     "body": "Investigated the sync adapter logs. Found 403 errors from the WMS API starting at 14:32 yesterday. The service account password was rotated by the client's IT team without notifying us.",
     "is_internal": true,
-    "created_at": "2024-06-22T07:30:00Z"
+    "hours_ago": 47.5
   },
   {
     "id": "cc2",
@@ -13,7 +13,7 @@
     "author_id": "u6",
     "body": "We have identified the root cause of the sync failure. Your IT team rotated the WMS API credentials yesterday afternoon which caused the integration to lose access. Could you please share the new credentials so we can update the connector?",
     "is_internal": false,
-    "created_at": "2024-06-22T07:45:00Z"
+    "hours_ago": 47.2
   },
   {
     "id": "cc3",
@@ -21,7 +21,7 @@
     "author_id": "u9",
     "body": "Yes, our IT team confirmed the rotation. I'll get the new credentials to you within the hour.",
     "is_internal": false,
-    "created_at": "2024-06-22T08:15:00Z"
+    "hours_ago": 46.5
   },
   {
     "id": "cc4",
@@ -29,7 +29,7 @@
     "author_id": "u8",
     "body": "Reproduced the error in our test environment. The journal entry mismatch is caused by a rounding difference in the Taka conversion. Need client to confirm their GL account mapping.",
     "is_internal": true,
-    "created_at": "2024-06-21T11:00:00Z"
+    "hours_ago": 70
   },
   {
     "id": "cc5",
@@ -37,7 +37,7 @@
     "author_id": "u8",
     "body": "To proceed with the fix, we need you to confirm your GL account mapping for the 'Foreign Exchange Gain/Loss' account. Could you log into the system and navigate to Settings > Chart of Accounts and share a screenshot?",
     "is_internal": false,
-    "created_at": "2024-06-21T11:30:00Z"
+    "hours_ago": 69.5
   },
   {
     "id": "cc6",
@@ -45,7 +45,7 @@
     "author_id": "u7",
     "body": "Fixed by updating the overtime calculation formula in the payroll engine configuration. The 'Production' department had an incorrect multiplier (1.0 instead of 2.0) set in the department settings.",
     "is_internal": true,
-    "created_at": "2024-06-20T14:00:00Z"
+    "hours_ago": 456.5
   },
   {
     "id": "cc7",
@@ -53,24 +53,24 @@
     "author_id": "u7",
     "body": "The overtime calculation has been corrected. The error was in the department-level settings where the multiplier for 'Production' was set to 1.0 instead of the correct 2.0. We have recalculated the June payroll figures — please find the corrected report attached. Please review and confirm if we can proceed with the payroll run.",
     "is_internal": false,
-    "created_at": "2024-06-20T14:30:00Z"
+    "hours_ago": 456
   },
 
-  { "id": "cc8",  "case_id": "case1", "author_id": "u9",  "body": "Hi, it has been almost an hour. Could you give us a status update? Our warehouse operations are completely halted and we are losing orders.", "is_internal": false, "created_at": "2024-06-22T09:10:00Z" },
-  { "id": "cc9",  "case_id": "case1", "author_id": "u6",  "body": "Priya, we are actively working on this. The credential update is in progress — we are testing the new connector config in staging before applying it to production to avoid any data corruption. Estimated 20 minutes.", "is_internal": false, "created_at": "2024-06-22T09:18:00Z" },
-  { "id": "cc10", "case_id": "case1", "author_id": "u2",  "body": "Rafi — escalation level raised to L1. Loop in Arif if the staging test fails. Do not push to production without a rollback snapshot. Client SLA breached at 10:00, so move fast.", "is_internal": true,  "created_at": "2024-06-22T09:22:00Z" },
-  { "id": "cc11", "case_id": "case1", "author_id": "u6",  "body": "Staging test passed. Applying the updated credentials to the production connector now. Will confirm sync status in 5 minutes.", "is_internal": true,  "created_at": "2024-06-22T09:38:00Z" },
-  { "id": "cc12", "case_id": "case1", "author_id": "u6",  "body": "Good news — the WMS sync has resumed successfully. Warehouse #3 is now syncing in real time. Stock counts will reconcile over the next 10–15 minutes as the backlog processes. Please monitor and let us know if any orders still show incorrect allocations.", "is_internal": false, "created_at": "2024-06-22T09:45:00Z" },
-  { "id": "cc13", "case_id": "case1", "author_id": "u2",  "body": "Good work Rafi. Mark for post-incident review — we need a process with the client to notify us before credential rotations. Prepare a brief RCA.", "is_internal": true,  "created_at": "2024-06-22T09:50:00Z" },
-  { "id": "cc14", "case_id": "case1", "author_id": "u9",  "body": "Confirmed — sync is working and the allocation figures are correcting themselves. Thank you for the fast resolution. We would appreciate if you could send a short incident report.", "is_internal": false, "created_at": "2024-06-22T10:05:00Z" },
-  { "id": "cc15", "case_id": "case1", "author_id": "u6",  "body": "Absolutely, Priya. We will share a full incident report by end of day. We will also reach out to schedule a short call to set up a credential-change notification process to prevent this from happening again.", "is_internal": false, "created_at": "2024-06-22T10:12:00Z" },
+  { "id": "cc8",  "case_id": "case1", "author_id": "u9",  "body": "Hi, it has been almost an hour. Could you give us a status update? Our warehouse operations are completely halted and we are losing orders.", "is_internal": false, "hours_ago": 45.5 },
+  { "id": "cc9",  "case_id": "case1", "author_id": "u6",  "body": "Priya, we are actively working on this. The credential update is in progress — we are testing the new connector config in staging before applying it to production to avoid any data corruption. Estimated 20 minutes.", "is_internal": false, "hours_ago": 45.3 },
+  { "id": "cc10", "case_id": "case1", "author_id": "u2",  "body": "Rafi — escalation level raised to L1. Loop in Arif if the staging test fails. Do not push to production without a rollback snapshot. Client SLA already breached, so move fast.", "is_internal": true,  "hours_ago": 45.2 },
+  { "id": "cc11", "case_id": "case1", "author_id": "u6",  "body": "Staging test passed. Applying the updated credentials to the production connector now. Will confirm sync status in 5 minutes.", "is_internal": true,  "hours_ago": 44.8 },
+  { "id": "cc12", "case_id": "case1", "author_id": "u6",  "body": "Good news — the WMS sync has resumed successfully. Warehouse #3 is now syncing in real time. Stock counts will reconcile over the next 10–15 minutes as the backlog processes. Please monitor and let us know if any orders still show incorrect allocations.", "is_internal": false, "hours_ago": 44.6 },
+  { "id": "cc13", "case_id": "case1", "author_id": "u2",  "body": "Good work Rafi. Mark for post-incident review — we need a process with the client to notify us before credential rotations. Prepare a brief RCA.", "is_internal": true,  "hours_ago": 44.4 },
+  { "id": "cc14", "case_id": "case1", "author_id": "u9",  "body": "Confirmed — sync is working and the allocation figures are correcting themselves. Thank you for the fast resolution. We would appreciate if you could send a short incident report.", "is_internal": false, "hours_ago": 44.0 },
+  { "id": "cc15", "case_id": "case1", "author_id": "u6",  "body": "Absolutely, Priya. We will share a full incident report by end of day. We will also reach out to schedule a short call to set up a credential-change notification process to prevent this from happening again.", "is_internal": false, "hours_ago": 43.8 },
 
-  { "id": "cc16", "case_id": "case2", "author_id": "u10", "body": "Hello. I have navigated to Settings > Chart of Accounts. The Foreign Exchange Gain/Loss account is mapped to GL code 7120. Let me know if you need anything else.", "is_internal": false, "created_at": "2024-06-21T12:00:00Z" },
-  { "id": "cc17", "case_id": "case2", "author_id": "u8",  "body": "GL 7120 confirmed. The rounding issue is in the Taka conversion at the sub-ledger level — the system is using 2 decimal places but the GL expects 0. Fixing the precision mapping now.", "is_internal": true,  "created_at": "2024-06-21T12:20:00Z" },
-  { "id": "cc18", "case_id": "case2", "author_id": "u3",  "body": "Imran — good find. Before you push the fix, make sure to regenerate the last 3 months of journal entries in test mode and verify the closing balances match. Rahim's team will be watching the numbers closely.", "is_internal": true,  "created_at": "2024-06-21T12:35:00Z" },
-  { "id": "cc19", "case_id": "case2", "author_id": "u8",  "body": "Test run complete — closing balances match across June, May, and April. Applying fix to production now.", "is_internal": true,  "created_at": "2024-06-21T13:10:00Z" },
-  { "id": "cc20", "case_id": "case2", "author_id": "u8",  "body": "Rahim, the precision mapping for your Foreign Exchange account has been corrected. Could you please try regenerating the monthly P&L report now and let us know if the journal mismatch error has cleared?", "is_internal": false, "created_at": "2024-06-21T13:20:00Z" },
-  { "id": "cc21", "case_id": "case2", "author_id": "u10", "body": "Imran, the report generated successfully — no errors! The figures look correct as well. Thank you. Can we now proceed with the month-end close?", "is_internal": false, "created_at": "2024-06-21T13:45:00Z" },
-  { "id": "cc22", "case_id": "case2", "author_id": "u3",  "body": "Rahim, yes — you are clear to proceed with the month-end close. Our team will remain available for the next 2 hours in case you encounter anything during the closing run.", "is_internal": false, "created_at": "2024-06-21T13:55:00Z" },
-  { "id": "cc23", "case_id": "case2", "author_id": "u10", "body": "Closing run completed without issues. Greatly appreciate the quick turnaround from the entire team.", "is_internal": false, "created_at": "2024-06-21T15:30:00Z" }
+  { "id": "cc16", "case_id": "case2", "author_id": "u10", "body": "Hello. I have navigated to Settings > Chart of Accounts. The Foreign Exchange Gain/Loss account is mapped to GL code 7120. Let me know if you need anything else.", "is_internal": false, "hours_ago": 69 },
+  { "id": "cc17", "case_id": "case2", "author_id": "u8",  "body": "GL 7120 confirmed. The rounding issue is in the Taka conversion at the sub-ledger level — the system is using 2 decimal places but the GL expects 0. Fixing the precision mapping now.", "is_internal": true,  "hours_ago": 68.6 },
+  { "id": "cc18", "case_id": "case2", "author_id": "u3",  "body": "Imran — good find. Before you push the fix, make sure to regenerate the last 3 months of journal entries in test mode and verify the closing balances match. Rahim's team will be watching the numbers closely.", "is_internal": true,  "hours_ago": 68.3 },
+  { "id": "cc19", "case_id": "case2", "author_id": "u8",  "body": "Test run complete — closing balances match across the last three months. Applying fix to production now.", "is_internal": true,  "hours_ago": 67.7 },
+  { "id": "cc20", "case_id": "case2", "author_id": "u8",  "body": "Rahim, the precision mapping for your Foreign Exchange account has been corrected. Could you please try regenerating the monthly P&L report now and let us know if the journal mismatch error has cleared?", "is_internal": false, "hours_ago": 67.5 },
+  { "id": "cc21", "case_id": "case2", "author_id": "u10", "body": "Imran, the report generated successfully — no errors! The figures look correct as well. Thank you. Can we now proceed with the month-end close?", "is_internal": false, "hours_ago": 67 },
+  { "id": "cc22", "case_id": "case2", "author_id": "u3",  "body": "Rahim, yes — you are clear to proceed with the month-end close. Our team will remain available for the next 2 hours in case you encounter anything during the closing run.", "is_internal": false, "hours_ago": 66.8 },
+  { "id": "cc23", "case_id": "case2", "author_id": "u10", "body": "Closing run completed without issues. Greatly appreciate the quick turnaround from the entire team.", "is_internal": false, "hours_ago": 65 }
 ]

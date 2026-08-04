@@ -51,6 +51,8 @@
     "stage": "closed_won",
     "notes": "Contract signed! Onboarding to begin Q2.",
     "estimated_value": 550000,
+    "deal_type": "installation",
+    "license_expiry": "2026-12-15T00:00:00Z",
     "created_by": "u4",
     "created_at": "2024-12-15T10:00:00Z",
     "updated_at": "2025-01-25T10:00:00Z"
@@ -65,6 +67,7 @@
     "stage": "closed_lost",
     "notes": "Lost to competitor. Revenue was too small for enterprise tier. Re-approach in 12 months.",
     "estimated_value": 90000,
+    "deal_type": "renewal",
     "created_by": "u4",
     "created_at": "2024-11-01T10:00:00Z",
     "updated_at": "2024-12-20T10:00:00Z"

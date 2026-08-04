@@ -6,11 +6,14 @@ import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { QuestionRatingRow } from '@/components/shared/question-rating-row'
+import { RatingGauge } from '@/components/shared/rating-gauge'
 import { toast } from '@/hooks/use-toast'
 import { cn, formatDateTime, formatDate, slaRemainingMs, formatDuration, CLIENT_STATUS_LABELS, CLIENT_INFO_REASON_LABELS, STATUS_COLORS, PRIORITY_COLORS, PRIORITY_LABELS } from '@/lib/utils'
+import { FEEDBACK_QUESTIONS, computeOverallRating } from '@/lib/feedback-questions'
 import {
   MessageSquare, Clock, AlertCircle, CheckCircle2, UserCheck,
-  Send, Paperclip, Download, RefreshCw, Star, UserCog, RotateCcw, ThumbsUp,
+  Send, Paperclip, Download, RefreshCw, UserCog, RotateCcw, ThumbsUp,
 } from 'lucide-react'
 import type { AuditLog, CaseComment, Attachment, Solution, Client } from '@/types'
 
@@ -67,7 +70,7 @@ export function CaseTimeline({ caseId }: Props) {
 
   const [reply, setReply] = useState('')
   const [feedbackText, setFeedbackText] = useState('')
-  const [feedbackRating, setFeedbackRating] = useState(0)
+  const [questionRatings, setQuestionRatings] = useState<Record<string, number>>({})
   const [feedbackDone, setFeedbackDone] = useState(false)
   // Resolved-state client choices
   const [showConfirmForm, setShowConfirmForm] = useState(false)
@@ -132,11 +135,15 @@ export function CaseTimeline({ caseId }: Props) {
     qc.invalidateQueries({ queryKey: ['notifications'] })
   }
 
+  const answeredCount = FEEDBACK_QUESTIONS.filter((q) => (questionRatings[q.key] ?? 0) > 0).length
+  const allQuestionsAnswered = answeredCount === FEEDBACK_QUESTIONS.length
+  const overallRating = computeOverallRating(questionRatings)
+
   // Confirm Solution — mandatory rating + feedback, closes the case directly.
   const confirmMutation = useMutation({
     mutationFn: () => {
-      if (feedbackRating < 1) throw new Error('Please give a rating to confirm and close the case')
-      return dp.confirmSolution(caseId, { rating: feedbackRating, feedback_text: feedbackText.trim() }, scope)
+      if (!allQuestionsAnswered) throw new Error('Please rate every question to confirm and close the case')
+      return dp.confirmSolution(caseId, { rating: overallRating, feedback_text: feedbackText.trim(), question_ratings: questionRatings }, scope)
     },
     onSuccess: () => {
       invalidateCase()
@@ -454,14 +461,30 @@ export function CaseTimeline({ caseId }: Props) {
           {/* Confirm → mandatory rating + feedback */}
           {showConfirmForm && (
             <div className="space-y-3 rounded-lg border bg-card p-3">
-              <p className="text-sm font-medium text-foreground">Rate your experience <span className="text-destructive">*</span></p>
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <button key={n} type="button" onClick={() => setFeedbackRating(feedbackRating === n ? 0 : n)} className="transition-transform hover:scale-110">
-                    <Star className={cn('h-7 w-7', n <= feedbackRating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30 hover:text-amber-300')} />
-                  </button>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium text-foreground">Rate your experience <span className="text-destructive">*</span></p>
+                <span className="text-xs font-medium text-muted-foreground shrink-0">{answeredCount}/{FEEDBACK_QUESTIONS.length}</span>
+              </div>
+              <div className="h-1 rounded-full bg-muted overflow-hidden -mt-1.5">
+                <div
+                  className="h-full rounded-full bg-primary transition-all duration-300"
+                  style={{ width: `${(answeredCount / FEEDBACK_QUESTIONS.length) * 100}%` }}
+                />
+              </div>
+              <div className="space-y-1.5">
+                {FEEDBACK_QUESTIONS.map((q, i) => (
+                  <QuestionRatingRow
+                    key={q.key}
+                    index={i + 1}
+                    label={q.label}
+                    value={questionRatings[q.key] ?? 0}
+                    onChange={(v) => setQuestionRatings((r) => ({ ...r, [q.key]: v }))}
+                    size="sm"
+                  />
                 ))}
-                {feedbackRating > 0 && <span className="text-xs text-muted-foreground ml-1">{feedbackRating}/5</span>}
+                <div className="rounded-lg border bg-gradient-to-br from-card to-muted/20 p-3 mt-1">
+                  <RatingGauge rating={overallRating} size="sm" />
+                </div>
               </div>
               <Textarea
                 rows={3}
@@ -471,7 +494,7 @@ export function CaseTimeline({ caseId }: Props) {
               />
               <div className="flex justify-end gap-2">
                 <Button size="sm" variant="ghost" onClick={() => setShowConfirmForm(false)}>Back</Button>
-                <Button size="sm" disabled={feedbackRating < 1 || confirmMutation.isPending}
+                <Button size="sm" disabled={!allQuestionsAnswered || confirmMutation.isPending}
                   onClick={() => confirmMutation.mutate()} className="bg-emerald-600 hover:bg-emerald-700 text-white">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   {confirmMutation.isPending ? 'Closing…' : 'Submit Feedback & Close Case'}

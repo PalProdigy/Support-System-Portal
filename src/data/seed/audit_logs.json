@@ -6,7 +6,7 @@
     "entity_id": "c1",
     "action": "create",
     "after": { "company_name": "Acme Corporation Ltd." },
-    "created_at": "2024-02-01T00:00:00Z"
+    "hours_ago": 4000
   },
   {
     "id": "al2",
@@ -14,8 +14,8 @@
     "entity_type": "case",
     "entity_id": "case1",
     "action": "create",
-    "after": { "reference_no": "NHQ-2024-0001", "status": "new" },
-    "created_at": "2024-06-22T07:00:00Z"
+    "after": { "reference_no": "NHQ-2026-0001", "status": "new" },
+    "hours_ago": 48
   },
   {
     "id": "al3",
@@ -25,7 +25,7 @@
     "action": "status_change",
     "before": { "status": "new" },
     "after": { "status": "triaged" },
-    "created_at": "2024-06-22T07:10:00Z"
+    "hours_ago": 47.8
   },
   {
     "id": "al4",
@@ -35,7 +35,7 @@
     "action": "assign",
     "before": { "assignee_id": null },
     "after": { "assignee_id": "u6", "status": "assigned" },
-    "created_at": "2024-06-22T07:15:00Z"
+    "hours_ago": 47.7
   },
   {
     "id": "al5",
@@ -45,7 +45,7 @@
     "action": "status_change",
     "before": { "status": "assigned" },
     "after": { "status": "in_progress" },
-    "created_at": "2024-06-22T07:20:00Z"
+    "hours_ago": 47.6
   },
   {
     "id": "al6",
@@ -55,7 +55,7 @@
     "action": "escalate",
     "before": { "escalation_level": 0 },
     "after": { "escalation_level": 1, "is_escalated": true },
-    "created_at": "2024-06-22T07:05:00Z"
+    "hours_ago": 47.9
   },
   {
     "id": "al7",
@@ -65,7 +65,7 @@
     "action": "status_change",
     "before": { "status": "in_progress" },
     "after": { "status": "resolved" },
-    "created_at": "2024-06-20T14:30:00Z"
+    "hours_ago": 456
   },
   {
     "id": "al8",
@@ -75,6 +75,6 @@
     "action": "update",
     "before": { "is_active": true },
     "after": { "is_active": false },
-    "created_at": "2024-05-01T00:00:00Z"
+    "hours_ago": 1500
   }
 ]

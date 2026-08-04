@@ -1,0 +1,51 @@
+[
+  {
+    "id": "proj1",
+    "title": "ERP Rollout — Phase 2",
+    "description": "Extend the existing ERP deployment with warehouse and procurement modules across two additional sites.",
+    "client_id": "c1",
+    "product_id": "p10",
+    "handler_ids": ["u6", "u2"],
+    "status": "in_progress",
+    "priority": "high",
+    "created_by": "u1",
+    "created_at": "2024-03-01T00:00:00Z"
+  },
+  {
+    "id": "proj2",
+    "title": "Security Posture Assessment",
+    "description": "Full infrastructure security review and hardening recommendations ahead of the client's compliance audit.",
+    "client_id": "c2",
+    "product_id": "p7",
+    "handler_ids": ["u7"],
+    "status": "planning",
+    "priority": "critical",
+    "created_by": "u1",
+    "created_at": "2024-03-10T00:00:00Z"
+  },
+  {
+    "id": "proj3",
+    "title": "CRM & Payroll Migration",
+    "description": "Migrate legacy CRM and payroll data into the new platform, including multi-level approval workflow setup.",
+    "client_id": "c3",
+    "product_id": "p6",
+    "handler_ids": ["u8", "u12", "u3"],
+    "status": "on_hold",
+    "priority": "medium",
+    "created_by": "u1",
+    "created_at": "2024-02-20T00:00:00Z"
+  },
+  {
+    "id": "proj4",
+    "title": "Backup & DR Implementation",
+    "description": "Design and roll out a backup and disaster-recovery strategy across the client's primary data center.",
+    "client_id": "c1",
+    "product_id": "p8",
+    "handler_ids": ["u13"],
+    "status": "completed",
+    "priority": "low",
+    "created_by": "u1",
+    "created_at": "2024-01-15T00:00:00Z",
+    "updated_at": "2024-02-28T00:00:00Z"
+  }
+]

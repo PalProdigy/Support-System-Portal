@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth/context'
 import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
+import { MobileNav } from './mobile-nav'
 import NHQLoader from '@/components/NHQLoader/page'
 import { getDataProvider } from '@/lib/data'
 import { useState } from 'react'
@@ -55,9 +56,12 @@ export function AppShell({ children }: AppShellProps) {
           <div className="contents print:hidden">
             <Topbar userName={currentUser?.name ?? 'User'} />
           </div>
-          <main className="absolute inset-0 overflow-y-auto pt-14 print:static print:overflow-visible print:pt-0">
+          <main className="absolute inset-0 overflow-y-auto pt-14 pb-16 md:pb-0 print:static print:overflow-visible print:pt-0">
             {children}
           </main>
+          <div className="contents print:hidden">
+            <MobileNav userName={currentUser?.name ?? 'User'} userRole={session.role} />
+          </div>
         </div>
       </div>
       </PasswordExpiryProvider>

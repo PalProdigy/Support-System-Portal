@@ -205,5 +205,17 @@
     "created_at": "2024-01-05T00:00:00Z",
     "years_of_experience": 1,
     "certification_level": "L1"
+  },
+  {
+    "id": "u13",
+    "name": "Nasrin Akter",
+    "email": "nasrin@nhqdist.com",
+    "role": "support_engineer",
+    "team_id": "t2",
+    "is_active": true,
+    "avatar": "",
+    "created_at": "2024-06-01T00:00:00Z",
+    "years_of_experience": 4,
+    "certification_level": "L3"
   }
 ]

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -8,15 +9,15 @@ import { CaseCard } from '@/components/shared/case-card'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { NewCaseDialog } from '@/modules/cases/new-case-dialog'
 import { Ticket, CheckCircle, Clock, PlusCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import type { Case } from '@/types'
 
 export default function ClientDashboard() {
   const session = useSession()
   const dp = getDataProvider()
-  const router = useRouter()
   const scope = { userId: session.userId, role: session.role }
+  const [newCaseOpen, setNewCaseOpen] = useState(false)
 
   const { data: casesData, isLoading } = useQuery({
     queryKey: ['cases', 'client', session.userId],
@@ -35,11 +36,13 @@ export default function ClientDashboard() {
           <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
           <p className="text-sm text-muted-foreground">Track your support requests</p>
         </div>
-        <Button onClick={() => router.push('/cases/new')}>
+        <Button onClick={() => setNewCaseOpen(true)}>
           <PlusCircle className="h-4 w-4" />
           New Case
         </Button>
       </div>
+
+      <NewCaseDialog open={newCaseOpen} onOpenChange={setNewCaseOpen} />
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard title="Open Cases" value={open.length} icon={Ticket} loading={isLoading} />
@@ -56,7 +59,7 @@ export default function ClientDashboard() {
                 icon={Ticket}
                 title="No cases yet"
                 description="Submit a new support case when you need help."
-                action={{ label: 'Create Case', onClick: () => router.push('/cases/new') }}
+                action={{ label: 'Create Case', onClick: () => setNewCaseOpen(true) }}
               />
             ) : (
               cases.slice(0, 20).map((c: Case) => (

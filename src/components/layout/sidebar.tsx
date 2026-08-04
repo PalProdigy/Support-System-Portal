@@ -14,13 +14,13 @@ import { ROLE_LABELS } from '@/lib/rbac'
 import { useAuth } from '@/lib/auth/context'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import {
-  LayoutDashboard, Ticket, Users, Building2, Lightbulb, Package,
-  BookOpen, Shield, Settings, BarChart3, Bell, ChevronLeft, ChevronRight,
-  Headset, Star, Briefcase, Wrench, ShieldAlert, LayoutGrid, TrendingUp,
+  LayoutDashboard, Ticket, Building2, Package,
+  BookOpen, Shield, Settings, BarChart3, ChevronLeft, ChevronRight,
+  Headset, Star, Briefcase, Wrench, LayoutGrid, Newspaper, FolderKanban, Handshake, ShieldX, KeyRound,
 } from 'lucide-react'
 import type { Role } from '@/types'
 
-interface NavItem {
+export interface NavItem {
   label: string
   href: string
   icon: React.ComponentType<{ className?: string }>
@@ -28,42 +28,39 @@ interface NavItem {
   badge?: number
 }
 
-const NAV_ITEMS: NavItem[] = [
+export const NAV_ITEMS: NavItem[] = [
   // Main Navigation
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
 
 // Workspaces
-  { label: 'TH Hub', href: '/technical-head', icon: ShieldAlert, roles: ['technical_head'] },
-  { label: 'Lead Hub', href: '/lead', icon: Users, roles: ['team_lead'] },
-  { label: 'AM Hub', href: '/sales-executive', icon: Briefcase, roles: ['sales_executive'] },
-  { label: 'My Performance', href: '/my-performance', icon: TrendingUp, roles: [ 'team_lead', 'support_engineer', 'sales_executive'] },
-  { label: 'Cases', href: '/my-case', icon: Wrench, roles: ['support_engineer'] },
+  { label: 'My Cases', href: '/my-case', icon: Wrench, roles: ['support_engineer'] },
 
 // Case Management
-  { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead', 'sales_executive'] },
+  { label: 'Cases', href: '/cases', icon: Ticket, roles: ['technical_head', 'team_lead'] },
 
 // Team Management
   { label: 'Teams', href: '/teams', icon: Headset, roles: ['team_lead', 'technical_head'] },
   { label: 'Team', href: '/team', icon: Headset, roles: ['support_engineer'] },
-  { label: 'Team Leads', href: '/team-lead', icon: Users, roles: ['technical_head'] },
-  { label: 'Support Engineers', href: '/support-engineer', icon: Wrench, roles: ['technical_head', 'team_lead'] },
+  { label: 'Engineers', href: '/support-engineer', icon: Wrench, roles: ['technical_head', 'team_lead'] },
   { label: 'Sales Executives', href: '/sales-executive', icon: Briefcase, roles: ['technical_head'] },
   { label: 'Clients', href: '/clients', icon: Building2, roles: ['sales_executive', 'team_lead', 'technical_head'] },
 
 // Resources
   { label: 'Products', href: '/products', icon: Package, roles: ['sales_executive', 'client', 'technical_head'] },
-  { label: 'Solutions', href: '/solutions', icon: Lightbulb, roles: ['team_lead', 'technical_head', 'support_engineer', 'sales_executive'] },
-  { label: 'Knowledge Base', href: '/knowledge-base', icon: BookOpen, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive', 'client'] },
+  { label: 'Articles', href: '/articles', icon: Newspaper, roles: ['team_lead', 'technical_head', 'support_engineer'] },
+  { label: 'Projects', href: '/projects', icon: FolderKanban, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
+  { label: 'Orders', href: '/engagements', icon: Handshake, roles: ['sales_executive', 'technical_head'] },
+  { label: 'License & SLA Monitoring', href: '/license-sla', icon: ShieldX, roles: ['sales_executive'] },
 
 // Analytics & Quality
-  { label: 'Reporting', href: '/reporting', icon: BarChart3, roles: ['team_lead', 'technical_head', 'sales_executive'] },
+  { label: 'Reporting', href: '/reporting', icon: BarChart3, roles: ['team_lead', 'technical_head'] },
   { label: 'Feedback', href: '/feedback', icon: Star, roles: ['team_lead', 'technical_head'] },
   { label: 'My Feedback', href: '/my-feedback', icon: Star, roles: ['support_engineer'] },
 
 // Administration
 //   { label: 'SLA Rules', href: '/sla-rules', icon: Shield, roles: ['technical_head'] },
-  { label: 'Audit Log', href: '/audit-log', icon: Shield, roles: ['technical_head', 'team_lead'] },
-  { label: 'Notifications', href: '/notifications', icon: Bell, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
+  { label: 'Audit Log', href: '/audit-log', icon: Shield, roles: ['technical_head'] },
+  { label: 'Permission Management', href: '/permissions', icon: KeyRound, roles: ['technical_head'] },
   { label: 'Settings', href: '/settings', icon: Settings, roles: ['technical_head', 'team_lead', 'support_engineer', 'sales_executive'] },
 
 // ==============================
@@ -74,12 +71,11 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Services', href: '/client/services', icon: LayoutGrid, roles: ['client'] },
   { label: 'Knowledge Base', href: '/client/kb', icon: BookOpen, roles: ['client'] },
   { label: 'My Feedback', href: '/my-feedback', icon: Star, roles: ['client'] },
-  { label: 'Notifications', href: '/notifications', icon: Bell, roles: ['client'] },
 ]
 
 // Routes whose href would otherwise prefix-match a sibling route via
 // pathname.startsWith() (e.g. /client → /clients, /team → /teams, /team-lead).
-const EXACT_MATCH_ROUTES = ['/client', '/team']
+export const EXACT_MATCH_ROUTES = ['/client', '/team']
 
 interface SidebarProps {
   userName?: string
@@ -122,7 +118,7 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'relative flex flex-col h-full  bg-card transition-all duration-300 shrink-0',
+        'relative hidden md:flex md:flex-col h-full bg-card transition-all duration-300 shrink-0',
         collapsed ? 'w-16' : 'w-60'
       )}
     >

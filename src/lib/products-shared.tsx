@@ -1,10 +1,42 @@
 'use client'
 
 import { useEffect, useState, type CSSProperties } from 'react'
-import { Pencil, ArrowRight, Package, ShieldCheck, Network, ShieldAlert, ScanSearch, DatabaseBackup, Cloud, Server, Layers, type LucideIcon } from 'lucide-react'
+import {
+  Pencil, ArrowRight, Package, ShieldCheck, Network, ShieldAlert, ScanSearch, DatabaseBackup, Cloud, Server, Layers,
+  Contact, type LucideIcon,
+} from 'lucide-react'
+import { UserAvatar } from '@/components/shared/user-avatar'
 import type { Product } from '@/types'
 
 const CAROUSEL_INTERVAL_MS = 2800
+
+// OEM/vendor the product is manufactured by (e.g. RSA, CrowdStrike) — distinct
+// from the security-domain category the product is grouped under. Not part of
+// the DataProvider schema, so the list is just persisted to localStorage. Shared
+// by the Products page (as "OEM") and the Engagements page (as "Vendor") since
+// both refer to the same underlying brand catalog.
+export const OEM_STORAGE_KEY = 'nhq_oem_list'
+export const DEFAULT_OEM_OPTIONS = [
+  'Acronis', 'Adobe', 'CrowdStrike', 'Forcepoint', 'McAfee', 'Microsoft',
+  'NetWitness', 'Palo Alto Networks', 'RSA', 'Secure64', 'Skybox Security',
+  'Symantec', 'Veritas',
+]
+
+export function loadOemOptions(): string[] {
+  if (typeof window === 'undefined') return [...DEFAULT_OEM_OPTIONS].sort((a, b) => a.localeCompare(b))
+  try {
+    const raw = localStorage.getItem(OEM_STORAGE_KEY)
+    const list = raw ? (JSON.parse(raw) as string[]) : DEFAULT_OEM_OPTIONS
+    return [...list].sort((a, b) => a.localeCompare(b))
+  } catch {
+    return [...DEFAULT_OEM_OPTIONS].sort((a, b) => a.localeCompare(b))
+  }
+}
+
+export function saveOemOptions(list: string[]): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(OEM_STORAGE_KEY, JSON.stringify(list))
+}
 
 export type CategoryStyle = { color: string; tint: string; shade: string }
 export type CategoryMeta = CategoryStyle & { mono: string; icon: LucideIcon }
@@ -81,10 +113,10 @@ export function ProductCard({
       onClick={() => onView(product)}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onView(product)}
       style={accentVars(meta)}
-      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--accent)] hover:shadow-lg"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)] hover:shadow-xl"
     >
       <div
-        className="relative flex h-28 items-center justify-center overflow-hidden"
+        className="relative flex h-32 items-center justify-center overflow-hidden"
         style={cover ? undefined : { background: `linear-gradient(135deg, ${meta.color} 0%, ${meta.shade} 100%)` }}
       >
         {cover ? (
@@ -119,7 +151,8 @@ export function ProductCard({
           </div>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-2.5 p-5">
+      <div className="h-[3px] shrink-0" style={{ background: `linear-gradient(90deg, ${meta.color}, ${meta.shade})` }} />
+      <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-start justify-between gap-2">
           <p className="text-[15px] font-semibold leading-snug text-foreground">{product.name}</p>
           {canManage && (
@@ -133,6 +166,25 @@ export function ProductCard({
           )}
         </div>
         <p className="line-clamp-3 text-[13px] leading-relaxed text-muted-foreground">{product.description}</p>
+
+        {product.manager?.name && (
+          <div className="flex items-center gap-2.5 rounded-xl border border-border bg-muted/40 px-2.5 py-2 dark:bg-muted/15">
+            <div className="rounded-full ring-2 shrink-0" style={{ '--tw-ring-color': 'var(--accent-tint)' } as CSSProperties}>
+              <UserAvatar name={product.manager.name} size="sm" border={false} shadow={false} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[12.5px] font-semibold leading-tight text-foreground truncate">{product.manager.name}</p>
+              <p className="text-[10.5px] leading-tight text-muted-foreground truncate">{product.manager.designation || 'Product Manager'}</p>
+            </div>
+            <span
+              className="flex shrink-0 items-center gap-1 rounded-full px-1.5 py-1 text-[9px] font-bold uppercase tracking-wide"
+              style={{ background: 'var(--accent-tint)', color: 'var(--accent)' }}
+            >
+              <Contact className="h-2.5 w-2.5" /> PM
+            </span>
+          </div>
+        )}
+
         <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
           <span className="text-[13px] font-semibold text-[var(--accent)]">Details</span>
           <ArrowRight className="h-3.5 w-3.5 text-[var(--accent)] transition-transform group-hover:translate-x-0.5" />

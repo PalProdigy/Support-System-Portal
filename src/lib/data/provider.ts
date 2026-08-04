@@ -1,5 +1,5 @@
 import type {
-  User, Client, Solution, ClientSolution, Team, Product,
+  User, Client, Solution, ClientSolution, Team, Product, ProductLicense,
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog, Role,
   Prospect, CreateClientAccountInput,
@@ -7,6 +7,9 @@ import type {
   TeamMemberRequest, CaseTransferRequest,
   ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
   SolutionArticle, SolutionArticleStatus,
+  Project, ProjectStatus, ProjectComment, ProjectAttachment,
+  Engagement, EngagementType, EngagementStatus, ClientContact, ExternalMember,
+  PermissionOverride, PermissionAction, PermissionResource,
 } from '@/types'
 
 export interface SolutionArticleFilters {
@@ -41,12 +44,33 @@ export interface CaseFilters {
   assignee_id?: string
   team_id?: string
   search?: string
+  date_from?: string   // ISO date (inclusive) — filters on created_at
+  date_to?: string     // ISO date (inclusive) — filters on created_at
   page?: number
   pageSize?: number
   // When true, only top-level cases are returned (sub-cases, which have a
   // parent_case_id, are excluded). Used by the main Cases list so sub tasks are
   // reached only from their parent's detail page, not shown as standalone cases.
   top_level_only?: boolean
+}
+
+export interface ProjectFilters {
+  status?: ProjectStatus
+  client_id?: string
+  handler_id?: string
+  search?: string
+}
+
+export interface EngagementFilters {
+  type?: EngagementType
+  status?: EngagementStatus
+  client_id?: string
+  search?: string
+}
+
+export interface ClientContactFilters {
+  client_id?: string
+  search?: string   // matches name or email
 }
 
 export interface Paginated<T> {
@@ -64,11 +88,63 @@ export interface DataProvider {
   updateUser(id: string, patch: Partial<User>): Promise<User>
   deleteUser(id: string): Promise<void>
 
+  // Permission overrides — per-user grants/revokes layered on top of role defaults
+  listPermissionOverrides(userId?: string): Promise<PermissionOverride[]>
+  setPermissionOverride(input: {
+    user_id: string
+    resource: PermissionResource
+    action: PermissionAction
+    effect: 'allow' | 'deny'
+    granted_by: string
+  }): Promise<PermissionOverride>
+  removePermissionOverride(id: string): Promise<void>
+
   // Clients
   listClients(scope: ListScope): Promise<Client[]>
   getClient(id: string): Promise<Client | null>
   createClient(input: Omit<Client, 'id' | 'created_at'>): Promise<Client>
   updateClient(id: string, patch: Partial<Client>): Promise<Client>
+
+  // Projects
+  listProjects(scope: ListScope, filters?: ProjectFilters): Promise<Project[]>
+  getProject(id: string): Promise<Project | null>
+  createProject(input: Omit<Project, 'id' | 'created_at'>): Promise<Project>
+  updateProject(id: string, patch: Partial<Project>): Promise<Project>
+  deleteProject(id: string): Promise<void>
+  listProjectComments(projectId: string): Promise<ProjectComment[]>
+  addProjectComment(input: Omit<ProjectComment, 'id' | 'created_at'>): Promise<ProjectComment>
+  listProjectAttachments(projectId: string): Promise<ProjectAttachment[]>
+  addProjectAttachment(input: Omit<ProjectAttachment, 'id' | 'created_at'>): Promise<ProjectAttachment>
+  listSubProjects(parentProjectId: string): Promise<Project[]>
+  createSubProject(parentProjectId: string, input: Partial<Project>): Promise<Project>
+
+  // External members — non-portal people attached to a Case or a Project
+  listExternalMembers(filters: { case_id?: string; project_id?: string }): Promise<ExternalMember[]>
+  addExternalMember(input: Omit<ExternalMember, 'id' | 'created_at'>): Promise<ExternalMember>
+  deleteExternalMember(id: string): Promise<void>
+
+  // Engagements
+  listEngagements(scope: ListScope, filters?: EngagementFilters): Promise<Engagement[]>
+  getEngagement(id: string): Promise<Engagement | null>
+  createEngagement(input: Omit<Engagement, 'id' | 'created_at'>): Promise<Engagement>
+  updateEngagement(id: string, patch: Partial<Engagement>): Promise<Engagement>
+  deleteEngagement(id: string): Promise<void>
+  // Technical Head assignment — the poc/support portion of a line routes to a
+  // Team; the installation portion routes to one-or-more engineers directly and
+  // spawns a real Project. A line with both types is assigned in one call.
+  assignEngagementProductLine(
+    engagementId: string, lineId: string,
+    input: { team_id?: string; handler_ids?: string[] },
+    scope: ListScope
+  ): Promise<Engagement>
+  // Marks a poc line's outcome (running/success/failed) — only meaningful once assigned.
+  setEngagementLinePocOutcome(
+    engagementId: string, lineId: string, outcome: 'running' | 'success' | 'failed', scope: ListScope
+  ): Promise<Engagement>
+
+  // Client Contacts (representatives)
+  listClientContacts(filters?: ClientContactFilters): Promise<ClientContact[]>
+  createClientContact(input: Omit<ClientContact, 'id' | 'created_at'>): Promise<ClientContact>
 
   // Solutions
   listSolutions(): Promise<Solution[]>
@@ -103,6 +179,12 @@ export interface DataProvider {
   createSolutionArticle(input: CreateSolutionArticleInput): Promise<SolutionArticle>
   updateSolutionArticle(id: string, patch: Partial<SolutionArticle>): Promise<SolutionArticle>
   deleteSolutionArticle(id: string): Promise<void>
+  // Engagement — same pattern as Solutions above.
+  toggleSolutionArticleLike(id: string, userId: string): Promise<SolutionArticle>
+  toggleSolutionArticleDislike(id: string, userId: string): Promise<SolutionArticle>
+  addSolutionArticleComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<SolutionArticle>
+  deleteSolutionArticleComment(id: string, commentId: string): Promise<SolutionArticle>
+  toggleSolutionArticleCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<SolutionArticle>
 
   // Client Solutions
   listClientSolutions(clientId?: string): Promise<ClientSolution[]>
@@ -120,6 +202,10 @@ export interface DataProvider {
   getProduct(id: string): Promise<Product | null>
   createProduct(input: Omit<Product, 'id' | 'created_at'>): Promise<Product>
   updateProduct(id: string, patch: Partial<Product>): Promise<Product>
+  // Per-client product license + support (SLA) contracts. Expiry dates feed the
+  // Technical Head dashboard's renewal-risk widgets.
+  //   listProductLicenses → GET /product-licenses
+  listProductLicenses(): Promise<ProductLicense[]>
 
   // SLA Rules
   listSLARules(): Promise<SLARule[]>
@@ -132,6 +218,9 @@ export interface DataProvider {
   createCase(input: Omit<Case, 'id' | 'reference_no' | 'created_at'>, scope: ListScope): Promise<Case>
   updateCase(id: string, patch: Partial<Case>, scope: ListScope): Promise<Case>
   assignCase(caseId: string, assigneeId: string, scope: ListScope): Promise<Case>
+  // Support Engineer self-service: grab an unassigned case routed to their
+  // team, no Team Lead / Technical Head approval required.
+  claimCase(caseId: string, scope: ListScope): Promise<Case>
   escalateCase(caseId: string, scope: ListScope): Promise<Case>
   startWork(caseId: string, scope: ListScope): Promise<Case>
   // Move a case to Pending Client, tagging why (reason category + message) so the
@@ -158,7 +247,7 @@ export interface DataProvider {
   approveEngineerChange(requestId: string, newEngineerId: string, scope: ListScope): Promise<Case>
   rejectEngineerChange(requestId: string, scope: ListScope): Promise<EngineerChangeRequest>
   // Client confirms the solution and submits mandatory feedback → closes the case.
-  confirmSolution(caseId: string, feedback: { rating: number; feedback_text: string }, scope: ListScope): Promise<Case>
+  confirmSolution(caseId: string, feedback: { rating: number; feedback_text: string; question_ratings?: Record<string, number> }, scope: ListScope): Promise<Case>
   // Client reopens a resolved case (with a reason) → back to In Progress.
   clientReopenCase(caseId: string, reason: string, scope: ListScope): Promise<Case>
   // Phase 5: TH approval gate for critical cases
@@ -190,6 +279,11 @@ export interface DataProvider {
   // Case Comments
   listComments(caseId: string, scope: ListScope): Promise<CaseComment[]>
   addComment(input: Omit<CaseComment, 'id' | 'created_at'>, scope: ListScope): Promise<CaseComment>
+  // Cross-case comment feed (e.g. Team Lead dashboard "Case Updates" — engineer
+  // activity across every case in scope, not one case's thread). Caller filters
+  // to the case ids it cares about.
+  //   listRecentComments → GET /comments/recent
+  listRecentComments(scope: ListScope): Promise<CaseComment[]>
 
   // Attachments
   listAttachments(caseId: string): Promise<Attachment[]>

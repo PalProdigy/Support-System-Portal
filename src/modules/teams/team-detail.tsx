@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import type { ReactNode } from 'react'
 import { getDataProvider } from '@/lib/data'
@@ -10,26 +10,29 @@ import { useSession } from '@/lib/auth/context'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { StatusBadge } from '@/components/shared/status-badge'
 import { PriorityChip } from '@/components/shared/priority-chip'
-import { SLACountdown } from '@/components/shared/sla-countdown'
 import { ErrorState } from '@/components/shared/error-state'
+import { SearchableSelect } from '@/components/shared/searchable-select'
 import { TeamMonthlyActivity } from '@/modules/teams/team-monthly-activity'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { toast } from '@/hooks/use-toast'
 import { ROLE_LABELS } from '@/lib/rbac'
-import { cn, formatDateTime, formatDuration } from '@/lib/utils'
+import { cn, formatDateTime, formatDuration, formatDate, STATUS_LABELS } from '@/lib/utils'
 import {
   ArrowLeft, Headset, Users, CheckCircle2, Clock,
-  Star, AlertTriangle, Ticket, TrendingUp,
-  UserPlus, UserMinus, ArrowRightLeft, Plus, X,
+  Star, AlertTriangle, Ticket, Crown,
+  UserPlus, ArrowRightLeft, Plus, X, Search,
   ClockIcon, CheckCircle, XCircle, ChevronRight,
+  LayoutGrid, MessageSquare, Settings as SettingsIcon, Power, Award, BadgeCheck, Mail,
 } from 'lucide-react'
-import type { Case, User, EngineerMetrics, Team, TeamMemberRequest, CaseTransferRequest, Solution } from '@/types'
+import type { Case, User, EngineerMetrics, Team, CaseTransferRequest, Solution, Client } from '@/types'
 
-const MEMBER_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899', '#84cc16']
+const TEAM_TABS = ['overview', 'members', 'cases', 'feedback', 'settings']
 
 /**
  * Full team workspace — header, KPIs, performance charts, members, and
@@ -41,15 +44,36 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const session = useSession()
   const dp = getDataProvider()
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const qc = useQueryClient()
   const scope = { userId: session.userId, role: session.role }
   const isTH = session.role === 'technical_head'
 
   const [showManageMembers, setShowManageMembers] = useState(false)
-  const [showTransferCase, setShowTransferCase] = useState(false)
+  const [transferCase, setTransferCase] = useState<Case | null>(null)
   const [showEditServices, setShowEditServices] = useState(false)
   const [editServiceIds, setEditServiceIds] = useState<string[]>([])
+  const [editServiceQuery, setEditServiceQuery] = useState('')
+  const [showChangeLead, setShowChangeLead] = useState(false)
+  const [newLeadId, setNewLeadId] = useState('')
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null)
+  const [activeTab, setActiveTabState] = useState<string>(() => {
+    const t = searchParams.get('tab')
+    return t && TEAM_TABS.includes(t) ? t : 'overview'
+  })
+  // Keep the URL's ?tab= query param in sync so a specific tab can be linked
+  // to directly (e.g. /teams/1?tab=cases) and stays intact on reload.
+  const setActiveTab = (tab: string) => {
+    setActiveTabState(tab)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('tab', tab)
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }
+  const [editingName, setEditingName] = useState(false)
+  const [nameInput, setNameInput] = useState('')
+  const [caseStatusFilter, setCaseStatusFilter] = useState<'all' | 'active' | 'escalated' | 'resolved'>('all')
+  const [caseSearch, setCaseSearch] = useState('')
 
   const { data: team, isLoading: loadingTeam, error } = useQuery({
     queryKey: ['team', teamId],
@@ -83,6 +107,14 @@ export function TeamDetail({ teamId }: { teamId: string }) {
     enabled: !!team,
   })
 
+  // listAllEngineerMetrics only covers support_engineer role — fetch the team
+  // lead's own case-handling stats separately so their member card isn't blank.
+  const { data: leadMetrics } = useQuery({
+    queryKey: ['engineer-metrics', team?.lead_user_id],
+    queryFn: () => dp.getEngineerMetrics(team!.lead_user_id!, scope),
+    enabled: !!team?.lead_user_id,
+  })
+
   const { data: memberRequests } = useQuery({
     queryKey: ['team-member-requests', teamId],
     queryFn: () => dp.listTeamMemberRequests(teamId),
@@ -92,6 +124,18 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const { data: caseTransferRequests } = useQuery({
     queryKey: ['case-transfer-requests', teamId],
     queryFn: () => dp.listCaseTransferRequests(teamId),
+    enabled: !!team,
+  })
+
+  const { data: feedback } = useQuery({
+    queryKey: ['feedback', 'team', teamId],
+    queryFn: () => dp.listFeedback(scope),
+    enabled: !!team,
+  })
+
+  const { data: clients } = useQuery({
+    queryKey: ['clients', 'team', teamId],
+    queryFn: () => dp.listClients(scope),
     enabled: !!team,
   })
 
@@ -115,19 +159,15 @@ export function TeamDetail({ teamId }: { teamId: string }) {
     onError: () => toast({ title: 'Failed to remove engineer', variant: 'destructive' }),
   })
 
-  // Mutation: submit a request (team_lead)
-  const requestMutation = useMutation({
-    mutationFn: (input: Omit<TeamMemberRequest, 'id' | 'created_at'>) =>
-      dp.createTeamMemberRequest(input),
-    onSuccess: (_, vars) => {
-      qc.invalidateQueries({ queryKey: ['team-member-requests', teamId] })
-      qc.invalidateQueries({ queryKey: ['team-member-requests', 'all-pending'] })
-      toast({
-        title: vars.type === 'add' ? 'Add request sent to Technical Head' : 'Remove request sent to Technical Head',
-        variant: 'success',
-      })
+  // Mutation: move engineer directly to another team (technical_head only)
+  const transferMemberMutation = useMutation({
+    mutationFn: ({ userId, targetTeamId }: { userId: string; targetTeamId: string }) =>
+      dp.updateUser(userId, { team_id: targetTeamId }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['users'] })
+      toast({ title: 'Engineer transferred to new team', variant: 'success' })
     },
-    onError: () => toast({ title: 'Failed to send request', variant: 'destructive' }),
+    onError: () => toast({ title: 'Failed to transfer engineer', variant: 'destructive' }),
   })
 
   // Mutation: submit a case transfer request (team_lead)
@@ -138,6 +178,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
       qc.invalidateQueries({ queryKey: ['case-transfer-requests', teamId] })
       qc.invalidateQueries({ queryKey: ['case-transfer-requests', 'all-pending'] })
       toast({ title: 'Transfer request sent to Technical Head', variant: 'success' })
+      setTransferCase(null)
     },
     onError: () => toast({ title: 'Failed to send transfer request', variant: 'destructive' }),
   })
@@ -189,6 +230,50 @@ export function TeamDetail({ teamId }: { teamId: string }) {
     onError: () => toast({ title: 'Failed to update services', variant: 'destructive' }),
   })
 
+  // Mutation: change team lead (technical_head only). The new lead's team_id
+  // is set to this team so their own dashboard scopes correctly; the outgoing
+  // lead's team_id is cleared since they no longer belong to this team.
+  const changeLeadMutation = useMutation({
+    mutationFn: async (leadId: string) => {
+      await dp.updateTeam(teamId, { lead_user_id: leadId })
+      await dp.updateUser(leadId, { team_id: teamId })
+      if (team?.lead_user_id && team.lead_user_id !== leadId) {
+        await dp.updateUser(team.lead_user_id, { team_id: undefined })
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['team', teamId] })
+      qc.invalidateQueries({ queryKey: ['teams'] })
+      qc.invalidateQueries({ queryKey: ['users'] })
+      toast({ title: 'Team lead changed', variant: 'success' })
+      setShowChangeLead(false)
+    },
+    onError: () => toast({ title: 'Failed to change team lead', variant: 'destructive' }),
+  })
+
+  // Mutation: toggle team active/inactive status (technical_head only)
+  const toggleActiveMutation = useMutation({
+    mutationFn: () => dp.updateTeam(teamId, { is_active: !(team?.is_active ?? true) }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['team', teamId] })
+      qc.invalidateQueries({ queryKey: ['teams'] })
+      toast({ title: team?.is_active === false ? 'Team activated' : 'Team deactivated', variant: 'success' })
+    },
+    onError: () => toast({ title: 'Failed to update team status', variant: 'destructive' }),
+  })
+
+  // Mutation: rename team (technical_head only)
+  const renameTeamMutation = useMutation({
+    mutationFn: (name: string) => dp.updateTeam(teamId, { name }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['team', teamId] })
+      qc.invalidateQueries({ queryKey: ['teams'] })
+      toast({ title: 'Team name updated', variant: 'success' })
+      setEditingName(false)
+    },
+    onError: () => toast({ title: 'Failed to update team name', variant: 'destructive' }),
+  })
+
   // Mutation: transfer case to another team
   const transferMutation = useMutation({
     mutationFn: ({ caseId, targetTeamId }: { caseId: string; targetTeamId: string }) =>
@@ -197,6 +282,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
       qc.invalidateQueries({ queryKey: ['cases', 'team', teamId] })
       qc.invalidateQueries({ queryKey: ['cases'] })
       toast({ title: 'Case transferred to new team', variant: 'success' })
+      setTransferCase(null)
     },
     onError: () => toast({ title: 'Failed to transfer case', variant: 'destructive' }),
   })
@@ -214,6 +300,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const allUsers: User[] = users ?? []
   const members = allUsers.filter((u) => u.team_id === teamId)
   const lead = allUsers.find((u) => u.id === team.lead_user_id)
+  const potentialLeads = allUsers.filter((u) => ['team_lead', 'technical_head'].includes(u.role) && u.is_active)
 
   const availableEngineers = allUsers.filter(
     (u) => u.role === 'support_engineer' && u.team_id !== teamId && u.is_active
@@ -230,44 +317,46 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const displayedCases = selectedMember ? cases.filter((c) => c.assignee_id === selectedMember.id) : cases
   const displayedOpenCases = selectedMember ? displayedCases.filter((c) => openCases.includes(c)) : openCases
   const displayedResolvedCases = selectedMember ? displayedCases.filter((c) => resolvedCases.includes(c)) : resolvedCases
+  const displayedEscalatedCases = displayedCases.filter((c) => c.is_escalated || c.status === 'escalated')
 
-  const transferableCases = cases.filter((c) => !['closed'].includes(c.status))
+  const caseSearchLower = caseSearch.trim().toLowerCase()
+  const filteredCases = displayedCases
+    .filter((c) => {
+      if (caseStatusFilter === 'active') return displayedOpenCases.includes(c)
+      if (caseStatusFilter === 'escalated') return displayedEscalatedCases.includes(c)
+      if (caseStatusFilter === 'resolved') return displayedResolvedCases.includes(c)
+      return true
+    })
+    .filter((c) => !caseSearchLower || c.reference_no.toLowerCase().includes(caseSearchLower) || c.title.toLowerCase().includes(caseSearchLower))
+
   const otherTeams = (allTeams ?? []).filter((t: Team) => t.id !== teamId)
 
-  const resolvedWithTime = resolvedCases.filter((c) => c.resolved_at)
-  const avgResolutionMs = resolvedWithTime.length > 0
-    ? resolvedWithTime.reduce((sum, c) =>
-        sum + (new Date(c.resolved_at!).getTime() - new Date(c.created_at).getTime()), 0)
-      / resolvedWithTime.length
-    : null
-  const avgResolutionHours = avgResolutionMs != null ? avgResolutionMs / 3_600_000 : null
+  // Case status breakdown — composition of this team's caseload across the pipeline.
+  const statusColors: Record<Case['status'], string> = {
+    new: '#3b82f6',
+    triaged: '#8b5cf6',
+    assigned: '#06b6d4',
+    in_progress: '#f59e0b',
+    pending_client: '#f97316',
+    resolved: '#10b981',
+    pending_closure: '#14b8a6',
+    closed: '#64748b',
+    escalated: '#ef4444',
+  }
+  const statusCounts = cases.reduce((acc, c) => {
+    acc[c.status] = (acc[c.status] ?? 0) + 1
+    return acc
+  }, {} as Record<Case['status'], number>)
+  const statusData = (Object.keys(statusCounts) as Case['status'][])
+    .map((status) => ({ name: STATUS_LABELS[status], value: statusCounts[status], color: statusColors[status] }))
+    .filter((d) => d.value > 0)
 
-  const slaCases = resolvedWithTime.filter((c) => c.sla_due_at)
-  const slaCompliantCount = slaCases.filter((c) =>
-    new Date(c.resolved_at!).getTime() <= new Date(c.sla_due_at!).getTime()
-  ).length
-  const slaCompliancePct = slaCases.length > 0 ? (slaCompliantCount / slaCases.length) * 100 : null
-
-  // Success rate: share of all team-handled cases that ended up resolved.
-  const successRatePct = cases.length > 0 ? (resolvedCases.length / cases.length) * 100 : null
-
-  // Contribution: share of all team cases each member is the assignee on.
-  const memberContribution = members.map((m, i) => ({
-    name: m.name,
-    value: cases.filter((c) => c.assignee_id === m.id).length,
-    color: MEMBER_COLORS[i % MEMBER_COLORS.length],
-  }))
-  const unassignedCount = cases.filter(
-    (c) => !c.assignee_id || !members.some((m) => m.id === c.assignee_id)
-  ).length
-  const contributionData = [
-    ...memberContribution,
-    ...(unassignedCount > 0 ? [{ name: 'Unassigned', value: unassignedCount, color: '#94a3b8' }] : []),
-  ].filter((d) => d.value > 0)
-
-  const metricsMap = Object.fromEntries(
+  const metricsMap: Record<string, EngineerMetrics> = Object.fromEntries(
     (allMetrics ?? []).map((m: EngineerMetrics) => [m.engineer_id, m])
   )
+  if (team.lead_user_id && leadMetrics) {
+    metricsMap[team.lead_user_id] = leadMetrics
+  }
 
   const memberSatisfactions = members
     .map((m) => metricsMap[m.id]?.satisfaction_score)
@@ -277,53 +366,87 @@ export function TeamDetail({ teamId }: { teamId: string }) {
     : null
 
   const canManage = ['team_lead', 'technical_head'].includes(session.role)
-  const solutionsMap = Object.fromEntries((solutions ?? []).map((s: Solution) => [s.id, s]))
 
   const pendingMemberRequests = (memberRequests ?? []).filter((r) => r.status === 'pending')
   const pendingTransferRequests = (caseTransferRequests ?? []).filter((r) => r.status === 'pending')
   const totalPending = pendingMemberRequests.length + pendingTransferRequests.length
   const usersMap = Object.fromEntries(allUsers.map((u) => [u.id, u]))
   const casesMap = Object.fromEntries(cases.map((c) => [c.id, c]))
+  const solutionsMap = Object.fromEntries((solutions ?? []).map((s: Solution) => [s.id, s]))
+  const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
+  const teamSolutions = (team.solution_ids ?? []).map((id) => solutionsMap[id]).filter(Boolean) as Solution[]
+
+  // Feedback tab: Feedback has no direct team_id, so join through this team's own cases.
+  const teamFeedback = (feedback ?? []).filter((f) => casesMap[f.case_id])
+  const feedbackRatings = teamFeedback.map((f) => f.rating).filter((r): r is number => r != null)
+  const avgFeedbackRating = feedbackRatings.length > 0
+    ? feedbackRatings.reduce((a, b) => a + b, 0) / feedbackRatings.length
+    : null
+  const feedbackRatingCounts = [5, 4, 3, 2, 1].map((n) => ({ n, count: feedbackRatings.filter((r) => r === n).length }))
+  const maxFeedbackRatingCount = Math.max(1, ...feedbackRatingCounts.map((r) => r.count))
+
+  const PRIORITY_BAR: Record<Case['priority'], string> = {
+    low: 'bg-slate-300', medium: 'bg-sky-400', high: 'bg-orange-400', critical: 'bg-red-500',
+  }
 
   const renderCaseCard = (c: Case) => {
     const assignee = allUsers.find((u) => u.id === c.assignee_id)
+    const coAssignees = (c.co_assignee_ids ?? []).map((uid) => allUsers.find((u) => u.id === uid)).filter((u): u is User => !!u)
     const resTime = c.resolved_at
       ? new Date(c.resolved_at).getTime() - new Date(c.created_at).getTime()
       : null
     return (
       <div
         key={c.id}
-        className="rounded-xl border bg-card p-3.5 hover:shadow-sm transition-shadow cursor-pointer"
+        className="group flex items-stretch gap-0 rounded-xl border bg-card overflow-hidden hover:border-primary/40 hover:shadow-md transition-all cursor-pointer"
         onClick={() => router.push(`/cases/${c.id}`)}
       >
-        <div className="flex items-start justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[10px] font-mono text-muted-foreground">{c.reference_no}</span>
-            <PriorityChip priority={c.priority} />
-            <StatusBadge status={c.status} />
-            {c.is_escalated && (
-              <Badge variant="destructive" className="text-[10px] h-4 px-1.5 gap-0.5">
-                <AlertTriangle className="h-2.5 w-2.5" /> Escalated
-              </Badge>
-            )}
+        <div className={cn('w-1 shrink-0', PRIORITY_BAR[c.priority])} />
+        <div className="flex-1 min-w-0 flex items-center gap-4 flex-wrap px-4 py-3.5">
+          <div className="flex-1 min-w-[220px]">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-mono text-muted-foreground">{c.reference_no}</span>
+              <PriorityChip priority={c.priority} />
+              <StatusBadge status={c.status} />
+              {c.is_escalated && (
+                <Badge variant="destructive" className="text-[10px] h-4 px-1.5 gap-0.5">
+                  <AlertTriangle className="h-2.5 w-2.5" /> Escalated
+                </Badge>
+              )}
+            </div>
+            <p className="text-sm font-medium text-foreground mt-1.5 truncate group-hover:text-primary transition-colors">{c.title}</p>
+            <div className="flex items-center gap-3 mt-1.5 text-[11px] text-muted-foreground flex-wrap">
+              <span><Clock className="inline h-3 w-3 mr-0.5" />Created {formatDateTime(c.created_at)}</span>
+              {assignee && (
+                <span className="flex items-center gap-1 rounded-full bg-primary/10 pl-0.5 pr-2 py-0.5">
+                  <UserAvatar name={assignee.name} size="sm" />
+                  <span className="text-foreground font-medium">{assignee.name}</span>
+                  <span className="text-[9px] font-semibold text-primary uppercase tracking-wide">Primary</span>
+                </span>
+              )}
+              {coAssignees.map((u) => (
+                <span key={u.id} className="flex items-center gap-1 rounded-full bg-violet-500/10 pl-0.5 pr-2 py-0.5">
+                  <UserAvatar name={u.name} size="sm" />
+                  <span className="text-foreground font-medium">{u.name}</span>
+                  <span className="text-[9px] font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wide">Supporting</span>
+                </span>
+              ))}
+              {resTime != null && (
+                <span className="flex items-center gap-1 text-emerald-600 font-medium">
+                  <CheckCircle2 className="h-3 w-3" /> Resolved in {formatDuration(resTime)}
+                </span>
+              )}
+            </div>
           </div>
-          <SLACountdown createdAt={c.created_at} dueAt={c.sla_due_at} status={c.status} />
-        </div>
-
-        <p className="text-sm font-medium text-foreground mt-1.5 line-clamp-1">{c.title}</p>
-
-        <div className="flex items-center gap-3 mt-2 text-[11px] text-muted-foreground flex-wrap">
-          <span><Clock className="inline h-3 w-3 mr-0.5" />Created {formatDateTime(c.created_at)}</span>
-          {assignee && (
-            <span className="flex items-center gap-1">
-              <UserAvatar name={assignee.name} size="sm" />
-              {assignee.name}
-            </span>
-          )}
-          {resTime != null && (
-            <span className="flex items-center gap-1 text-emerald-600 font-medium">
-              <CheckCircle2 className="h-3 w-3" /> Resolved in {formatDuration(resTime)}
-            </span>
+          {canManage && c.status !== 'closed' && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 text-[11px] px-2.5 gap-1 shrink-0"
+              onClick={(e) => { e.stopPropagation(); setTransferCase(c) }}
+            >
+              <ArrowRightLeft className="h-3 w-3" /> Transfer
+            </Button>
           )}
         </div>
       </div>
@@ -338,67 +461,66 @@ export function TeamDetail({ teamId }: { teamId: string }) {
         </Button>
       )}
 
-      {/* Team header */}
-      <div className="rounded-xl border bg-card p-5 flex items-start gap-4 flex-wrap">
-        <div className="rounded-xl bg-primary/10 p-3 shrink-0">
+      {/* Team header — modern gradient hero */}
+      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-start gap-4 flex-wrap">
+        <div className="rounded-xl bg-primary/15 p-3 shrink-0">
           <Headset className="h-7 w-7 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl font-bold text-foreground">{team.name}</h1>
+            {team.is_active === false
+              ? <Badge variant="secondary" className="text-[10px] h-5 px-1.5 bg-zinc-800 text-zinc-100 hover:bg-zinc-800">Deactive</Badge>
+              : <Badge variant="default" className="text-[10px] h-5 px-1.5 bg-emerald-500 hover:bg-emerald-500 text-white">Active</Badge>
+            }
           </div>
-          {lead && (
-            <div
-              className="flex items-center gap-2 mt-1 cursor-pointer w-fit hover:opacity-75 transition-opacity"
-              onClick={() => router.push(`/users/${lead.id}`)}
-            >
-              <UserAvatar name={lead.name} size="sm" />
-              <span className="text-sm text-muted-foreground">
-                Lead: <span className="font-medium text-foreground">{lead.name}</span>
-                <span className="ml-1 text-xs">({ROLE_LABELS[lead.role]})</span>
-              </span>
-            </div>
-          )}
           <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-            <span className="text-xs text-muted-foreground shrink-0">Services:</span>
-            {(team.solution_ids ?? []).length === 0 ? (
-              <span className="text-xs text-muted-foreground italic">None set</span>
-            ) : (
-              (team.solution_ids ?? []).map((sid) => {
-                const sol = solutionsMap[sid]
-                return sol ? (
-                  <Badge key={sid} variant="outline" className="text-[10px] h-5 px-2">{sol.name}</Badge>
-                ) : null
-              })
+            {lead ? (
+              <div
+                className="flex items-center gap-1.5 cursor-pointer w-fit hover:opacity-75 transition-opacity"
+                onClick={() => router.push(`/users/${lead.id}`)}
+              >
+                <Crown className="h-3.5 w-3.5 text-amber-500" />
+                <span className="text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">{lead.name}</span>
+                  <span className="ml-1 text-xs">· {ROLE_LABELS[lead.role]}</span>
+                </span>
+              </div>
+            ) : isTH && (
+              <span className="text-sm text-muted-foreground italic">No lead assigned</span>
             )}
             {isTH && (
               <button
-                className="text-[11px] text-primary hover:underline ml-1 cursor-pointer"
-                onClick={() => { setEditServiceIds(team.solution_ids ?? []); setShowEditServices(true) }}
+                type="button"
+                className="text-[11px] text-primary hover:underline cursor-pointer"
+                onClick={() => { setNewLeadId(lead?.id ?? ''); setShowChangeLead(true) }}
               >
-                Edit
+                {lead ? 'Change' : 'Assign lead'}
               </button>
             )}
           </div>
-          <p className="text-xs text-muted-foreground mt-1">Created {formatDateTime(team.created_at)}</p>
+          <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
+            <Clock className="h-3 w-3" /> Created {formatDateTime(team.created_at)}
+          </p>
         </div>
-        {/* Action buttons */}
-        {canManage && (
+        {/* Action buttons — engineer/service management is technical_head only;
+            team_lead has read-only visibility into their team's roster. */}
+        {isTH && (
           <div className="flex items-center gap-2 flex-wrap">
+            <Button size="sm" variant="outline" onClick={() => { setEditServiceIds(team.solution_ids ?? []); setShowEditServices(true) }}>
+              Services
+            </Button>
             <div className="relative">
               <Button size="sm" variant="outline" onClick={() => setShowManageMembers(true)}>
                 <UserPlus className="h-3.5 w-3.5" /> Manage Engineers
               </Button>
-              {isTH && totalPending > 0 && (
+              {totalPending > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500" />
                 </span>
               )}
             </div>
-            <Button size="sm" variant="outline" onClick={() => setShowTransferCase(true)}>
-              <ArrowRightLeft className="h-3.5 w-3.5" /> {isTH ? 'Transfer Case' : 'Transfer Request'}
-            </Button>
           </div>
         )}
       </div>
@@ -525,137 +647,85 @@ export function TeamDetail({ teamId }: { teamId: string }) {
         </div>
       )}
 
-      {/* KPI cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <KpiCard icon={<Ticket className="h-5 w-5 text-blue-500" />} label="Total Cases" value={String(cases.length)} />
-        <KpiCard icon={<CheckCircle2 className="h-5 w-5 text-emerald-500" />} label="Resolved" value={String(resolvedCases.length)} />
-        <KpiCard icon={<AlertTriangle className="h-5 w-5 text-amber-500" />} label="Open" value={String(openCases.length)} />
-        <KpiCard icon={<AlertTriangle className="h-5 w-5 text-red-500" />} label="Escalated" value={String(escalatedCases.length)} />
-      </div>
+      {/* Team workspace tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
+        <TabsList className="h-auto flex-wrap gap-1 p-1">
+          <TabsTrigger value="overview" className="gap-1.5"><LayoutGrid className="h-3.5 w-3.5" /> Overview</TabsTrigger>
+          <TabsTrigger value="members" className="gap-1.5"><Users className="h-3.5 w-3.5" /> Members</TabsTrigger>
+          <TabsTrigger value="cases" className="gap-1.5"><Ticket className="h-3.5 w-3.5" /> Cases</TabsTrigger>
+          <TabsTrigger value="feedback" className="gap-1.5"><MessageSquare className="h-3.5 w-3.5" /> Feedback</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-1.5"><SettingsIcon className="h-3.5 w-3.5" /> Settings</TabsTrigger>
+        </TabsList>
 
-      {/* Performance metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-xl border bg-card p-4 flex items-start gap-3">
-          <Clock className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
-          <div>
-            <p className="text-xs text-muted-foreground">Avg Resolution Time</p>
-            <p className="text-xl font-bold text-foreground">
-              {avgResolutionHours != null ? formatDuration(avgResolutionHours * 3_600_000) : '—'}
-            </p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              across {resolvedWithTime.length} resolved case{resolvedWithTime.length !== 1 ? 's' : ''}
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-xl border bg-card p-4 flex items-start gap-3">
-          <TrendingUp className="h-5 w-5 text-emerald-500 mt-0.5 shrink-0" />
-          <div>
-            <p className="text-xs text-muted-foreground">Total SLA</p>
-            <p className="text-xl font-bold text-foreground">{slaCases.length}</p>
-
-          </div>
-        </div>
-
-        <div className="rounded-xl border bg-card p-4 flex items-start gap-3">
-          <Star className="h-5 w-5 text-yellow-500 mt-0.5 shrink-0" />
-          <div>
-            <p className="text-xs text-muted-foreground">Team Satisfaction</p>
-            <p className="text-xl font-bold text-foreground">
-              {avgSatisfaction != null ? `${avgSatisfaction.toFixed(1)} / 5` : '—'}
-            </p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              avg across {members.length} member{members.length !== 1 ? 's' : ''}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Team success rate */}
-      {successRatePct != null && (
-        <div className="rounded-xl border bg-card p-4 space-y-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-indigo-500" />
-              <span className="text-sm font-semibold">Team Success Rate</span>
-            </div>
-            <span className={`text-sm font-bold ${
-              successRatePct >= 90 ? 'text-emerald-600'
-              : successRatePct >= 70 ? 'text-amber-600'
-              : 'text-red-600'}`}>
-              {successRatePct.toFixed(0)}%
-            </span>
-          </div>
-          <div className="h-3 rounded-full bg-muted overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all ${
-                successRatePct >= 90 ? 'bg-emerald-500'
-                : successRatePct >= 70 ? 'bg-amber-500'
-                : 'bg-red-500'}`}
-              style={{ width: `${Math.min(successRatePct, 100)}%` }}
+        {/* Overview */}
+        <TabsContent value="overview" className="space-y-6 mt-0">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <KpiCard icon={<Ticket className="h-5 w-5 text-blue-500" />} label="Total Cases" value={String(cases.length)} />
+            <KpiCard icon={<AlertTriangle className="h-5 w-5 text-amber-500" />} label="Open Cases" value={String(openCases.length)} />
+            <KpiCard icon={<CheckCircle2 className="h-5 w-5 text-emerald-500" />} label="Resolved" value={String(resolvedCases.length)} />
+            <KpiCard icon={<AlertTriangle className="h-5 w-5 text-red-500" />} label="Escalated" value={String(escalatedCases.length)} />
+            <KpiCard icon={<Users className="h-5 w-5 text-violet-500" />} label="Team Members" value={String(members.length)} />
+            <KpiCard
+              icon={<Star className="h-5 w-5 text-yellow-500" />}
+              label="Team Satisfaction"
+              value={avgSatisfaction != null ? `${avgSatisfaction.toFixed(1)} / 5` : '—'}
             />
           </div>
-          <p className="text-xs text-muted-foreground">
-            {resolvedCases.length} resolved out of {cases.length} case{cases.length !== 1 ? 's' : ''} handled by this team
-          </p>
-        </div>
-      )}
 
-      {/* Team member contribution + monthly resolved activity */}
-      {(contributionData.length > 0 || cases.length > 0) && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {contributionData.length > 0 && (
-            <div className="rounded-xl border bg-card p-4 space-y-3">
-              <div>
-                <p className="text-sm font-semibold">Team Contribution</p>
-                <p className="text-xs text-muted-foreground">Share of all cases handled by each member</p>
-              </div>
-              <ResponsiveContainer width="100%" height={280}>
-                <PieChart>
-                  <Pie
-                    data={contributionData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={65}
-                    outerRadius={100}
-                    paddingAngle={2}
-                    dataKey="value"
-                  >
-                    {contributionData.map((entry, index) => (
-                      <Cell key={index} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value, name) => {
-                      const n = Number(value)
-                      return [`${n} case${n !== 1 ? 's' : ''} (${((n / cases.length) * 100).toFixed(0)}%)`, name]
-                    }}
-                    contentStyle={{ fontSize: 12 }}
-                  />
-                  <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-                </PieChart>
-              </ResponsiveContainer>
+          {(statusData.length > 0 || cases.length > 0) && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {statusData.length > 0 && (
+                <div className="rounded-xl border bg-card p-4 space-y-3">
+                  <div>
+                    <p className="text-sm font-semibold">Case Status Breakdown</p>
+                    <p className="text-xs text-muted-foreground">Composition of this team&apos;s caseload by status</p>
+                  </div>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <PieChart>
+                      <Pie
+                        data={statusData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={65}
+                        outerRadius={100}
+                        paddingAngle={2}
+                        dataKey="value"
+                      >
+                        {statusData.map((entry, index) => (
+                          <Cell key={index} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(value, name) => {
+                          const n = Number(value)
+                          return [`${n} case${n !== 1 ? 's' : ''} (${((n / cases.length) * 100).toFixed(0)}%)`, name]
+                        }}
+                        contentStyle={{ fontSize: 12 }}
+                      />
+                      <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+
+              <TeamMonthlyActivity cases={cases} />
             </div>
           )}
+        </TabsContent>
 
-          <TeamMonthlyActivity cases={cases} />
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Members panel */}
-        <div className="space-y-3">
+        {/* Members */}
+        <TabsContent value="members" className="space-y-3 mt-0">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold flex items-center gap-2">
               <Users className="h-4 w-4 text-muted-foreground" />
               Members <span className="text-sm font-normal text-muted-foreground">({members.length})</span>
             </h2>
-            {canManage && (
+            {isTH && (
               <div className="relative">
                 <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-primary" onClick={() => setShowManageMembers(true)}>
                   <Plus className="h-3 w-3" /> Manage
                 </Button>
-                {isTH && totalPending > 0 && (
+                {totalPending > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
@@ -667,7 +737,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
           {members.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">No members assigned yet.</p>
           ) : (
-            <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
               {members.map((m) => {
                 const metrics = metricsMap[m.id]
                 const isLeadCard = m.id === team.lead_user_id
@@ -677,10 +747,14 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                 const canNavigate = session.role !== 'support_engineer'
                 const memberHref = isLeadCard && session.role === 'team_lead'
                   ? '/dashboard'
-                  : m.role === 'support_engineer' ? `/support-engineer/${m.id}`
-                  : m.role === 'team_lead' ? `/team-lead/${m.id}`
+                  : m.role === 'support_engineer' || m.role === 'team_lead' ? `/engineer/${m.id}`
                   : `/users/${m.id}`
-                const toggleSelect = () => setSelectedMemberId((prev) => (prev === m.id ? null : m.id))
+                const toggleSelect = () => setSelectedMemberId((prev) => {
+                  const next = prev === m.id ? null : m.id
+                  if (next) setActiveTab('cases')
+                  return next
+                })
+                const certCount = m.certifications?.length ?? 0
                 return (
                   <div
                     key={m.id}
@@ -689,9 +763,10 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                     aria-pressed={isSelected}
                     aria-label={isSelected ? `Clear case filter for ${m.name}` : `Show ${m.name}'s cases`}
                     className={cn(
-                      'relative rounded-xl border bg-card p-3 flex items-start gap-3',
-                      'group transition-all cursor-pointer hover:border-primary/40 hover:shadow-sm hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
-                      isSelected && 'border-primary bg-primary/5 ring-1 ring-primary/30'
+                      'relative rounded-xl border bg-card p-4 flex items-start gap-3',
+                      'group transition-all cursor-pointer hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5 hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                      isSelected && 'border-primary bg-primary/5 ring-1 ring-primary/30',
+                      isLeadCard && 'border-amber-400/40'
                     )}
                     onClick={toggleSelect}
                     onKeyDown={(e) => {
@@ -701,120 +776,66 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                       }
                     }}
                   >
-                    <UserAvatar name={m.name} />
+                    <div className="relative shrink-0">
+                      <UserAvatar name={m.name} avatarUrl={m.avatar} userId={m.id} size="md" />
+                      {isLeadCard && (
+                        <Crown className="absolute -top-1.5 -right-1.5 h-4 w-4 text-amber-500 fill-amber-400 drop-shadow" />
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0 pr-5">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className={cn('text-sm font-medium text-foreground group-hover:text-primary transition-colors', isSelected && 'text-primary')}>{m.name}</p>
-                        {m.id === team.lead_user_id && (
-                          <Badge variant="default" className="text-[10px] h-4 px-1.5">Lead</Badge>
-                        )}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <p className={cn('text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate', isSelected && 'text-primary')}>
+                          {m.name}
+                        </p>
                         {isSelected && (
-                          <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-primary text-primary">
+                          <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-primary text-primary shrink-0">
                             Showing cases
                           </Badge>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">{m.email}</p>
-                      <p className="text-[11px] text-muted-foreground">{ROLE_LABELS[m.role]}</p>
-                      {metrics && (
-                        <div className="flex items-center gap-3 mt-2 text-[11px] text-muted-foreground">
-                          <span className="flex items-center gap-1 text-emerald-600">
-                            <CheckCircle2 className="h-3 w-3" /> {metrics.total_resolved}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Ticket className="h-3 w-3" /> {metrics.open_cases} open
-                          </span>
-                          {metrics.satisfaction_score != null && (
-                            <span className="flex items-center gap-1 text-yellow-600">
-                              <Star className="h-3 w-3" /> {metrics.satisfaction_score.toFixed(1)}
+                      <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                        <Badge variant="secondary" className="text-[10px] h-4 px-1.5 font-normal">{ROLE_LABELS[m.role]}</Badge>
+                        {isLeadCard && m.role !== 'team_lead' && (
+                          <Badge variant="default" className="text-[10px] h-4 px-1.5 bg-amber-500 hover:bg-amber-500 text-white">Team Lead</Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1 truncate">
+                        <Mail className="h-3 w-3 shrink-0" /> {m.email}
+                      </p>
+                      {(m.certification_level || certCount > 0) && (
+                        <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                          {m.certification_level && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">
+                              <BadgeCheck className="h-3 w-3" /> {m.certification_level}
+                            </span>
+                          )}
+                          {certCount > 0 && (
+                            <span className="text-[10px] text-muted-foreground">
+                              {certCount} certificate{certCount !== 1 ? 's' : ''}
                             </span>
                           )}
                         </div>
                       )}
-                      {m.id !== team.lead_user_id && (
-                        <div className="mt-2.5 space-y-1.5">
-                          {/* SLA bar */}
-                          <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                            <span className="w-[72px] shrink-0">SLA</span>
-                            <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
-                              <div
-                                className={`h-full rounded-full transition-all ${
-                                  (metrics?.sla_compliance_pct ?? 0) >= 80
-                                    ? 'bg-emerald-500'
-                                    : (metrics?.sla_compliance_pct ?? 0) >= 50
-                                    ? 'bg-amber-500'
-                                    : 'bg-red-500'
-                                }`}
-                                style={{ width: `${metrics?.sla_compliance_pct ?? 0}%` }}
-                              />
-                            </div>
-                            <span className="w-8 text-right shrink-0 tabular-nums">
-                              {metrics?.sla_compliance_pct ?? 0}%
-                            </span>
-                          </div>
-                          {/* Satisfaction bar — avg of client feedback ratings (1–5) */}
-                          <div className="space-y-0.5">
-                            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                              <span className="w-[72px] shrink-0">Satisfaction</span>
-                              <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
-                                <div
-                                  className={`h-full rounded-full transition-all ${
-                                    (metrics?.satisfaction_score ?? 0) >= 4
-                                      ? 'bg-emerald-500'
-                                      : (metrics?.satisfaction_score ?? 0) >= 3
-                                      ? 'bg-amber-500'
-                                      : metrics?.satisfaction_score != null
-                                      ? 'bg-red-500'
-                                      : 'bg-muted-foreground/30'
-                                  }`}
-                                  style={{
-                                    width: metrics?.satisfaction_score != null
-                                      ? `${((metrics.satisfaction_score - 1) / 4) * 100}%`
-                                      : '0%',
-                                  }}
-                                />
-                              </div>
-                              <span className="w-14 text-right shrink-0 tabular-nums">
-                                {metrics?.satisfaction_score != null
-                                  ? `${metrics.satisfaction_score.toFixed(1)} / 5`
-                                  : '— / 5'}
-                              </span>
-                            </div>
-                            <div className="pl-[80px] text-[10px] text-muted-foreground/70">
-                              {metrics?.total_feedback_count
-                                ? `avg of ${metrics.total_feedback_count} rating${metrics.total_feedback_count !== 1 ? 's' : ''}`
-                                : 'no ratings yet'}
-                            </div>
-                          </div>
+                      {metrics && (
+                        <div className="flex items-center gap-3 mt-2.5 pt-2.5 border-t text-[11px] text-muted-foreground flex-wrap">
+                          <span className="flex items-center gap-1 text-emerald-600">
+                            <CheckCircle2 className="h-3 w-3" /> {metrics.total_resolved} resolved
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Ticket className="h-3 w-3" /> {metrics.open_cases} open
+                          </span>
+                          <span className="flex items-center gap-1 text-yellow-600">
+                            <Star className="h-3 w-3" />
+                            {metrics.satisfaction_score != null ? metrics.satisfaction_score.toFixed(1) : '—'}
+                            {metrics.total_feedback_count > 0 && ` (${metrics.total_feedback_count})`}
+                          </span>
+                          <span className="flex items-center gap-1 text-violet-600 font-semibold">
+                            <Award className="h-3 w-3" /> {metrics.points} pts
+                          </span>
                         </div>
                       )}
                     </div>
-                    {canManage && m.id !== team.lead_user_id ? (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 shrink-0 text-muted-foreground hover:text-destructive"
-                        disabled={removeMutation.isPending || requestMutation.isPending}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          if (isTH) {
-                            removeMutation.mutate(m.id)
-                          } else {
-                            requestMutation.mutate({
-                              team_id: teamId,
-                              type: 'remove',
-                              requested_by: session.userId,
-                              user_ids: [m.id],
-                              status: 'pending',
-                            })
-                          }
-                        }}
-                        aria-label={isTH ? `Remove ${m.name}` : `Request removal of ${m.name}`}
-                        title={isTH ? 'Remove from team' : 'Send remove request to Technical Head'}
-                      >
-                        {isTH ? <UserMinus className="h-3.5 w-3.5" /> : <ClockIcon className="h-3.5 w-3.5 text-amber-500" />}
-                      </Button>
-                    ) : canNavigate ? (
+                    {canNavigate && (
                       <Button
                         variant="ghost"
                         size="icon"
@@ -825,16 +846,16 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                       >
                         <ChevronRight className="h-3.5 w-3.5" />
                       </Button>
-                    ) : null}
+                    )}
                   </div>
                 )
               })}
             </div>
           )}
-        </div>
+        </TabsContent>
 
-        {/* Cases panel */}
-        <div className="lg:col-span-2 space-y-3">
+        {/* Cases */}
+        <TabsContent value="cases" className="space-y-4 mt-0">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <h2 className="text-base font-semibold flex items-center gap-2 min-w-0">
               <Ticket className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -856,11 +877,6 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                   <X className="h-3 w-3" /> Clear filter
                 </Button>
               )}
-              {canManage && transferableCases.length > 0 && (
-                <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-primary" onClick={() => setShowTransferCase(true)}>
-                  <ArrowRightLeft className="h-3 w-3" /> {isTH ? 'Transfer' : 'Request Transfer'}
-                </Button>
-              )}
             </div>
           </div>
 
@@ -873,40 +889,231 @@ export function TeamDetail({ teamId }: { teamId: string }) {
               {selectedMember ? `No cases assigned to ${selectedMember.name}.` : 'No cases for this team yet.'}
             </p>
           ) : (
-            <div className="space-y-5">
-              {/* Active cases */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                  <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
-                  Active Cases <span className="text-xs font-normal text-muted-foreground">({displayedOpenCases.length})</span>
-                </h3>
-                {displayedOpenCases.length === 0 ? (
-                  <p className="text-sm text-muted-foreground italic">No active cases.</p>
-                ) : (
-                  <div className="space-y-2 h-[320px] overflow-y-auto pr-1">
-                    {displayedOpenCases.map((c: Case) => renderCaseCard(c))}
-                  </div>
-                )}
+            <>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1 shrink-0">
+                  {([
+                    { key: 'all', label: 'All', count: displayedCases.length },
+                    { key: 'active', label: 'Active', count: displayedOpenCases.length },
+                    { key: 'escalated', label: 'Escalated', count: displayedEscalatedCases.length },
+                    { key: 'resolved', label: 'Resolved', count: displayedResolvedCases.length },
+                  ] as const).map(({ key, label, count }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setCaseStatusFilter(key)}
+                      className={cn(
+                        'px-2.5 py-1 text-xs font-medium rounded-md transition-colors',
+                        caseStatusFilter === key ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+                      )}
+                    >
+                      {label} <span className="tabular-nums opacity-70">({count})</span>
+                    </button>
+                  ))}
+                </div>
+                <div className="relative flex-1 min-w-[160px]">
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                  <input
+                    value={caseSearch}
+                    onChange={(e) => setCaseSearch(e.target.value)}
+                    placeholder="Search reference # or title…"
+                    className="h-8 w-full rounded-lg border bg-transparent pl-8 pr-3 text-xs outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary/40"
+                  />
+                </div>
               </div>
 
-              {/* Resolved cases */}
-              <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                  Resolved Cases <span className="text-xs font-normal text-muted-foreground">({displayedResolvedCases.length})</span>
-                </h3>
-                {displayedResolvedCases.length === 0 ? (
-                  <p className="text-sm text-muted-foreground italic">No resolved cases yet.</p>
-                ) : (
-                  <div className="space-y-2 h-[320px] overflow-y-auto pr-1">
-                    {displayedResolvedCases.map((c: Case) => renderCaseCard(c))}
-                  </div>
-                )}
-              </div>
-            </div>
+              {filteredCases.length === 0 ? (
+                <p className="text-sm text-muted-foreground italic py-6 text-center">No cases match this filter.</p>
+              ) : (
+                <div className="space-y-2.5">
+                  {filteredCases.map((c: Case) => renderCaseCard(c))}
+                </div>
+              )}
+            </>
           )}
-        </div>
-      </div>
+        </TabsContent>
+
+        {/* Feedback — joined through this team's own cases (Feedback has no direct team_id) */}
+        <TabsContent value="feedback" className="space-y-4 mt-0">
+          {teamFeedback.length === 0 ? (
+            <p className="text-sm text-muted-foreground italic">No feedback for this team yet.</p>
+          ) : (
+            <>
+              <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-5 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div className="flex items-center gap-4 shrink-0">
+                  <div className="rounded-xl bg-yellow-500/15 p-3">
+                    <Star className="h-6 w-6 text-yellow-500 fill-yellow-500" />
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-foreground">
+                      {avgFeedbackRating != null ? avgFeedbackRating.toFixed(1) : '—'}
+                      <span className="text-base font-normal text-muted-foreground"> / 5</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {teamFeedback.length} response{teamFeedback.length !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-1 w-full space-y-1">
+                  {feedbackRatingCounts.map(({ n, count }) => (
+                    <div key={n} className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                      <span className="w-8 shrink-0 flex items-center gap-0.5">{n} <Star className="h-2.5 w-2.5 fill-current" /></span>
+                      <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
+                        <div className="h-full rounded-full bg-yellow-400 transition-all" style={{ width: `${(count / maxFeedbackRatingCount) * 100}%` }} />
+                      </div>
+                      <span className="w-4 text-right tabular-nums shrink-0">{count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2.5">
+                {teamFeedback.map((f) => {
+                  const client = clientsMap[f.client_id]
+                  const relatedCase = casesMap[f.case_id]
+                  const engineer = relatedCase?.assignee_id ? usersMap[relatedCase.assignee_id] : undefined
+                  return (
+                    <div
+                      key={f.id}
+                      className="rounded-xl border bg-card p-4 hover:border-primary/40 hover:shadow-md transition-all cursor-pointer"
+                      onClick={() => relatedCase && router.push(`/cases/${relatedCase.id}`)}
+                    >
+                      <div className="flex items-start justify-between gap-2 flex-wrap">
+                        <span className="text-sm font-semibold text-foreground">{client?.company_name ?? 'Unknown client'}</span>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {f.ml_reviewed && (
+                            <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">
+                              <CheckCircle2 className="h-2.5 w-2.5" /> Lead reviewed
+                            </span>
+                          )}
+                          {f.th_reviewed && (
+                            <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">
+                              <CheckCircle2 className="h-2.5 w-2.5" /> TH reviewed
+                            </span>
+                          )}
+                          <div className="flex gap-0.5">
+                            {[1, 2, 3, 4, 5].map((n) => (
+                              <Star key={n} className={cn('h-3.5 w-3.5', f.rating && n <= f.rating ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/30')} />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-sm text-foreground leading-relaxed mt-2">{f.feedback_text}</p>
+                      <div className="flex items-center gap-3 mt-3 pt-3 border-t text-xs text-muted-foreground flex-wrap">
+                        {relatedCase && <span className="font-mono text-[11px] bg-muted px-1.5 py-0.5 rounded">{relatedCase.reference_no}</span>}
+                        {engineer && <span className="flex items-center gap-1"><UserAvatar name={engineer.name} size="sm" />{engineer.name}</span>}
+                        <span className="ml-auto">{formatDate(f.created_at)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </>
+          )}
+        </TabsContent>
+
+        {/* Settings */}
+        <TabsContent value="settings" className="space-y-4 mt-0 max-w-2xl">
+          <div className="rounded-xl border bg-card p-4 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-semibold">Team Name</p>
+              {isTH && !editingName && (
+                <Button size="sm" variant="ghost" className="h-7 text-xs text-primary" onClick={() => { setNameInput(team.name); setEditingName(true) }}>
+                  Edit
+                </Button>
+              )}
+            </div>
+            {editingName ? (
+              <div className="flex items-center gap-2">
+                <Input
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  className="h-9"
+                  autoFocus
+                  maxLength={80}
+                />
+                <Button
+                  size="sm"
+                  disabled={!nameInput.trim() || renameTeamMutation.isPending}
+                  onClick={() => renameTeamMutation.mutate(nameInput.trim())}
+                >
+                  {renameTeamMutation.isPending ? 'Saving…' : 'Save'}
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => setEditingName(false)}>Cancel</Button>
+              </div>
+            ) : (
+              <p className="text-sm text-foreground">{team.name}</p>
+            )}
+          </div>
+
+          <div className="rounded-xl border bg-card p-4 flex items-center justify-between gap-3 flex-wrap">
+            <div>
+              <p className="text-sm font-semibold">Team Status</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {team.is_active === false ? 'This team is deactivated and hidden from active workflows.' : 'This team is active.'}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              {team.is_active === false
+                ? <Badge variant="secondary" className="text-[10px] h-5 px-1.5 bg-zinc-800 text-zinc-100 hover:bg-zinc-800">Deactive</Badge>
+                : <Badge variant="default" className="text-[10px] h-5 px-1.5 bg-emerald-500 hover:bg-emerald-500 text-white">Active</Badge>
+              }
+              {isTH && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={toggleActiveMutation.isPending}
+                  onClick={() => toggleActiveMutation.mutate()}
+                >
+                  <Power className="h-3.5 w-3.5" /> {team.is_active === false ? 'Activate' : 'Deactivate'}
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-xl border bg-card p-4 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-semibold">Team Lead</p>
+              {isTH && (
+                <Button size="sm" variant="ghost" className="h-7 text-xs text-primary" onClick={() => { setNewLeadId(lead?.id ?? ''); setShowChangeLead(true) }}>
+                  {lead ? 'Change' : 'Assign lead'}
+                </Button>
+              )}
+            </div>
+            {lead ? (
+              <div className="flex items-center gap-2.5">
+                <UserAvatar name={lead.name} avatarUrl={lead.avatar} userId={lead.id} size="sm" />
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{lead.name}</p>
+                  <p className="text-xs text-muted-foreground">{ROLE_LABELS[lead.role]}</p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">No lead assigned.</p>
+            )}
+          </div>
+
+          <div className="rounded-xl border bg-card p-4 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-sm font-semibold">Support Services</p>
+              {isTH && (
+                <Button size="sm" variant="ghost" className="h-7 text-xs text-primary" onClick={() => { setEditServiceIds(team.solution_ids ?? []); setShowEditServices(true) }}>
+                  Edit
+                </Button>
+              )}
+            </div>
+            {teamSolutions.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic">No support services assigned.</p>
+            ) : (
+              <div className="flex flex-wrap gap-1.5">
+                {teamSolutions.map((s) => (
+                  <Badge key={s.id} variant="outline" className="text-xs font-normal">{s.name}</Badge>
+                ))}
+              </div>
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Manage Engineers Dialog */}
       <ManageEngineersDialog
@@ -916,53 +1123,62 @@ export function TeamDetail({ teamId }: { teamId: string }) {
         teamLeadId={team.lead_user_id}
         members={members}
         available={availableEngineers}
+        otherTeams={otherTeams}
         isTH={isTH}
-        requestedBy={session.userId}
         onDirectAdd={(uid) => assignMutation.mutate(uid)}
         onDirectRemove={(uid) => removeMutation.mutate(uid)}
-        onRequestAdd={(userIds) => requestMutation.mutate({
-          team_id: teamId,
-          type: 'add',
-          requested_by: session.userId,
-          user_ids: userIds,
-          status: 'pending',
-        })}
-        onRequestRemove={(uid) => requestMutation.mutate({
-          team_id: teamId,
-          type: 'remove',
-          requested_by: session.userId,
-          user_ids: [uid],
-          status: 'pending',
-        })}
-        isPending={assignMutation.isPending || removeMutation.isPending || requestMutation.isPending}
+        onDirectTransfer={(uid, targetTeamId) => transferMemberMutation.mutate({ userId: uid, targetTeamId })}
+        isPending={assignMutation.isPending || removeMutation.isPending || transferMemberMutation.isPending}
       />
 
       {/* Edit Services Dialog — TH only */}
-      <Dialog open={showEditServices} onOpenChange={(o) => !o && setShowEditServices(false)}>
+      <Dialog open={showEditServices} onOpenChange={(o) => { setShowEditServices(o); if (!o) setEditServiceQuery('') }}>
         <DialogContent className="max-w-sm">
-          <DialogHeader><DialogTitle>Edit Support Services</DialogTitle></DialogHeader>
-          <div className="space-y-1 max-h-64 overflow-y-auto">
-            {(solutions ?? []).filter((s: Solution) => s.is_active).map((s: Solution) => {
-              const selected = editServiceIds.includes(s.id)
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setEditServiceIds((prev) =>
-                    prev.includes(s.id) ? prev.filter((id) => id !== s.id) : [...prev, s.id]
-                  )}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors cursor-pointer hover:bg-muted/50 ${selected ? 'bg-primary/5' : ''}`}
-                >
-                  <div className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 transition-colors ${selected ? 'bg-primary border-primary' : 'border-muted-foreground/40'}`}>
-                    {selected && <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="text-sm">{s.name}</span>
-                    <span className="ml-2 text-xs text-muted-foreground">({s.category})</span>
-                  </div>
-                </button>
-              )
-            })}
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              Edit Support Services
+              {editServiceIds.length > 0 && (
+                <span className="text-xs font-normal text-muted-foreground">({editServiceIds.length} selected)</span>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="rounded-lg border overflow-hidden">
+            <div className="flex items-center gap-2 border-b px-3 py-2 bg-muted/20">
+              <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+              <input
+                autoFocus
+                value={editServiceQuery}
+                onChange={(e) => setEditServiceQuery(e.target.value)}
+                placeholder="Search services…"
+                className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="max-h-56 overflow-y-auto p-1">
+              {(solutions ?? [])
+                .filter((s: Solution) => s.is_active)
+                .filter((s: Solution) => s.name.toLowerCase().includes(editServiceQuery.toLowerCase()) || s.category.toLowerCase().includes(editServiceQuery.toLowerCase()))
+                .map((s: Solution) => {
+                  const selected = editServiceIds.includes(s.id)
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => setEditServiceIds((prev) =>
+                        prev.includes(s.id) ? prev.filter((id) => id !== s.id) : [...prev, s.id]
+                      )}
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors cursor-pointer hover:bg-muted/50 ${selected ? 'bg-primary/5' : ''}`}
+                    >
+                      <div className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 transition-colors ${selected ? 'bg-primary border-primary' : 'border-muted-foreground/40'}`}>
+                        {selected && <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-sm">{s.name}</span>
+                        <span className="ml-2 text-xs text-muted-foreground">({s.category})</span>
+                      </div>
+                    </button>
+                  )
+                })}
+            </div>
           </div>
           {editServiceIds.length === 0 && (
             <p className="text-xs text-destructive">Select at least one support service.</p>
@@ -979,11 +1195,64 @@ export function TeamDetail({ teamId }: { teamId: string }) {
         </DialogContent>
       </Dialog>
 
+      {/* Change Team Lead Dialog — technical_head only */}
+      <Dialog open={showChangeLead} onOpenChange={(o) => { setShowChangeLead(o); if (!o) setNewLeadId('') }}>
+        <DialogContent className="max-w-sm p-0 gap-0 overflow-hidden">
+          {/* Hero header */}
+          <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-6 pt-6 pb-5">
+            <DialogHeader className="space-y-1">
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-primary/15 p-2.5 shrink-0">
+                  <Crown className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <DialogTitle>{lead ? 'Change Team Lead' : 'Assign Team Lead'}</DialogTitle>
+                  <DialogDescription>{team.name}</DialogDescription>
+                </div>
+              </div>
+            </DialogHeader>
+          </div>
+
+          <div className="px-6 py-5 space-y-4">
+            {lead && (
+              <div className="flex items-center gap-2.5 rounded-lg border bg-muted/30 px-3 py-2.5">
+                <UserAvatar name={lead.name} avatarUrl={lead.avatar} userId={lead.id} size="sm" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Current Lead</p>
+                  <p className="text-sm font-medium text-foreground truncate">{lead.name}</p>
+                </div>
+              </div>
+            )}
+            <SearchableSelect
+              label="New Team Lead"
+              required
+              options={potentialLeads.map((u) => ({ id: u.id, label: u.name, sublabel: ROLE_LABELS[u.role], avatarUrl: u.avatar ?? '' }))}
+              value={newLeadId}
+              onChange={setNewLeadId}
+              placeholder="Select lead"
+              searchPlaceholder="Search leads…"
+              emptyText="No matching leads"
+            />
+          </div>
+
+          <DialogFooter className="px-6 py-4 border-t bg-muted/30">
+            <Button variant="outline" onClick={() => setShowChangeLead(false)}>Cancel</Button>
+            <Button
+              className="gap-1.5"
+              disabled={!newLeadId || newLeadId === lead?.id || changeLeadMutation.isPending}
+              onClick={() => changeLeadMutation.mutate(newLeadId)}
+            >
+              {changeLeadMutation.isPending ? 'Saving…' : (<><Crown className="h-4 w-4" /> Save</>)}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Transfer Case Dialog */}
       <TransferCaseDialog
-        open={showTransferCase}
-        onClose={() => setShowTransferCase(false)}
-        cases={transferableCases}
+        open={!!transferCase}
+        onClose={() => setTransferCase(null)}
+        cases={transferCase ? [transferCase] : []}
         teams={otherTeams}
         allUsers={allUsers}
         isTH={isTH}
@@ -1005,8 +1274,8 @@ export function TeamDetail({ teamId }: { teamId: string }) {
 // ── Manage Engineers Dialog ────────────────────────────────────────────────────
 
 function ManageEngineersDialog({
-  open, onClose, teamName, teamLeadId, members, available, isTH,
-  onDirectAdd, onDirectRemove, onRequestAdd, onRequestRemove, isPending,
+  open, onClose, teamName, teamLeadId, members, available, otherTeams, isTH,
+  onDirectAdd, onDirectRemove, onDirectTransfer, isPending,
 }: {
   open: boolean
   onClose: () => void
@@ -1014,29 +1283,26 @@ function ManageEngineersDialog({
   teamLeadId: string
   members: User[]
   available: User[]
+  otherTeams: Team[]
   isTH: boolean
-  requestedBy: string
   onDirectAdd: (uid: string) => void
   onDirectRemove: (uid: string) => void
-  onRequestAdd: (userIds: string[]) => void
-  onRequestRemove: (uid: string) => void
+  onDirectTransfer: (uid: string, targetTeamId: string) => void
   isPending: boolean
 }) {
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [transferringId, setTransferringId] = useState<string | null>(null)
+  const [transferTargetId, setTransferTargetId] = useState('')
 
-  const toggleSelect = (uid: string) =>
-    setSelectedIds((prev) =>
-      prev.includes(uid) ? prev.filter((id) => id !== uid) : [...prev, uid]
-    )
-
-  const handleSendAddRequest = () => {
-    if (selectedIds.length === 0) return
-    onRequestAdd(selectedIds)
-    setSelectedIds([])
+  const startTransfer = (uid: string) => { setTransferringId(uid); setTransferTargetId('') }
+  const confirmTransfer = () => {
+    if (!transferringId || !transferTargetId) return
+    onDirectTransfer(transferringId, transferTargetId)
+    setTransferringId(null)
+    setTransferTargetId('')
   }
 
   return (
-    <Dialog open={open} onOpenChange={(o) => { if (!o) { onClose(); setSelectedIds([]) } }}>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) { onClose(); setTransferringId(null) } }}>
       <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -1055,35 +1321,61 @@ function ManageEngineersDialog({
             )}
             {members.map((m) => {
               const isLead = m.id === teamLeadId
+              const isTransferring = transferringId === m.id
               return (
-                <div key={m.id} className="flex items-center gap-3 rounded-lg border bg-card px-3 py-2.5">
-                  <UserAvatar name={m.name} size="sm" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{m.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{m.email}</p>
+                <div key={m.id} className="rounded-lg border bg-card px-3 py-2.5 space-y-2">
+                  <div className="flex items-center gap-3">
+                    <UserAvatar name={m.name} avatarUrl={m.avatar} userId={m.id} size="sm" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{m.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{m.email}</p>
+                    </div>
+                    {isLead ? (
+                      <Badge variant="default" className="text-[10px] shrink-0">Lead</Badge>
+                    ) : (
+                      <div className="flex items-center gap-1 shrink-0">
+                        {isTH && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 gap-1 shrink-0"
+                            disabled={isPending || otherTeams.length === 0}
+                            onClick={() => startTransfer(m.id)}
+                          >
+                            <ArrowRightLeft className="h-3 w-3" /> Transfer
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 gap-1 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          disabled={isPending}
+                          onClick={() => onDirectRemove(m.id)}
+                        >
+                          <X className="h-3 w-3" /> Remove
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                  {isLead ? (
-                    <Badge variant="default" className="text-[10px] shrink-0">Lead</Badge>
-                  ) : isTH ? (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 gap-1 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
-                      disabled={isPending}
-                      onClick={() => onDirectRemove(m.id)}
-                    >
-                      <X className="h-3 w-3" /> Remove
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 gap-1 text-amber-600 hover:text-amber-700 hover:bg-amber-50 shrink-0"
-                      disabled={isPending}
-                      onClick={() => onRequestRemove(m.id)}
-                    >
-                      <ClockIcon className="h-3 w-3" /> Remove Request
-                    </Button>
+                  {isTransferring && (
+                    <div className="flex items-center gap-2 pl-11">
+                      <div className="flex-1">
+                        <SearchableSelect
+                          options={otherTeams.map((t) => ({ id: t.id, label: t.name }))}
+                          value={transferTargetId}
+                          onChange={setTransferTargetId}
+                          placeholder="Select destination team"
+                          searchPlaceholder="Search teams…"
+                          emptyText="No other teams"
+                        />
+                      </div>
+                      <Button size="sm" className="h-9 gap-1 shrink-0" disabled={!transferTargetId || isPending} onClick={confirmTransfer}>
+                        <ArrowRightLeft className="h-3 w-3" /> Move
+                      </Button>
+                      <Button variant="outline" size="sm" className="h-9 shrink-0" onClick={() => setTransferringId(null)}>
+                        Cancel
+                      </Button>
+                    </div>
                   )}
                 </div>
               )
@@ -1092,40 +1384,14 @@ function ManageEngineersDialog({
 
           {/* Available engineers */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Available Engineers ({available.length})
-              </p>
-              {!isTH && selectedIds.length > 0 && (
-                <Button
-                  size="sm"
-                  className="h-7 gap-1 text-xs"
-                  disabled={isPending}
-                  onClick={handleSendAddRequest}
-                >
-                  <ClockIcon className="h-3 w-3" /> Send Add Request ({selectedIds.length})
-                </Button>
-              )}
-            </div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              Available Engineers ({available.length})
+            </p>
             {available.length === 0 && (
               <p className="text-sm text-muted-foreground italic">No available engineers to add.</p>
             )}
             {available.map((u) => (
               <div key={u.id} className="flex items-center gap-3 rounded-lg border bg-muted/30 px-3 py-2.5">
-                {!isTH && (
-                  <div
-                    className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 cursor-pointer transition-colors ${
-                      selectedIds.includes(u.id) ? 'bg-primary border-primary' : 'border-muted-foreground/40'
-                    }`}
-                    onClick={() => toggleSelect(u.id)}
-                  >
-                    {selectedIds.includes(u.id) && (
-                      <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    )}
-                  </div>
-                )}
                 <UserAvatar name={u.name} size="sm" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">{u.name}</p>
@@ -1134,41 +1400,22 @@ function ManageEngineersDialog({
                     <p className="text-[10px] text-amber-600 mt-0.5">Currently in another team</p>
                   )}
                 </div>
-                {isTH ? (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 gap-1 shrink-0"
-                    disabled={isPending}
-                    onClick={() => onDirectAdd(u.id)}
-                  >
-                    <Plus className="h-3 w-3" /> Add
-                  </Button>
-                ) : (
-                  <button
-                    type="button"
-                    className="text-xs text-muted-foreground shrink-0 cursor-pointer"
-                    onClick={() => toggleSelect(u.id)}
-                  >
-                    {selectedIds.includes(u.id) ? 'Deselect' : 'Select'}
-                  </button>
-                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 gap-1 shrink-0"
+                  disabled={isPending}
+                  onClick={() => onDirectAdd(u.id)}
+                >
+                  <Plus className="h-3 w-3" /> Add
+                </Button>
               </div>
             ))}
           </div>
         </div>
 
         <DialogFooter className="pt-2">
-          {!isTH && selectedIds.length > 0 && (
-            <Button
-              className="gap-1"
-              disabled={isPending}
-              onClick={handleSendAddRequest}
-            >
-              <ClockIcon className="h-3.5 w-3.5" /> Send Add Request ({selectedIds.length})
-            </Button>
-          )}
-          <Button variant="outline" onClick={() => { onClose(); setSelectedIds([]) }}>Done</Button>
+          <Button variant="outline" onClick={onClose}>Done</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -10,6 +10,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { canAccess } from '@/lib/rbac'
 import { toast } from '@/hooks/use-toast'
 import { formatDateTime, getInitials, STATUS_COLORS, STATUS_LABELS } from '@/lib/utils'
+import { FEEDBACK_QUESTIONS } from '@/lib/feedback-questions'
+import { RatingGauge } from '@/components/shared/rating-gauge'
 import {
   ArrowLeft, Star, MessageSquare, Ticket,
   Briefcase, Calendar, CheckCircle2, Building2,
@@ -232,22 +234,31 @@ export default function ReviewDetailPage({ params }: { params: Promise<{ feedbac
           </div>
 
           {/* Rating + Review text */}
-          <div className="rounded-xl border bg-card p-5 space-y-4">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-                Rating
-              </p>
-              <div className="flex items-center gap-3">
-                <StarRow rating={feedback.rating} size="lg" />
-                <span className="text-2xl font-bold text-foreground">{feedback.rating ?? '—'}</span>
-                <span className="text-base text-muted-foreground">/ 5</span>
-              </div>
-            </div>
+          <div className="rounded-xl border bg-gradient-to-br from-card to-muted/20 p-5 space-y-4">
+            <RatingGauge rating={feedback.rating ?? 0} />
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
                 <MessageSquare className="h-3.5 w-3.5" /> Review Comment
               </p>
               <p className="text-foreground leading-relaxed text-sm">{feedback.feedback_text}</p>
+            </div>
+          </div>
+
+          {/* Question breakdown — the overall rating above is the average of these */}
+          <div className="rounded-xl border bg-card p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+              Question Breakdown
+            </p>
+            {!feedback.question_ratings && (
+              <p className="text-xs text-muted-foreground mb-3">Submitted before per-question ratings existed — only the overall score above is available.</p>
+            )}
+            <div className="divide-y">
+              {FEEDBACK_QUESTIONS.map((q) => (
+                <div key={q.key} className="flex items-center justify-between gap-3 py-2">
+                  <span className="text-sm text-foreground">{q.label}</span>
+                  <StarRow rating={feedback.question_ratings?.[q.key]} size="sm" />
+                </div>
+              ))}
             </div>
           </div>
 

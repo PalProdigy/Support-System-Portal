@@ -104,16 +104,20 @@ export interface User {
 
 export interface Client {
   id: string
-  user_id: string
+  // Only set when a portal login was created alongside the client (the full
+  // "Create Client Account" flow) — a plain client created from the Clients
+  // page has no linked user and no portal access.
+  user_id?: string
   company_name: string
   contact_person: string
+  contact_designation?: string
   phone: string
   email?: string
   industry?: string
   account_tier?: 'starter' | 'professional' | 'enterprise'
   account_status?: 'active' | 'at_risk' | 'churned'
   assigned_am?: string
-  business_context: string
+  business_context?: string
   pre_sales_notes?: string
   last_activity_at?: string
   created_by: string
@@ -136,6 +140,8 @@ export interface Solution {
   description: string
   details: string
   category: string
+  product_id?: string     // which product/OEM this solution write-up is for
+  case_id?: string        // optional case this solution was derived from
   is_active: boolean
   created_at: string
   // Auto-captured author metadata (set from the logged-in user on save)
@@ -182,6 +188,17 @@ export interface Team {
   created_at: string
 }
 
+// The OEM/vendor-side contact responsible for a product — captured when the
+// product is added so there's always a point of contact on file.
+export interface ProductManager {
+  name: string
+  email: string
+  phone: string
+  designation: string
+  employee_id: string
+  joining_date: string
+}
+
 export interface Product {
   id: string
   name: string
@@ -190,6 +207,7 @@ export interface Product {
   is_active: boolean
   created_at: string
   image_urls?: string[]   // base64 data URLs uploaded from the Add/Edit Product form (max 5)
+  manager?: ProductManager
 }
 
 export interface SLARule {
@@ -198,6 +216,18 @@ export interface SLARule {
   response_time_minutes: number
   resolution_time_minutes: number
   business_hours_only: boolean
+}
+
+// License + support (SLA) contract a client holds for a product. Expiry dates
+// drive the Technical Head dashboard's renewal-risk widgets (expiring ≤ 7 days
+// and already-expired).
+export interface ProductLicense {
+  id: string
+  client_id: string
+  product_id: string
+  license_expires_at: string  // ISO — product license end
+  sla_expires_at: string      // ISO — support/SLA contract end
+  created_at: string
 }
 
 export interface Case {
@@ -217,6 +247,7 @@ export interface Case {
   sla_due_at: string
   escalation_level: number
   created_at: string
+  updated_at?: string
   resolved_at?: string
   closed_at?: string
   is_escalated: boolean
@@ -236,6 +267,12 @@ export interface Case {
   // that carries the old case's data forward and links back to the original via
   // this field. Undefined on genuinely new cases (nothing to show).
   reopened_from_case_id?: string
+  // Set when a closure attempt was rejected: a lead/TH sent a pending_closure
+  // case back to work, or the client reopened a resolved case instead of
+  // confirming the solution. Persists after re-resolution as history; the TH
+  // dashboard surfaces open cases carrying this flag.
+  closure_rejected?: boolean
+  closure_rejected_at?: string
   // Why the engineer moved the case to Pending Client (set by requestClientInfo).
   // Surfaced to the client so they know exactly what is needed.
   pending_client_reason?: ClientInfoReason
@@ -249,6 +286,9 @@ export interface Case {
   // Denormalized flag: true while a client-raised Engineer Change Request is
   // awaiting a Team Lead / Technical Head decision. Drives the warning badge.
   has_pending_engineer_change?: boolean
+  // Planned start and end for sub-task scheduling
+  started_at?: string
+  estimated_end_at?: string
   // Time tracking (used by sub-cases). Intervals are the source of truth for
   // total worked time and are persisted so totals survive reloads.
   time_intervals?: TimeInterval[]
@@ -280,12 +320,124 @@ export interface Attachment {
   id: string
   case_id: string
   uploaded_by: string
+  uploaded_by_name?: string
   file_url: string
   file_name: string
   file_type: string
   category: string
+  source?: string
   size: number
   created_at: string
+}
+
+export type ProjectStatus = 'planning' | 'in_progress' | 'on_hold' | 'completed' | 'cancelled'
+
+export interface Project {
+  id: string
+  title: string
+  description?: string
+  client_id: string
+  product_id?: string      // which product/OEM this project is for
+  handler_ids: string[]   // engineers/leads handling this project — can be multiple
+  status: ProjectStatus
+  priority?: Priority
+  parent_project_id?: string   // set on a sub task — a real, independently trackable child project
+  started_at?: string
+  estimated_end_at?: string
+  created_by: string
+  created_at: string
+  updated_at?: string
+}
+
+export interface ProjectComment {
+  id: string
+  project_id: string
+  author_id: string
+  body: string
+  created_at: string
+}
+
+export interface ProjectAttachment {
+  id: string
+  project_id: string
+  uploaded_by: string
+  file_url: string
+  file_name: string
+  file_type: string
+  size: number
+  created_at: string
+}
+
+// An external email address (client-side stakeholder, vendor contact, etc.)
+// CC'd on a Case or a Project — just the address, not an app User. Exactly
+// one of case_id/project_id is set.
+export interface ExternalMember {
+  id: string
+  case_id?: string
+  project_id?: string
+  email: string
+  created_at: string
+}
+
+export type EngagementType = 'installation' | 'poc' | 'support'
+// Every engagement sits in this one state — waiting on the client to move
+// forward with the installation/POC/support work. No in-progress/completed/
+// cancelled lifecycle is tracked.
+export type EngagementStatus = 'open'
+
+// A named point of contact at a client — searchable/reusable across engagements
+// instead of being re-typed as free text every time.
+export interface ClientContact {
+  id: string
+  client_id: string
+  name: string
+  email: string
+  phone?: string
+  designation?: string
+  created_at: string
+}
+
+// One product line within an engagement — its own type(s) (installation/POC/
+// support — a line can be more than one at once, e.g. Installation + Support),
+// the OEM/brand and specific product under it (both drawn from the real
+// Product catalog, since a Product's `category` field already holds its OEM
+// name), and its own client representative(s) — the point of contact for
+// that particular product.
+export interface EngagementProductLine {
+  id: string
+  types: EngagementType[]
+  oem: string
+  product_id: string
+  placed_at?: string      // when this product/service was placed (ordered)
+  expires_at?: string     // when it's due to expire
+  contact_ids: string[]   // ClientContact ids — can have multiple representatives
+  // Technical Head assignment — the poc/support portion of a line routes to a
+  // Team; the installation portion routes to one-or-more engineers directly
+  // (first = Primary). A line with both is only fully assigned once both are set.
+  assigned_team_id?: string
+  assigned_handler_ids?: string[]
+  assigned_at?: string
+  project_id?: string     // set once the installation portion spawns a real Project
+  // Outcome tracking for the poc portion of a line — unset once assigned means
+  // still running; only meaningful once assigned_team_id is set.
+  poc_outcome?: 'running' | 'success' | 'failed'
+}
+
+// A discrete piece of field work with a client — one or more product lines,
+// each independently an installation, a proof of concept, or a support
+// engagement — distinct from a Case (a support ticket) and a Project (a
+// longer-running body of work). Customer PO is engagement-wide (not per
+// product) and is only relevant once something is actually being purchased —
+// i.e. when at least one product line isn't a POC.
+export interface Engagement {
+  id: string
+  client_id: string
+  customer_po?: string
+  products: EngagementProductLine[]
+  status: EngagementStatus
+  created_by: string
+  created_at: string
+  updated_at?: string
 }
 
 export interface RCA {
@@ -378,6 +530,8 @@ export interface SolutionArticle {
   content: string              // Markdown source (GFM) — the single source of truth
   category?: string
   tags: string[]
+  solution_id?: string         // set when this article is the write-up for a catalogue Solution
+  product_id?: string          // which product this article/solution is for
   cover_image_url?: string
   status: SolutionArticleStatus // always 'published' today; enables drafts later
   created_by: string           // user id
@@ -387,6 +541,10 @@ export interface SolutionArticle {
   updated_by_name?: string
   created_at: string
   updated_at: string
+  // Engagement
+  likes?: string[]        // user ids who liked
+  dislikes?: string[]     // user ids who disliked
+  comments?: SolutionComment[]
 }
 
 export interface Feedback {
@@ -394,7 +552,8 @@ export interface Feedback {
   case_id: string
   client_id: string
   feedback_text: string
-  rating?: number
+  rating?: number   // overall score — the average of question_ratings when present
+  question_ratings?: Record<string, number>   // per-question 1-5 scores, keyed by FEEDBACK_QUESTIONS[].key
   ml_reviewed?: boolean
   th_reviewed?: boolean
   created_at: string
@@ -418,6 +577,46 @@ export interface AuditLog {
   action: AuditAction
   before?: Record<string, unknown>
   after?: Record<string, unknown>
+  created_at: string
+}
+
+// ── RBAC ────────────────────────────────────────────────────────────────────
+// Declared here (rather than in src/lib/rbac) so both the RBAC engine and
+// domain types like PermissionOverride can reference them without a circular
+// import — rbac/index.ts imports and re-exports these as the source of truth.
+export type PermissionAction =
+  | 'create' | 'read' | 'update' | 'delete'
+  | 'assign' | 'escalate' | 'resolve' | 'close' | 'reopen'
+  | 'triage' | 'change_status'
+  | 'create_internal_comment'
+  | 'manage_users' | 'manage_teams' | 'manage_solutions'
+  | 'manage_products' | 'manage_kb' | 'manage_sla' | 'manage_permissions'
+  | 'view_audit_log' | 'view_all_cases' | 'view_feedback'
+  | 'review_feedback'
+  | 'manage_prospects' | 'create_client_account'
+  | 'handle_all_cases' | 'handle_team_cases'
+  | 'add_engineer' | 'add_sales_executive'
+  | 'manage_projects' | 'manage_orders'
+
+export type PermissionResource =
+  | 'case' | 'comment' | 'internal_comment' | 'attachment' | 'rca'
+  | 'user' | 'client' | 'solution' | 'team' | 'product'
+  | 'kb_article' | 'sla_rule' | 'feedback' | 'audit_log'
+  | 'notification' | 'system_settings'
+  | 'prospect' | 'pre_sales_note'
+  | 'project' | 'engagement'
+
+// A per-user grant/revoke on top of their role's default permissions —
+// 'allow' opens up something their role wouldn't normally have, 'deny' locks
+// down something their role would. Looked up by (user_id, resource, action);
+// at most one override should exist per triple (upserted, not appended).
+export interface PermissionOverride {
+  id: string
+  user_id: string
+  resource: PermissionResource
+  action: PermissionAction
+  effect: 'allow' | 'deny'
+  granted_by: string
   created_at: string
 }
 
@@ -476,6 +675,10 @@ export type ProspectStage =
   | 'closed_won'
   | 'closed_lost'
 
+// Deal classification once a prospect is closed — what kind of engagement it is,
+// independent of stage/outcome (a lost deal can still have been a Renewal pitch).
+export type DealType = 'installation' | 'renewal' | 'poc'
+
 export interface Prospect {
   id: string
   company_name: string
@@ -486,6 +689,9 @@ export interface Prospect {
   stage: ProspectStage
   notes?: string
   estimated_value?: number
+  deal_type?: DealType
+  // Only set once the deal is won and a license is actually issued.
+  license_expiry?: string
   created_by: string
   created_at: string
   updated_at: string

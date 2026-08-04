@@ -1,11 +1,14 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
+
+import { redirect } from 'next/navigation'
 import { useSession } from '@/lib/auth/context'
 import { canAccess } from '@/lib/rbac'
-import { redirect } from 'next/navigation'
-import { Wrench } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { NewCaseDialog } from '@/modules/cases/new-case-dialog'
+import { Wrench, PlusCircle } from 'lucide-react'
 
 function ListSkeleton() {
   return (
@@ -29,6 +32,7 @@ const MyCases = dynamic(
   { loading: () => <ListSkeleton /> }
 )
 
+
 function Guard() {
   const session = useSession()
   const scope = { userId: session.userId, role: session.role }
@@ -36,23 +40,39 @@ function Guard() {
   return null
 }
 
-export default function EngineerHubPage() {
+function EngineerHubContent() {
+  const [newCaseOpen, setNewCaseOpen] = useState(false)
   return (
     <div className="p-6 space-y-6">
       <Guard />
-      <div className="flex items-center gap-3">
-        <div className="rounded-xl bg-primary/10 p-2.5">
-          <Wrench className="h-5 w-5 text-primary" />
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="rounded-xl bg-primary/10 p-2.5">
+            <Wrench className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
+            <p className="text-sm text-muted-foreground">Every case assigned to you</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
-          <p className="text-sm text-muted-foreground">Every case assigned to you</p>
-        </div>
+        <Button onClick={() => setNewCaseOpen(true)}>
+          <PlusCircle className="h-4 w-4" /> New Case
+        </Button>
       </div>
+
+      <NewCaseDialog open={newCaseOpen} onOpenChange={setNewCaseOpen} />
 
       <Suspense fallback={<ListSkeleton />}>
         <MyCases />
       </Suspense>
     </div>
+  )
+}
+
+export default function EngineerHubPage() {
+  return (
+    <Suspense fallback={<div className="p-6"><ListSkeleton /></div>}>
+      <EngineerHubContent />
+    </Suspense>
   )
 }

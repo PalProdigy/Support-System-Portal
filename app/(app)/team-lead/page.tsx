@@ -93,7 +93,7 @@ function TeamLeadContent() {
                     className="hover:bg-muted/30 transition-colors cursor-pointer"
                     onClick={(e) => {
                       if ((e.target as HTMLElement).closest('button,input[type=checkbox]')) return
-                      router.push(`/team-lead/${u.id}`)
+                      router.push(`/engineer/${u.id}`)
                     }}
                   >
                     <td className="px-4 py-3">

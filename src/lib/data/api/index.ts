@@ -2,16 +2,17 @@
 // Switch via NEXT_PUBLIC_DATA_SOURCE='api'
 // Replace all TODOs with fetch() calls to your REST/GraphQL backend
 
-import type { DataProvider, ListScope, CaseFilters, KBArticleFilters, Paginated, SolutionArticleFilters, CreateSolutionArticleInput } from '../provider'
+import type { DataProvider, ListScope, CaseFilters, KBArticleFilters, Paginated, SolutionArticleFilters, CreateSolutionArticleInput, ProjectFilters, EngagementFilters, ClientContactFilters } from '../provider'
 import type {
-  User, Client, Solution, ClientSolution, Team, Product, Role,
+  User, Client, Solution, ClientSolution, Team, Product, ProductLicense, Role,
   SLARule, Case, CaseComment, Attachment, RCA, KBArticle,
   Feedback, Notification, AuditLog,
   Prospect, CreateClientAccountInput,
   EngineerMetrics, SalesExecutiveMetrics, UserNotificationPrefs, NotificationChannel,
   TeamMemberRequest, CaseTransferRequest,
   ClientInfoReason, EngineerChangeRequest, CaseClaimRequest,
-  SolutionArticle,
+  SolutionArticle, Project, ProjectComment, ProjectAttachment, Engagement, ClientContact, ExternalMember,
+  PermissionOverride, PermissionAction, PermissionResource,
 } from '@/types'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '/api'
@@ -33,10 +34,47 @@ export class ApiDataProvider implements DataProvider {
   async updateUser(id: string, patch: Partial<User>): Promise<User> { return http(`/users/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
   async deleteUser(id: string): Promise<void> { return http(`/users/${id}`, { method: 'DELETE' }) }
 
+  async listPermissionOverrides(userId?: string): Promise<PermissionOverride[]> { return http(`/permission-overrides${userId ? `?user_id=${userId}` : ''}`) }
+  async setPermissionOverride(input: { user_id: string; resource: PermissionResource; action: PermissionAction; effect: 'allow' | 'deny'; granted_by: string }): Promise<PermissionOverride> {
+    return http('/permission-overrides', { method: 'POST', body: JSON.stringify(input) })
+  }
+  async removePermissionOverride(id: string): Promise<void> { return http(`/permission-overrides/${id}`, { method: 'DELETE' }) }
+
   async listClients(_scope: ListScope): Promise<Client[]> { return http('/clients') }
   async getClient(id: string): Promise<Client | null> { return http(`/clients/${id}`) }
   async createClient(input: Omit<Client, 'id' | 'created_at'>): Promise<Client> { return http('/clients', { method: 'POST', body: JSON.stringify(input) }) }
   async updateClient(id: string, patch: Partial<Client>): Promise<Client> { return http(`/clients/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
+
+  async listProjects(_scope: ListScope, filters: ProjectFilters = {}): Promise<Project[]> { return http(`/projects?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async getProject(id: string): Promise<Project | null> { return http(`/projects/${id}`) }
+  async createProject(input: Omit<Project, 'id' | 'created_at'>): Promise<Project> { return http('/projects', { method: 'POST', body: JSON.stringify(input) }) }
+  async updateProject(id: string, patch: Partial<Project>): Promise<Project> { return http(`/projects/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
+  async deleteProject(id: string): Promise<void> { return http(`/projects/${id}`, { method: 'DELETE' }) }
+  async listProjectComments(projectId: string): Promise<ProjectComment[]> { return http(`/projects/${projectId}/comments`) }
+  async addProjectComment(input: Omit<ProjectComment, 'id' | 'created_at'>): Promise<ProjectComment> { return http(`/projects/${input.project_id}/comments`, { method: 'POST', body: JSON.stringify(input) }) }
+  async listProjectAttachments(projectId: string): Promise<ProjectAttachment[]> { return http(`/projects/${projectId}/attachments`) }
+  async addProjectAttachment(input: Omit<ProjectAttachment, 'id' | 'created_at'>): Promise<ProjectAttachment> { return http(`/projects/${input.project_id}/attachments`, { method: 'POST', body: JSON.stringify(input) }) }
+  async listSubProjects(parentProjectId: string): Promise<Project[]> { return http(`/projects/${parentProjectId}/sub-projects`) }
+  async createSubProject(parentProjectId: string, input: Partial<Project>): Promise<Project> { return http(`/projects/${parentProjectId}/sub-projects`, { method: 'POST', body: JSON.stringify(input) }) }
+
+  async listExternalMembers(filters: { case_id?: string; project_id?: string }): Promise<ExternalMember[]> { return http(`/external-members?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async addExternalMember(input: Omit<ExternalMember, 'id' | 'created_at'>): Promise<ExternalMember> { return http('/external-members', { method: 'POST', body: JSON.stringify(input) }) }
+  async deleteExternalMember(id: string): Promise<void> { return http(`/external-members/${id}`, { method: 'DELETE' }) }
+
+  async listEngagements(_scope: ListScope, filters: EngagementFilters = {}): Promise<Engagement[]> { return http(`/engagements?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async getEngagement(id: string): Promise<Engagement | null> { return http(`/engagements/${id}`) }
+  async createEngagement(input: Omit<Engagement, 'id' | 'created_at'>): Promise<Engagement> { return http('/engagements', { method: 'POST', body: JSON.stringify(input) }) }
+  async updateEngagement(id: string, patch: Partial<Engagement>): Promise<Engagement> { return http(`/engagements/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
+  async deleteEngagement(id: string): Promise<void> { return http(`/engagements/${id}`, { method: 'DELETE' }) }
+  async assignEngagementProductLine(engagementId: string, lineId: string, input: { team_id?: string; handler_ids?: string[] }, _scope: ListScope): Promise<Engagement> {
+    return http(`/engagements/${engagementId}/products/${lineId}/assign`, { method: 'POST', body: JSON.stringify(input) })
+  }
+  async setEngagementLinePocOutcome(engagementId: string, lineId: string, outcome: 'running' | 'success' | 'failed', _scope: ListScope): Promise<Engagement> {
+    return http(`/engagements/${engagementId}/products/${lineId}/poc-outcome`, { method: 'POST', body: JSON.stringify({ outcome }) })
+  }
+
+  async listClientContacts(filters: ClientContactFilters = {}): Promise<ClientContact[]> { return http(`/client-contacts?${new URLSearchParams(filters as Record<string, string>).toString()}`) }
+  async createClientContact(input: Omit<ClientContact, 'id' | 'created_at'>): Promise<ClientContact> { return http('/client-contacts', { method: 'POST', body: JSON.stringify(input) }) }
 
   async listSolutions(): Promise<Solution[]> { return http('/solutions') }
   async getSolution(id: string): Promise<Solution | null> { return http(`/solutions/${id}`) }
@@ -56,6 +94,11 @@ export class ApiDataProvider implements DataProvider {
   async createSolutionArticle(input: CreateSolutionArticleInput): Promise<SolutionArticle> { return http('/solution-articles', { method: 'POST', body: JSON.stringify(input) }) }
   async updateSolutionArticle(id: string, patch: Partial<SolutionArticle>): Promise<SolutionArticle> { return http(`/solution-articles/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
   async deleteSolutionArticle(id: string): Promise<void> { return http(`/solution-articles/${id}`, { method: 'DELETE' }) }
+  async toggleSolutionArticleLike(id: string, userId: string): Promise<SolutionArticle> { return http(`/solution-articles/${id}/like`, { method: 'POST', body: JSON.stringify({ user_id: userId }) }) }
+  async toggleSolutionArticleDislike(id: string, userId: string): Promise<SolutionArticle> { return http(`/solution-articles/${id}/dislike`, { method: 'POST', body: JSON.stringify({ user_id: userId }) }) }
+  async addSolutionArticleComment(id: string, input: { author_id: string; author_name: string; author_role?: Role; body: string; parent_id?: string | null }): Promise<SolutionArticle> { return http(`/solution-articles/${id}/comments`, { method: 'POST', body: JSON.stringify(input) }) }
+  async deleteSolutionArticleComment(id: string, commentId: string): Promise<SolutionArticle> { return http(`/solution-articles/${id}/comments/${commentId}`, { method: 'DELETE' }) }
+  async toggleSolutionArticleCommentReaction(id: string, commentId: string, userId: string, reaction: 'like' | 'dislike'): Promise<SolutionArticle> { return http(`/solution-articles/${id}/comments/${commentId}/reaction`, { method: 'POST', body: JSON.stringify({ user_id: userId, reaction }) }) }
 
   async listClientSolutions(clientId?: string): Promise<ClientSolution[]> { return http(`/client-solutions${clientId ? `?client_id=${clientId}` : ''}`) }
   async addClientSolution(clientId: string, solutionId: string): Promise<ClientSolution> { return http('/client-solutions', { method: 'POST', body: JSON.stringify({ client_id: clientId, solution_id: solutionId }) }) }
@@ -67,6 +110,7 @@ export class ApiDataProvider implements DataProvider {
   async updateTeam(id: string, patch: Partial<Team>): Promise<Team> { return http(`/teams/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
 
   async listProducts(): Promise<Product[]> { return http('/products') }
+  async listProductLicenses(): Promise<ProductLicense[]> { return http('/product-licenses') }
   async getProduct(id: string): Promise<Product | null> { return http(`/products/${id}`) }
   async createProduct(input: Omit<Product, 'id' | 'created_at'>): Promise<Product> { return http('/products', { method: 'POST', body: JSON.stringify(input) }) }
   async updateProduct(id: string, patch: Partial<Product>): Promise<Product> { return http(`/products/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
@@ -80,6 +124,7 @@ export class ApiDataProvider implements DataProvider {
   async createCase(input: Omit<Case, 'id' | 'reference_no' | 'created_at'>, _scope: ListScope): Promise<Case> { return http('/cases', { method: 'POST', body: JSON.stringify(input) }) }
   async updateCase(id: string, patch: Partial<Case>, _scope: ListScope): Promise<Case> { return http(`/cases/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }) }
   async assignCase(caseId: string, assigneeId: string, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/assign`, { method: 'POST', body: JSON.stringify({ assignee_id: assigneeId }) }) }
+  async claimCase(caseId: string, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/claim`, { method: 'POST' }) }
   async escalateCase(caseId: string, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/escalate`, { method: 'POST' }) }
   async startWork(caseId: string, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/start`, { method: 'POST' }) }
   async requestClientInfo(caseId: string, _scope: ListScope, reason?: ClientInfoReason, message?: string): Promise<Case> { return http(`/cases/${caseId}/pending-client`, { method: 'POST', body: JSON.stringify({ reason, message }) }) }
@@ -90,7 +135,7 @@ export class ApiDataProvider implements DataProvider {
   async listEngineerChangeRequests(caseId: string): Promise<EngineerChangeRequest[]> { return http(`/cases/${caseId}/engineer-change`) }
   async approveEngineerChange(requestId: string, newEngineerId: string, _scope: ListScope): Promise<Case> { return http(`/engineer-change/${requestId}/approve`, { method: 'POST', body: JSON.stringify({ new_engineer_id: newEngineerId }) }) }
   async rejectEngineerChange(requestId: string, _scope: ListScope): Promise<EngineerChangeRequest> { return http(`/engineer-change/${requestId}/reject`, { method: 'POST' }) }
-  async confirmSolution(caseId: string, feedback: { rating: number; feedback_text: string }, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/confirm`, { method: 'POST', body: JSON.stringify(feedback) }) }
+  async confirmSolution(caseId: string, feedback: { rating: number; feedback_text: string; question_ratings?: Record<string, number> }, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/confirm`, { method: 'POST', body: JSON.stringify(feedback) }) }
   async clientReopenCase(caseId: string, reason: string, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/client-reopen`, { method: 'POST', body: JSON.stringify({ reason }) }) }
   async approveCriticalResolution(caseId: string, _scope: ListScope): Promise<Case> { return http(`/cases/${caseId}/approve`, { method: 'POST' }) }
   // Backend resolves the team by service match, creates the pending approval + 30-min deadline,
@@ -115,6 +160,7 @@ export class ApiDataProvider implements DataProvider {
 
   async listComments(caseId: string, _scope: ListScope): Promise<CaseComment[]> { return http(`/cases/${caseId}/comments`) }
   async addComment(input: Omit<CaseComment, 'id' | 'created_at'>, _scope: ListScope): Promise<CaseComment> { return http(`/cases/${input.case_id}/comments`, { method: 'POST', body: JSON.stringify(input) }) }
+  async listRecentComments(_scope: ListScope): Promise<CaseComment[]> { return http('/comments/recent') }
 
   async listAttachments(caseId: string): Promise<Attachment[]> { return http(`/cases/${caseId}/attachments`) }
   async addAttachment(input: Omit<Attachment, 'id' | 'created_at'>): Promise<Attachment> { return http(`/cases/${input.case_id}/attachments`, { method: 'POST', body: JSON.stringify(input) }) }

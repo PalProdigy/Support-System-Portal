@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { MarkdownViewer } from '@/components/markdown/markdown-viewer'
 import { MarkdownGuide } from '@/components/markdown/markdown-guide'
-import { ArrowLeft, CheckCircle2, XCircle, X, Eye } from 'lucide-react'
+import { SearchableSelect } from '@/components/shared/searchable-select'
+import { ArrowLeft, CheckCircle2, XCircle, X, Eye, Package, Ticket } from 'lucide-react'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { cn } from '@/lib/utils'
 import type { Solution } from '@/types'
@@ -33,9 +33,6 @@ const MarkdownEditor = dynamic(
   },
 )
 
-// Fallback Type options, unioned with whatever categories already exist in the data.
-const DEFAULT_TYPES = ['Integration', 'Data & Analytics', 'CRM', 'Operations', 'HR']
-
 type Banner = { kind: 'success' | 'error'; message: string }
 
 export default function NewSolutionPage() {
@@ -44,7 +41,7 @@ export default function NewSolutionPage() {
   const router = useRouter()
   const qc = useQueryClient()
 
-  const [form, setForm] = useState({ title: '', type: '', description: '' })
+  const [form, setForm] = useState({ title: '', product_id: '', case_id: '', description: '' })
   const [touched, setTouched] = useState(false)
   const [banner, setBanner] = useState<Banner | null>(null)
   const [saving, setSaving] = useState(false)
@@ -61,13 +58,17 @@ export default function NewSolutionPage() {
     setForm((f) => ({ ...f, description: md }))
   }, [])
 
-  const { data: solutions } = useQuery({ queryKey: ['solutions'], queryFn: () => dp.listSolutions() })
   const { data: currentUser } = useQuery({ queryKey: ['user', session.userId], queryFn: () => dp.getUser(session.userId) })
+  const { data: products } = useQuery({ queryKey: ['products'], queryFn: () => dp.listProducts() })
+  const { data: casesData } = useQuery({
+    queryKey: ['cases', 'for-solution', session.userId],
+    queryFn: () => dp.listCases({ userId: session.userId, role: session.role }, { pageSize: 500 }),
+  })
 
-  const typeOptions = useMemo(() => {
-    const fromData = (solutions ?? []).map((s) => s.category).filter(Boolean)
-    return Array.from(new Set([...DEFAULT_TYPES, ...fromData]))
-  }, [solutions])
+  const activeProducts = useMemo(() => (products ?? []).filter((p) => p.is_active), [products])
+  const selectedProduct = activeProducts.find((p) => p.id === form.product_id)
+  const cases = casesData?.items ?? []
+  const selectedCase = cases.find((c) => c.id === form.case_id)
 
   // Auto-dismiss banner after a few seconds
   useEffect(() => {
@@ -78,10 +79,10 @@ export default function NewSolutionPage() {
 
   const errors = {
     title: form.title.trim() ? '' : 'Title is required.',
-    type: form.type.trim() ? '' : 'Type is required.',
+    product_id: form.product_id ? '' : 'Product is required.',
     description: form.description.trim() ? '' : 'Description is required.',
   }
-  const isValid = !errors.title && !errors.type && !errors.description
+  const isValid = !errors.title && !errors.product_id && !errors.description
 
   async function handleSave() {
     setTouched(true)
@@ -94,7 +95,9 @@ export default function NewSolutionPage() {
       if (savedId) {
         await dp.updateSolution(savedId, {
           name: form.title.trim(),
-          category: form.type,
+          category: selectedProduct?.name ?? '',
+          product_id: form.product_id,
+          case_id: form.case_id || undefined,
           description: form.description.trim(),
           details: form.description.trim(),
           author_id: session.userId,
@@ -104,7 +107,9 @@ export default function NewSolutionPage() {
       } else {
         const created = await dp.createSolution({
           name: form.title.trim(),
-          category: form.type,
+          category: selectedProduct?.name ?? '',
+          product_id: form.product_id,
+          case_id: form.case_id || undefined,
           description: form.description.trim(),
           details: form.description.trim(),
           is_active: true,
@@ -180,18 +185,50 @@ export default function NewSolutionPage() {
           {showError('title') && <p className="text-xs text-destructive">{errors.title}</p>}
         </div>
 
-        {/* Type */}
+        {/* Product */}
         <div className="space-y-1.5">
-          <Label>Type <span className="text-destructive">*</span></Label>
-          <Select value={form.type} disabled={readOnly} onValueChange={(v) => setForm({ ...form, type: v })}>
-            <SelectTrigger><SelectValue placeholder="Select a type" /></SelectTrigger>
-            <SelectContent>
-              {typeOptions.map((t) => (
-                <SelectItem key={t} value={t}>{t}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {showError('type') && <p className="text-xs text-destructive">{errors.type}</p>}
+          {readOnly ? (
+            <>
+              <Label>Product <span className="text-destructive">*</span></Label>
+              <p className="text-sm text-foreground">{selectedProduct?.name ?? '—'}</p>
+            </>
+          ) : (
+            <SearchableSelect
+              label="Product"
+              required
+              icon={Package}
+              options={activeProducts.map((p) => ({ id: p.id, label: p.name, sublabel: p.category }))}
+              value={form.product_id}
+              onChange={(v) => setForm({ ...form, product_id: v })}
+              placeholder="Select a product"
+              searchPlaceholder="Search products…"
+              emptyText="No matching products"
+            />
+          )}
+          {showError('product_id') && <p className="text-xs text-destructive">{errors.product_id}</p>}
+        </div>
+
+        {/* Case reference (optional) */}
+        <div className="space-y-1.5">
+          {readOnly ? (
+            selectedCase && (
+              <>
+                <Label>Case Reference</Label>
+                <p className="text-sm text-foreground">{selectedCase.reference_no} — {selectedCase.title}</p>
+              </>
+            )
+          ) : (
+            <SearchableSelect
+              label="Case Reference (optional)"
+              icon={Ticket}
+              options={cases.map((c) => ({ id: c.id, label: `${c.reference_no} — ${c.title}` }))}
+              value={form.case_id}
+              onChange={(v) => setForm({ ...form, case_id: v })}
+              placeholder="Link a case (optional)"
+              searchPlaceholder="Search by case ID or title…"
+              emptyText="No matching cases"
+            />
+          )}
         </div>
 
         {/* Description */}
@@ -248,18 +285,18 @@ export default function NewSolutionPage() {
           <span className="text-[11px] text-muted-foreground">rendered exactly as published</span>
         </div>
         <div className="p-5 sm:p-6 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
-          {deferredTitle.trim() || form.type || deferredDescription.trim() ? (
+          {deferredTitle.trim() || selectedProduct || deferredDescription.trim() ? (
             <div className="space-y-4">
-              {(deferredTitle.trim() || form.type) && (
+              {(deferredTitle.trim() || selectedProduct) && (
                 <div className="space-y-2">
                   {deferredTitle.trim() && (
                     <h2 className="text-2xl font-bold leading-tight tracking-tight break-words">
                       {deferredTitle}
                     </h2>
                   )}
-                  {form.type && (
+                  {selectedProduct && (
                     <span className="inline-flex items-center rounded-full border bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-                      {form.type}
+                      {selectedProduct.name}
                     </span>
                   )}
                 </div>

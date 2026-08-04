@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { getDataProvider } from '@/lib/data'
 import { useAuth } from '@/lib/auth/context'
 import { EmptyState } from '@/components/shared/empty-state'
@@ -11,9 +11,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn, formatDate } from '@/lib/utils'
 import { canAccess } from '@/lib/rbac'
-import { Star, CheckCircle2, Search, X } from 'lucide-react'
+import { FEEDBACK_QUESTIONS } from '@/lib/feedback-questions'
+import { Star, CheckCircle2, Search, X, ChevronDown, ChevronRight } from 'lucide-react'
 import { CreateFeedbackDialog } from './create-feedback-dialog'
 import type { Feedback, Client, Case, Team, User } from '@/types'
 
@@ -39,7 +41,11 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
   const { session } = useAuth()
   const dp = getDataProvider()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const tab = searchParams.get('tab') || 'new'
 
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [teamFilter, setTeamFilter] = useState('all')
   const [engineerFilter, setEngineerFilter] = useState('all')
   const [clientFilter, setClientFilter] = useState('all')
@@ -123,6 +129,14 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
     setDateFilter('')
   }
 
+  const toggleExpand = (id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      return next
+    })
+  }
+
   const filteredFeedback = visibleFeedback.filter((f: Feedback) => {
     const relatedCase = casesMap[f.case_id]
     if (teamFilter !== 'all' && relatedCase?.team_id !== teamFilter) return false
@@ -131,6 +145,21 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
     if (dateFilter && new Date(f.created_at).toISOString().slice(0, 10) !== dateFilter) return false
     return true
   })
+
+  // Only team_lead/technical_head can review — tabs split their queue into
+  // New / reviewed by them / reviewed by the other reviewer role.
+  const otherRoleLabel = scope.role === 'team_lead' ? 'Technical Head' : 'Team Lead'
+  const reviewedByMe = (f: Feedback) => (scope.role === 'team_lead' ? !!f.ml_reviewed : !!f.th_reviewed)
+  const reviewedByOther = (f: Feedback) => (scope.role === 'team_lead' ? !!f.th_reviewed && !f.ml_reviewed : !!f.ml_reviewed && !f.th_reviewed)
+
+  const newFeedback = filteredFeedback.filter((f) => !f.ml_reviewed && !f.th_reviewed)
+  const myReviewedFeedback = filteredFeedback.filter(reviewedByMe)
+  const otherReviewedFeedback = filteredFeedback.filter(reviewedByOther)
+
+  const tabbedFeedback = !canReview ? filteredFeedback
+    : tab === 'reviewed' ? myReviewedFeedback
+    : tab === 'reviewed-other' ? otherReviewedFeedback
+    : newFeedback
 
   return (
     <div className="p-6 space-y-4">
@@ -218,9 +247,19 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
         </div>
       </div>
 
+      {canReview && (
+        <Tabs value={tab} onValueChange={(v) => router.replace(`${pathname}?tab=${v}`, { scroll: false })}>
+          <TabsList>
+            <TabsTrigger value="new">New <span className="ml-1 text-muted-foreground">({newFeedback.length})</span></TabsTrigger>
+            <TabsTrigger value="reviewed">Reviewed <span className="ml-1 text-muted-foreground">({myReviewedFeedback.length})</span></TabsTrigger>
+            <TabsTrigger value="reviewed-other">Reviewed by {otherRoleLabel} <span className="ml-1 text-muted-foreground">({otherReviewedFeedback.length})</span></TabsTrigger>
+          </TabsList>
+        </Tabs>
+      )}
+
       {isLoading ? (
         <div className="space-y-3">{[...Array(3)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-muted animate-pulse" />)}</div>
-      ) : filteredFeedback.length === 0 ? (
+      ) : tabbedFeedback.length === 0 ? (
         <EmptyState
           icon={Star}
           title={hasActiveFilters ? 'No feedback matches these filters' : 'No feedback yet'}
@@ -228,16 +267,11 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
         />
       ) : (
         <div className="space-y-3">
-          {filteredFeedback.map((f: Feedback) => {
+          {tabbedFeedback.map((f: Feedback) => {
             const client = clientsMap[f.client_id]
             const relatedCase = casesMap[f.case_id]
             const team = relatedCase?.team_id ? teamsMap[relatedCase.team_id] : undefined
             const engineer = relatedCase?.assignee_id ? usersMap[relatedCase.assignee_id] : undefined
-            // Whether *this* viewer's role has already reviewed the feedback —
-            // team leads and technical heads each track their own review flag.
-            const reviewedByMe = scope.role === 'team_lead' ? f.ml_reviewed
-              : scope.role === 'technical_head' ? f.th_reviewed
-              : false
 
             return (
               <div key={f.id} className="rounded-xl border bg-card p-4">
@@ -250,9 +284,38 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
                           ? (engineer?.name ?? 'Support Engineer')
                           : (client?.company_name ?? f.client_id)}
                       </span>
-                      <StarRating rating={f.rating} />
+                      <div className="flex items-center gap-2">
+                        <StarRating rating={f.rating} />
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(f.id)}
+                          className="flex items-center gap-0.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          {expanded.has(f.id) ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+                          Breakdown
+                        </button>
+                      </div>
                     </div>
                     <p className="text-sm text-foreground leading-relaxed">{f.feedback_text}</p>
+
+                    {expanded.has(f.id) && (
+                      <div className="rounded-lg bg-muted/30 p-3 divide-y divide-border/60">
+                        {FEEDBACK_QUESTIONS.map((q) => (
+                          <div key={q.key} className="flex items-center justify-between gap-3 py-1.5 first:pt-0 last:pb-0">
+                            <span className="text-xs text-muted-foreground">{q.label}</span>
+                            <div className="flex items-center gap-0.5">
+                              {Array.from({ length: 5 }, (_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-3 w-3 ${(f.question_ratings?.[q.key] ?? 0) > i ? 'text-amber-400 fill-amber-400' : 'text-muted-foreground/25'}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
                       {team && <span>{team.name}</span>}
                       {engineer && !isClient && <span>{engineer.name}</span>}
@@ -286,7 +349,7 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
                       View Case
                     </Button>
                     {canReview && (
-                      reviewedByMe ? (
+                      reviewedByMe(f) ? (
                         <span className="h-7 flex items-center gap-1 text-xs px-3 font-medium text-emerald-600">
                           <CheckCircle2 className="h-3.5 w-3.5" /> Reviewed
                         </span>

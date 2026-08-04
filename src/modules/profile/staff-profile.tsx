@@ -11,7 +11,7 @@ import { useSession } from '@/lib/auth/context'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { getInitials, formatDate } from '@/lib/utils'
 import {
-  Pencil, Mail, Calendar, IdCard, Building2, Briefcase, Award, GraduationCap,
+  Pencil, Mail, Calendar, IdCard, Building2, Briefcase, Award,
   Phone, Languages, Wrench, Sparkles, FileText, Download, TrendingUp, Trophy,
   Star, Zap, ShieldCheck, Medal,
 } from 'lucide-react'
@@ -155,30 +155,6 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
               <Chips items={user.expertise} empty="No expertise added yet." />
             </InfoCard>
           </div>
-
-          <InfoCard title="Education" icon={<GraduationCap className="h-3.5 w-3.5" />}>
-            {user.education && user.education.length > 0 ? (
-              <div className="space-y-3">
-                {user.education.map((e) => (
-                  <div key={e.id} className="flex gap-3">
-                    <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <GraduationCap className="h-4 w-4" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-foreground">{e.degree || 'Qualification'}</p>
-                      <p className="text-xs text-muted-foreground">{e.institution}{e.year ? ` · ${e.year}` : ''}</p>
-                      {e.gpa && (
-                        <div className="text-xs font-medium text-foreground mt-1 inline-flex items-center gap-1">
-                          <Badge variant="outline" className="text-[10px] font-mono">CGPA / GPA</Badge>
-                          <span className="font-mono">{e.gpa}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : <p className="text-sm text-muted-foreground">No education added yet.</p>}
-          </InfoCard>
 
           <InfoCard title="Certifications" icon={<Award className="h-3.5 w-3.5" />}>
             {user.certifications && user.certifications.length > 0 ? (

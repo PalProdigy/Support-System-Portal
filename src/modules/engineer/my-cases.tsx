@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
@@ -13,7 +13,8 @@ import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
+import { Ticket, RotateCcw, Activity, AlertTriangle, ShieldAlert, Check } from 'lucide-react'
 import { STATUS_LABELS, PRIORITY_LABELS, slaRemainingMs, slaPercent } from '@/lib/utils'
 import type { Case, Client, User, CaseStatus, Priority } from '@/types'
 
@@ -29,6 +30,7 @@ const ACTIVE_STATUSES = new Set(['new', 'triaged', 'assigned', 'in_progress', 'p
 export function MyCases() {
   const session = useSession()
   const dp = getDataProvider()
+  const qc = useQueryClient()
   const searchParams = useSearchParams()
   const scope = { userId: session.userId, role: session.role }
 
@@ -77,6 +79,25 @@ export function MyCases() {
     queryFn: () => dp.listCases(scope, { pageSize: 1000, top_level_only: true }),
   })
 
+  // Still-unassigned cases routed to my team — shown inline at the top of the
+  // Active bucket below (with a Grab action instead of an assignee) rather
+  // than as a separate section. Grabbing assigns directly, no approval needed.
+  const { data: claimable } = useQuery({
+    queryKey: ['claimable-cases', session.userId],
+    queryFn: () => dp.listClaimableCases(scope),
+    refetchInterval: 30_000,
+  })
+  const claimCase = useMutation({
+    mutationFn: (caseId: string) => dp.claimCase(caseId, scope),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['cases'] })
+      qc.invalidateQueries({ queryKey: ['claimable-cases'] })
+      qc.invalidateQueries({ queryKey: ['notifications'] })
+      toast({ title: 'Case assigned to you', variant: 'success' })
+    },
+    onError: (e) => toast({ title: String(e), variant: 'destructive' }),
+  })
+
   const clientsMap = Object.fromEntries((clients ?? []).map((c: Client) => [c.id, c]))
   const usersMap = Object.fromEntries((users ?? []).map((u: User) => [u.id, u]))
 
@@ -104,9 +125,24 @@ export function MyCases() {
   const totalPages = Math.ceil(total / 15)
 
   const showGrouped = status === 'all' && !search && slaFilter === 'all'
-  const activeCases = cases.filter((c) => ACTIVE_STATUSES.has(c.status))
+  // Claimable cases aren't mine yet, so they only make sense in the default
+  // grouped view (no active search/status/SLA filter) — prepended to Active.
+  const claimableCases = showGrouped ? (claimable ?? []) : []
+  const activeCases = [...claimableCases, ...cases.filter((c) => ACTIVE_STATUSES.has(c.status))]
   const previousCases = cases.filter((c) => !ACTIVE_STATUSES.has(c.status))
   const hasFilters = search || status !== 'all' || priority !== 'all' || slaFilter !== 'all'
+  const claimableIds = new Set(claimableCases.map((c) => c.id))
+
+  const grabButton = (c: Case) => (
+    <Button
+      size="sm"
+      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+      disabled={claimCase.isPending}
+      onClick={() => claimCase.mutate(c.id)}
+    >
+      <Check className="h-3.5 w-3.5" /> Grab Case
+    </Button>
+  )
 
   if (error) return <ErrorState onRetry={refetch} />
 
@@ -195,7 +231,14 @@ export function MyCases() {
                 Active <span className="font-normal">· {activeCases.length}</span>
               </p>
               {activeCases.map((c: Case) => (
-                <CaseCard key={c.id} case_={c} client={clientsMap[c.client_id]} assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined} href={`/my-case/${c.id}`} />
+                <CaseCard
+                  key={c.id}
+                  case_={c}
+                  client={clientsMap[c.client_id]}
+                  assignee={c.assignee_id ? usersMap[c.assignee_id] : undefined}
+                  href={`/my-case/${c.id}`}
+                  action={claimableIds.has(c.id) ? grabButton(c) : undefined}
+                />
               ))}
             </div>
           )}
