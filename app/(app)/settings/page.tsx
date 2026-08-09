@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import type { ComponentType } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
@@ -13,6 +13,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { canAccess } from '@/lib/rbac'
+import { EmptyState } from '@/components/shared/empty-state'
+import type { NotificationPreferencesHandle } from '@/modules/shared/notification-preferences'
+import { PersonalSettings, TeamLeadSettings } from '@/modules/shared/personal-settings'
 import {
   Settings, Mail, MessageSquare, Bell, Smartphone, Shield, Save,
   Clock, CalendarClock, AlertTriangle, KeyRound, LogIn, ShieldCheck, Wrench,
@@ -24,6 +27,10 @@ interface SystemSettings {
   escalation_threshold_hours: number
   auto_close_days: number
   sla_breach_alert: boolean
+  email_notifications: boolean
+  sms_notifications: boolean
+  whatsapp_notifications: boolean
+  web_push_notifications: boolean
   session_timeout_minutes: number
   max_login_attempts: number
   require_2fa: boolean
@@ -55,6 +62,10 @@ function defaults(): SystemSettings {
     escalation_threshold_hours: 4,
     auto_close_days: 7,
     sla_breach_alert: true,
+    email_notifications: true,
+    sms_notifications: false,
+    whatsapp_notifications: false,
+    web_push_notifications: true,
     session_timeout_minutes: 60,
     max_login_attempts: 5,
     require_2fa: false,
