@@ -106,7 +106,8 @@ export function CaseSummary12m() {
       <div className="flex items-center gap-2 flex-wrap">
         <BarChart3 className="h-4 w-4 text-muted-foreground shrink-0" />
         <h3 className="text-sm font-semibold text-foreground">{activeTab.title} — Case Summary</h3>
-        <div className="sm:ml-auto flex flex-wrap gap-x-3 gap-y-1">
+
+        <div className="flex items-center gap-3 flex-nowrap overflow-x-auto sm:flex-wrap sm:overflow-visible -mx-1 sm:ml-auto  px-.5 ">
           {SERIES.map((s) => (
             <span key={s.key} className="inline-flex items-center gap-1 text-xs text-muted-foreground">
               <span className="h-2 w-2 rounded-full shrink-0" style={{ background: s.color }} />

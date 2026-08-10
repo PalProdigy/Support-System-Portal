@@ -161,7 +161,7 @@ export function CaseApprovalQueue({ cases, users, teamId }: CaseApprovalQueuePro
                   {isOverdue
                       ? remaining != null
                           ? `30-min window ended ${formatDuration(-remaining)} ago — awaiting Technical Head assignment`
-                          : 'Awaiting Technical Head assignment'
+                          : 'Waiting for Technical Head Assignment'
                       : remaining == null
                           ? 'No deadline'
                           : remaining <= 0
