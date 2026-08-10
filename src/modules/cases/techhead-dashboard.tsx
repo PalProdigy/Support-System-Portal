@@ -97,8 +97,8 @@ export default function TechHeadDashboard() {
           <div className="flex items-center gap-2 mb-3">
             <TimerReset className="h-4 w-4 text-red-500" />
             <h3 className="text-sm font-semibold text-foreground">Case Assignment Queue</h3>
-            <span className="text-[11px] text-muted-foreground">
-              Unassigned cases — including team-lead windows that ran past 30 minutes
+            <span className="text-[11px] mt-1 text-muted-foreground">
+              Unassigned cases
             </span>
           </div>
           <CaseApprovalQueue cases={cases} users={users ?? []} />
