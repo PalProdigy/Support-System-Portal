@@ -65,22 +65,23 @@ export default function TechHeadDashboard() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Technical Head Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">All cases across every team — full visibility</p>
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
         </div>
       </div>
 
       {/* Engagements awaiting product-line assignment */}
       {pendingEngagementLines > 0 && (
-        <div className="rounded-xl border bg-card p-4 flex items-center justify-between gap-3 flex-wrap">
-          <div className="flex items-center gap-2">
-            <Handshake className="h-4 w-4 text-red-600 dark:text-red-400" />
-            <h3 className="text-sm font-semibold text-foreground">Orders need assignment</h3>
+        <div className="rounded-xl flex border bg-card p-4 flex items-center justify-between gap-3">
+          <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-1.5">
+                <Handshake className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" />
+                <h3 className="text-sm font-semibold text-foreground">Orders need assignment</h3>
+              </div>
             <span className="text-[11px] text-muted-foreground">
               {pendingEngagementLines} product line{pendingEngagementLines !== 1 ? 's' : ''} waiting for a team or engineer
             </span>
           </div>
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => router.push('/engagements')}>
+          <Button size="sm" variant="outline" className="gap-1 shrink-0" onClick={() => router.push('/engagements')}>
             Assign <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>
