@@ -167,7 +167,7 @@ export function THDashboard() {
           <StatCard
             title="License / SLA Risk"
             value={expiringSoon.length}
-            subtitle={`expiring ≤ ${EXPIRY_SOON_DAYS}d · ${expired.length} expired`}
+            // subtitle={`expiring ≤ ${EXPIRY_SOON_DAYS}d · ${expired.length} expired`}
             icon={BadgeAlert}
             iconColor="text-rose-600 dark:text-rose-400"
           />
