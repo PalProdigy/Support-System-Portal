@@ -176,7 +176,7 @@ export function THDashboard() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* License & SLA expiry */}
-        <div id="license-sla-panel" className="rounded-xl border bg-card scroll-mt-6">
+        <div id="license-sla-panel"  className="min-w-0 overflow-hidden rounded-xl border bg-card scroll-mt-6">
           <div className="flex items-center gap-2 px-4 py-3 border-b flex-wrap">
             <ShieldX className="h-4 w-4 text-rose-600 dark:text-rose-400" />
             <h3 className="text-sm font-semibold text-foreground flex-1 min-w-0">License &amp; SLA Expiry</h3>
@@ -204,7 +204,7 @@ export function THDashboard() {
               {licenseTab === 'expiring' ? `Nothing expiring within ${EXPIRY_SOON_DAYS} days` : 'Nothing expired'}
             </p>
           ) : (
-            <div className="divide-y max-h-56 overflow-y-auto">
+            <div className="divide-y max-h-56 overflow-y-auto scrollbar-gutter-stable">
               {(licenseTab === 'expiring' ? expiringSoon : expired).map((r) => (
                 <div key={r.id} className="flex items-center gap-3 px-4 py-2.5">
                   <span className={cn(
@@ -223,7 +223,7 @@ export function THDashboard() {
                     <p className={cn('text-xs font-semibold', r.days < 0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400')}>
                       {expiryLabel(r.days)}
                     </p>
-                    <p className="text-[11px] text-muted-foreground">{formatDateTime(r.expires_at)}</p>
+                    <p className="text-[11px] text-muted-foreground ">{formatDateTime(r.expires_at)}</p>
                   </div>
                 </div>
               ))}
