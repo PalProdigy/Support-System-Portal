@@ -184,10 +184,10 @@ export function ManageEngineers() {
   const teamLeads = useMemo(() => visibleUsers.filter((u) => u.role === 'team_lead'), [visibleUsers])
   const supportEngineers = useMemo(() => visibleUsers.filter((u) => u.role === 'support_engineer'), [visibleUsers])
 
-  const TABS: { key: Tab; label: string; icon: React.ComponentType<{ className?: string }>; count: number }[] = [
-    { key: 'all', label: 'All Engineers', icon: LayoutGrid, count: allEngineers.length },
-    ...(isLead ? [] : [{ key: 'leads' as Tab, label: 'Team Leads', icon: Crown, count: teamLeads.length }]),
-    { key: 'engineers', label: 'Support Engineers', icon: Wrench, count: supportEngineers.length },
+  const TABS: { key: Tab; label: string; shortLabel: string; icon: React.ComponentType<{ className?: string }>; count: number }[] = [
+    { key: 'all', label: 'All Engineers', shortLabel: 'All', icon: LayoutGrid, count: allEngineers.length },
+    ...(isLead ? [] : [{ key: 'leads' as Tab, label: 'Team Leads', shortLabel: 'Leads', icon: Crown, count: teamLeads.length }]),
+    { key: 'engineers', label: 'Support Engineers', shortLabel: 'Engineers', icon: Wrench, count: supportEngineers.length },
   ]
 
   const activeTab = isLead && tab === 'leads' ? 'all' : tab
@@ -210,29 +210,45 @@ export function ManageEngineers() {
       </div>
 
       {/* Tabs + search */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1">
-          {TABS.map(({ key, label, icon: Icon, count }) => (
+      <div className="space-y-3 md:space-y-0 md:flex md:items-center md:justify-between md:gap-3">
+        <div
+          className={cn(
+            'grid gap-1 px-1.5 bg-background border border-input rounded-lg shadow-sm hover:bg-[#020817]',
+            TABS.length === 3 ? 'grid-cols-3' : 'grid-cols-2',
+            'md:flex md:w-fit md:items-center md:gap-1'
+          )}
+        >
+          {TABS.map(({ key, label, shortLabel, icon: Icon, count }) => (
             <button
               key={key}
               type="button"
               onClick={() => setTab(key)}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
-                activeTab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                'flex items-center justify-center gap-1.5 h-10 min-w-0 px-1 rounded-xl text-[13px] font-medium transition-colors',
+                'md:px-4 md:text-sm',
+                activeTab === key
+                  ? 'bg-background border-input shadow-sm text-foreground'
+                  : ' border-transparent text-muted-foreground hover:text-foreground '
               )}
             >
-              <Icon className="h-3.5 w-3.5" />
-              {label}
-              <span className={cn('text-xs tabular-nums', activeTab === key ? 'text-muted-foreground' : 'text-muted-foreground/70')}>
-                ({count})
+              <Icon className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate md:hidden">{shortLabel}</span>
+              <span className="truncate hidden md:inline">{label}</span>
+              <span
+                className={cn(
+                  'text-[11px] px-1.5 rounded-full shrink-0 tabular-nums',
+                  activeTab === key ? 'bg-muted text-foreground' : 'bg-muted/60 text-muted-foreground'
+                )}
+              >
+                {count}
               </span>
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:gap-2">
           <SearchInput
-            containerClassName="w-full max-w-xs"
+            containerClassName="w-full md:w-64"
+            className="h-10"
             placeholder="Search engineers..."
             value={query}
             onChange={setQuery}
@@ -240,8 +256,8 @@ export function ManageEngineers() {
             resultCount={activeRows.length}
             resultLabel="result"
           />
-          <Button onClick={openCreate} variant="outline">
-            <PlusCircle className="h-4 w-4" /> Add Engineer
+          <Button onClick={openCreate} variant="outline" className="h-10 min-w-0 w-full md:w-auto">
+            <PlusCircle className="h-4 w-4 shrink-0" /> <span className="truncate">Add Engineer</span>
           </Button>
         </div>
       </div>
