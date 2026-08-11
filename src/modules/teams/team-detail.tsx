@@ -454,12 +454,13 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="  pb-6 pt-4 max-w-6xl">
       {isTH && (
-        <Button variant="ghost" size="sm" onClick={() => router.back()}>
+        <Button variant="ghost" className="pb-2 pl-6" size="sm" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4" /> Back to Teams
         </Button>
       )}
+      <div className=" px-6 mx-auto space-y-6">
 
       {/* Team header — modern gradient hero */}
       <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-start gap-4 flex-wrap">
@@ -1268,6 +1269,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
         isPending={transferMutation.isPending || caseTransferRequestMutation.isPending}
       />
     </div>
+</div>
   )
 }
 
