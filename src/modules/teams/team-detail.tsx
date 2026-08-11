@@ -13,6 +13,7 @@ import { PriorityChip } from '@/components/shared/priority-chip'
 import { ErrorState } from '@/components/shared/error-state'
 import { SearchableSelect } from '@/components/shared/searchable-select'
 import { TeamMonthlyActivity } from '@/modules/teams/team-monthly-activity'
+import { useIsTouchDevice } from '@/hooks/use-touch-device'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -56,6 +57,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const qc = useQueryClient()
   const scope = { userId: session.userId, role: session.role }
   const isTH = session.role === 'technical_head'
+  const isTouchDevice = useIsTouchDevice()
 
   const [showManageMembers, setShowManageMembers] = useState(false)
   const [transferCase, setTransferCase] = useState<Case | null>(null)
@@ -704,6 +706,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                         ))}
                       </Pie>
                       <Tooltip
+                        trigger={isTouchDevice ? 'click' : 'hover'}
                         formatter={(value, name) => {
                           const n = Number(value)
                           return [`${n} case${n !== 1 ? 's' : ''} (${((n / cases.length) * 100).toFixed(0)}%)`, name]
@@ -1315,7 +1318,8 @@ function ManageEngineersDialog({
       <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-primary" /> Manage Engineers — {teamName}
+            <Users className="h-4 w-4 text-primary" />
+            <div className="text-[16px] sm:text-lg">Manage Engineers — {teamName}</div>
           </DialogTitle>
         </DialogHeader>
 
@@ -1459,7 +1463,7 @@ function TransferCaseDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ArrowRightLeft className="h-4 w-4 text-primary" />
-            {isTH ? 'Transfer Cases to Another Team' : 'Request Case Transfer'}
+            {isTH ? 'Transfer Cases' : 'Request Case Transfer'}
           </DialogTitle>
         </DialogHeader>
 
@@ -1475,7 +1479,7 @@ function TransferCaseDialog({
           <div className="flex-1 overflow-y-auto space-y-2 pr-1">
             {isTH && (
               <p className="text-xs text-muted-foreground">
-                Select a destination team for each case, then click Transfer.
+                Select a destination team
               </p>
             )}
             {cases.map((c) => {
