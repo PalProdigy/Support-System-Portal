@@ -18,7 +18,7 @@ export interface SearchableSelectOption {
 // Searchable single-select dropdown — a Select/Combobox hybrid built on the
 // existing Popover primitive (no cmdk dependency). Filters client-side as you type.
 export function SearchableSelect({
-  icon: Icon, label, required, options, value, onChange, placeholder = 'Select…', searchPlaceholder = 'Search…', emptyText = 'No results',
+  icon: Icon, label, required, options, value, onChange, placeholder = 'Select…', searchPlaceholder = 'Search…', emptyText = 'No results', triggerClassName,
 }: {
   icon?: React.ComponentType<{ className?: string }>
   label?: string
@@ -29,6 +29,7 @@ export function SearchableSelect({
   placeholder?: string
   searchPlaceholder?: string
   emptyText?: string
+  triggerClassName?: string
 }) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -52,7 +53,8 @@ export function SearchableSelect({
               showAvatars ? 'pl-2' : Icon ? 'pl-9' : 'pl-3',
               'hover:border-primary/40 hover:bg-accent/30',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary/50',
-              open && 'border-primary/50 ring-2 ring-primary/40'
+              open && 'border-primary/50 ring-2 ring-primary/40',
+              triggerClassName
             )}
           >
             {!showAvatars && Icon && <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />}

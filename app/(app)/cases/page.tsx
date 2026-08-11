@@ -232,9 +232,9 @@ function CasesPageContent() {
           </Button>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <SearchInput
-            containerClassName="flex-1 min-w-48"
+            containerClassName="col-span-2"
             className="h-9"
             placeholder="Search by title or reference..."
             value={search}
@@ -247,7 +247,7 @@ function CasesPageContent() {
             resultLabel="case"
           />
           <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="h-9">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -258,7 +258,7 @@ function CasesPageContent() {
             </SelectContent>
           </Select>
           <Select value={priority} onValueChange={(v) => { setPriority(v); setPage(1) }}>
-            <SelectTrigger className="w-36">
+            <SelectTrigger className="h-9">
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
@@ -269,7 +269,7 @@ function CasesPageContent() {
             </SelectContent>
           </Select>
           <Select value={queueFilter} onValueChange={(v) => { setQueueFilter(v); setPage(1) }}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="h-9">
               <SelectValue placeholder="Queue State" />
             </SelectTrigger>
             <SelectContent>
@@ -278,19 +278,18 @@ function CasesPageContent() {
               <SelectItem value="long_running">3+ Months Running</SelectItem>
             </SelectContent>
           </Select>
-          <div className="w-48">
-            <SearchableSelect
-              icon={UserIcon}
-              options={engineers.map((u: User) => ({ id: u.id, label: u.name, sublabel: u.role === 'team_lead' ? 'Team Lead' : 'Engineer' }))}
-              value={engineerFilter}
-              onChange={(v) => { setEngineerFilter(v); setPage(1) }}
-              placeholder="All Engineers"
-              searchPlaceholder="Search engineers..."
-            />
-          </div>
+          <SearchableSelect
+            icon={UserIcon}
+            options={engineers.map((u: User) => ({ id: u.id, label: u.name, sublabel: u.role === 'team_lead' ? 'Team Lead' : 'Engineer' }))}
+            value={engineerFilter}
+            onChange={(v) => { setEngineerFilter(v); setPage(1) }}
+            placeholder="All Engineers"
+            searchPlaceholder="Search engineers..."
+            triggerClassName="h-9 rounded-md"
+          />
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="h-9">
+              <Button variant="outline" className="col-span-2 h-9 w-full">
                 <CalendarDays className="h-4 w-4" />
                 {dateFrom || dateTo ? `${dateFrom || '…'} – ${dateTo || '…'}` : 'Date Range'}
               </Button>
@@ -312,7 +311,7 @@ function CasesPageContent() {
             </PopoverContent>
           </Popover>
           {hasFilters && (
-            <Button variant="outline" size="sm" onClick={clearFilters}>
+            <Button variant="outline" className="col-span-2 h-9 w-full" onClick={clearFilters}>
               <RotateCcw className="h-4 w-4" />
               Reset
             </Button>
