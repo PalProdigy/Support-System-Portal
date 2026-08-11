@@ -202,10 +202,10 @@ export function ManageEngineers() {
         </div>
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-foreground">Engineers</h1>
-          <p className="text-sm text-muted-foreground">
-            {isLead && (myTeam ? `${myTeam.name} · ` : 'Your team · ')}
-            Team leads and support engineers across the organization
-          </p>
+          {/*<p className="text-sm text-muted-foreground">*/}
+          {/*  {isLead && (myTeam ? `${myTeam.name} · ` : 'Your team · ')}*/}
+          {/*  Team leads and support engineers across the organization*/}
+          {/*</p>*/}
         </div>
       </div>
 
