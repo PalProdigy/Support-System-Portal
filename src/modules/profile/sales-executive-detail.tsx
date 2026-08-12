@@ -146,14 +146,14 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
             No deals closed yet — won and lost prospects will appear here.
           </div>
         ) : (
-          <div className="rounded-xl border overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="rounded-xl border overflow-x-auto">
+            <table className="w-full text-sm min-w-[640px]">
               <thead className="bg-muted/50 border-b">
                 <tr>
                   <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Company</th>
-                  <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground hidden md:table-cell">Contact</th>
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Contact</th>
                   <th className="px-4 py-2.5 text-xs font-medium text-muted-foreground">Type</th>
-                  <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground hidden lg:table-cell">License Expiry</th>
+                  <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">License Expiry</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -165,7 +165,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
                         <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">✓ Converted to client</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 hidden md:table-cell text-muted-foreground text-xs">
+                    <td className="px-4 py-3 text-muted-foreground text-xs">
                       {p.contact_person}
                     </td>
                     <td className="px-4 py-3">
@@ -177,7 +177,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
                         <span className="text-muted-foreground text-xs">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right text-xs text-muted-foreground hidden lg:table-cell">
+                    <td className="px-4 py-3 text-right text-xs text-muted-foreground">
                       {p.license_expiry ? (
                         <span className="inline-flex items-center gap-1">
                           <CalendarClock className="h-3 w-3" />
