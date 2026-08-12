@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { getDataProvider } from '@/lib/data'
@@ -9,12 +9,10 @@ import { ErrorState } from '@/components/shared/error-state'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { cn, formatDate, formatDateTime } from '@/lib/utils'
 import { ArrowLeft, Mail, Calendar, Eye, Handshake, CalendarClock } from 'lucide-react'
 import type { Prospect, DealType } from '@/types'
-import { SalesExecutiveProfile } from './sales-executive-profile'
 
 const DEAL_TYPE_LABELS: Record<DealType, string> = {
   installation: 'Installation',
@@ -32,7 +30,6 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
   const dp = getDataProvider()
   const router = useRouter()
   const scope = { userId: id, role: 'sales_executive' as const }
-  const [showProfile, setShowProfile] = useState(false)
 
   const { data: users, isLoading: loadingUser } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
@@ -101,7 +98,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
               </div>
               {user.designation && <p className="text-sm text-muted-foreground truncate">{user.designation}</p>}
             </div>
-            <Button variant="outline" size="sm" onClick={() => setShowProfile(true)} className="hidden sm:inline-flex">
+            <Button variant="outline" size="sm" onClick={() => router.push(`/sales-executive/${id}/profile`)} className="hidden sm:inline-flex">
               <Eye className="h-3.5 w-3.5" /> View Full Profile
             </Button>
           </div>
@@ -127,7 +124,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
           {/* Mobile-only full-width action */}
           <Button
             variant="outline"
-            onClick={() => setShowProfile(true)}
+            onClick={() => router.push(`/sales-executive/${id}/profile`)}
             className="w-full h-11 sm:hidden [-webkit-tap-highlight-color:transparent] active:bg-accent"
           >
             <Eye className="h-3.5 w-3.5" /> View Full Profile
@@ -192,18 +189,6 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
           </div>
         )}
       </div>
-
-      {/* Full profile modal — mounted only while open so it always fetches fresh data */}
-      {showProfile && (
-        <Dialog open onOpenChange={setShowProfile}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Sales Executive Profile</DialogTitle>
-            </DialogHeader>
-            <SalesExecutiveProfile user={user} teamName={teamName} />
-          </DialogContent>
-        </Dialog>
-      )}
     </div>
     </div>
   )
