@@ -143,12 +143,12 @@ export function ManageSalesExecutives({ query, onQueryChange, onResultCountChang
       ) : filtered.length === 0 ? (
         <EmptyState icon={Briefcase} title={query ? `No results found for "${query}"` : 'No account managers found'} />
       ) : (
-        <div className="rounded-xl border overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-xl border overflow-x-auto">
+          <table className="w-full text-sm min-w-[640px]">
             <thead className="bg-muted/50 border-b">
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Sales Executive</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground"># Successful Deals</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Successful Deals</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Joined Date</th>
                 <th className="px-4 py-3" />
