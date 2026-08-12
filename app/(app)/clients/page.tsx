@@ -62,7 +62,7 @@ export default function ClientsPage() {
           <div className="rounded-xl bg-primary/15 p-3 shrink-0">
             <Building2 className="h-7 w-7 text-primary" />
           </div>
-          <div>
+          <div className="flex flex-row items-baseline gap-2">
             <h1 className="text-2xl font-bold text-foreground">Clients</h1>
             <p className="text-sm text-muted-foreground mt-0.5">{all.length} client{all.length !== 1 ? 's' : ''}</p>
           </div>
@@ -268,7 +268,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                       key={i}
                       className={`text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground ${
                         isActionCol
-                          ? 'sticky right-0 w-24 text-right'
+                          ? 'w-24 text-right'
                           : 'whitespace-nowrap'
                       }`}
                     >
@@ -300,7 +300,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                     <td className="px-3 py-2.5 whitespace-nowrap">{c.contact_person}</td>
                     <td className="px-3 py-2.5 whitespace-nowrap font-medium">{casesByClient[c.id] ?? 0}</td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
-                    <td className="px-3 py-2.5 sticky right-0 bg-card/95 group-hover:bg-accent/20 transition-colors w-24 text-right">
+                    <td className="px-3 py-2.5 w-24 text-right">
                       <Button
                         variant="outline"
                         size="sm"
