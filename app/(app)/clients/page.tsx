@@ -228,7 +228,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
           <div className="rounded-xl bg-primary/10 p-2.5">
             <Building2 className="h-5 w-5 text-primary" />
           </div>
-          <div>
+          <div  className="flex flex-row items-baseline gap-2">
             <h1 className="text-2xl font-bold">Clients</h1>
             <p className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground tabular-nums">{clients.length}</span> total
