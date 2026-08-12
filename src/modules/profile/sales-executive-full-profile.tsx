@@ -44,11 +44,14 @@ export function SalesExecutiveFullProfile({ id }: { id: string }) {
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <Button variant="ghost" size="sm" onClick={() => router.back()}>
+    <div className=" max-w-5xl mx-auto ">
+      <Button variant="ghost" size="sm" className="pl-6" onClick={() => router.back()}>
         <ArrowLeft className="h-4 w-4" /> Back
       </Button>
-      <SalesExecutiveProfile user={user} teamName={teamName} />
+        <div className="px-4  sm:px-6 pb-6 space-y-3 sm:space-y-6">
+            <SalesExecutiveProfile user={user} teamName={teamName} />
+        </div>
+
     </div>
   )
 }
