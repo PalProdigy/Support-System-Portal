@@ -152,7 +152,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
                 <tr>
                   <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Company</th>
                   <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Contact</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-muted-foreground">Type</th>
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Type</th>
                   <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">License Expiry</th>
                 </tr>
               </thead>
