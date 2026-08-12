@@ -17,6 +17,7 @@ import type { User, Role, Prospect } from '@/types'
 import { useRouter } from 'next/navigation'
 import { formatDate, formatBytes } from '@/lib/utils'
 import { useSession } from '@/lib/auth/context'
+import {SearchInput} from "@/components/ui/search-input";
 
 const TARGET_ROLE: Role = 'sales_executive'
 const IMG_MAX = 2 * 1024 * 1024 // 2 MB avatar cap (kept small so it persists in localStorage)
@@ -35,16 +36,19 @@ const EMPTY_FORM = { name: '', email: '', mobile: '', designation: '', employeeI
 
 interface ManageSalesExecutivesProps {
   query: string
+  onQueryChange?: (query: string) => void
   onResultCountChange?: (count: number) => void
 }
 
 /**
  * Technical-Head directory for managing Sales Executive user accounts.
  * Rendered as a tab inside the Sales Hub (/sales-executive); access is
- * already gated by the parent page. The search box lives in the page
- * header, so filtering is driven by the `query` prop.
+ * already gated by the parent page. `query` is owned by the parent so it
+ * can be reset/inspected alongside the other Sales Hub tabs; this
+ * component just renders the search box and reports edits back up via
+ * `onQueryChange`.
  */
-export function ManageSalesExecutives({ query, onResultCountChange }: ManageSalesExecutivesProps) {
+export function ManageSalesExecutives({ query, onQueryChange, onResultCountChange }: ManageSalesExecutivesProps) {
   const dp = getDataProvider()
   const qc = useQueryClient()
   const router = useRouter()
@@ -113,9 +117,24 @@ export function ManageSalesExecutives({ query, onResultCountChange }: ManageSale
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
-        <Button onClick={() => { setForm((f) => ({ ...f, joiningDate: todayISODate() })); setShowCreate(true) }}>
-          <PlusCircle className="h-4 w-4" /> Add Sales Executive
+      <div className="flex flex-row items-center justify-between gap-2 sm:gap-3">
+        <div className="flex-1 min-w-0 sm:max-w-md">
+          <SearchInput
+            placeholder="Search account managers..."
+            value={query}
+            onChange={(v) => onQueryChange?.(v)}
+            aria-label="Search account managers"
+            resultCount={filtered.length}
+            resultLabel="account manager"
+          />
+        </div>
+        <Button
+          className="shrink-0 h-9 px-2.5 text-xs  sm:px-4 sm:text-sm"
+          onClick={() => { setForm((f) => ({ ...f, joiningDate: todayISODate() })); setShowCreate(true) }}
+        >
+          <PlusCircle className="h-4 w-4" />
+          <span className="hidden sm:inline">Add Sales Executive</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </div>
 

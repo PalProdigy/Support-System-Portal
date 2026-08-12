@@ -269,23 +269,24 @@ export function ManageEngineers() {
         <EmptyState icon={Users} title={query ? `No results found for "${query}"` : 'No one here yet'} />
       ) : (
         <div className="rounded-xl border overflow-hidden">
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted/50 border-b">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">User</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground whitespace-nowrap">User</th>
                 {activeTab === 'all' && (
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden sm:table-cell">Role</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden sm:table-cell whitespace-nowrap">Role</th>
                 )}
                 {activeTab === 'leads' ? (
                   <>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Leads</th>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell">Team Size</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell whitespace-nowrap">Leads</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell whitespace-nowrap">Team Size</th>
                   </>
                 ) : (
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Team</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell whitespace-nowrap">Team</th>
                 )}
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Certification</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground whitespace-nowrap">Years of Experience</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground whitespace-nowrap">Certification</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -302,7 +303,7 @@ export function ManageEngineers() {
                       router.push(detailHref)
                     }}
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <EngineerAvatar user={u} />
                         <div>
@@ -312,33 +313,33 @@ export function ManageEngineers() {
                       </div>
                     </td>
                     {activeTab === 'all' && (
-                      <td className="px-4 py-3 hidden sm:table-cell">
+                      <td className="px-4 py-3 hidden sm:table-cell whitespace-nowrap">
                         <RoleBadge role={u.role} />
                       </td>
                     )}
                     {activeTab === 'leads' ? (
                       <>
-                        <td className="px-4 py-3 hidden md:table-cell">
+                        <td className="px-4 py-3 hidden md:table-cell whitespace-nowrap">
                           <LeadsChip team={ledTeam} />
                         </td>
-                        <td className="px-4 py-3 hidden lg:table-cell text-muted-foreground text-xs">
+                        <td className="px-4 py-3 hidden lg:table-cell whitespace-nowrap text-muted-foreground text-xs">
                           {ledTeam ? `${teamSizeMap[ledTeam.id] ?? 0} engineer${(teamSizeMap[ledTeam.id] ?? 0) === 1 ? '' : 's'}` : '—'}
                         </td>
                       </>
                     ) : (
-                      <td className="px-4 py-3 hidden md:table-cell">
+                      <td className="px-4 py-3 hidden md:table-cell whitespace-nowrap">
                         {u.role === 'team_lead'
                           ? <LeadsChip team={ledTeam} />
                           : <span className="text-muted-foreground text-xs">{u.team_id ? teamsMap[u.team_id]?.name ?? '—' : '—'}</span>}
                       </td>
                     )}
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <YearsCell years={u.years_of_experience} />
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <CertBadge level={u.certification_level} />
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
                       <Button variant="outline" size="sm" onClick={() => router.push(detailHref)}>
                         <Eye className="h-3.5 w-3.5" /> View
                       </Button>
@@ -348,6 +349,7 @@ export function ManageEngineers() {
               })}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 

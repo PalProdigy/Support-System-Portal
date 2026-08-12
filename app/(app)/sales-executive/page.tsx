@@ -48,24 +48,13 @@ export default function SalesExecutiveHubPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{isAM ? 'Sales Hub' : 'Sales Executives'}</h1>
-          <p className="text-sm text-muted-foreground">
-            {isAM
-              ? 'Manage your pipeline, notes, and SLA health.'
-              : 'Administer Sales Executive accounts and review pipeline health.'}
-          </p>
+          {/*<p className="text-sm text-muted-foreground">*/}
+          {/*  {isAM*/}
+          {/*    ? 'Manage your pipeline, notes, and SLA health.'*/}
+          {/*    : 'Administer Sales Executive accounts and review pipeline health.'}*/}
+          {/*</p>*/}
         </div>
-        {isTH && (
-          <div className="max-w-md w-full">
-            <SearchInput
-              placeholder="Search account managers..."
-              value={query}
-              onChange={setQuery}
-              aria-label="Search account managers"
-              resultCount={resultCount}
-              resultLabel="account manager"
-            />
-          </div>
-        )}
+
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
@@ -111,7 +100,7 @@ export default function SalesExecutiveHubPage() {
         {isTH && (
           <TabsContent value="manage" className="mt-5">
             <Suspense fallback={null}>
-              <ManageSalesExecutives query={query} onResultCountChange={setResultCount} />
+              <ManageSalesExecutives query={query} onQueryChange={setQuery} onResultCountChange={setResultCount} />
             </Suspense>
           </TabsContent>
         )}
