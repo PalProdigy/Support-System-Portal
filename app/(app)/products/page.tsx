@@ -107,32 +107,49 @@ export default function ProductCategoriesPage() {
   }
 
   return (
-    <div className="space-y-6 px-6 py-10">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-primary/10 p-2.5">
-            <Package className="h-5 w-5 text-primary" />
+    <div className="space-y-4 sm:space-y-6 px-6 py-10">
+      <div className="w-full rounded-xl border border-border bg-card px-4 pb-4 pt-[18px]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-3">
+              <div className="shrink-0 rounded-xl bg-primary/10 p-2.5">
+                <Package className="h-5 w-5 text-primary" />
+              </div>
+              <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight text-foreground">Products by OEM</h1>
+              {categories.length > 0 && (
+                <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                  {categories.length} {categories.length === 1 ? 'OEM' : 'OEMs'}
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">Browse NHQ&apos;s product portfolio by OEM</p>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products by OEM</h1>
-            <p className="text-sm text-muted-foreground">Browse NHQ&apos;s product portfolio by OEM · {categories.length} {categories.length === 1 ? 'OEM' : 'OEMs'}</p>
-          </div>
+
+          {canManage && (
+            <div className="actions mt-4 flex gap-2 border-t border-border pt-4 max-[339px]:flex-col sm:mt-0 sm:w-auto sm:shrink-0 sm:border-t-0 sm:pt-0">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowManageOem(true)}
+                className="min-h-11 flex-1 active:scale-[0.98] active:bg-accent sm:flex-none"
+              >
+                <Factory className="h-4 w-4" /> Add OEM
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setShowCreate(true)}
+                className="min-h-11 flex-1 active:scale-[0.98] active:bg-primary/80 sm:flex-none"
+              >
+                <PlusCircle className="h-4 w-4" /> Add Product
+              </Button>
+            </div>
+          )}
         </div>
-        {canManage && (
-          <div className="flex items-center gap-2">
-            <Button type="button" variant="outline" onClick={() => setShowManageOem(true)}>
-              <Factory className="h-4 w-4" /> Add OEM
-            </Button>
-            <Button type="button" onClick={() => setShowCreate(true)}>
-              <PlusCircle className="h-4 w-4" /> Add Product
-            </Button>
-          </div>
-        )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex items-center gap-2">
         <SearchInput
-          containerClassName="w-full max-w-md"
+          containerClassName="min-w-0 flex-1 sm:max-w-md"
           placeholder="Search OEM or product…"
           value={query}
           onChange={setQuery}
@@ -142,7 +159,7 @@ export default function ProductCategoriesPage() {
         />
 
         <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="h-9 w-52"><SelectValue placeholder="OEM" /></SelectTrigger>
+          <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52"><SelectValue placeholder="OEM" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All OEMs</SelectItem>
             {categoryOptions.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
@@ -150,7 +167,7 @@ export default function ProductCategoriesPage() {
         </Select>
 
         {hasDropdownFilter && (
-          <Button variant="ghost" size="sm" className="h-9 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
+          <Button variant="ghost" size="sm" className="h-9 shrink-0 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
             <X className="h-3 w-3" /> Clear
           </Button>
         )}
