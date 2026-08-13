@@ -223,14 +223,14 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
   return (
     <div className="p-6 space-y-4">
       {/* Header + total count */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-primary/10 p-2.5">
-            <Building2 className="h-5 w-5 text-primary" />
+      <div className="flex items-center justify-between gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="rounded-xl bg-primary/10 p-2 sm:p-2.5 shrink-0">
+            <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           </div>
-          <div  className="flex flex-row items-baseline gap-2">
-            <h1 className="text-2xl font-bold">Clients</h1>
-            <p className="text-sm text-muted-foreground">
+          <div className="flex flex-row items-baseline gap-2 min-w-0">
+            <h1 className="text-lg sm:text-2xl font-bold truncate">Clients</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
               <span className="font-semibold text-foreground tabular-nums">{clients.length}</span> total
               {query && <> · {ordered.length} match “{query}”</>}
             </p>
@@ -239,7 +239,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
 
         {/* Search — searches Client Name or Company / Organization */}
         <SearchInput
-          containerClassName="w-full max-w-xs"
+          containerClassName="w-44 sm:w-full sm:max-w-xs shrink-0"
           placeholder="Search Client Name…"
           value={query}
           onChange={setQuery}
