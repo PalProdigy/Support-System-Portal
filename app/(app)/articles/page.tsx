@@ -56,7 +56,7 @@ export default function ArticlesPage() {
   const kbCount = (kbArticles ?? []).filter((a) => a.status === 'published').length
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Hero header */}
       <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center gap-4">
         <div className="rounded-xl bg-primary/15 p-3 shrink-0">
