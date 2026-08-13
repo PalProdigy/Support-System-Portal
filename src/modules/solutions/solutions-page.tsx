@@ -196,7 +196,7 @@ export function SolutionsPage() {
   return (
     <div className="space-y-4 max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div><h1 className="text-2xl font-bold">Solutions</h1><p className="text-sm text-muted-foreground">{solutions?.length ?? 0} products/services</p></div>
+        <div><h1 className="text-2xl font-bold">Solutions</h1></div>
         <div className="flex w-full items-center gap-2 sm:w-auto">
           {!isArticlesTab && (
             <div className="w-24 shrink-0 sm:w-48">

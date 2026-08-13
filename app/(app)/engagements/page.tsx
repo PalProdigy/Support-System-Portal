@@ -132,9 +132,9 @@ export default function EngagementsPage() {
   const supportCount = allProductLines.filter((p) => p.types.includes('support')).length
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
           <div className="rounded-xl bg-primary/15 p-3 shrink-0">
             <Handshake className="h-7 w-7 text-primary" />

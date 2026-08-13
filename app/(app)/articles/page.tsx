@@ -58,14 +58,14 @@ export default function ArticlesPage() {
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="rounded-xl bg-primary/15 p-3 shrink-0">
           <Newspaper className="h-7 w-7 text-primary" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Articles</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {solutionsCount} solution{solutionsCount !== 1 ? 's' : ''} · {kbCount} knowledge base article{kbCount !== 1 ? 's' : ''}
+            {solutionsCount} solution{solutionsCount !== 1 ? 's' : ''} · {kbCount} KB Articles{kbCount !== 1 ? 's' : ''}
           </p>
         </div>
       </div>

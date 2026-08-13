@@ -249,10 +249,16 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
 
       {canReview && (
         <Tabs value={tab} onValueChange={(v) => router.replace(`${pathname}?tab=${v}`, { scroll: false })}>
-          <TabsList>
-            <TabsTrigger value="new">New <span className="ml-1 text-muted-foreground">({newFeedback.length})</span></TabsTrigger>
-            <TabsTrigger value="reviewed">Reviewed <span className="ml-1 text-muted-foreground">({myReviewedFeedback.length})</span></TabsTrigger>
-            <TabsTrigger value="reviewed-other">Reviewed by {otherRoleLabel} <span className="ml-1 text-muted-foreground">({otherReviewedFeedback.length})</span></TabsTrigger>
+          <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 p-1">
+            <TabsTrigger value="new" className="w-full min-w-0 truncate">
+              <span className="truncate">New</span> <span className="ml-1 text-muted-foreground shrink-0">({newFeedback.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="reviewed" className="w-full min-w-0 truncate">
+              <span className="truncate">Reviewed</span> <span className="ml-1 text-muted-foreground shrink-0">({myReviewedFeedback.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="reviewed-other" className="w-full min-w-0 truncate">
+              <span className="truncate">Reviewed by {otherRoleLabel}</span> <span className="ml-1 text-muted-foreground shrink-0">({otherReviewedFeedback.length})</span>
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       )}
@@ -275,7 +281,7 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
 
             return (
               <div key={f.id} className="rounded-xl border bg-card p-4">
-                <div className="flex items-start gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-start gap-3">
                   {/* Main content */}
                   <div className="flex-1 min-w-0 space-y-2">
                     <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -339,25 +345,25 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
                   </div>
 
                   {/* Action buttons */}
-                  <div className="flex flex-col gap-1.5 shrink-0">
+                  <div className="flex items-center gap-1.5 border-t pt-3 sm:flex-col sm:items-stretch sm:border-t-0 sm:pt-0 sm:shrink-0">
                     <Button
                       size="sm"
                       variant="outline"
-                      className="h-7 text-xs px-3"
+                      className="h-7 flex-1 text-xs px-3 sm:flex-none"
                       onClick={() => router.push(`/cases/${f.case_id}`)}
                     >
                       View Case
                     </Button>
                     {canReview && (
                       reviewedByMe(f) ? (
-                        <span className="h-7 flex items-center gap-1 text-xs px-3 font-medium text-emerald-600">
+                        <span className="h-7 flex flex-1 items-center justify-center gap-1 text-xs px-3 font-medium text-emerald-600 sm:flex-none">
                           <CheckCircle2 className="h-3.5 w-3.5" /> Reviewed
                         </span>
                       ) : (
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 text-xs px-3 text-primary"
+                          className="h-7 flex-1 text-xs px-3 text-primary sm:flex-none"
                           onClick={() => router.push(`/feedback/${f.id}/reviews/${f.id}`)}
                         >
                           Review
