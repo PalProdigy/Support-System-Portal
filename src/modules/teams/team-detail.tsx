@@ -13,6 +13,7 @@ import { PriorityChip } from '@/components/shared/priority-chip'
 import { ErrorState } from '@/components/shared/error-state'
 import { SearchableSelect } from '@/components/shared/searchable-select'
 import { TeamMonthlyActivity } from '@/modules/teams/team-monthly-activity'
+import { useIsTouchDevice } from '@/hooks/use-touch-device'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -34,6 +35,13 @@ import type { Case, User, EngineerMetrics, Team, CaseTransferRequest, Solution, 
 
 const TEAM_TABS = ['overview', 'members', 'cases', 'feedback', 'settings']
 
+const TEAM_TAB_TRIGGER_CLASS = cn(
+  'flex flex-col items-center justify-center gap-1 min-h-10 min-w-0 py-2 sm:py-0 px-0.5 rounded-[10px]',
+  'text-[11px] leading-tight whitespace-nowrap text-muted-foreground',
+  'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+  'active:opacity-60'
+)
+
 /**
  * Full team workspace — header, KPIs, performance charts, members, and
  * cases. Shared by the /teams/[id] route (team_lead / technical_head, with
@@ -49,6 +57,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   const qc = useQueryClient()
   const scope = { userId: session.userId, role: session.role }
   const isTH = session.role === 'technical_head'
+  const isTouchDevice = useIsTouchDevice()
 
   const [showManageMembers, setShowManageMembers] = useState(false)
   const [transferCase, setTransferCase] = useState<Case | null>(null)
@@ -454,12 +463,13 @@ export function TeamDetail({ teamId }: { teamId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="  pb-6 pt-4 max-w-6xl">
       {isTH && (
-        <Button variant="ghost" size="sm" onClick={() => router.back()}>
+        <Button variant="ghost" className="pb-2 pl-6" size="sm" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4" /> Back to Teams
         </Button>
       )}
+      <div className=" px-6 mx-auto space-y-6">
 
       {/* Team header — modern gradient hero */}
       <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-start gap-4 flex-wrap">
@@ -648,17 +658,17 @@ export function TeamDetail({ teamId }: { teamId: string }) {
       )}
 
       {/* Team workspace tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
-        <TabsList className="h-auto flex-wrap gap-1 p-1">
-          <TabsTrigger value="overview" className="gap-1.5"><LayoutGrid className="h-3.5 w-3.5" /> Overview</TabsTrigger>
-          <TabsTrigger value="members" className="gap-1.5"><Users className="h-3.5 w-3.5" /> Members</TabsTrigger>
-          <TabsTrigger value="cases" className="gap-1.5"><Ticket className="h-3.5 w-3.5" /> Cases</TabsTrigger>
-          <TabsTrigger value="feedback" className="gap-1.5"><MessageSquare className="h-3.5 w-3.5" /> Feedback</TabsTrigger>
-          <TabsTrigger value="settings" className="gap-1.5"><SettingsIcon className="h-3.5 w-3.5" /> Settings</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3">
+        <TabsList className="h-auto w-full grid grid-cols-5 gap-1 p-1.5 bg-card rounded-[14px] border border-border [-webkit-tap-highlight-color:transparent]">
+          <TabsTrigger value="overview" className={TEAM_TAB_TRIGGER_CLASS}><LayoutGrid className="h-[18px] w-[18px]" /> Overview</TabsTrigger>
+          <TabsTrigger value="members" className={TEAM_TAB_TRIGGER_CLASS}><Users className="h-[18px] w-[18px]" /> Members</TabsTrigger>
+          <TabsTrigger value="cases" className={TEAM_TAB_TRIGGER_CLASS}><Ticket className="h-[18px] w-[18px]" /> Cases</TabsTrigger>
+          <TabsTrigger value="feedback" className={TEAM_TAB_TRIGGER_CLASS}><MessageSquare className="h-[18px] w-[18px]" /> Feedback</TabsTrigger>
+          <TabsTrigger value="settings" className={TEAM_TAB_TRIGGER_CLASS}><SettingsIcon className="h-[18px] w-[18px]" /> Settings</TabsTrigger>
         </TabsList>
 
         {/* Overview */}
-        <TabsContent value="overview" className="space-y-6 mt-0">
+        <TabsContent value="overview" className="space-y-4 mt-0">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             <KpiCard icon={<Ticket className="h-5 w-5 text-blue-500" />} label="Total Cases" value={String(cases.length)} />
             <KpiCard icon={<AlertTriangle className="h-5 w-5 text-amber-500" />} label="Open Cases" value={String(openCases.length)} />
@@ -696,6 +706,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
                         ))}
                       </Pie>
                       <Tooltip
+                        trigger={isTouchDevice ? 'click' : 'hover'}
                         formatter={(value, name) => {
                           const n = Number(value)
                           return [`${n} case${n !== 1 ? 's' : ''} (${((n / cases.length) * 100).toFixed(0)}%)`, name]
@@ -1013,7 +1024,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
         </TabsContent>
 
         {/* Settings */}
-        <TabsContent value="settings" className="space-y-4 mt-0 max-w-2xl">
+        <TabsContent value="settings" className="space-y-4 mt-0 max-w-full">
           <div className="rounded-xl border bg-card p-4 space-y-3">
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm font-semibold">Team Name</p>
@@ -1268,6 +1279,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
         isPending={transferMutation.isPending || caseTransferRequestMutation.isPending}
       />
     </div>
+</div>
   )
 }
 
@@ -1306,7 +1318,8 @@ function ManageEngineersDialog({
       <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-primary" /> Manage Engineers — {teamName}
+            <Users className="h-4 w-4 text-primary" />
+            <div className="text-[16px] sm:text-lg">Manage Engineers — {teamName}</div>
           </DialogTitle>
         </DialogHeader>
 
@@ -1450,7 +1463,7 @@ function TransferCaseDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ArrowRightLeft className="h-4 w-4 text-primary" />
-            {isTH ? 'Transfer Cases to Another Team' : 'Request Case Transfer'}
+            {isTH ? 'Transfer Cases' : 'Request Case Transfer'}
           </DialogTitle>
         </DialogHeader>
 
@@ -1466,7 +1479,7 @@ function TransferCaseDialog({
           <div className="flex-1 overflow-y-auto space-y-2 pr-1">
             {isTH && (
               <p className="text-xs text-muted-foreground">
-                Select a destination team for each case, then click Transfer.
+                Select a destination team
               </p>
             )}
             {cases.map((c) => {

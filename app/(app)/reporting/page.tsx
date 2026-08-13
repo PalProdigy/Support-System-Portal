@@ -221,34 +221,36 @@ export default function ReportingPage() {
   }).sort((a, b) => b.total - a.total)
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="rounded-xl bg-primary/15 p-3 shrink-0">
           <BarChart3 className="h-7 w-7 text-primary" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Reporting</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {isTH
-              ? 'Organization-wide case metrics, team and engineer performance'
-              : isLead
-              ? `Case metrics and engineer performance for ${selectableTeams[0]?.name ?? 'your team'}`
-              : 'Case metrics for your clients'}
-          </p>
+
         </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
-        <TabsList className="h-auto flex-wrap gap-1 p-1">
-          <TabsTrigger value="overview" className="gap-1.5"><LayoutGrid className="h-3.5 w-3.5" /> Overview</TabsTrigger>
+        <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 p-1">
+          <TabsTrigger value="overview" className="w-full min-w-0 gap-1.5 truncate">
+            <LayoutGrid className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Overview</span>
+          </TabsTrigger>
           {showTeamTabs && (
             <>
               {showTeamCompareTab && (
-                <TabsTrigger value="team" className="gap-1.5"><Users className="h-3.5 w-3.5" /> Team Performance</TabsTrigger>
+                <TabsTrigger value="team" className="w-full min-w-0 gap-1.5 truncate">
+                  <Users className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Team Performance</span>
+                </TabsTrigger>
               )}
-              <TabsTrigger value="engineer" className="gap-1.5"><Trophy className="h-3.5 w-3.5" /> Engineer Performance</TabsTrigger>
-              <TabsTrigger value="workload" className="gap-1.5"><Activity className="h-3.5 w-3.5" /> Workload</TabsTrigger>
+              <TabsTrigger value="engineer" className="w-full min-w-0 gap-1.5 truncate">
+                <Trophy className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Engineer Performance</span>
+              </TabsTrigger>
+              <TabsTrigger value="workload" className="w-full min-w-0 gap-1.5 truncate">
+                <Activity className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Workload</span>
+              </TabsTrigger>
             </>
           )}
         </TabsList>
@@ -321,20 +323,22 @@ export default function ReportingPage() {
               {reportCases.length === 0 ? (
                 <p className="py-6 text-center text-sm text-muted-foreground">No cases in this range.</p>
               ) : (
-                <div className="divide-y">
-                  {reportCases.map((c: Case) => {
-                    const client = clientsMap[c.client_id]
-                    const solution = solutionsMap[c.solution_id]
-                    return (
-                      <div key={c.id} className="flex items-center gap-3 py-2.5 text-sm">
-                        <span className="font-mono text-xs text-muted-foreground shrink-0">{c.reference_no}</span>
-                        <span className="flex-1 min-w-0 truncate text-foreground">{c.title}</span>
-                        <span className="w-36 shrink-0 truncate text-xs text-muted-foreground">{client?.company_name ?? '—'}</span>
-                        <span className="w-36 shrink-0 truncate text-xs text-muted-foreground">{solution?.name ?? '—'}</span>
-                        <Badge className={cn('shrink-0 text-[10px]', STATUS_COLORS[c.status])}>{STATUS_LABELS[c.status]}</Badge>
-                      </div>
-                    )
-                  })}
+                <div className="overflow-x-auto">
+                  <div className="divide-y min-w-[640px]">
+                    {reportCases.map((c: Case) => {
+                      const client = clientsMap[c.client_id]
+                      const solution = solutionsMap[c.solution_id]
+                      return (
+                        <div key={c.id} className="flex items-center gap-3 py-2.5 text-sm">
+                          <span className="font-mono text-xs text-muted-foreground shrink-0">{c.reference_no}</span>
+                          <span className="flex-1 min-w-0 truncate text-foreground">{c.title}</span>
+                          <span className="w-36 shrink-0 truncate text-xs text-muted-foreground">{client?.company_name ?? '—'}</span>
+                          <span className="w-36 shrink-0 truncate text-xs text-muted-foreground">{solution?.name ?? '—'}</span>
+                          <Badge className={cn('shrink-0 text-[10px]', STATUS_COLORS[c.status])}>{STATUS_LABELS[c.status]}</Badge>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
               )}
             </div>

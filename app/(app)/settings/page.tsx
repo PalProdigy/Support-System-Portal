@@ -218,9 +218,9 @@ function SystemSettingsView() {
   const notificationsIsPending = saveMutation.isPending || notifTypesState.isPending
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-6">
+    <div className="px-6 pb-24 sm:pb-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Hero header */}
-      <div className="relative overflow-hidden rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div className=" flex items-center justify-between gap-4 flex-wrap">
         <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/20 blur-3xl" />
         <div className="relative flex items-center gap-4">
           <div className="rounded-xl bg-primary/15 p-3 shrink-0">
@@ -233,7 +233,15 @@ function SystemSettingsView() {
             </p>
           </div>
         </div>
-        <Button className="relative" onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+        <Button className="relative hidden sm:inline-flex" onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+          <Save className="h-4 w-4" />
+          {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
+        </Button>
+      </div>
+
+      {/* Mobile: Save Changes pinned to the bottom of the screen instead of the header */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 backdrop-blur pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:hidden">
+        <Button className="w-full" onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
           <Save className="h-4 w-4" />
           {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
         </Button>
@@ -243,11 +251,19 @@ function SystemSettingsView() {
         notificationsCard
       ) : (
         <Tabs defaultValue="general">
-          <TabsList className="mb-4">
-            <TabsTrigger value="general"><Settings className="h-3.5 w-3.5" /> General</TabsTrigger>
-            <TabsTrigger value="notifications"><Bell className="h-3.5 w-3.5" /> Notifications</TabsTrigger>
-            <TabsTrigger value="security"><Shield className="h-3.5 w-3.5" /> Security</TabsTrigger>
-            <TabsTrigger value="maintenance"><Wrench className="h-3.5 w-3.5" /> Maintenance</TabsTrigger>
+          <TabsList className="mb-4 grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 p-1">
+            <TabsTrigger value="general" className="w-full min-w-0 gap-1.5 truncate">
+              <Settings className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">General</span>
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="w-full min-w-0 gap-1.5 truncate">
+              <Bell className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Notifications</span>
+            </TabsTrigger>
+            <TabsTrigger value="security" className="w-full min-w-0 gap-1.5 truncate">
+              <Shield className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Security</span>
+            </TabsTrigger>
+            <TabsTrigger value="maintenance" className="w-full min-w-0 gap-1.5 truncate">
+              <Wrench className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Maintenance</span>
+            </TabsTrigger>
           </TabsList>
 
           {/* General */}

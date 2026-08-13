@@ -103,19 +103,21 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
               <div className="pb-1 space-y-1">
                 <h1 className="text-2xl font-bold text-foreground leading-tight">{user.name}</h1>
                 <p className="text-sm text-muted-foreground">{designation}</p>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  <Badge variant="secondary">{ROLE_LABELS[user.role]}</Badge>
-                  <Badge variant="outline" className={`font-mono gap-1 ${CERT_LEVEL_COLORS[certLevel]}`}>
-                    <Award className="h-3 w-3" /> {certLevel}
-                  </Badge>
-                  {typeof points === 'number' && (
-                    <Badge
-                      variant="outline"
-                      className="font-mono gap-1 bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700"
-                    >
-                      <Trophy className="h-3 w-3" /> {points} pts
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <Badge variant="secondary" className="whitespace-nowrap">{ROLE_LABELS[user.role]}</Badge>
+                  <div className="flex flex-nowrap items-center gap-1.5">
+                    <Badge variant="outline" className={`font-mono gap-1 whitespace-nowrap ${CERT_LEVEL_COLORS[certLevel]}`}>
+                      <Award className="h-3 w-3" /> {certLevel}
                     </Badge>
-                  )}
+                    {typeof points === 'number' && (
+                      <Badge
+                        variant="outline"
+                        className="font-mono gap-1 whitespace-nowrap bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/40 dark:text-amber-400 dark:border-amber-700"
+                      >
+                        <Trophy className="h-3 w-3" /> {points} pts
+                      </Badge>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -143,7 +145,7 @@ export function StaffProfile({ user, teamName, stats, summaryTitle = 'Performanc
         <div className="lg:col-span-2 space-y-5">
           <InfoCard title="About" icon={<Sparkles className="h-3.5 w-3.5" />}>
             {user.about
-              ? <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{user.about}</p>
+              ? <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap text-justify sm:text-left">{user.about}</p>
               : <p className="text-sm text-muted-foreground">No description added yet.</p>}
           </InfoCard>
 

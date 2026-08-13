@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useIsTouchDevice } from '@/hooks/use-touch-device'
 
 import { ROLE_LABELS } from '@/lib/rbac'
 import { cn, formatDateTime, formatDuration } from '@/lib/utils'
@@ -40,6 +41,7 @@ const CERT_COLORS: Record<CertificationLevel, string> = {
 
 export function UserDetail({ id }: { id: string }) {
   const session = useSession()
+  const isTouchDevice = useIsTouchDevice()
   const dp = getDataProvider()
   const router = useRouter()
   const scope = { userId: session.userId, role: session.role }
@@ -406,7 +408,7 @@ export function UserDetail({ id }: { id: string }) {
                             <Cell key={index} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip contentStyle={{ fontSize: 12 }} />
+                        <Tooltip trigger={isTouchDevice ? 'click' : 'hover'} contentStyle={{ fontSize: 12 }} />
                         <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
                       </PieChart>
                     </ResponsiveContainer>
@@ -491,7 +493,7 @@ export function UserDetail({ id }: { id: string }) {
                                 <Cell key={index} fill={entry.color} />
                               ))}
                             </Pie>
-                            <Tooltip contentStyle={{ fontSize: 12 }} />
+                            <Tooltip trigger={isTouchDevice ? 'click' : 'hover'} contentStyle={{ fontSize: 12 }} />
                             <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
                           </PieChart>
                         </ResponsiveContainer>

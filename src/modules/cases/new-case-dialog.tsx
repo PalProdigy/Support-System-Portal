@@ -468,7 +468,7 @@ export function NewCaseDialog({ open, onOpenChange, prefill }: NewCaseDialogProp
           </div>
         </div>
 
-        <DialogFooter className="p-5 pt-0">
+        <DialogFooter className="p-5 pt-0 gap-2">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button
             disabled={!isValid || createMutation.isPending}

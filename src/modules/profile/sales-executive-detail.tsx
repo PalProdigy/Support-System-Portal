@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { getDataProvider } from '@/lib/data'
@@ -9,12 +9,10 @@ import { ErrorState } from '@/components/shared/error-state'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ROLE_LABELS } from '@/lib/rbac'
 import { cn, formatDate, formatDateTime } from '@/lib/utils'
 import { ArrowLeft, Mail, Calendar, Eye, Handshake, CalendarClock } from 'lucide-react'
 import type { Prospect, DealType } from '@/types'
-import { SalesExecutiveProfile } from './sales-executive-profile'
 
 const DEAL_TYPE_LABELS: Record<DealType, string> = {
   installation: 'Installation',
@@ -32,7 +30,6 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
   const dp = getDataProvider()
   const router = useRouter()
   const scope = { userId: id, role: 'sales_executive' as const }
-  const [showProfile, setShowProfile] = useState(false)
 
   const { data: users, isLoading: loadingUser } = useQuery({ queryKey: ['users'], queryFn: () => dp.listUsers() })
   const { data: teams } = useQuery({ queryKey: ['teams'], queryFn: () => dp.listTeams() })
@@ -71,39 +68,67 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
   const teamName = user.team_id ? (teams ?? []).find((t) => t.id === user.team_id)?.name : undefined
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className=" max-w-6xl mx-auto  pb-[calc(1rem+env(safe-area-inset-bottom))] sm:pb-6">
       {/* Back */}
-      <Button variant="ghost" size="sm" onClick={() => router.back()}>
+      <Button variant="ghost" size="sm" className="pl-4" onClick={() => router.back()}>
         <ArrowLeft className="h-4 w-4" /> Back
       </Button>
 
+      <div className="space-y-4 px-4 sm:px-6 pb-6 pt-0">
+
       {/* Profile header — modern gradient hero */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-start gap-5 flex-wrap">
-        <UserAvatar name={user.name} avatarUrl={user.avatar} size="lg" border shadow />
-        <div className="flex-1 min-w-0 space-y-2">
+      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-4 sm:p-6 flex items-start gap-3 sm:gap-5">
+        <UserAvatar
+          name={user.name}
+          avatarUrl={user.avatar}
+          size="lg"
+          border
+          shadow
+          className="h-11 w-11 sm:h-14 sm:w-14 shrink-0"
+        />
+        <div className="flex-1 min-w-0 space-y-3">
+          {/* Identity: name + status pill + role/designation line */}
           <div className="flex items-start justify-between gap-3 flex-wrap">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
-              {user.designation && <p className="text-sm text-muted-foreground">{user.designation}</p>}
+            <div className="min-w-0">
+              <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
+                <h1 className="text-[17px] sm:text-2xl font-bold text-foreground break-words">{user.name}</h1>
+                <Badge variant={user.is_active ? 'default' : 'destructive'} className="shrink-0">
+                  {user.is_active ? 'Active' : 'Inactive'}
+                </Badge>
+              </div>
+              {user.designation && <p className="text-sm text-muted-foreground truncate">{user.designation}</p>}
             </div>
-            <Button variant="outline" size="sm" onClick={() => setShowProfile(true)}>
+            <Button variant="outline" size="sm" onClick={() => router.push(`/sales-executive/${id}/profile`)} className="hidden sm:inline-flex">
               <Eye className="h-3.5 w-3.5" /> View Full Profile
             </Button>
           </div>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
+
+          {/* Contact — stacked on mobile, inline on larger screens */}
+          <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5 min-w-0">
               <Mail className="h-3.5 w-3.5 shrink-0" />
-              {user.email}
+              <span className="truncate">{user.email}</span>
             </span>
             <span className="flex items-center gap-1.5">
               <Calendar className="h-3.5 w-3.5 shrink-0" />
               Joined {formatDateTime(user.created_at)}
             </span>
           </div>
-          <div className="flex flex-wrap gap-2 pt-1">
+
+          {/* Access tags */}
+          <div className="flex flex-wrap gap-2">
             <Badge variant="secondary">{ROLE_LABELS[user.role]}</Badge>
             {teamName && <Badge variant="outline">{teamName}</Badge>}
           </div>
+
+          {/* Mobile-only full-width action */}
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/sales-executive/${id}/profile`)}
+            className="w-full h-11 sm:hidden [-webkit-tap-highlight-color:transparent] active:bg-accent"
+          >
+            <Eye className="h-3.5 w-3.5" /> View Full Profile
+          </Button>
         </div>
       </div>
 
@@ -118,14 +143,14 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
             No deals closed yet — won and lost prospects will appear here.
           </div>
         ) : (
-          <div className="rounded-xl border overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="rounded-xl border overflow-x-auto">
+            <table className="w-full text-sm min-w-[640px]">
               <thead className="bg-muted/50 border-b">
                 <tr>
                   <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Company</th>
-                  <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground hidden md:table-cell">Contact</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-muted-foreground">Type</th>
-                  <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground hidden lg:table-cell">License Expiry</th>
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Contact</th>
+                  <th className="text-left px-4 py-2.5 text-xs font-medium text-muted-foreground">Type</th>
+                  <th className="text-right px-4 py-2.5 text-xs font-medium text-muted-foreground">License Expiry</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -137,7 +162,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
                         <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">✓ Converted to client</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 hidden md:table-cell text-muted-foreground text-xs">
+                    <td className="px-4 py-3 text-muted-foreground text-xs">
                       {p.contact_person}
                     </td>
                     <td className="px-4 py-3">
@@ -149,7 +174,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
                         <span className="text-muted-foreground text-xs">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right text-xs text-muted-foreground hidden lg:table-cell">
+                    <td className="px-4 py-3 text-right text-xs text-muted-foreground">
                       {p.license_expiry ? (
                         <span className="inline-flex items-center gap-1">
                           <CalendarClock className="h-3 w-3" />
@@ -164,18 +189,7 @@ export function SalesExecutiveDetail({ id }: { id: string }) {
           </div>
         )}
       </div>
-
-      {/* Full profile modal — mounted only while open so it always fetches fresh data */}
-      {showProfile && (
-        <Dialog open onOpenChange={setShowProfile}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Sales Executive Profile</DialogTitle>
-            </DialogHeader>
-            <SalesExecutiveProfile user={user} teamName={teamName} />
-          </DialogContent>
-        </Dialog>
-      )}
+    </div>
     </div>
   )
 }

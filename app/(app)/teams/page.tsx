@@ -151,7 +151,7 @@ function THTeamsPage() {
   return (
     <div className="p-6 space-y-5">
       {/* Header — modern gradient hero */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center justify-between gap-3 flex-wrap">
+      <div className=" flex flex-row items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-primary/15 p-2.5 shrink-0">
             <Headset className="h-5 w-5 text-primary" />
@@ -327,7 +327,7 @@ function THTeamsPage() {
                       className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                     />
                   </div>
-                  <div className={`max-h-40 overflow-y-auto divide-y ${thinScroll}`}>
+                  <div className={`max-h-30 sm:max-h-40 overflow-y-auto divide-y ${thinScroll}`}>
                     {(solutions ?? [])
                       .filter((s: Solution) => s.is_active)
                       .filter((s: Solution) => s.name.toLowerCase().includes(serviceQuery.toLowerCase()) || s.category.toLowerCase().includes(serviceQuery.toLowerCase()))
@@ -375,7 +375,7 @@ function THTeamsPage() {
                       className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                     />
                   </div>
-                  <div className={`max-h-48 overflow-y-auto divide-y ${thinScroll}`}>
+                  <div className={`max-h-30 sm:max-h-40 overflow-y-auto divide-y ${thinScroll}`}>
                     {supportEngineers.filter((u: User) => u.name.toLowerCase().includes(engineerQuery.toLowerCase())).map((u: User) => {
                     const selected = form.member_ids.includes(u.id)
                     return (

@@ -23,7 +23,7 @@ import { cn, formatDate } from '@/lib/utils'
 import { getCategoryMeta } from '@/lib/products-shared'
 import {
   FolderKanban, Building2, Calendar, Pencil, Trash2, X,
-  UserPlus, CheckCircle2, ListTodo, Package, Crown, Wrench, FlaskConical,
+  UserPlus, CheckCircle2, ListTodo, Package, Crown, Wrench, FlaskConical, LifeBuoy,
   Users, PlayCircle, XCircle, Clock,
 } from 'lucide-react'
 import type { Project, ProjectStatus, Client, User, Priority, Product, Team } from '@/types'
@@ -57,7 +57,7 @@ export default function ProjectsPage() {
   const scope = { userId: session.userId, role: session.role }
   const canManage = ['technical_head', 'team_lead'].includes(session.role)
 
-  const [tab, setTab] = useState<'installations' | 'poc'>('installations')
+  const [tab, setTab] = useState<'installations' | 'poc' | 'services'>('installations')
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [showForm, setShowForm] = useState(false)
@@ -121,27 +121,39 @@ export default function ProjectsPage() {
   const pocSuccess = pocEntries.filter(({ line }) => line.poc_outcome === 'success').length
   const pocFailed = pocEntries.filter(({ line }) => line.poc_outcome === 'failed').length
 
+  const serviceEntries = (engagements ?? []).flatMap((e) =>
+    e.products.filter((p) => p.types.includes('support')).map((line) => ({ engagementId: e.id, clientId: e.client_id, line }))
+  )
+  const serviceTotal = serviceEntries.length
+  const serviceExpired = serviceEntries.filter(({ line }) => !!line.expires_at && new Date(line.expires_at) < new Date()).length
+  const serviceActive = serviceTotal - serviceExpired
+
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="px-6 pb-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div className="  flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
           <div className="rounded-xl bg-primary/15 p-3 shrink-0">
             <FolderKanban className="h-7 w-7 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Projects</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">
-              {tab === 'installations' ? `${totalCount} installation${totalCount !== 1 ? 's' : ''} tracked` : `${pocTotal} POC${pocTotal !== 1 ? 's' : ''} tracked`}
-            </p>
+
           </div>
         </div>
       </div>
 
-      <Tabs value={tab} onValueChange={(v) => setTab(v as 'installations' | 'poc')}>
-        <TabsList>
-          <TabsTrigger value="installations" className="gap-1.5"><Wrench className="h-3.5 w-3.5" /> Installations</TabsTrigger>
-          <TabsTrigger value="poc" className="gap-1.5"><FlaskConical className="h-3.5 w-3.5" /> POC</TabsTrigger>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as 'installations' | 'poc' | 'services')}>
+        <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 overflow-hidden">
+          <TabsTrigger value="installations" className="w-full min-w-0 gap-1.5 truncate">
+            <Wrench className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Installations</span>
+          </TabsTrigger>
+          <TabsTrigger value="poc" className="w-full min-w-0 gap-1.5 truncate">
+            <FlaskConical className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">POC</span>
+          </TabsTrigger>
+          <TabsTrigger value="services" className="w-full min-w-0 gap-1.5 truncate">
+            <LifeBuoy className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Service</span>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="installations" className="space-y-6 mt-4">
@@ -392,6 +404,91 @@ export default function ProjectsPage() {
                             ))}
                           </div>
                         )}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="services" className="space-y-6 mt-4">
+          {/* Overview */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <StatCard title="Total Services" value={serviceTotal} icon={LifeBuoy} iconColor="text-violet-500" loading={pocLoading} />
+            <StatCard title="Active" value={serviceActive} icon={CheckCircle2} iconColor="text-emerald-500" loading={pocLoading} />
+            <StatCard title="Expired" value={serviceExpired} icon={XCircle} iconColor="text-red-500" loading={pocLoading} />
+          </div>
+
+          {/* List */}
+          {pocLoading ? (
+            <div className="space-y-3">{[...Array(3)].map((_, i) => <Skeleton key={i} className="h-32 rounded-xl" />)}</div>
+          ) : serviceEntries.length === 0 ? (
+            <EmptyState icon={LifeBuoy} title="No services found" description="No support/service lines have been raised yet." />
+          ) : (
+            <div className="space-y-3">
+              {serviceEntries.map(({ clientId, line }) => {
+                const client = clientsMap[clientId]
+                const product = productsMap[line.product_id]
+                const meta = product ? getCategoryMeta(product.category) : null
+                const isExpired = !!line.expires_at && new Date(line.expires_at) < new Date()
+                return (
+                  <div
+                    key={line.id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => router.push('/engagements')}
+                    onKeyDown={(e) => { if (e.key === 'Enter') router.push('/engagements') }}
+                    className="group flex items-stretch gap-0 rounded-xl border bg-card overflow-hidden transition-all hover:border-primary/40 hover:shadow-lg cursor-pointer"
+                  >
+                    <div className={cn('w-1.5 shrink-0', isExpired ? 'bg-red-500' : 'bg-emerald-500')} />
+
+                    <div className="flex-1 min-w-0 flex items-start gap-3.5 p-4">
+                      {meta ? (
+                        <div
+                          className="flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold tracking-wide shrink-0"
+                          style={{ background: meta.tint, color: meta.color }}
+                        >
+                          {meta.mono}
+                        </div>
+                      ) : (
+                        <div className="rounded-xl bg-violet-500/10 p-2.5 shrink-0">
+                          <LifeBuoy className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+                        </div>
+                      )}
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-base font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                            {product ? `${product.category} · ${product.name}` : line.oem}
+                          </p>
+                          {line.expires_at ? (
+                            <span className={cn(
+                              'flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shrink-0',
+                              isExpired ? 'bg-red-500/10 text-red-600 dark:text-red-400' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                            )}>
+                              <Clock className="h-3 w-3" /> {isExpired ? 'Expired' : 'Expires'} {formatDate(line.expires_at)}
+                            </span>
+                          ) : (
+                            <span className="flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground shrink-0">
+                              <Clock className="h-3 w-3" /> No expiry set
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t text-xs">
+                          {client && (
+                            <span className="flex items-center gap-1 rounded-full bg-primary/10 text-primary px-2 py-0.5 font-medium">
+                              <Building2 className="h-3 w-3" /> {client.company_name}
+                            </span>
+                          )}
+                          {line.placed_at && (
+                            <span className="flex items-center gap-1 rounded-full bg-amber-500/10 text-amber-950 dark:text-amber-400 px-2 py-0.5 font-medium">
+                              <Calendar className="h-3 w-3" /> {formatDate(line.placed_at)}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

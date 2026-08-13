@@ -1,0 +1,112 @@
+- generic [ref=f15e1]:
+  - generic [ref=f15e34]:
+    - complementary [ref=f15e36]:
+      - link [ref=f15e38] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=f15e39]:
+          - generic [ref=f15e40]: NH
+          - generic [ref=f15e41]: DISTRIBUTIONS
+      - navigation [ref=f15e49]:
+        - link "Dashboard" [ref=f15e50] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Cases" [ref=f15e57] [cursor=pointer]:
+          - /url: /cases
+        - link "Teams" [ref=f15e61] [cursor=pointer]:
+          - /url: /teams
+        - link "Engineers" [ref=f15e66] [cursor=pointer]:
+          - /url: /support-engineer
+        - link "Sales Executives" [ref=f15e70] [cursor=pointer]:
+          - /url: /sales-executive
+        - link "Clients" [ref=f15e75] [cursor=pointer]:
+          - /url: /clients
+        - link "Products" [ref=f15e81] [cursor=pointer]:
+          - /url: /products
+        - link "Articles" [ref=f15e87] [cursor=pointer]:
+          - /url: /articles
+        - link "Projects" [ref=f15e92] [cursor=pointer]:
+          - /url: /projects
+        - link "Orders" [ref=f15e96] [cursor=pointer]:
+          - /url: /engagements
+        - link "Reporting" [ref=f15e103] [cursor=pointer]:
+          - /url: /reporting
+        - link "Feedback" [ref=f15e107] [cursor=pointer]:
+          - /url: /feedback
+        - link "Audit Log" [ref=f15e111] [cursor=pointer]:
+          - /url: /audit-log
+        - link "Permission Management" [ref=f15e115] [cursor=pointer]:
+          - /url: /permissions
+        - link "Settings" [ref=f15e120] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=f15e126]:
+        - generic [ref=f15e127]:
+          - generic "Arif Rahman" [ref=f15e181]:
+            - generic "Arif Rahman avatar" [ref=f15e182]: AR
+          - generic [ref=f15e131]:
+            - paragraph [ref=f15e132]: Arif Rahman
+            - paragraph [ref=f15e133]: Technical Head
+        - button "Collapse sidebar" [ref=f15e134]
+    - generic [ref=f15e137]:
+      - banner [ref=f15e139]:
+        - generic [ref=f15e140]:
+          - button "Toggle theme" [ref=f15e141] [cursor=pointer]
+          - button "Notifications" [ref=f15e142] [cursor=pointer]:
+            - generic [ref=f15e183]: 9+
+          - button "Arif Rahman avatar Arif Rahman Technical Head" [ref=f15e184] [cursor=pointer]:
+            - generic "Arif Rahman" [ref=f15e185]:
+              - generic "Arif Rahman avatar" [ref=f15e186]: AR
+            - generic [ref=f15e147]:
+              - paragraph [ref=f15e148]: Arif Rahman
+              - paragraph [ref=f15e149]: Technical Head
+      - main [ref=f15e150]:
+        - generic [ref=f15e187]:
+          - button "Back" [ref=f15e188] [cursor=pointer]
+          - generic [ref=f15e189]:
+            - generic [ref=f15e190]:
+              - generic "Tanvir Ahmed" [ref=f15e191]:
+                - generic "Tanvir Ahmed avatar" [ref=f15e193]: TA
+              - generic [ref=f15e194]:
+                - generic [ref=f15e195]:
+                  - generic [ref=f15e196]:
+                    - generic [ref=f15e197]:
+                      - heading "Tanvir Ahmed" [level=1] [ref=f15e198]
+                      - generic [ref=f15e199]: Active
+                    - paragraph [ref=f15e200]: Account Manager
+                  - button "View Full Profile" [active] [ref=f15e201] [cursor=pointer]
+                - generic [ref=f15e202]:
+                  - generic [ref=f15e203]: tanvir@nhqdist.com
+                  - generic [ref=f15e208]: Joined 03 Jan 2024, 06:00
+                - generic [ref=f15e211]:
+                  - generic [ref=f15e212]: Sales Executive
+                  - generic [ref=f15e213]: Alpha Support Team
+            - generic [ref=f15e214]:
+              - heading "Deals (2)" [level=2] [ref=f15e221]
+              - table [ref=f15e223]:
+                - rowgroup [ref=f15e224]:
+                  - row [ref=f15e225]:
+                    - columnheader "Company" [ref=f15e226]
+                    - columnheader "Contact" [ref=f15e227]
+                    - columnheader "Type" [ref=f15e228]
+                    - columnheader "License Expiry" [ref=f15e229]
+                - rowgroup [ref=f15e230]:
+                  - row [ref=f15e231]:
+                    - cell [ref=f15e232]:
+                      - paragraph [ref=f15e233]: Meridian Pharma
+                    - cell "Dr. Sultana Begum" [ref=f15e234]
+                    - cell "Installation" [ref=f15e235]
+                    - cell "15 Dec 2026" [ref=f15e237]
+                  - row [ref=f15e243]:
+                    - cell [ref=f15e244]:
+                      - paragraph [ref=f15e245]: Coastal Traders
+                    - cell "Minhaj Uddin" [ref=f15e246]
+                    - cell "Renew" [ref=f15e247]
+                    - cell "—" [ref=f15e249]
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=f15e250] [cursor=pointer]:
+    - generic [ref=f15e259]:
+      - text: Compiling
+      - generic [ref=f15e260]:
+        - generic [ref=f15e261]: .
+        - generic [ref=f15e262]: .
+        - generic [ref=f15e263]: .
+  - alert [ref=f15e180]

@@ -136,9 +136,7 @@ function AuditContent() {
         </div>
         <div className="min-w-0">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Audit Log</h1>
-          <p className="text-sm text-muted-foreground">
-            System-wide trail of every create, update and status change across NHQ Support.
-          </p>
+
         </div>
       </div>
 
@@ -152,19 +150,19 @@ function AuditContent() {
           value={sensitiveCount}
           icon={ShieldCheck}
           iconColor={sensitiveCount > 0 ? 'text-red-500' : 'text-emerald-500'}
-          subtitle="Deletes & escalations"
+          subtitle=""
           loading={isLoading}
         />
       </div>
 
       {/* ── Toolbar: search + filters ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
+      <div className="flex items-center gap-2.5">
         <SearchInput
           value={query}
           onChange={setQuery}
           debounceMs={200}
           placeholder="Search by actor, entity type, entity ID or action…"
-          containerClassName="flex-1"
+          containerClassName="min-w-0 flex-1"
           aria-label="Search audit log"
           resultCount={filtered.length}
           resultLabel="event"
@@ -247,17 +245,18 @@ function AuditContent() {
         />
       ) : (
         <>
-          {/* Desktop / tablet table */}
-          <div className="hidden md:block rounded-xl border bg-card overflow-hidden">
+          {/* Table — scrolls horizontally on narrow screens instead of switching to cards,
+              so every column stays visible and aligned at any viewport width. */}
+          <div className="rounded-xl border bg-card overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full min-w-[760px] text-sm">
                 <thead>
                   <tr className="border-b bg-muted/40">
                     <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground whitespace-nowrap">At</th>
                     <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground whitespace-nowrap">Actor</th>
                     <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground whitespace-nowrap">Action</th>
                     <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground whitespace-nowrap">Entity</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground hidden xl:table-cell">Changed fields</th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground whitespace-nowrap">Changed fields</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -286,7 +285,7 @@ function AuditContent() {
                           )}
                         </td>
                         <td className="px-4 py-3 align-top">
-                          <span className={cn('inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium', meta.className)}>
+                          <span className={cn('inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap', meta.className)}>
                             <Icon className="h-3 w-3" /> {meta.label}
                           </span>
                         </td>
@@ -296,7 +295,7 @@ function AuditContent() {
                             <span className="text-xs text-muted-foreground font-mono truncate">{log.entity_id.slice(0, 8)}</span>
                           </div>
                         </td>
-                        <td className="px-4 py-3 hidden xl:table-cell align-top">
+                        <td className="px-4 py-3 align-top">
                           {fields.length > 0 ? (
                             <div className="flex flex-wrap gap-1 max-w-xs">
                               {fields.slice(0, 3).map((f) => (
@@ -314,52 +313,6 @@ function AuditContent() {
                 </tbody>
               </table>
             </div>
-          </div>
-
-          {/* Mobile cards */}
-          <div className="md:hidden space-y-2.5">
-            {filtered.map((log: AuditLog) => {
-              const actor = usersMap[log.actor_id]
-              const meta = ACTION_META[log.action] ?? { label: log.action, icon: Activity, className: 'bg-muted text-muted-foreground' }
-              const Icon = meta.icon
-              const fields = changedFields(log)
-              return (
-                <div key={log.id} className="rounded-xl border bg-card p-3.5 space-y-2.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className={cn('inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium', meta.className)}>
-                      <Icon className="h-3 w-3" /> {meta.label}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground shrink-0">{timeAgo(log.created_at)}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {actor ? (
-                      <>
-                        <UserAvatar name={actor.name} avatarUrl={actor.avatar} userId={actor.id} size="sm" />
-                        <div className="min-w-0">
-                          <p className="text-xs font-medium text-foreground truncate">{actor.name}</p>
-                          <p className="text-[11px] text-muted-foreground capitalize">{actor.role.replace('_', ' ')}</p>
-                        </div>
-                      </>
-                    ) : (
-                      <span className="text-xs text-muted-foreground font-mono">{log.actor_id}</span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <Badge variant="secondary" className="text-[10px]">{entityLabel(log.entity_type)}</Badge>
-                    <span className="text-xs text-muted-foreground font-mono">{log.entity_id.slice(0, 8)}</span>
-                  </div>
-                  {fields.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {fields.slice(0, 4).map((f) => (
-                        <span key={f} className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">{f}</span>
-                      ))}
-                      {fields.length > 4 && <span className="text-[10px] text-muted-foreground">+{fields.length - 4} more</span>}
-                    </div>
-                  )}
-                  <p className="text-[11px] text-muted-foreground pt-2 border-t">{formatDateTime(log.created_at)}</p>
-                </div>
-              )
-            })}
           </div>
 
           <p className="text-xs text-muted-foreground text-center pt-1">

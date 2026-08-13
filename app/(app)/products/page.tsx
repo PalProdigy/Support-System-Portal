@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { Button } from '@/components/ui/button'
@@ -17,14 +17,13 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { SearchableSelect } from '@/components/shared/searchable-select'
 import { IconField } from '@/components/shared/icon-field'
 import { toast } from '@/hooks/use-toast'
-import { Package, PlusCircle, ArrowRight, X, Factory, User, Mail, Phone, Briefcase, IdCard, CalendarDays } from 'lucide-react'
+import { Package, PlusCircle, ChevronRight, X, Factory, User, Mail, Phone, Briefcase, IdCard, CalendarDays } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
 import type { Product } from '@/types'
 import { getCategoryMeta, loadOemOptions, saveOemOptions } from '@/lib/products-shared'
 
 export default function ProductCategoriesPage() {
   const session = useSession()
-  const router = useRouter()
   const dp = getDataProvider()
   const qc = useQueryClient()
   const scope = { userId: session.userId, role: session.role }
@@ -102,37 +101,50 @@ export default function ProductCategoriesPage() {
     onError: () => toast({ title: 'Failed', variant: 'destructive' }),
   })
 
-  function openCategory(name: string) {
-    router.push(`/products/${encodeURIComponent(name)}`)
-  }
-
   return (
-    <div className="space-y-6 px-6 py-10">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-primary/10 p-2.5">
-            <Package className="h-5 w-5 text-primary" />
+    <div className="space-y-4 sm:space-y-6 px-6 py-10">
+      <div className="w-full rounded-xl border border-border bg-card px-4 pb-4 pt-[18px]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-3">
+              <div className="shrink-0 rounded-xl bg-primary/10 p-2.5">
+                <Package className="h-5 w-5 text-primary" />
+              </div>
+              <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight text-foreground">Products by OEM</h1>
+              {categories.length > 0 && (
+                <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                  {categories.length} {categories.length === 1 ? 'OEM' : 'OEMs'}
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">Browse NHQ&apos;s product portfolio by OEM</p>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products by OEM</h1>
-            <p className="text-sm text-muted-foreground">Browse NHQ&apos;s product portfolio by OEM · {categories.length} {categories.length === 1 ? 'OEM' : 'OEMs'}</p>
-          </div>
+
+          {canManage && (
+            <div className="actions mt-4 flex gap-2 border-t border-border pt-4 max-[339px]:flex-col sm:mt-0 sm:w-auto sm:shrink-0 sm:border-t-0 sm:pt-0">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowManageOem(true)}
+                className="min-h-11 flex-1 active:scale-[0.98] active:bg-accent sm:flex-none"
+              >
+                <Factory className="h-4 w-4" /> Add OEM
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setShowCreate(true)}
+                className="min-h-11 flex-1 active:scale-[0.98] active:bg-primary/80 sm:flex-none"
+              >
+                <PlusCircle className="h-4 w-4" /> Add Product
+              </Button>
+            </div>
+          )}
         </div>
-        {canManage && (
-          <div className="flex items-center gap-2">
-            <Button type="button" variant="outline" onClick={() => setShowManageOem(true)}>
-              <Factory className="h-4 w-4" /> Add OEM
-            </Button>
-            <Button type="button" onClick={() => setShowCreate(true)}>
-              <PlusCircle className="h-4 w-4" /> Add Product
-            </Button>
-          </div>
-        )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex items-center gap-2">
         <SearchInput
-          containerClassName="w-full max-w-md"
+          containerClassName="min-w-0 flex-1 sm:max-w-md"
           placeholder="Search OEM or product…"
           value={query}
           onChange={setQuery}
@@ -142,7 +154,7 @@ export default function ProductCategoriesPage() {
         />
 
         <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="h-9 w-52"><SelectValue placeholder="OEM" /></SelectTrigger>
+          <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52"><SelectValue placeholder="OEM" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All OEMs</SelectItem>
             {categoryOptions.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
@@ -150,14 +162,14 @@ export default function ProductCategoriesPage() {
         </Select>
 
         {hasDropdownFilter && (
-          <Button variant="ghost" size="sm" className="h-9 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
+          <Button variant="ghost" size="sm" className="h-9 shrink-0 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
             <X className="h-3 w-3" /> Clear
           </Button>
         )}
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{[...Array(6)].map((_, i) => <div key={i} className="h-36 animate-pulse rounded-2xl bg-muted" />)}</div>
+        <div className="flex flex-col gap-2.5">{[...Array(6)].map((_, i) => <div key={i} className="h-[72px] animate-pulse rounded-2xl bg-muted" />)}</div>
       ) : displayedCategories.length === 0 ? (
         searching ? (
           <EmptyState icon={Package} title={`No results found for "${query}"`} description="Try a different search term." />
@@ -167,39 +179,35 @@ export default function ProductCategoriesPage() {
           <EmptyState icon={Package} title="No OEMs found" description="No products are available yet." />
         )
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="flex flex-col gap-2.5">
           {displayedCategories.map(({ name, items, meta }) => {
             const activeCount = items.filter((p) => p.is_active).length
-            const inactiveCount = items.length - activeCount
             return (
-              <button
+              <Link
                 key={name}
-                type="button"
-                onClick={() => openCategory(name)}
-                style={{ '--accent': meta.color, '--accent-tint': meta.tint, '--accent-shade': meta.shade } as React.CSSProperties}
-                className="group flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)] hover:shadow-lg"
+                href={`/products/${encodeURIComponent(name)}`}
+                style={{ '--accent': meta.color } as React.CSSProperties}
+                className="group flex min-h-[72px] items-center gap-3 rounded-2xl border border-border bg-card p-3.5 shadow-sm transition-colors active:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <div className="flex items-center justify-between">
-                  <div
-                    className="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold tracking-wide"
-                    style={{ background: meta.tint, color: meta.color }}
-                  >
-                    {meta.mono}
-                  </div>
-                  <span className="rounded-full px-2.5 py-1 text-xs font-semibold" style={{ background: meta.tint, color: meta.color }}>
+                <div
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-bold tracking-wide"
+                  style={{ background: meta.tint, color: meta.color }}
+                >
+                  {meta.mono}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[15px] font-semibold tracking-tight text-foreground">{name}</p>
+                  <p className="mt-0.5 truncate text-[13px] text-muted-foreground">
                     {items.length} {items.length === 1 ? 'product' : 'products'}
-                  </span>
+                    {' · '}
+                    <span className="inline-flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                      {activeCount} active
+                    </span>
+                  </p>
                 </div>
-                <div>
-                  <div className="text-[15px] font-semibold tracking-tight text-foreground">{name}</div>
-                  <div className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-                    {activeCount} active{inactiveCount > 0 ? ` · ${inactiveCount} inactive` : ''}
-                  </div>
-                </div>
-                <div className="mt-auto flex items-center gap-1.5 text-[13px] font-semibold text-[var(--accent)]">
-                  View products <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                </div>
-              </button>
+                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-active:translate-x-0.5" />
+              </Link>
             )
           })}
         </div>

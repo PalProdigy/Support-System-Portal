@@ -49,16 +49,17 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
   }
 
   return (
-    <div className="space-y-6 px-6 py-10">
+    <div className="">
       <button
         type="button"
         onClick={() => router.push('/products')}
         style={accentVars(meta)}
-        className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+        className="inline-flex items-center gap-2 rounded-lg  bg-card px-3.5 py-2 ml-2 mb-1 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
       >
         <ArrowLeft className="h-4 w-4" /> All OEMs
       </button>
 
+      <div className="space-y-6 px-6 ">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div
@@ -73,7 +74,7 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
           </div>
         </div>
         {canManage && (
-          <Button type="button" onClick={() => setShowCreate(true)}>
+          <Button type="button" onClick={() => setShowCreate(true)}  style={{ background: meta.color }}>
             <PlusCircle className="h-4 w-4 text-white" /> <span className="text-white">Add Product</span>
           </Button>
         )}
@@ -257,6 +258,7 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
           onOpenChange={(o) => !o && setEditing(null)}
         />
       )}
+    </div>
     </div>
   )
 }

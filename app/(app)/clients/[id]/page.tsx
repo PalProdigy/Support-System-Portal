@@ -154,11 +154,12 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
     : null
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <Button variant="ghost" size="sm" className="-ml-2" onClick={() => router.back()}>
+    <div className=" max-w-5xl mx-auto ">
+      <Button variant="ghost" size="sm" className="pl-6" onClick={() => router.back()}>
         <ArrowLeft className="h-4 w-4" /> Back
       </Button>
 
+      <div className="px-6 pb-6 space-y-4 sm:space-y-6">
       {/* Hero header */}
       <div className="relative overflow-hidden rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-start justify-between gap-4 flex-wrap">
         <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/20 blur-3xl" />
@@ -228,9 +229,9 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
 
           {view === 'cases' && (
             <div className="space-y-4">
-              <div className="flex flex-wrap gap-2">
+              <div className="flex items-center gap-2">
                 <SearchInput
-                  containerClassName="flex-1 min-w-48"
+                  containerClassName="flex-1 min-w-0"
                   className="h-9"
                   placeholder="Search cases…"
                   value={caseSearch}
@@ -239,7 +240,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                   resultLabel="case"
                 />
                 <Select value={tab} onValueChange={(v) => router.replace(`${pathname}?view=cases&tab=${v}`, { scroll: false })}>
-                  <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="w-28 sm:w-44 shrink-0"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="active">Active ({openCases.length})</SelectItem>
                     <SelectItem value="resolved">Resolved ({resolvedCases.length})</SelectItem>
@@ -406,6 +407,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   )

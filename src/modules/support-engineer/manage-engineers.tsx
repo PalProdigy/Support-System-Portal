@@ -184,10 +184,10 @@ export function ManageEngineers() {
   const teamLeads = useMemo(() => visibleUsers.filter((u) => u.role === 'team_lead'), [visibleUsers])
   const supportEngineers = useMemo(() => visibleUsers.filter((u) => u.role === 'support_engineer'), [visibleUsers])
 
-  const TABS: { key: Tab; label: string; icon: React.ComponentType<{ className?: string }>; count: number }[] = [
-    { key: 'all', label: 'All Engineers', icon: LayoutGrid, count: allEngineers.length },
-    ...(isLead ? [] : [{ key: 'leads' as Tab, label: 'Team Leads', icon: Crown, count: teamLeads.length }]),
-    { key: 'engineers', label: 'Support Engineers', icon: Wrench, count: supportEngineers.length },
+  const TABS: { key: Tab; label: string; shortLabel: string; icon: React.ComponentType<{ className?: string }>; count: number }[] = [
+    { key: 'all', label: 'All Engineers', shortLabel: 'All', icon: LayoutGrid, count: allEngineers.length },
+    ...(isLead ? [] : [{ key: 'leads' as Tab, label: 'Team Leads', shortLabel: 'Leads', icon: Crown, count: teamLeads.length }]),
+    { key: 'engineers', label: 'Support Engineers', shortLabel: 'Engineers', icon: Wrench, count: supportEngineers.length },
   ]
 
   const activeTab = isLead && tab === 'leads' ? 'all' : tab
@@ -202,37 +202,53 @@ export function ManageEngineers() {
         </div>
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-foreground">Engineers</h1>
-          <p className="text-sm text-muted-foreground">
-            {isLead && (myTeam ? `${myTeam.name} · ` : 'Your team · ')}
-            Team leads and support engineers across the organization
-          </p>
+          {/*<p className="text-sm text-muted-foreground">*/}
+          {/*  {isLead && (myTeam ? `${myTeam.name} · ` : 'Your team · ')}*/}
+          {/*  Team leads and support engineers across the organization*/}
+          {/*</p>*/}
         </div>
       </div>
 
       {/* Tabs + search */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1">
-          {TABS.map(({ key, label, icon: Icon, count }) => (
+      <div className="space-y-3 md:space-y-0 md:flex md:items-center md:justify-between md:gap-3">
+        <div
+          className={cn(
+            'grid gap-1 px-1.5 bg-background border border-input rounded-lg shadow-sm hover:bg-[#020817]',
+            TABS.length === 3 ? 'grid-cols-3' : 'grid-cols-2',
+            'md:flex md:w-fit md:items-center md:gap-1'
+          )}
+        >
+          {TABS.map(({ key, label, shortLabel, icon: Icon, count }) => (
             <button
               key={key}
               type="button"
               onClick={() => setTab(key)}
               className={cn(
-                'flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
-                activeTab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                'flex items-center justify-center gap-1.5 h-10 min-w-0 px-1 rounded-xl text-[13px] font-medium transition-colors',
+                'md:px-4 md:text-sm',
+                activeTab === key
+                  ? 'bg-background border-input shadow-sm text-foreground'
+                  : ' border-transparent text-muted-foreground hover:text-foreground '
               )}
             >
-              <Icon className="h-3.5 w-3.5" />
-              {label}
-              <span className={cn('text-xs tabular-nums', activeTab === key ? 'text-muted-foreground' : 'text-muted-foreground/70')}>
-                ({count})
+              <Icon className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate md:hidden">{shortLabel}</span>
+              <span className="truncate hidden md:inline">{label}</span>
+              <span
+                className={cn(
+                  'text-[11px] px-1.5 rounded-full shrink-0 tabular-nums',
+                  activeTab === key ? 'bg-muted text-foreground' : 'bg-muted/60 text-muted-foreground'
+                )}
+              >
+                {count}
               </span>
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:gap-2">
           <SearchInput
-            containerClassName="w-full max-w-xs"
+            containerClassName="w-full md:w-64"
+            className="h-10"
             placeholder="Search engineers..."
             value={query}
             onChange={setQuery}
@@ -240,8 +256,8 @@ export function ManageEngineers() {
             resultCount={activeRows.length}
             resultLabel="result"
           />
-          <Button onClick={openCreate} variant="outline">
-            <PlusCircle className="h-4 w-4" /> Add Engineer
+          <Button onClick={openCreate} variant="outline" className="h-10 min-w-0 w-full md:w-auto">
+            <PlusCircle className="h-4 w-4 shrink-0" /> <span className="truncate">Add Engineer</span>
           </Button>
         </div>
       </div>
@@ -253,23 +269,24 @@ export function ManageEngineers() {
         <EmptyState icon={Users} title={query ? `No results found for "${query}"` : 'No one here yet'} />
       ) : (
         <div className="rounded-xl border overflow-hidden">
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted/50 border-b">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">User</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground whitespace-nowrap">User</th>
                 {activeTab === 'all' && (
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden sm:table-cell">Role</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden sm:table-cell whitespace-nowrap">Role</th>
                 )}
                 {activeTab === 'leads' ? (
                   <>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Leads</th>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell">Team Size</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell whitespace-nowrap">Leads</th>
+                    <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden lg:table-cell whitespace-nowrap">Team Size</th>
                   </>
                 ) : (
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell">Team</th>
+                  <th className="text-left px-4 py-3 font-medium text-muted-foreground hidden md:table-cell whitespace-nowrap">Team</th>
                 )}
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Years of Experience</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Certification</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground whitespace-nowrap">Years of Experience</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground whitespace-nowrap">Certification</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -286,7 +303,7 @@ export function ManageEngineers() {
                       router.push(detailHref)
                     }}
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <EngineerAvatar user={u} />
                         <div>
@@ -296,33 +313,33 @@ export function ManageEngineers() {
                       </div>
                     </td>
                     {activeTab === 'all' && (
-                      <td className="px-4 py-3 hidden sm:table-cell">
+                      <td className="px-4 py-3 hidden sm:table-cell whitespace-nowrap">
                         <RoleBadge role={u.role} />
                       </td>
                     )}
                     {activeTab === 'leads' ? (
                       <>
-                        <td className="px-4 py-3 hidden md:table-cell">
+                        <td className="px-4 py-3 hidden md:table-cell whitespace-nowrap">
                           <LeadsChip team={ledTeam} />
                         </td>
-                        <td className="px-4 py-3 hidden lg:table-cell text-muted-foreground text-xs">
+                        <td className="px-4 py-3 hidden lg:table-cell whitespace-nowrap text-muted-foreground text-xs">
                           {ledTeam ? `${teamSizeMap[ledTeam.id] ?? 0} engineer${(teamSizeMap[ledTeam.id] ?? 0) === 1 ? '' : 's'}` : '—'}
                         </td>
                       </>
                     ) : (
-                      <td className="px-4 py-3 hidden md:table-cell">
+                      <td className="px-4 py-3 hidden md:table-cell whitespace-nowrap">
                         {u.role === 'team_lead'
                           ? <LeadsChip team={ledTeam} />
                           : <span className="text-muted-foreground text-xs">{u.team_id ? teamsMap[u.team_id]?.name ?? '—' : '—'}</span>}
                       </td>
                     )}
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <YearsCell years={u.years_of_experience} />
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <CertBadge level={u.certification_level} />
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
                       <Button variant="outline" size="sm" onClick={() => router.push(detailHref)}>
                         <Eye className="h-3.5 w-3.5" /> View
                       </Button>
@@ -332,6 +349,7 @@ export function ManageEngineers() {
               })}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 

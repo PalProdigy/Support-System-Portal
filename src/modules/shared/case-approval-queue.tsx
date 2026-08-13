@@ -126,49 +126,74 @@ export function CaseApprovalQueue({ cases, users, teamId }: CaseApprovalQueuePro
         key={c.id}
         className="rounded-lg border bg-card p-3"
       >
-        <div className="flex items-center gap-3">
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-[11px] text-muted-foreground">{c.reference_no}</span>
-              <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-full', PRIORITY_COLORS[c.priority])}>
-                {PRIORITY_LABELS[c.priority]}
-              </span>
-              {isOverdue && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-red-600 dark:text-red-400">
-                  <AlarmClockOff className="h-3 w-3" /> Time exceeded
+        <div className="flex flex-col gap-2">
+          {/* Meta row — wraps instead of overflowing on narrow screens */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="font-mono text-[11px] text-muted-foreground">{c.reference_no}</span>
+
+            <span className={cn(
+                'text-[10px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap',
+                PRIORITY_COLORS[c.priority],
+            )}>
+              {PRIORITY_LABELS[c.priority]}
+            </span>
+
+            {isOverdue && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-red-600 dark:text-red-400 whitespace-nowrap">
+                    <AlarmClockOff className="h-3 w-3 shrink-0" /> Time exceeded
                 </span>
               )}
-            </div>
-            <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
-            <p className={cn(
-              'text-[11px] mt-0.5 inline-flex items-center gap-1',
-              isOverdue ? 'text-red-600 dark:text-red-400 font-semibold'
-                : urgent ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-muted-foreground',
-            )}>
-              <Clock className="h-3 w-3" />
-              {isOverdue
-                ? remaining != null
-                  ? `30-min window ended ${formatDuration(-remaining)} ago — awaiting Technical Head assignment`
-                  : 'Awaiting Technical Head assignment'
-                : remaining == null
-                  ? 'No deadline'
-                  : remaining <= 0 ? 'Deadline passed' : `${formatDuration(remaining)} left`}
-            </p>
           </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            <Button variant="ghost" size="icon" className="h-7 w-7" aria-label={`Open case ${c.reference_no}`} onClick={() => router.push(`/cases/${c.id}`)}>
-              <ExternalLink className="h-3.5 w-3.5" />
-            </Button>
-            <Button
-              size="sm"
-              className={cn(
-                'text-white',
-                isOverdue ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700',
-              )}
-              onClick={() => setAssignTarget(c)}
-            >
-              <UserPlus className="h-3.5 w-3.5" /> Assign
-            </Button>
+
+          {/* Body — stacked on mobile, side-by-side from sm up */}
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
+
+              <p className={cn(
+                  'text-[11px] mt-0.5 flex items-start gap-1',
+                  isOverdue || urgent
+                      ? 'text-red-600 dark:text-red-400 font-semibold'
+                      : 'text-muted-foreground',
+              )}>
+                <Clock className="h-3 w-3 shrink-0 mt-[2px]" />
+                <span className="min-w-0">
+                  {isOverdue
+                      ? remaining != null
+                          ? `30-min window ended ${formatDuration(-remaining)} ago — awaiting Technical Head assignment`
+                          : 'Waiting for Technical Head Assignment'
+                      : remaining == null
+                          ? 'No deadline'
+                          : remaining <= 0
+                              ? 'Deadline passed'
+                              : `${formatDuration(remaining)} left`}
+                  </span>
+              </p>
+            </div>
+
+            {/* Actions — full-width row on mobile, compact on desktop */}
+            <div className="flex items-center gap-1.5 shrink-0 w-full sm:w-auto">
+              <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 shrink-0"
+                  aria-label={`Open case ${c.reference_no}`}
+                  onClick={() => router.push(`/cases/${c.id}`)}
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+              </Button>
+
+              <Button
+                  size="sm"
+                  className={cn(
+                      'text-white flex-1 sm:flex-none gap-1.5',
+                      isOverdue ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700',
+                  )}
+                  onClick={() => setAssignTarget(c)}
+              >
+                <UserPlus className="h-3.5 w-3.5" /> Assign
+              </Button>
+            </div>
           </div>
         </div>
 

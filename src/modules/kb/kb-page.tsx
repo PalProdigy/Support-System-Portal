@@ -85,30 +85,30 @@ function KnowledgeBaseIndex() {
       <div className="">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Knowledge Base</h1>
+            <h1 className="text-2xl sm:text-2xl font-bold tracking-tight">Knowledge Base</h1>
 
           </div>
 
-          <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div className="max-w-2xl">
-            <SearchInput
-                value={query}
-                onChange={setQuery}
-                debounceMs={350}
-                minChars={2}
-                loading={isFetching}
-                placeholder="Search by title, content, tags, category or author…"
-            className="h-9 text-base bg-background"
-                aria-label="Search articles"
-                resultCount={visible.length}
-                resultLabel="article"
-            />
-          </div>
-          {writer && (
-              <Button onClick={() => router.push('/knowledge-base/new')}>
-                <PlusCircle className="h-4 w-4" /> New Article
-              </Button>
-          )}
+          <div className="flex w-full items-center gap-2 sm:w-auto">
+            <div className="min-w-0 flex-1 sm:max-w-2xl sm:flex-none">
+              <SearchInput
+                  value={query}
+                  onChange={setQuery}
+                  debounceMs={350}
+                  minChars={2}
+                  loading={isFetching}
+                  placeholder="Search by title, content, tags, category or author…"
+              className="h-9 text-base bg-background"
+                  aria-label="Search articles"
+                  resultCount={visible.length}
+                  resultLabel="article"
+              />
+            </div>
+            {writer && (
+                <Button onClick={() => router.push('/knowledge-base/new')} className="shrink-0 px-2.5 sm:px-4">
+                  <PlusCircle className="h-4 w-4" /> <span className="hidden sm:inline">New Article</span>
+                </Button>
+            )}
           </div>
         </div>
 

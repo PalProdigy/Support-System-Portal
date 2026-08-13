@@ -62,7 +62,7 @@ export default function ClientsPage() {
           <div className="rounded-xl bg-primary/15 p-3 shrink-0">
             <Building2 className="h-7 w-7 text-primary" />
           </div>
-          <div>
+          <div className="flex flex-row items-baseline gap-2">
             <h1 className="text-2xl font-bold text-foreground">Clients</h1>
             <p className="text-sm text-muted-foreground mt-0.5">{all.length} client{all.length !== 1 ? 's' : ''}</p>
           </div>
@@ -223,14 +223,14 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
   return (
     <div className="p-6 space-y-4">
       {/* Header + total count */}
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-primary/10 p-2.5">
-            <Building2 className="h-5 w-5 text-primary" />
+      <div className="flex items-center justify-between gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="rounded-xl bg-primary/10 p-2 sm:p-2.5 shrink-0">
+            <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
           </div>
-          <div>
-            <h1 className="text-2xl font-bold">Clients</h1>
-            <p className="text-sm text-muted-foreground">
+          <div className="flex flex-row items-baseline gap-2 min-w-0">
+            <h1 className="text-lg sm:text-2xl font-bold truncate">Clients</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
               <span className="font-semibold text-foreground tabular-nums">{clients.length}</span> total
               {query && <> · {ordered.length} match “{query}”</>}
             </p>
@@ -239,7 +239,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
 
         {/* Search — searches Client Name or Company / Organization */}
         <SearchInput
-          containerClassName="w-full max-w-xs"
+          containerClassName="w-44 sm:w-full sm:max-w-xs shrink-0"
           placeholder="Search Client Name…"
           value={query}
           onChange={setQuery}
@@ -268,7 +268,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                       key={i}
                       className={`text-left px-3 py-2.5 text-xs font-semibold text-muted-foreground ${
                         isActionCol
-                          ? 'sticky right-0 w-24 text-right'
+                          ? 'w-24 text-right'
                           : 'whitespace-nowrap'
                       }`}
                     >
@@ -300,7 +300,7 @@ function ClientsTable({ clients, isLoading }: { clients: Client[]; isLoading: bo
                     <td className="px-3 py-2.5 whitespace-nowrap">{c.contact_person}</td>
                     <td className="px-3 py-2.5 whitespace-nowrap font-medium">{casesByClient[c.id] ?? 0}</td>
                     <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(recencyOf(c))}</td>
-                    <td className="px-3 py-2.5 sticky right-0 bg-card/95 group-hover:bg-accent/20 transition-colors w-24 text-right">
+                    <td className="px-3 py-2.5 w-24 text-right">
                       <Button
                         variant="outline"
                         size="sm"

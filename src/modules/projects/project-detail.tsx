@@ -86,12 +86,14 @@ export default function ProjectDetail({ projectId }: { projectId: string }) {
   const [primary, ...support] = handlers
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className=" max-w-6xl mx-auto ">
+      <Button variant="ghost" size="sm" className="gap-1.5 ml-4 pb-2" onClick={() => router.push('/projects')}>
+        <ArrowLeft className="h-3.5 w-3.5" /> Back to Projects
+      </Button>
       {/* Header */}
-      <div className="space-y-4">
-        <Button variant="ghost" size="sm" className="gap-1.5 -ml-2" onClick={() => router.push('/projects')}>
-          <ArrowLeft className="h-3.5 w-3.5" /> Back to Projects
-        </Button>
+      <div className="px-6 pb-6 space-y-4 sm:space-y-6">
+
+      <div>
 
         {parentProject && (
           <button
@@ -131,6 +133,7 @@ export default function ProjectDetail({ projectId }: { projectId: string }) {
           </div>
         </div>
       </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main column — Workflow (sub tasks don't nest further sub tasks) */}
@@ -278,6 +281,7 @@ export default function ProjectDetail({ projectId }: { projectId: string }) {
           )}
         </div>
       )}
+      </div>
     </div>
   )
 }

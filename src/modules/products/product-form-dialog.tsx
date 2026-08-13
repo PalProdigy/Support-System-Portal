@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDataProvider } from '@/lib/data'
 import { Button } from '@/components/ui/button'
@@ -8,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
+import { DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { IconField } from '@/components/shared/icon-field'
 import { toast } from '@/hooks/use-toast'
 import { formatBytes } from '@/lib/utils'
@@ -121,104 +122,117 @@ export function ProductFormDialog({ mode, category, product, open, onOpenChange 
   const isEdit = mode === 'edit'
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{isEdit ? 'Edit Product' : 'Add Product'}</DialogTitle>
-        </DialogHeader>
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        <DialogPrimitive.Content
+          className="fixed inset-x-0 bottom-0 z-50 grid w-full max-h-[85vh] gap-3 overflow-y-auto rounded-t-2xl border-t bg-background p-3 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom sm:inset-x-auto sm:bottom-auto sm:left-[50%] sm:top-[50%] sm:max-w-lg sm:max-h-[90vh] sm:-translate-x-[50%] sm:-translate-y-[50%] sm:rounded-lg sm:border sm:data-[state=closed]:zoom-out-95 sm:data-[state=open]:zoom-in-95 sm:data-[state=closed]:slide-out-to-bottom-0 sm:data-[state=closed]:slide-out-to-left-1/2 sm:data-[state=closed]:slide-out-to-top-[48%] sm:data-[state=open]:slide-in-from-bottom-0 sm:data-[state=open]:slide-in-from-left-1/2 sm:data-[state=open]:slide-in-from-top-[48%]"
+        >
+          {/* Grab-handle affordance for the mobile bottom sheet */}
+          <div className="mx-auto -mt-0.5 mb-0.5 h-1.5 w-10 shrink-0 rounded-full bg-muted-foreground/25 sm:hidden" />
 
-        <div className="space-y-5">
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <FolderKanban className="h-3.5 w-3.5" />
-            {isEdit ? 'Category' : 'Adding to'}
-            <Badge variant="secondary" style={{ background: meta.tint, color: meta.color }} className="font-medium">
-              {category}
-            </Badge>
-          </div>
+          <DialogHeader>
+            <DialogTitle>{isEdit ? 'Edit Product' : 'Add Product'}</DialogTitle>
+          </DialogHeader>
 
-          {/* Image upload */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label>Product Images</Label>
-              <span className="text-xs text-muted-foreground">{images.length}/{MAX_IMAGES}</span>
+          <div className="space-y-5">
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <FolderKanban className="h-3.5 w-3.5" />
+              {isEdit ? 'Category' : 'Adding to'}
+              <Badge variant="secondary" style={{ background: meta.tint, color: meta.color }} className="font-medium">
+                {category}
+              </Badge>
             </div>
 
-            {images.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-                {images.map((src, index) => (
-                  <div key={index} className="group relative aspect-square overflow-hidden rounded-lg border border-border" style={accentVars(meta)}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={src} alt={`Product preview ${index + 1}`} className="h-full w-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ))}
+            {/* Image upload */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label>Product Images</Label>
+                <span className="text-xs text-muted-foreground">{images.length}/{MAX_IMAGES}</span>
               </div>
-            )}
 
-            {images.length < MAX_IMAGES && (
-              <button
-                type="button"
-                onClick={() => fileRef.current?.click()}
-                onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={(e) => { e.preventDefault(); setDragOver(false); onPickImages(e.dataTransfer.files) }}
-                className={`flex h-28 w-full flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed transition-colors ${dragOver ? 'border-primary bg-primary/5' : 'border-border bg-muted/30 hover:border-primary/50 hover:bg-muted/50'}`}
-              >
-                <div className="rounded-full bg-primary/10 p-2">
-                  <ImagePlus className="h-4 w-4 text-primary" />
+              {images.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+                  {images.map((src, index) => (
+                    <div key={index} className="group relative aspect-square overflow-hidden rounded-lg border border-border" style={accentVars(meta)}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={src} alt={`Product preview ${index + 1}`} className="h-full w-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-sm font-medium text-foreground">Click to upload or drag and drop</p>
-                <p className="text-xs text-muted-foreground">Up to {MAX_IMAGES} images · PNG or JPG, {formatBytes(IMG_MAX)} each</p>
-              </button>
-            )}
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              multiple
-              className="sr-only"
-              onChange={(e) => { onPickImages(e.target.files); e.target.value = '' }}
-            />
-          </div>
+              )}
 
-          <div className="space-y-1.5">
-            <Label>Name</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Endpoint Protection Suite" />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label>Description</Label>
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="A short description of this product…" />
-          </div>
-
-          <div className="space-y-3 rounded-xl border bg-muted/20 p-3.5">
-            <Label className="text-sm font-semibold">Product Manager</Label>
-            <IconField icon={User} label="Name" value={managerName} onChange={(e) => setManagerName(e.target.value)} placeholder="Full name" />
-            <IconField icon={Mail} label="Email" type="email" value={managerEmail} onChange={(e) => setManagerEmail(e.target.value)} placeholder="email@company.com" />
-            <div className="grid grid-cols-2 gap-3">
-              <IconField icon={Phone} label="Mobile Number" type="tel" value={managerPhone} onChange={(e) => setManagerPhone(e.target.value)} placeholder="+880 …" />
-              <IconField icon={Briefcase} label="Designation" value={managerDesignation} onChange={(e) => setManagerDesignation(e.target.value)} placeholder="Product Manager" />
+              {images.length < MAX_IMAGES && (
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
+                  onDragLeave={() => setDragOver(false)}
+                  onDrop={(e) => { e.preventDefault(); setDragOver(false); onPickImages(e.dataTransfer.files) }}
+                  className={`flex h-28 w-full flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed transition-colors ${dragOver ? 'border-primary bg-primary/5' : 'border-border bg-muted/30 hover:border-primary/50 hover:bg-muted/50'}`}
+                >
+                  <div className="rounded-full bg-primary/10 p-2">
+                    <ImagePlus className="h-4 w-4 text-primary" />
+                  </div>
+                  <p className="text-sm font-medium text-foreground">Click to upload or drag and drop</p>
+                  <p className="text-xs text-muted-foreground">Up to {MAX_IMAGES} images · PNG or JPG, {formatBytes(IMG_MAX)} each</p>
+                </button>
+              )}
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="sr-only"
+                onChange={(e) => { onPickImages(e.target.files); e.target.value = '' }}
+              />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <IconField icon={IdCard} label="Employee ID" value={managerEmployeeId} onChange={(e) => setManagerEmployeeId(e.target.value)} placeholder="EMP-1024" />
-              <IconField icon={CalendarDays} label="Joining Date" type="date" value={managerJoiningDate} onChange={(e) => setManagerJoiningDate(e.target.value)} />
+
+            <div className="space-y-1.5">
+              <Label>Name</Label>
+              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Endpoint Protection Suite" />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label>Description</Label>
+              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="A short description of this product…" />
+            </div>
+
+            <div className="space-y-3 rounded-xl border bg-muted/20 p-3.5">
+              <Label className="text-sm font-semibold">Product Manager</Label>
+              <IconField icon={User} label="Name" value={managerName} onChange={(e) => setManagerName(e.target.value)} placeholder="Full name" />
+              <IconField icon={Mail} label="Email" type="email" value={managerEmail} onChange={(e) => setManagerEmail(e.target.value)} placeholder="email@company.com" />
+              <div className="grid grid-cols-2 gap-3">
+                <IconField icon={Phone} label="Mobile Number" type="tel" value={managerPhone} onChange={(e) => setManagerPhone(e.target.value)} placeholder="+880 …" />
+                <IconField icon={Briefcase} label="Designation" value={managerDesignation} onChange={(e) => setManagerDesignation(e.target.value)} placeholder="Product Manager" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <IconField icon={IdCard} label="Employee ID" value={managerEmployeeId} onChange={(e) => setManagerEmployeeId(e.target.value)} placeholder="EMP-1024" />
+                <IconField icon={CalendarDays} label="Joining Date" type="date" value={managerJoiningDate} onChange={(e) => setManagerJoiningDate(e.target.value)} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button disabled={saveMutation.isPending || !name.trim()} onClick={() => saveMutation.mutate()}>
-            {saveMutation.isPending ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving...</> : isEdit ? 'Save Changes' : 'Add Product'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+            <Button disabled={saveMutation.isPending || !name.trim()} onClick={() => saveMutation.mutate()} style={{ background: meta.color }}>
+              {saveMutation.isPending ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving...</> : isEdit ? 'Save Changes' : 'Add Product'}
+            </Button>
+          </DialogFooter>
+
+          <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   )
 }

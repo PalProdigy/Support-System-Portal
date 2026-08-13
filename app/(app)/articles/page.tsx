@@ -56,27 +56,27 @@ export default function ArticlesPage() {
   const kbCount = (kbArticles ?? []).filter((a) => a.status === 'published').length
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="rounded-xl bg-primary/15 p-3 shrink-0">
           <Newspaper className="h-7 w-7 text-primary" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Articles</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            {solutionsCount} solution{solutionsCount !== 1 ? 's' : ''} · {kbCount} knowledge base article{kbCount !== 1 ? 's' : ''}
+            {solutionsCount} solution{solutionsCount !== 1 ? 's' : ''} · {kbCount} KB Articles{kbCount !== 1 ? 's' : ''}
           </p>
         </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
-        <TabsList className="h-auto flex-wrap gap-1 p-1">
-          <TabsTrigger value="solutions" className="gap-1.5">
+        <TabsList className="h-auto w-full flex-wrap gap-1 p-1 sm:w-auto">
+          <TabsTrigger value="solutions" className="flex-1 gap-1.5 sm:flex-none">
             <Lightbulb className="h-3.5 w-3.5" /> Solutions
             <span className="ml-0.5 text-[10px] tabular-nums opacity-70">({solutionsCount})</span>
           </TabsTrigger>
-          <TabsTrigger value="knowledge-base" className="gap-1.5">
+          <TabsTrigger value="knowledge-base" className="flex-1 gap-1.5 sm:flex-none">
             <BookOpen className="h-3.5 w-3.5" /> Knowledge Base
             <span className="ml-0.5 text-[10px] tabular-nums opacity-70">({kbCount})</span>
           </TabsTrigger>
