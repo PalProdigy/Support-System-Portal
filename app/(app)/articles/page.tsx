@@ -71,12 +71,12 @@ export default function ArticlesPage() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
-        <TabsList className="h-auto flex-wrap gap-1 p-1">
-          <TabsTrigger value="solutions" className="gap-1.5">
+        <TabsList className="h-auto w-full flex-wrap gap-1 p-1 sm:w-auto">
+          <TabsTrigger value="solutions" className="flex-1 gap-1.5 sm:flex-none">
             <Lightbulb className="h-3.5 w-3.5" /> Solutions
             <span className="ml-0.5 text-[10px] tabular-nums opacity-70">({solutionsCount})</span>
           </TabsTrigger>
-          <TabsTrigger value="knowledge-base" className="gap-1.5">
+          <TabsTrigger value="knowledge-base" className="flex-1 gap-1.5 sm:flex-none">
             <BookOpen className="h-3.5 w-3.5" /> Knowledge Base
             <span className="ml-0.5 text-[10px] tabular-nums opacity-70">({kbCount})</span>
           </TabsTrigger>

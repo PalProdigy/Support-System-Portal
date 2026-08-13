@@ -197,9 +197,9 @@ export function SolutionsPage() {
     <div className="space-y-4 max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div><h1 className="text-2xl font-bold">Solutions</h1><p className="text-sm text-muted-foreground">{solutions?.length ?? 0} products/services</p></div>
-        <div className="flex items-center gap-2">
+        <div className="flex w-full items-center gap-2 sm:w-auto">
           {!isArticlesTab && (
-            <div className="w-48">
+            <div className="w-24 shrink-0 sm:w-48">
               <SearchableSelect
                 icon={Package}
                 options={[{ id: 'all', label: 'All Products' }, ...typeOptions.map((t) => ({ id: t, label: t }))]}
@@ -211,7 +211,7 @@ export function SolutionsPage() {
             </div>
           )}
           <SearchInput
-            containerClassName="w-full max-w-xs"
+            containerClassName="min-w-0 flex-1 sm:max-w-xs"
             placeholder={isArticlesTab ? 'Search articles...' : 'Search solutions...'}
             value={query}
             onChange={setQuery}
@@ -220,8 +220,8 @@ export function SolutionsPage() {
             resultLabel={isArticlesTab ? 'article' : 'solution'}
           />
           {canAddSolution && (
-            <Button onClick={() => router.push('/solutions/new')}>
-              <PlusCircle className="h-4 w-4" /> Add Solution
+            <Button onClick={() => router.push('/solutions/new')} className="shrink-0 px-2.5 sm:px-4">
+              <PlusCircle className="h-4 w-4" /> <span className="hidden sm:inline">Add Solution</span>
             </Button>
           )}
         </div>
