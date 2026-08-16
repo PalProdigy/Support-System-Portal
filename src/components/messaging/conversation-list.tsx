@@ -1,6 +1,6 @@
 'use client'
 
-import { Info, Search, Settings, Users } from 'lucide-react'
+import { BellOff, Info, Search, Settings, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -96,7 +96,10 @@ export function ConversationList({
                   <span className={cn('truncate text-sm text-foreground', c.unreadCount > 0 ? 'font-semibold' : 'font-medium')}>
                     {c.name}
                   </span>
-                  <span className="shrink-0 text-[10px] text-muted-foreground">{timeAgo(c.lastMessageAt)}</span>
+                  <span className="flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground">
+                    {c.muted && <BellOff className="h-3 w-3" />}
+                    {timeAgo(c.lastMessageAt)}
+                  </span>
                 </div>
                 <div className="mt-0.5 flex items-center justify-between gap-2">
                   <span className={cn('truncate text-xs', c.unreadCount > 0 ? 'text-foreground/80' : 'text-muted-foreground')}>

@@ -51,9 +51,11 @@ interface ChatViewProps {
   messages: ChatMessage[]
   onBack?: () => void
   onSend: (body: string) => void
+  onAvatarClick?: () => void
+  accentColor?: string
 }
 
-export function ChatView({ conversation, messages, onBack, onSend }: ChatViewProps) {
+export function ChatView({ conversation, messages, onBack, onSend, onAvatarClick, accentColor }: ChatViewProps) {
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
 
@@ -78,16 +80,33 @@ export function ChatView({ conversation, messages, onBack, onSend }: ChatViewPro
             <ArrowLeft className="h-4 w-4" />
           </Button>
         )}
-        <div className="relative shrink-0">
-          <UserAvatar name={conversation.name} userId={conversation.id} size="sm" shadow={false} />
-          {conversation.online && (
-            <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-card" />
-          )}
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold leading-tight text-foreground">{conversation.name}</p>
-          <p className="text-[11px] text-muted-foreground">{conversation.online ? 'Online' : 'Offline'}</p>
-        </div>
+        {conversation.isGroup && onAvatarClick ? (
+          <button
+            type="button"
+            onClick={onAvatarClick}
+            className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md text-left transition-colors hover:bg-accent/40"
+            aria-label="Open group info"
+          >
+            <UserAvatar name={conversation.name} avatarUrl={conversation.avatarUrl} userId={conversation.id} size="sm" shadow={false} />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold leading-tight text-foreground">{conversation.name}</p>
+              <p className="text-[11px] text-muted-foreground">Tap for group info</p>
+            </div>
+          </button>
+        ) : (
+          <>
+            <div className="relative shrink-0">
+              <UserAvatar name={conversation.name} avatarUrl={conversation.avatarUrl} userId={conversation.id} size="sm" shadow={false} />
+              {conversation.online && (
+                <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-card" />
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold leading-tight text-foreground">{conversation.name}</p>
+              <p className="text-[11px] text-muted-foreground">{conversation.online ? 'Online' : 'Offline'}</p>
+            </div>
+          </>
+        )}
       </div>
 
       <ScrollArea className="flex-1">
@@ -115,16 +134,17 @@ export function ChatView({ conversation, messages, onBack, onSend }: ChatViewPro
                       {cluster.map((m, j) => (
                         <div
                           key={m.id}
+                          style={isMe && accentColor ? { backgroundColor: accentColor } : undefined}
                           className={cn(
                             'max-w-[75%] break-words rounded-2xl px-3 py-2 text-sm',
                             isMe
-                              ? 'rounded-br-sm bg-primary text-primary-foreground'
+                              ? cn('rounded-br-sm text-white', !accentColor && 'bg-primary text-primary-foreground')
                               : 'rounded-bl-sm bg-muted text-foreground',
                           )}
                         >
                           {m.body}
                           {j === cluster.length - 1 && (
-                            <div className={cn('mt-0.5 text-[10px]', isMe ? 'text-primary-foreground/70' : 'text-muted-foreground')}>
+                            <div className={cn('mt-0.5 text-[10px]', isMe ? 'text-white/70' : 'text-muted-foreground')}>
                               {bubbleTime(m.sentAt)}
                             </div>
                           )}

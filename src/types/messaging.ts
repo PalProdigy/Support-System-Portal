@@ -29,4 +29,5 @@ export interface Group {
   avatarUrl?: string
   memberIds: string[]
   createdAt: string
+  themeColor?: string
 }

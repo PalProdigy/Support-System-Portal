@@ -16,6 +16,7 @@ export function useMessaging() {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [overlay, setOverlay] = useState<MessagingOverlay>(null)
+  const [groupInfoId, setGroupInfoId] = useState<string | null>(null)
 
   const filteredConversations = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -25,11 +26,14 @@ export function useMessaging() {
 
   const activeConversation = conversations.find((c) => c.id === activeId) ?? null
   const activeMessages = activeId ? messagesByConversation[activeId] ?? [] : []
+  const activeGroup = activeConversation ? groups.find((g) => g.id === activeConversation.id) ?? null : null
+  const groupInfoGroup = groupInfoId ? groups.find((g) => g.id === groupInfoId) ?? null : null
   const unreadTotal = conversations.reduce((sum, c) => sum + c.unreadCount, 0)
 
   function selectConversation(id: string) {
     setActiveId(id)
     setOverlay(null)
+    setGroupInfoId(null)
     setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, unreadCount: 0 } : c)))
   }
 
@@ -57,18 +61,46 @@ export function useMessaging() {
 
   function openGroupsList() {
     setOverlay('groupsList')
+    setGroupInfoId(null)
   }
 
   function openNewGroupForm() {
     setOverlay('newGroup')
+    setGroupInfoId(null)
   }
 
   function openSettings() {
     setOverlay('settings')
+    setGroupInfoId(null)
   }
 
   function closeOverlay() {
     setOverlay(null)
+  }
+
+  function openGroupInfo(id: string) {
+    setGroupInfoId(id)
+  }
+
+  function closeGroupInfo() {
+    setGroupInfoId(null)
+  }
+
+  function updateGroup(id: string, patch: { name?: string; avatarUrl?: string; themeColor?: string }) {
+    setGroups((prev) => prev.map((g) => (g.id === id ? { ...g, ...patch } : g)))
+    if (patch.name !== undefined || patch.avatarUrl !== undefined) {
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? { ...c, ...(patch.name !== undefined ? { name: patch.name } : {}), ...(patch.avatarUrl !== undefined ? { avatarUrl: patch.avatarUrl } : {}) }
+            : c,
+        ),
+      )
+    }
+  }
+
+  function toggleMuteConversation(id: string, muted: boolean) {
+    setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, muted } : c)))
   }
 
   function createGroup(input: { name: string; memberIds: string[]; avatarUrl?: string }) {
@@ -83,6 +115,7 @@ export function useMessaging() {
     setConversations((prev) => [conversation, ...prev])
     setMessagesByConversation((prev) => ({ ...prev, [id]: [] }))
     setOverlay(null)
+    setGroupInfoId(null)
     setActiveId(id)
   }
 
@@ -90,6 +123,7 @@ export function useMessaging() {
     conversations: filteredConversations,
     activeConversation,
     activeMessages,
+    activeGroup,
     search,
     setSearch,
     selectConversation,
@@ -104,6 +138,11 @@ export function useMessaging() {
     openSettings,
     closeOverlay,
     createGroup,
+    groupInfoGroup,
+    openGroupInfo,
+    closeGroupInfo,
+    updateGroup,
+    toggleMuteConversation,
   }
 }
 

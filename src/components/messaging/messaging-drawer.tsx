@@ -8,6 +8,7 @@ import type { UseMessagingReturn } from '@/hooks/use-messaging'
 import { cn } from '@/lib/utils'
 import { ChatView } from './chat-view'
 import { ConversationList } from './conversation-list'
+import { GroupInfo } from './group-info'
 import { GroupsList } from './groups-list'
 import { GroupsNav } from './groups-nav'
 import { NewGroupForm } from './new-group-form'
@@ -22,9 +23,10 @@ interface MessagingDrawerProps {
 export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDrawerProps) {
   const isMobile = useIsMobile()
   const {
-    conversations, activeConversation, activeMessages,
+    conversations, activeConversation, activeMessages, activeGroup,
     search, setSearch, selectConversation, closeConversation, sendMessage,
     groups, contacts, overlay, openGroupsList, openNewGroupForm, openSettings, closeOverlay, createGroup,
+    groupInfoGroup, openGroupInfo, closeGroupInfo, updateGroup, toggleMuteConversation,
   } = messaging
 
   function handleOpenChange(next: boolean) {
@@ -32,6 +34,7 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
     if (!next) {
       closeConversation()
       closeOverlay()
+      closeGroupInfo()
     }
   }
 
@@ -101,11 +104,26 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
                 <GroupsList groups={groups} onOpenGroup={selectConversation} onNewGroup={openNewGroupForm} />
               ) : overlay === 'settings' ? (
                 <SettingsPanel />
+              ) : groupInfoGroup ? (
+                <GroupInfo
+                  group={groupInfoGroup}
+                  memberNames={groupInfoGroup.memberIds.map(
+                    (id) => contacts.find((c) => c.id === id)?.name ?? id,
+                  )}
+                  muted={conversations.find((c) => c.id === groupInfoGroup.id)?.muted ?? false}
+                  onBack={closeGroupInfo}
+                  onRename={(name) => updateGroup(groupInfoGroup.id, { name })}
+                  onChangePhoto={(avatarUrl) => updateGroup(groupInfoGroup.id, { avatarUrl })}
+                  onChangeTheme={(themeColor) => updateGroup(groupInfoGroup.id, { themeColor })}
+                  onToggleMute={(muted) => toggleMuteConversation(groupInfoGroup.id, muted)}
+                />
               ) : activeConversation ? (
                 <ChatView
                   conversation={activeConversation}
                   messages={activeMessages}
                   onSend={sendMessage}
+                  onAvatarClick={activeConversation.isGroup ? () => openGroupInfo(activeConversation.id) : undefined}
+                  accentColor={activeGroup?.themeColor}
                 />
               ) : (
                 <EmptyState
