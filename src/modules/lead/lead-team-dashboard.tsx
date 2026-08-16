@@ -175,11 +175,11 @@ export function LeadTeamDashboard() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* License & SLA expiry */}
-        <div className="rounded-xl border bg-card">
+        <div className="rounded-xl border bg-card w-full sm:w-[420px] sm:shrink-0 overflow-hidden overflow">
           <div className="flex items-center gap-2 px-4 py-3 border-b flex-wrap">
             <ShieldX className="h-4 w-4 text-rose-600 dark:text-rose-400" />
             <h3 className="text-sm font-semibold text-foreground flex-1 min-w-0">License &amp; SLA Expiry</h3>
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1 shrink-0 max-w-full ">
               {([
                 { key: 'expiring', label: `Expiring ≤ ${EXPIRY_SOON_DAYS}d`, count: expiringSoon.length },
                 { key: 'expired',  label: 'Already Expired',                 count: expired.length },
@@ -189,7 +189,7 @@ export function LeadTeamDashboard() {
                   type="button"
                   onClick={() => setLicenseTab(key)}
                   className={cn(
-                    'px-2.5 py-1 text-xs font-medium rounded-full transition-colors',
+                    'px-2.5 py-1 text-xs font-medium rounded-full transition-colors whitespace-nowrap shrink-0',
                     licenseTab === key ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent hover:text-foreground'
                   )}
                 >
@@ -203,29 +203,31 @@ export function LeadTeamDashboard() {
               {licenseTab === 'expiring' ? `Nothing expiring within ${EXPIRY_SOON_DAYS} days` : 'Nothing expired'}
             </p>
           ) : (
-            <div className="divide-y max-h-56 overflow-y-auto">
-              {(licenseTab === 'expiring' ? expiringSoon : expired).map((r) => (
-                <div key={r.id} className="flex items-center gap-3 px-4 py-2.5">
-                  <span className={cn(
-                    'text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 w-14 text-center',
-                    r.kind === 'License'
-                      ? 'text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40'
-                      : 'text-violet-700 dark:text-violet-300 bg-violet-100 dark:bg-violet-900/40'
-                  )}>
-                    {r.kind}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{productsMap[r.product_id] ?? r.product_id}</p>
-                    <p className="text-xs text-muted-foreground truncate">{clientsMap[r.client_id] ?? r.client_id}</p>
+            <div className="max-h-56 overflow-y-auto overflow-x-auto sm:overflow-x-visible">
+              <div className="divide-y min-w-[360px] sm:min-w-0">
+                {(licenseTab === 'expiring' ? expiringSoon : expired).map((r) => (
+                  <div key={r.id} className="flex items-center gap-3 px-4 py-2.5">
+                    <span className={cn(
+                      'text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 w-14 text-center',
+                      r.kind === 'License'
+                        ? 'text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40'
+                        : 'text-violet-700 dark:text-violet-300 bg-violet-100 dark:bg-violet-900/40'
+                    )}>
+                      {r.kind}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{productsMap[r.product_id] ?? r.product_id}</p>
+                      <p className="text-xs text-muted-foreground truncate">{clientsMap[r.client_id] ?? r.client_id}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className={cn('text-xs font-semibold whitespace-nowrap', r.days < 0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400')}>
+                        {expiryLabel(r.days)}
+                      </p>
+                      <p className="text-[11px] text-muted-foreground whitespace-nowrap">{formatDateTime(r.expires_at)}</p>
+                    </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <p className={cn('text-xs font-semibold', r.days < 0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400')}>
-                      {expiryLabel(r.days)}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground">{formatDateTime(r.expires_at)}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
         </div>
