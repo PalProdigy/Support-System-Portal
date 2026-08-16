@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { MOCK_CONTACTS, MOCK_CONVERSATIONS, MOCK_GROUPS, MOCK_MESSAGES } from '@/data/messaging'
-import type { ChatMessage, Conversation, Group } from '@/types/messaging'
+import type { Attachment, ChatMessage, Conversation, Group } from '@/types/messaging'
 
 export type MessagingOverlay = 'newGroup' | 'groupsList' | 'settings' | null
 
@@ -41,21 +41,24 @@ export function useMessaging() {
     setActiveId(null)
   }
 
-  function sendMessage(body: string) {
+  function sendMessage(body: string, attachment?: Attachment) {
     if (!activeId) return
+    if (!body && !attachment) return
     const message: ChatMessage = {
       id: `local-${Date.now()}`,
       conversationId: activeId,
       senderId: 'me',
       body,
       sentAt: new Date().toISOString(),
+      attachment,
     }
     setMessagesByConversation((prev) => ({
       ...prev,
       [activeId]: [...(prev[activeId] ?? []), message],
     }))
+    const preview = attachment ? body || `📎 ${attachment.name}` : body
     setConversations((prev) =>
-      prev.map((c) => (c.id === activeId ? { ...c, lastMessage: body, lastMessageAt: message.sentAt } : c)),
+      prev.map((c) => (c.id === activeId ? { ...c, lastMessage: preview, lastMessageAt: message.sentAt } : c)),
     )
   }
 

@@ -10,12 +10,20 @@ export interface Conversation {
   isGroup?: boolean
 }
 
+export interface Attachment {
+  name: string
+  url: string
+  type: string
+  size: number
+}
+
 export interface ChatMessage {
   id: string
   conversationId: string
   senderId: 'me' | string
   body: string
   sentAt: string
+  attachment?: Attachment
 }
 
 export interface Contact {
