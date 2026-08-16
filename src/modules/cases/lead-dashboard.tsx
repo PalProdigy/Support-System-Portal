@@ -44,7 +44,7 @@ export default function LeadDashboard() {
         <div>
           <h1 className="text-2xl font-bold">Team Dashboard</h1>
           <p className="text-sm text-muted-foreground">
-            {myTeam ? myTeam.name : 'Your team'} · {teamSize} engineer{teamSize !== 1 ? 's' : ''} · {casesData?.total ?? 0} cases
+            {myTeam ? myTeam.name : 'Your team'} · {teamSize} engineer{teamSize !== 1 ? 's' : ''}
           </p>
         </div>
         <Button onClick={() => setNewCaseOpen(true)}>

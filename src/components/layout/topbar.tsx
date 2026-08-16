@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Bell, Sun, Moon, LogOut, User, ChevronDown } from 'lucide-react'
+import { Bell, Sun, Moon, LogOut, User, ChevronDown, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { ROLE_LABELS } from '@/lib/rbac'
@@ -73,6 +73,11 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
         {/* Theme toggle */}
         <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
           {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </Button>
+
+        {/* Messenger */}
+        <Button variant="ghost" size="icon" aria-label="Messenger">
+          <MessageCircle className="h-4 w-4" />
         </Button>
 
         {/* Notifications */}
