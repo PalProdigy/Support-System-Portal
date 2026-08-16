@@ -17,6 +17,8 @@ import { getDataProvider } from '@/lib/data'
 import type { Notification } from '@/types'
 import { timeAgo } from '@/lib/utils'
 import { Logo } from './logo'
+import { MessagingDrawer } from '@/components/messaging/messaging-drawer'
+import { useMessaging } from '@/hooks/use-messaging'
 
 interface TopbarProps {
   userName?: string
@@ -28,6 +30,8 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
   const qc = useQueryClient()
   const [dark, setDark] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
+  const [msgOpen, setMsgOpen] = useState(false)
+  const messaging = useMessaging()
 
   useEffect(() => {
     const stored = localStorage.getItem('nhq_theme')
@@ -67,6 +71,7 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
   }
 
   return (
+<>
 <header className="absolute inset-x-0 top-0 z-20 flex h-14 items-center justify-between md:justify-end bg-card/70 px-4 gap-4 backdrop-blur-md backdrop-saturate-150 supports-[backdrop-filter]:bg-card/60 shadow-sm print:static">
     <Logo className="md:hidden h-9 w-auto" />
     <div className="flex items-center gap-1">
@@ -76,8 +81,13 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
         </Button>
 
         {/* Messenger */}
-        <Button variant="ghost" size="icon" aria-label="Messenger">
+        <Button variant="ghost" size="icon" className="relative" aria-label="Messenger" onClick={() => setMsgOpen(true)}>
           <MessageCircle className="h-4 w-4" />
+          {messaging.unreadTotal > 0 && (
+            <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+              {messaging.unreadTotal > 9 ? '9+' : messaging.unreadTotal}
+            </span>
+          )}
         </Button>
 
         {/* Notifications */}
@@ -157,5 +167,7 @@ export function Topbar({ userName = 'User' }: TopbarProps) {
         </DropdownMenu>
       </div>
     </header>
+    <MessagingDrawer open={msgOpen} onOpenChange={setMsgOpen} messaging={messaging} />
+    </>
   )
 }
