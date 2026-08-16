@@ -35,14 +35,25 @@ export function GroupInfo({
 }: GroupInfoProps) {
   const [editingName, setEditingName] = useState(false)
   const [nameDraft, setNameDraft] = useState(group.name)
+  const [photoDraft, setPhotoDraft] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
     const reader = new FileReader()
-    reader.onload = () => onChangePhoto(reader.result as string)
+    reader.onload = () => setPhotoDraft(reader.result as string)
     reader.readAsDataURL(file)
+  }
+
+  function confirmPhoto() {
+    if (photoDraft) onChangePhoto(photoDraft)
+    setPhotoDraft(null)
+  }
+
+  function cancelPhoto() {
+    setPhotoDraft(null)
+    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   function startEdit() {
@@ -72,13 +83,27 @@ export function GroupInfo({
             onClick={() => fileInputRef.current?.click()}
             className="group relative shrink-0 rounded-full"
             aria-label="Change group photo"
+            disabled={!!photoDraft}
           >
-            <UserAvatar name={group.name} avatarUrl={group.avatarUrl} userId={group.id} size="xl" shadow={false} />
-            <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/0 text-white opacity-0 transition-opacity group-hover:bg-black/40 group-hover:opacity-100">
-              <Camera className="h-5 w-5" />
-            </span>
+            <UserAvatar name={group.name} avatarUrl={photoDraft ?? group.avatarUrl} userId={group.id} size="xl" shadow={false} />
+            {!photoDraft && (
+              <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/0 text-white opacity-0 transition-opacity group-hover:bg-black/40 group-hover:opacity-100">
+                <Camera className="h-5 w-5" />
+              </span>
+            )}
           </button>
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+
+          {photoDraft && (
+            <div className="flex items-center gap-1.5">
+              <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={confirmPhoto} aria-label="Save photo">
+                <Check className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={cancelPhoto} aria-label="Cancel photo change">
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
 
           {editingName ? (
             <div className="flex w-full max-w-[240px] items-center gap-1.5">
