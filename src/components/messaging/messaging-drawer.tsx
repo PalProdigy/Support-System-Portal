@@ -43,26 +43,23 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
-        side={isMobile ? 'bottom' : 'right'}
+        side="right"
         hideClose
         className={cn(
-          'flex flex-col gap-0 p-0',
-          // Mobile: fixed 70% viewport height so the sheet's proportions stay
-          // constant rather than tracking the dynamic toolbar/keyboard.
+          // `duration-900` isn't a real Tailwind scale value, so it silently
+          // produced no CSS and the panel snapped at the library's default
+          // 300ms/200ms. Arbitrary values here give it an actual, smooth
+          // (not instant, not sluggish) glide in both directions.
+          'flex flex-col gap-0 p-0 ease-out data-[state=open]:duration-[350ms] data-[state=closed]:duration-[300ms]',
+          // Mobile: full-screen panel that still slides in/out from the right edge.
           // Desktop: fixed 70% viewport width, split into a conversation list
           // and the active thread so both are visible at once.
-          isMobile ? 'h-[70vh] max-h-[70vh] w-full' : 'h-full w-[70vw] max-w-[70vw]',
+          isMobile ? 'h-full w-full' : 'h-full w-[70vw] max-w-[70vw]',
         )}
       >
         <SheetClose className="absolute right-3 top-3 z-10 rounded-md border border-red-600 bg-red-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-red-700 focus:outline-none ">
           Close
         </SheetClose>
-
-        {isMobile && (
-          <div className="flex shrink-0 justify-center pt-2">
-            <span className="h-1.5 w-10 rounded-full bg-muted-foreground/25" />
-          </div>
-        )}
 
         {isMobile ? (
           <div className="min-h-0 flex-1">

@@ -11,6 +11,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { cn, timeAgo } from '@/lib/utils'
 import type { Conversation } from '@/types/messaging'
+import { MESSAGING_SEARCH_FIELD_CLASS } from './field-styles'
 
 interface ConversationListProps {
   conversations: Conversation[]
@@ -60,7 +61,7 @@ export function ConversationList({
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search conversations..."
-            className="h-9 pl-8"
+            className={MESSAGING_SEARCH_FIELD_CLASS}
           />
         </div>
       </div>

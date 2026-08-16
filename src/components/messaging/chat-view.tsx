@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { cn } from '@/lib/utils'
 import type { Attachment, ChatMessage, Conversation } from '@/types/messaging'
+import { MESSAGING_COMPOSER_FIELD_CLASS } from './field-styles'
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
@@ -317,7 +318,7 @@ export function ChatView({ conversation, messages, onBack, onSend, onAvatarClick
               }
             }}
             placeholder="Write a message..."
-            className="h-9 flex-1"
+            className={cn(MESSAGING_COMPOSER_FIELD_CLASS, 'flex-1')}
           />
           <Button
             size="icon"

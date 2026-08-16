@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { cn } from '@/lib/utils'
 import type { Contact } from '@/types/messaging'
+import { MESSAGING_SEARCH_FIELD_CLASS } from './field-styles'
 
 interface NewGroupFormProps {
   contacts: Contact[]
@@ -111,7 +112,7 @@ export function NewGroupForm({ contacts, onCreate, onCancel }: NewGroupFormProps
                 value={memberSearch}
                 onChange={(e) => setMemberSearch(e.target.value)}
                 placeholder="Search people..."
-                className="h-9 pl-8"
+                className={MESSAGING_SEARCH_FIELD_CLASS}
               />
             </div>
 
