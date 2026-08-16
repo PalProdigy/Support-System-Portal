@@ -9,15 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import { UserAvatar } from '@/components/shared/user-avatar'
 import { cn } from '@/lib/utils'
 import type { Group } from '@/types/messaging'
-
-const THEME_COLORS: { key: string; label: string; value?: string }[] = [
-  { key: 'default', label: 'Default' },
-  { key: 'blue', label: 'Blue', value: '#2563eb' },
-  { key: 'green', label: 'Green', value: '#16a34a' },
-  { key: 'purple', label: 'Purple', value: '#7c3aed' },
-  { key: 'orange', label: 'Orange', value: '#ea580c' },
-  { key: 'pink', label: 'Pink', value: '#db2777' },
-]
+import { THEME_COLORS } from './theme-colors'
 
 interface GroupInfoProps {
   group: Group

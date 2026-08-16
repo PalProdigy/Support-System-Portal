@@ -1,12 +1,13 @@
 'use client'
 
 import { MessageCircle } from 'lucide-react'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { Sheet, SheetClose, SheetContent } from '@/components/ui/sheet'
 import { EmptyState } from '@/components/shared/empty-state'
 import { useIsMobile } from '@/hooks/use-is-mobile'
 import type { UseMessagingReturn } from '@/hooks/use-messaging'
 import { cn } from '@/lib/utils'
 import { ChatView } from './chat-view'
+import { ContactInfo } from './contact-info'
 import { ConversationList } from './conversation-list'
 import { GroupInfo } from './group-info'
 import { GroupsList } from './groups-list'
@@ -26,7 +27,8 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
     conversations, activeConversation, activeMessages, activeGroup,
     search, setSearch, selectConversation, closeConversation, sendMessage,
     groups, contacts, overlay, openGroupsList, openNewGroupForm, openSettings, closeOverlay, createGroup,
-    groupInfoGroup, openGroupInfo, closeGroupInfo, updateGroup, toggleMuteConversation,
+    groupInfoGroup, contactInfoConversation, openInfoPanel, closeInfoPanel, updateGroup, updateConversationTheme,
+    toggleMuteConversation,
   } = messaging
 
   function handleOpenChange(next: boolean) {
@@ -34,7 +36,7 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
     if (!next) {
       closeConversation()
       closeOverlay()
-      closeGroupInfo()
+      closeInfoPanel()
     }
   }
 
@@ -42,6 +44,7 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
         side={isMobile ? 'bottom' : 'right'}
+        hideClose
         className={cn(
           'flex flex-col gap-0 p-0',
           // Mobile: fixed 70% viewport height so the sheet's proportions stay
@@ -51,6 +54,10 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
           isMobile ? 'h-[70vh] max-h-[70vh] w-full' : 'h-full w-[70vw] max-w-[70vw]',
         )}
       >
+        <SheetClose className="absolute right-3 top-3 z-10 rounded-md border border-red-600 bg-red-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-red-700 focus:outline-none ">
+          Close
+        </SheetClose>
+
         {isMobile && (
           <div className="flex shrink-0 justify-center pt-2">
             <span className="h-1.5 w-10 rounded-full bg-muted-foreground/25" />
@@ -111,19 +118,28 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
                     (id) => contacts.find((c) => c.id === id)?.name ?? id,
                   )}
                   muted={conversations.find((c) => c.id === groupInfoGroup.id)?.muted ?? false}
-                  onBack={closeGroupInfo}
+                  onBack={closeInfoPanel}
                   onRename={(name) => updateGroup(groupInfoGroup.id, { name })}
                   onChangePhoto={(avatarUrl) => updateGroup(groupInfoGroup.id, { avatarUrl })}
                   onChangeTheme={(themeColor) => updateGroup(groupInfoGroup.id, { themeColor })}
                   onToggleMute={(muted) => toggleMuteConversation(groupInfoGroup.id, muted)}
+                />
+              ) : contactInfoConversation ? (
+                <ContactInfo
+                  userId={contactInfoConversation.id}
+                  name={contactInfoConversation.name}
+                  avatarUrl={contactInfoConversation.avatarUrl}
+                  themeColor={contactInfoConversation.themeColor}
+                  onBack={closeInfoPanel}
+                  onChangeTheme={(themeColor) => updateConversationTheme(contactInfoConversation.id, themeColor)}
                 />
               ) : activeConversation ? (
                 <ChatView
                   conversation={activeConversation}
                   messages={activeMessages}
                   onSend={sendMessage}
-                  onAvatarClick={activeConversation.isGroup ? () => openGroupInfo(activeConversation.id) : undefined}
-                  accentColor={activeGroup?.themeColor}
+                  onAvatarClick={() => openInfoPanel(activeConversation.id)}
+                  accentColor={activeConversation.isGroup ? activeGroup?.themeColor : activeConversation.themeColor}
                 />
               ) : (
                 <EmptyState

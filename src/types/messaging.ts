@@ -8,6 +8,7 @@ export interface Conversation {
   online?: boolean
   muted?: boolean
   isGroup?: boolean
+  themeColor?: string
 }
 
 export interface Attachment {

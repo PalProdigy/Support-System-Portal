@@ -153,17 +153,24 @@ export function ChatView({ conversation, messages, onBack, onSend, onAvatarClick
             <ArrowLeft className="h-4 w-4" />
           </Button>
         )}
-        {conversation.isGroup && onAvatarClick ? (
+        {onAvatarClick ? (
           <button
             type="button"
             onClick={onAvatarClick}
-            className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md text-left transition-colors hover:bg-accent/40"
-            aria-label="Open group info"
+            className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md text-left transition-colors"
+            aria-label={conversation.isGroup ? 'Open group info' : 'Open contact info'}
           >
-            <UserAvatar name={conversation.name} avatarUrl={conversation.avatarUrl} userId={conversation.id} size="sm" shadow={false} />
+            <div className="relative shrink-0">
+              <UserAvatar name={conversation.name} avatarUrl={conversation.avatarUrl} userId={conversation.id} size="sm" shadow={false} />
+              {!conversation.isGroup && conversation.online && (
+                <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-card" />
+              )}
+            </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold leading-tight text-foreground">{conversation.name}</p>
-              <p className="text-[11px] text-muted-foreground">Tap for group info</p>
+              <p className="text-[11px] text-muted-foreground">
+                {conversation.isGroup ? 'Tap for group info' : 'Tap for contact info'}
+              </p>
             </div>
           </button>
         ) : (
