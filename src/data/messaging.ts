@@ -1,4 +1,4 @@
-import type { ChatMessage, Conversation } from '@/types/messaging'
+import type { ChatMessage, Contact, Conversation, Group } from '@/types/messaging'
 
 // Fixed at module load so timestamps stay stable for the lifetime of the tab
 // instead of drifting on every render.
@@ -12,11 +12,33 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
   { id: 'c2', name: 'Karim Chowdhury', unreadCount: 0, online: true, lastMessage: "Let's discuss the project tomorrow.", lastMessageAt: minutesAgo(18) },
   { id: 'c3', name: 'Nusrat Jahan', unreadCount: 0, lastMessage: 'Thank you so much!', lastMessageAt: hoursAgo(1) },
   { id: 'c4', name: 'Sakib Hasan', unreadCount: 1, lastMessage: "I'll send it over tomorrow.", lastMessageAt: hoursAgo(3) },
-  { id: 'c5', name: 'Support Team', unreadCount: 0, muted: true, lastMessage: 'Ticket #4521 has been resolved.', lastMessageAt: hoursAgo(6) },
-  { id: 'c6', name: 'Project Alpha Team', unreadCount: 4, lastMessage: 'Farhana: Updated the deployment doc.', lastMessageAt: daysAgo(1) },
+  { id: 'c5', name: 'Support Team', unreadCount: 0, muted: true, isGroup: true, lastMessage: 'Ticket #4521 has been resolved.', lastMessageAt: hoursAgo(6) },
+  { id: 'c6', name: 'Project Alpha Team', unreadCount: 4, isGroup: true, lastMessage: 'Farhana: Updated the deployment doc.', lastMessageAt: daysAgo(1) },
   { id: 'c7', name: 'Admin', unreadCount: 0, lastMessage: 'Your access request was approved.', lastMessageAt: daysAgo(2) },
-  { id: 'c8', name: 'Development Team', unreadCount: 0, lastMessage: 'Build passed on staging.', lastMessageAt: daysAgo(4) },
+  { id: 'c8', name: 'Development Team', unreadCount: 0, isGroup: true, lastMessage: 'Build passed on staging.', lastMessageAt: daysAgo(4) },
   { id: 'c9', name: 'Tanvir Islam', unreadCount: 0, lastMessage: 'Sure, sounds good.', lastMessageAt: daysAgo(6) },
+]
+
+// People selectable when creating a new group. Includes everyone already in
+// a conversation plus a few colleagues not yet messaged.
+export const MOCK_CONTACTS: Contact[] = [
+  { id: 'c1', name: 'Rahim Uddin' },
+  { id: 'c2', name: 'Karim Chowdhury' },
+  { id: 'c3', name: 'Nusrat Jahan' },
+  { id: 'c4', name: 'Sakib Hasan' },
+  { id: 'c9', name: 'Tanvir Islam' },
+  { id: 'contact-farhana', name: 'Farhana Begum' },
+  { id: 'contact-imran', name: 'Imran Khan' },
+  { id: 'contact-nasrin', name: 'Nasrin Akter' },
+]
+
+// The existing team conversations (c5, c6, c8) double as the seed groups
+// shown under Groups > See Groups — id matches the conversation id so
+// opening a group from that list opens its chat directly.
+export const MOCK_GROUPS: Group[] = [
+  { id: 'c5', name: 'Support Team', memberIds: ['contact-farhana', 'contact-imran', 'contact-nasrin'], createdAt: daysAgo(45) },
+  { id: 'c6', name: 'Project Alpha Team', memberIds: ['c1', 'c2', 'contact-farhana'], createdAt: daysAgo(60) },
+  { id: 'c8', name: 'Development Team', memberIds: ['c4', 'contact-imran', 'c9'], createdAt: daysAgo(90) },
 ]
 
 export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {

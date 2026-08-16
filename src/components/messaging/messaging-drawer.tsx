@@ -8,6 +8,10 @@ import type { UseMessagingReturn } from '@/hooks/use-messaging'
 import { cn } from '@/lib/utils'
 import { ChatView } from './chat-view'
 import { ConversationList } from './conversation-list'
+import { GroupsList } from './groups-list'
+import { GroupsNav } from './groups-nav'
+import { NewGroupForm } from './new-group-form'
+import { SettingsPanel } from './settings-panel'
 
 interface MessagingDrawerProps {
   open: boolean
@@ -20,11 +24,15 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
   const {
     conversations, activeConversation, activeMessages,
     search, setSearch, selectConversation, closeConversation, sendMessage,
+    groups, contacts, overlay, openGroupsList, openNewGroupForm, openSettings, closeOverlay, createGroup,
   } = messaging
 
   function handleOpenChange(next: boolean) {
     onOpenChange(next)
-    if (!next) closeConversation()
+    if (!next) {
+      closeConversation()
+      closeOverlay()
+    }
   }
 
   return (
@@ -67,16 +75,33 @@ export function MessagingDrawer({ open, onOpenChange, messaging }: MessagingDraw
         ) : (
           <div className="flex min-h-0 flex-1">
             <div className="w-[340px] shrink-0 border-r">
-              <ConversationList
-                conversations={conversations}
-                search={search}
-                onSearchChange={setSearch}
-                onSelect={selectConversation}
-                activeId={activeConversation?.id}
-              />
+              {overlay === 'newGroup' || overlay === 'groupsList' ? (
+                <GroupsNav
+                  active={overlay}
+                  onSelectNew={openNewGroupForm}
+                  onSelectList={openGroupsList}
+                  onBack={closeOverlay}
+                />
+              ) : (
+                <ConversationList
+                  conversations={conversations}
+                  search={search}
+                  onSearchChange={setSearch}
+                  onSelect={selectConversation}
+                  activeId={activeConversation?.id}
+                  onOpenGroups={openGroupsList}
+                  onOpenSettings={openSettings}
+                />
+              )}
             </div>
             <div className="min-w-0 flex-1">
-              {activeConversation ? (
+              {overlay === 'newGroup' ? (
+                <NewGroupForm contacts={contacts} onCreate={createGroup} onCancel={openGroupsList} />
+              ) : overlay === 'groupsList' ? (
+                <GroupsList groups={groups} onOpenGroup={selectConversation} onNewGroup={openNewGroupForm} />
+              ) : overlay === 'settings' ? (
+                <SettingsPanel />
+              ) : activeConversation ? (
                 <ChatView
                   conversation={activeConversation}
                   messages={activeMessages}

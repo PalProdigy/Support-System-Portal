@@ -1,6 +1,10 @@
 'use client'
 
-import { Search } from 'lucide-react'
+import { Info, Search, Settings, Users } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { EmptyState } from '@/components/shared/empty-state'
@@ -14,13 +18,42 @@ interface ConversationListProps {
   onSearchChange: (value: string) => void
   onSelect: (id: string) => void
   activeId?: string | null
+  onOpenGroups?: () => void
+  onOpenSettings?: () => void
 }
 
-export function ConversationList({ conversations, search, onSearchChange, onSelect, activeId }: ConversationListProps) {
+export function ConversationList({
+  conversations, search, onSearchChange, onSelect, activeId, onOpenGroups, onOpenSettings,
+}: ConversationListProps) {
   return (
     <div className="flex h-full flex-col">
       <div className="shrink-0 border-b px-4 pb-3 pt-4">
-        <h2 className="mb-3 text-base font-semibold text-foreground">Messages</h2>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-base font-semibold text-foreground">Messages</h2>
+          {(onOpenGroups || onOpenSettings) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="About">
+                  <Info className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                {onOpenGroups && (
+                  <DropdownMenuItem onClick={onOpenGroups}>
+                    <Users className="h-4 w-4" />
+                    Groups
+                  </DropdownMenuItem>
+                )}
+                {onOpenSettings && (
+                  <DropdownMenuItem onClick={onOpenSettings}>
+                    <Settings className="h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
         <div className="relative">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -47,9 +80,14 @@ export function ConversationList({ conversations, search, onSearchChange, onSele
               )}
             >
               <div className="relative shrink-0">
-                <UserAvatar name={c.name} userId={c.id} size="md" shadow={false} />
+                <UserAvatar name={c.name} avatarUrl={c.avatarUrl} userId={c.id} size="md" shadow={false} />
                 {c.online && (
                   <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-card" />
+                )}
+                {c.isGroup && (
+                  <span className="absolute bottom-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-muted-foreground ring-2 ring-card">
+                    <Users className="h-2.5 w-2.5 text-card" />
+                  </span>
                 )}
               </div>
 
