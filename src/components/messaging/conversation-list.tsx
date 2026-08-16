@@ -28,7 +28,7 @@ export function ConversationList({
 }: ConversationListProps) {
   return (
     <div className="flex h-full flex-col">
-      <div className="shrink-0 border-b px-4 pb-3 pt-4">
+      <div className="shrink-0  px-4 pb-3 pt-4">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-base font-semibold text-foreground">Messages</h2>
           {(onOpenGroups || onOpenSettings) && (
@@ -76,7 +76,7 @@ export function ConversationList({
               type="button"
               onClick={() => onSelect(c.id)}
               className={cn(
-                'flex w-full items-start gap-3 border-b px-4 py-3 text-left transition-colors last:border-0 hover:bg-accent/60',
+                'flex w-full items-start gap-3  px-4 py-3 text-left transition-colors last:border-0 hover:bg-accent/60',
                 c.id === activeId && 'bg-accent',
               )}
             >
