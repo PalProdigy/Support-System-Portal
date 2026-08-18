@@ -57,7 +57,7 @@ export default function ClientsPage() {
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
           <div className="rounded-xl bg-primary/15 p-3 shrink-0">
             <Building2 className="h-7 w-7 text-primary" />
@@ -67,25 +67,28 @@ export default function ClientsPage() {
             <p className="text-sm text-muted-foreground mt-0.5">{all.length} client{all.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
-        {canCreate && (
-          <Button onClick={() => setShowCreate(true)}>
-            <PlusCircle className="h-4 w-4" /> Create Client
-          </Button>
+        {(all.length > 0 || canCreate) && (
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            {all.length > 0 && (
+              <SearchInput
+                containerClassName="min-w-0 flex-1 sm:w-64 sm:flex-none"
+                className="h-9"
+                placeholder="Search by company or contact…"
+                value={search}
+                onChange={setSearch}
+                aria-label="Search clients"
+                resultCount={filtered.length}
+                resultLabel="client"
+              />
+            )}
+            {canCreate && (
+              <Button className="shrink-0" onClick={() => setShowCreate(true)}>
+                <PlusCircle className="h-4 w-4" /> Create Client
+              </Button>
+            )}
+          </div>
         )}
       </div>
-
-      {all.length > 0 && (
-        <SearchInput
-          containerClassName="w-full max-w-sm"
-          className="h-9"
-          placeholder="Search by company or contact…"
-          value={search}
-          onChange={setSearch}
-          aria-label="Search clients"
-          resultCount={filtered.length}
-          resultLabel="client"
-        />
-      )}
 
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
