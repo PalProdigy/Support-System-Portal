@@ -213,7 +213,7 @@ export function ManageEngineers() {
       <div className="space-y-3 md:space-y-0 md:flex md:items-center md:justify-between md:gap-3">
         <div
           className={cn(
-            'grid gap-1 px-1.5 bg-background border border-input rounded-lg shadow-sm hover:bg-[#020817]',
+            'grid gap-1 px-1.5 bg-background border border-input rounded-lg shadow-sm',
             TABS.length === 3 ? 'grid-cols-3' : 'grid-cols-2',
             'md:flex md:w-fit md:items-center md:gap-1'
           )}
