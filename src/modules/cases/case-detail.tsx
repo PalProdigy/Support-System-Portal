@@ -397,7 +397,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="px-6 pb-6 pt-1 max-w-7xl mx-auto ">
       {/* Back — a sub task returns to its parent case; otherwise browser back */}
       {isSubCase ? (
         <Button variant="ghost" size="sm" onClick={() => router.push(`/cases/${case_.parent_case_id}`)}>
@@ -408,7 +408,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
       )}
-
+      <div className=" space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="rounded-xl border bg-gradient-to-br from-card to-muted/30 shadow-sm p-5 space-y-4">
         <div className="flex items-start gap-3 flex-wrap">
@@ -1292,6 +1292,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
           )}
         </>
       )}
+      </div>
     </div>
   )
 }

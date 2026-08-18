@@ -157,10 +157,10 @@ export function MyCases() {
         <StatCard title="SLA Breached" value={slaBreachedCount} icon={ShieldAlert} iconColor={slaBreachedCount > 0 ? 'text-red-500' : 'text-emerald-500'} loading={statsLoading} />
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-2">
+      {/* Filters — 2-up grid on mobile (search+status, then priority+SLA), plain row on desktop */}
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
         <SearchInput
-          containerClassName="flex-1 min-w-48"
+          containerClassName="sm:flex-1 sm:min-w-48"
           className="h-9"
           placeholder="Search by title or reference..."
           value={search}
@@ -173,7 +173,7 @@ export function MyCases() {
           resultLabel="case"
         />
         <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-full sm:w-40">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -184,7 +184,7 @@ export function MyCases() {
           </SelectContent>
         </Select>
         <Select value={priority} onValueChange={(v) => { setPriority(v); setPage(1) }}>
-          <SelectTrigger className="w-36">
+          <SelectTrigger className="w-full sm:w-36">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -195,7 +195,7 @@ export function MyCases() {
           </SelectContent>
         </Select>
         <Select value={slaFilter} onValueChange={(v) => { setSLAFilter(v); setPage(1) }}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-full sm:w-40">
             <SelectValue placeholder="SLA State" />
           </SelectTrigger>
           <SelectContent>
@@ -205,7 +205,7 @@ export function MyCases() {
           </SelectContent>
         </Select>
         {hasFilters && (
-          <Button variant="outline" size="sm" onClick={() => { setSearch(''); setStatus('all'); setPriority('all'); setSLAFilter('all'); setPage(1) }}>
+          <Button variant="outline" size="sm" className="col-span-2 sm:col-auto" onClick={() => { setSearch(''); setStatus('all'); setPriority('all'); setSLAFilter('all'); setPage(1) }}>
             <RotateCcw className="h-4 w-4" />
             Reset
           </Button>

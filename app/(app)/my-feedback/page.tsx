@@ -11,5 +11,5 @@ export default function MyFeedbackPage() {
       ? 'Feedback you submitted on your support cases.'
       : 'Feedback from clients on the cases you handled.'
 
-  return <FeedbackBoard mine title="My Feedback" description={description} />
+  return <FeedbackBoard mine title="My Feedback"  />
 }
