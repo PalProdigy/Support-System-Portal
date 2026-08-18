@@ -146,7 +146,7 @@ export default function ProductCategoriesPage() {
       <div className="flex items-center gap-2 py-3">
       <SearchInput
           containerClassName="min-w-0 flex-1 sm:max-w-md"
-          className="h-9 transition-all duration-200 ease-out focus-visible:ring-0 focus-visible:border-primary/50 focus-visible:shadow-sm"
+          className="h-9"
           placeholder="Search OEM or product…"
           value={query}
           onChange={setQuery}
@@ -155,13 +155,7 @@ export default function ProductCategoriesPage() {
           resultLabel="OEM"
       />
         <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-          <SelectTrigger
-              className={cn(
-                  'h-9 w-28 shrink-0 sm:w-52 transition-all duration-200 ease-out',
-                  'focus:ring-0 focus:ring-offset-0',
-                  'data-[state=open]:border-primary/50 data-[state=open]:shadow-sm'
-              )}
-          >
+          <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52">
             <SelectValue placeholder="OEM" />
           </SelectTrigger>
 

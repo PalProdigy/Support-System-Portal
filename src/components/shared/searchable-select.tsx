@@ -52,8 +52,8 @@ export function SearchableSelect({
               'group relative flex h-11 w-full items-center gap-2 rounded-xl border border-input bg-transparent pr-9 text-sm shadow-sm transition-all',
               showAvatars ? 'pl-2' : Icon ? 'pl-9' : 'pl-3',
               'hover:border-primary/40 hover:bg-accent/30',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary/50',
-              open && 'border-primary/50 ring-2 ring-primary/40',
+              'focus-visible:outline-none focus-visible:ring-0 focus-visible:border-primary/50 focus-visible:shadow-sm',
+              open && 'border-primary/50 shadow-sm',
               triggerClassName
             )}
           >
