@@ -103,8 +103,8 @@ export default function ProductCategoriesPage() {
   })
 
   return (
-    <div className="space-y-4 sm:space-y-6 px-6 py-10">
-      <div className="w-full rounded-xl border border-border bg-card px-4 pb-4 pt-[18px]">
+    <div className=" px-6 pb-6 pt-3">
+      <div className="w-full ">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-3">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
@@ -118,7 +118,7 @@ export default function ProductCategoriesPage() {
                 </span>
               )}
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">Browse NHQ&apos;s product portfolio by OEM</p>
+
           </div>
 
           {canManage && (
@@ -142,32 +142,34 @@ export default function ProductCategoriesPage() {
           )}
         </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        <SearchInput
+      <div className="flex items-center gap-2 py-3">
+      <SearchInput
           containerClassName="min-w-0 flex-1 sm:max-w-md"
+          className="h-9"
           placeholder="Search OEM or product…"
           value={query}
           onChange={setQuery}
           aria-label="Search OEM or product"
           resultCount={searching ? searchResults.length : undefined}
           resultLabel="OEM"
-        />
+      />
 
-        <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52"><SelectValue placeholder="OEM" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All OEMs</SelectItem>
-            {categoryOptions.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
-          </SelectContent>
-        </Select>
+      <Select value={categoryFilter} onValueChange={handleCategoryChange}>
+        <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52 focus:ring-0 focus:ring-offset-0"><SelectValue placeholder="OEM" /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All OEMs</SelectItem>
+          {categoryOptions.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
+        </SelectContent>
+      </Select>
 
-        {hasDropdownFilter && (
+      {hasDropdownFilter && (
           <Button variant="ghost" size="sm" className="h-9 shrink-0 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
             <X className="h-3 w-3" /> Clear
           </Button>
-        )}
-      </div>
+      )}
+    </div>
+      <div className="space-y-4 sm:space-y-6 ">
+
 
       {isLoading ? (
         <div className="flex flex-col gap-2.5">{[...Array(6)].map((_, i) => <div key={i} className="h-[72px] animate-pulse rounded-2xl bg-muted" />)}</div>
@@ -282,6 +284,7 @@ export default function ProductCategoriesPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
     </div>
   )
 }

@@ -49,7 +49,7 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
   }
 
   return (
-    <div className="">
+    <div className="pt-2">
       <button
         type="button"
         onClick={() => router.push('/products')}
