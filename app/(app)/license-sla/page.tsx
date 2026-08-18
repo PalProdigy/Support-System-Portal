@@ -84,15 +84,14 @@ export default function LicenseSlaPage() {
   const isLoading = clientsLoading || licensesLoading
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="px-6 pt-3 pb-6 max-w-6xl mx-auto space-y-4">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center gap-4">
+      <div className=" flex items-center gap-4">
         <div className="rounded-xl bg-primary/15 p-3 shrink-0">
           <ShieldX className="h-7 w-7 text-primary" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">License &amp; SLA Monitoring</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Track license and support-contract expiry across your clients</p>
         </div>
       </div>
 
@@ -112,23 +111,23 @@ export default function LicenseSlaPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1 shrink-0">
+        <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1 w-full sm:w-auto sm:shrink-0">
           {([
             { key: 'expiring', label: 'Expiring Soon', count: expiringSoon.length },
             { key: 'expired', label: 'Expired', count: expired.length },
             { key: 'healthy', label: 'Healthy', count: healthy.length },
           ] as const).map(({ key, label, count }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setTab(key)}
-              className={cn(
-                'px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors',
-                tab === key ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-              )}
-            >
-              {label} <span className="tabular-nums opacity-70">({count})</span>
-            </button>
+              <button
+                  key={key}
+                  type="button"
+                  onClick={() => setTab(key)}
+                  className={cn(
+                      'flex-1 sm:flex-none px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap',
+                      tab === key ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  )}
+              >
+                {label} <span className="tabular-nums opacity-70">({count})</span>
+              </button>
           ))}
         </div>
         <SearchInput
