@@ -19,6 +19,7 @@ import { ProductManagerField } from '@/components/shared/product-manager-field'
 import { toast } from '@/hooks/use-toast'
 import { Package, PlusCircle, ChevronRight, X, Factory } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
+import { cn } from '@/lib/utils'
 import type { Product, ProductManager } from '@/types'
 import { getCategoryMeta, loadOemOptions, saveOemOptions, collectManagerCandidates } from '@/lib/products-shared'
 
@@ -145,7 +146,7 @@ export default function ProductCategoriesPage() {
       <div className="flex items-center gap-2 py-3">
       <SearchInput
           containerClassName="min-w-0 flex-1 sm:max-w-md"
-          className="h-9"
+          className="h-9 transition-all duration-200 ease-out focus-visible:ring-0 focus-visible:border-primary/50 focus-visible:shadow-sm"
           placeholder="Search OEM or product…"
           value={query}
           onChange={setQuery}
@@ -153,20 +154,61 @@ export default function ProductCategoriesPage() {
           resultCount={searching ? searchResults.length : undefined}
           resultLabel="OEM"
       />
+        <Select value={categoryFilter} onValueChange={handleCategoryChange}>
+          <SelectTrigger
+              className={cn(
+                  'h-9 w-28 shrink-0 sm:w-52 transition-all duration-200 ease-out',
+                  'focus:ring-0 focus:ring-offset-0',
+                  'data-[state=open]:border-primary/50 data-[state=open]:shadow-sm'
+              )}
+          >
+            <SelectValue placeholder="OEM" />
+          </SelectTrigger>
 
-      <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-        <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52 focus:ring-0 focus:ring-offset-0"><SelectValue placeholder="OEM" /></SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All OEMs</SelectItem>
-          {categoryOptions.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
-        </SelectContent>
-      </Select>
+          <SelectContent
+              position="popper"
+              sideOffset={6}
+              className={cn(
+                  'max-h-72 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]',
+                  'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2',
+                  'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+                  'duration-150 ease-out'
+              )}
+          >
+            <SelectItem
+                value="all"
+                className="cursor-pointer transition-colors duration-150 ease-out data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground"
+            >
+              All OEMs
+            </SelectItem>
+            {categoryOptions.map((c) => (
+                <SelectItem
+                    key={c.name}
+                    value={c.name}
+                    className="cursor-pointer transition-colors duration-150 ease-out data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground"
+                >
+                  {c.name}
+                </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-      {hasDropdownFilter && (
-          <Button variant="ghost" size="sm" className="h-9 shrink-0 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
-            <X className="h-3 w-3" /> Clear
-          </Button>
-      )}
+        {hasDropdownFilter && (
+            <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                    'h-9 shrink-0 text-xs text-muted-foreground gap-1',
+                    'transition-all duration-200 ease-out',
+                    'animate-in fade-in-0 zoom-in-95 slide-in-from-left-1',
+                    'hover:text-foreground hover:bg-accent/70'
+                )}
+                onClick={clearDropdownFilters}
+            >
+              <X className="h-3 w-3 transition-transform duration-150 ease-out group-hover:rotate-90" />
+              Clear
+            </Button>
+        )}
     </div>
       <div className="space-y-4 sm:space-y-6 ">
 
