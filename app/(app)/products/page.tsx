@@ -15,12 +15,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared/empty-state'
 import { SearchableSelect } from '@/components/shared/searchable-select'
-import { IconField } from '@/components/shared/icon-field'
+import { ProductManagerField } from '@/components/shared/product-manager-field'
 import { toast } from '@/hooks/use-toast'
-import { Package, PlusCircle, ChevronRight, X, Factory, User, Mail, Phone, Briefcase, IdCard, CalendarDays } from 'lucide-react'
+import { Package, PlusCircle, ChevronRight, X, Factory } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
-import type { Product } from '@/types'
-import { getCategoryMeta, loadOemOptions, saveOemOptions } from '@/lib/products-shared'
+import type { Product, ProductManager } from '@/types'
+import { getCategoryMeta, loadOemOptions, saveOemOptions, collectManagerCandidates } from '@/lib/products-shared'
 
 export default function ProductCategoriesPage() {
   const session = useSession()
@@ -33,7 +33,7 @@ export default function ProductCategoriesPage() {
   const [showCreate, setShowCreate] = useState(false)
   const emptyForm = {
     name: '', description: '', category: '', is_active: true,
-    manager: { name: '', email: '', phone: '', designation: '', employee_id: '', joining_date: '' },
+    managers: [] as ProductManager[],
   }
   const [form, setForm] = useState(emptyForm)
   const [oemOptions, setOemOptions] = useState<string[]>(() => loadOemOptions())
@@ -51,6 +51,7 @@ export default function ProductCategoriesPage() {
 
   const { data: products, isLoading } = useQuery({ queryKey: ['products'], queryFn: () => dp.listProducts() })
   const canManage = canAccess(scope, 'manage_products', 'product')
+  const managerCandidates = useMemo(() => collectManagerCandidates(products ?? []), [products])
 
   // Managers see inactive products too; everyone else only sees the live catalog.
   const visible = useMemo(() => (products ?? []).filter((p) => canManage || p.is_active), [products, canManage])
@@ -95,7 +96,7 @@ export default function ProductCategoriesPage() {
   const createMutation = useMutation({
     mutationFn: () => dp.createProduct({
       ...form,
-      manager: form.manager.name.trim() ? form.manager : undefined,
+      managers: form.managers.length ? form.managers : undefined,
     }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); toast({ title: 'Category created', variant: 'success' }); setShowCreate(false); setForm(emptyForm) },
     onError: () => toast({ title: 'Failed', variant: 'destructive' }),
@@ -232,19 +233,11 @@ export default function ProductCategoriesPage() {
             <div className="space-y-1.5"><Label>Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></div>
             <div className="flex items-center gap-2"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /><Label>Active</Label></div>
 
-            <div className="space-y-3 rounded-xl border bg-muted/20 p-3.5">
-              <Label className="text-sm font-semibold">Product Manager</Label>
-              <IconField icon={User} label="Name" value={form.manager.name} onChange={(e) => setForm({ ...form, manager: { ...form.manager, name: e.target.value } })} placeholder="Full name" />
-              <IconField icon={Mail} label="Email" type="email" value={form.manager.email} onChange={(e) => setForm({ ...form, manager: { ...form.manager, email: e.target.value } })} placeholder="email@company.com" />
-              <div className="grid grid-cols-2 gap-3">
-                <IconField icon={Phone} label="Mobile Number" type="tel" value={form.manager.phone} onChange={(e) => setForm({ ...form, manager: { ...form.manager, phone: e.target.value } })} placeholder="+880 …" />
-                <IconField icon={Briefcase} label="Designation" value={form.manager.designation} onChange={(e) => setForm({ ...form, manager: { ...form.manager, designation: e.target.value } })} placeholder="Product Manager" />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <IconField icon={IdCard} label="Employee ID" value={form.manager.employee_id} onChange={(e) => setForm({ ...form, manager: { ...form.manager, employee_id: e.target.value } })} placeholder="EMP-1024" />
-                <IconField icon={CalendarDays} label="Joining Date" type="date" value={form.manager.joining_date} onChange={(e) => setForm({ ...form, manager: { ...form.manager, joining_date: e.target.value } })} />
-              </div>
-            </div>
+            <ProductManagerField
+              managers={form.managers}
+              onChange={(managers) => setForm({ ...form, managers })}
+              candidates={managerCandidates}
+            />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>

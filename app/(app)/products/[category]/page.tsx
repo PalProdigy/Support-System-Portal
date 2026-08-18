@@ -184,48 +184,54 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
                   <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{viewing.description || '—'}</p>
                 </div>
 
-                {/* Product Manager */}
-                {viewing.manager?.name && (
+                {/* Product Manager(s) */}
+                {(viewing.managers?.length ?? 0) > 0 && (
                   <div className="rounded-xl border overflow-hidden">
                     <div className="h-[3px]" style={{ background: `linear-gradient(90deg, ${meta.color}, ${meta.shade})` }} />
                     <div className="p-3.5 space-y-3">
                       <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                        <Contact className="h-3.5 w-3.5" /> Product Manager
+                        <Contact className="h-3.5 w-3.5" /> Product Manager{viewing.managers!.length > 1 ? 's' : ''}
                       </p>
-                      <div className="flex items-center gap-3">
-                        <UserAvatar name={viewing.manager.name} size="md" border shadow />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-semibold text-foreground truncate">{viewing.manager.name}</p>
-                          {(viewing.manager.designation || viewing.manager.employee_id) && (
-                            <p className="text-xs text-muted-foreground truncate">
-                              {viewing.manager.designation}
-                              {viewing.manager.designation && viewing.manager.employee_id ? ' · ' : ''}
-                              {viewing.manager.employee_id}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                        {viewing.manager.email && (
-                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
-                            <Mail className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {viewing.manager.email}
-                          </span>
-                        )}
-                        {viewing.manager.phone && (
-                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
-                            <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {viewing.manager.phone}
-                          </span>
-                        )}
-                        {viewing.manager.employee_id && (
-                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
-                            <IdCard className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {viewing.manager.employee_id}
-                          </span>
-                        )}
-                        {viewing.manager.joining_date && (
-                          <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
-                            <CalendarDays className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> Joined {formatDate(viewing.manager.joining_date)}
-                          </span>
-                        )}
+                      <div className="space-y-3 divide-y divide-border">
+                        {viewing.managers!.map((manager) => (
+                          <div key={manager.id} className="space-y-2 pt-3 first:pt-0">
+                            <div className="flex items-center gap-3">
+                              <UserAvatar name={manager.name} size="md" border shadow />
+                              <div className="min-w-0 flex-1">
+                                <p className="text-sm font-semibold text-foreground truncate">{manager.name}</p>
+                                {(manager.designation || manager.employee_id) && (
+                                  <p className="text-xs text-muted-foreground truncate">
+                                    {manager.designation}
+                                    {manager.designation && manager.employee_id ? ' · ' : ''}
+                                    {manager.employee_id}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                              {manager.email && (
+                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                                  <Mail className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {manager.email}
+                                </span>
+                              )}
+                              {manager.phone && (
+                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                                  <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {manager.phone}
+                                </span>
+                              )}
+                              {manager.employee_id && (
+                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                                  <IdCard className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> {manager.employee_id}
+                                </span>
+                              )}
+                              {manager.joining_date && (
+                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                                  <CalendarDays className="h-3.5 w-3.5 shrink-0" style={{ color: meta.color }} /> Joined {formatDate(manager.joining_date)}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>

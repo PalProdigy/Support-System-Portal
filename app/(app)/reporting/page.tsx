@@ -476,14 +476,14 @@ export default function ReportingPage() {
 
             {/* Workload */}
             <TabsContent value="workload" className="space-y-4 mt-0">
-              <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <TeamFilter
                   isTH={isTH}
                   selectableTeams={selectableTeams}
                   effectiveTeamId={effectiveTeamId}
                   onChange={setSelectedTeamId}
                 />
-                <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1 shrink-0">
+                <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1 w-full sm:w-auto sm:shrink-0">
                   {([
                     { key: 'most', label: 'Most Workload' },
                     { key: 'least', label: 'Least Workload' },
@@ -493,7 +493,7 @@ export default function ReportingPage() {
                       type="button"
                       onClick={() => setWorkloadTab(key)}
                       className={cn(
-                        'px-2.5 py-1 text-xs font-medium rounded-md transition-colors',
+                        'flex-1 sm:flex-initial px-2.5 py-1 text-xs font-medium rounded-md transition-colors',
                         workloadTab === key ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
                       )}
                     >

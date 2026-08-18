@@ -117,7 +117,7 @@ function loadEngagements(): Engagement[] {
   }))
 }
 
-const SEED_VERSION = '42' // bump when seed schema changes
+const SEED_VERSION = '43' // bump when seed schema changes
 
 // License, case, comment, notification, feedback and audit-log seed rows store
 // dates as day/hour offsets from "now" and are re-based at seed time, so the

@@ -6,7 +6,7 @@ import {
   Contact, type LucideIcon,
 } from 'lucide-react'
 import { UserAvatar } from '@/components/shared/user-avatar'
-import type { Product } from '@/types'
+import type { Product, ProductManager } from '@/types'
 
 const CAROUSEL_INTERVAL_MS = 2800
 
@@ -78,6 +78,19 @@ export function getCategoryMeta(name: string): CategoryMeta {
 
 export function accentVars(meta: CategoryStyle): CSSProperties {
   return { '--accent': meta.color, '--accent-tint': meta.tint, '--accent-shade': meta.shade } as CSSProperties
+}
+
+// Every product manager already on file, across all products — the pool the
+// "Add Product Manager" search matches against so an existing contact can be
+// reused instead of re-entered. Deduped by id, newest first.
+export function collectManagerCandidates(products: Product[]): ProductManager[] {
+  const byId = new Map<string, ProductManager>()
+  for (const p of products) {
+    for (const m of p.managers ?? []) {
+      if (!byId.has(m.id)) byId.set(m.id, m)
+    }
+  }
+  return [...byId.values()].reverse()
 }
 
 export function ProductCard({
@@ -167,20 +180,20 @@ export function ProductCard({
         </div>
         <p className="line-clamp-3 text-[13px] leading-relaxed text-muted-foreground">{product.description}</p>
 
-        {product.manager?.name && (
+        {(product.managers?.length ?? 0) > 0 && (
           <div className="flex items-center gap-2.5 rounded-xl border border-border bg-muted/40 px-2.5 py-2 dark:bg-muted/15">
             <div className="rounded-full ring-2 shrink-0" style={{ '--tw-ring-color': 'var(--accent-tint)' } as CSSProperties}>
-              <UserAvatar name={product.manager.name} size="sm" border={false} shadow={false} />
+              <UserAvatar name={product.managers![0].name} size="sm" border={false} shadow={false} />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[12.5px] font-semibold leading-tight text-foreground truncate">{product.manager.name}</p>
-              <p className="text-[10.5px] leading-tight text-muted-foreground truncate">{product.manager.designation || 'Product Manager'}</p>
+              <p className="text-[12.5px] font-semibold leading-tight text-foreground truncate">{product.managers![0].name}</p>
+              <p className="text-[10.5px] leading-tight text-muted-foreground truncate">{product.managers![0].designation || 'Product Manager'}</p>
             </div>
             <span
               className="flex shrink-0 items-center gap-1 rounded-full px-1.5 py-1 text-[9px] font-bold uppercase tracking-wide"
               style={{ background: 'var(--accent-tint)', color: 'var(--accent)' }}
             >
-              <Contact className="h-2.5 w-2.5" /> PM
+              <Contact className="h-2.5 w-2.5" /> {product.managers!.length > 1 ? `PM +${product.managers!.length - 1}` : 'PM'}
             </span>
           </div>
         )}
