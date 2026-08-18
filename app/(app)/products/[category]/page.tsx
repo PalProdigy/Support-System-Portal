@@ -60,21 +60,21 @@ export default function ProductCategoryPage({ params }: { params: Promise<{ cate
       </button>
 
       <div className="space-y-6 px-6 ">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between gap-3 overflow-x-auto">
+        <div className="flex min-w-0 items-center gap-3">
           <div
-            className="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold tracking-wide"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-bold tracking-wide"
             style={{ background: meta.tint, color: meta.color }}
           >
             {meta.mono}
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Products</h1>
-            <p className="text-sm text-muted-foreground">{categoryName} · {items.length} {items.length === 1 ? 'product' : 'products'}</p>
+          <div className="min-w-0">
+            <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">Products</h1>
+            <p className="truncate text-sm text-muted-foreground">{categoryName} · {items.length} {items.length === 1 ? 'product' : 'products'}</p>
           </div>
         </div>
         {canManage && (
-          <Button type="button" onClick={() => setShowCreate(true)}  style={{ background: meta.color }}>
+          <Button type="button" onClick={() => setShowCreate(true)} className="shrink-0" style={{ background: meta.color }}>
             <PlusCircle className="h-4 w-4 text-white" /> <span className="text-white">Add Product</span>
           </Button>
         )}
