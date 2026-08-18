@@ -766,12 +766,20 @@ export function UserDetail({ id }: { id: string }) {
           {/* ── Articles tab ──────────────────────────────────────────────── */}
           <TabsContent value="articles" className="mt-4">
             <Tabs defaultValue="solution-articles">
-              <TabsList className="h-auto flex-wrap gap-1 p-1">
-                <TabsTrigger value="solution-articles" className="gap-1.5">
-                  <Lightbulb className="h-3.5 w-3.5" /> Solution Articles ({myArticles.length})
+              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 p-1">
+                <TabsTrigger value="solution-articles" className="min-w-0 gap-1.5 px-2">
+                  <Lightbulb className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">
+                    <span className="sm:hidden">Solutions ({myArticles.length})</span>
+                    <span className="hidden sm:inline">Solution Articles ({myArticles.length})</span>
+                  </span>
                 </TabsTrigger>
-                <TabsTrigger value="kb-articles" className="gap-1.5">
-                  <BookOpen className="h-3.5 w-3.5" /> Knowledge Base Articles ({myKbArticles.length})
+                <TabsTrigger value="kb-articles" className="min-w-0 gap-1.5 px-2">
+                  <BookOpen className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">
+                    <span className="sm:hidden">KB Articles ({myKbArticles.length})</span>
+                    <span className="hidden sm:inline">Knowledge Base Articles ({myKbArticles.length})</span>
+                  </span>
                 </TabsTrigger>
               </TabsList>
 
