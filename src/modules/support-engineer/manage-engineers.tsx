@@ -213,7 +213,7 @@ export function ManageEngineers() {
       <div className="space-y-3 md:space-y-0 md:flex md:items-center md:justify-between md:gap-3">
         <div
           className={cn(
-            'grid gap-1 px-1.5 bg-background border border-input rounded-lg shadow-sm',
+            'grid gap-1 px-1.5 py-1 bg-background border border-input rounded-lg shadow-sm',
             TABS.length === 3 ? 'grid-cols-3' : 'grid-cols-2',
             'md:flex md:w-fit md:items-center md:gap-1'
           )}
@@ -224,7 +224,7 @@ export function ManageEngineers() {
               type="button"
               onClick={() => setTab(key)}
               className={cn(
-                'flex items-center justify-center gap-1.5 h-10 min-w-0 px-1 rounded-xl text-[13px] font-medium transition-colors',
+                'flex items-center justify-center gap-1.5 h-9 min-w-0 px-1 rounded-xl text-[13px] font-medium transition-colors',
                 'md:px-4 md:text-sm',
                 activeTab === key
                   ? 'bg-background border-input shadow-sm text-foreground'

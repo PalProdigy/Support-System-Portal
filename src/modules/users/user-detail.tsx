@@ -352,11 +352,19 @@ export function UserDetail({ id }: { id: string }) {
 
       {isEngineer && (
         <Tabs defaultValue="overview">
-          <TabsList className="h-auto flex-wrap gap-1 p-1">
-            <TabsTrigger value="overview" className="gap-1.5"><LayoutGrid className="h-3.5 w-3.5" /> Overview</TabsTrigger>
-            <TabsTrigger value="certification" className="gap-1.5"><Award className="h-3.5 w-3.5" /> Certification</TabsTrigger>
-            <TabsTrigger value="cases" className="gap-1.5"><Ticket className="h-3.5 w-3.5" /> Cases ({cases.length})</TabsTrigger>
-            <TabsTrigger value="articles" className="gap-1.5"><Newspaper className="h-3.5 w-3.5" /> Articles ({myArticles.length + myKbArticles.length})</TabsTrigger>
+          <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 p-1">
+            <TabsTrigger value="overview" className="w-full min-w-0 gap-1.5 truncate">
+              <LayoutGrid className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="certification" className="w-full min-w-0 gap-1.5 truncate">
+              <Award className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Certification</span>
+            </TabsTrigger>
+            <TabsTrigger value="cases" className="w-full min-w-0 gap-1.5 truncate">
+              <Ticket className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Cases ({cases.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="articles" className="w-full min-w-0 gap-1.5 truncate">
+              <Newspaper className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Articles ({myArticles.length + myKbArticles.length})</span>
+            </TabsTrigger>
           </TabsList>
 
           {/* ── Overview tab ──────────────────────────────────────────────── */}

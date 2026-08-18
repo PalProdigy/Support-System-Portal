@@ -117,7 +117,7 @@ export function CaseSummary12m() {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <Tabs value={period} onValueChange={(v) => setPeriod(v as Period)} className="min-w-0">
           <TabsList className="max-w-full overflow-x-auto justify-start">
             {PERIOD_TABS.map((t) => (
