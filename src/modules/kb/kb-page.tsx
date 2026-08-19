@@ -31,7 +31,7 @@ type Shelf = 'browse' | 'mine'
  * and a "My Articles" shelf. Clients see published articles only (enforced by
  * the data layer).
  */
-function KnowledgeBaseIndex() {
+function KnowledgeBaseIndex({ newArticleHref = '/knowledge-base/new' }: { newArticleHref?: string }) {
   const session = useSession()
   const dp = getDataProvider()
   const router = useRouter()
@@ -105,7 +105,7 @@ function KnowledgeBaseIndex() {
               />
             </div>
             {writer && (
-                <Button onClick={() => router.push('/knowledge-base/new')} className="shrink-0 px-2.5 sm:px-4">
+                <Button onClick={() => router.push(newArticleHref)} className="shrink-0 px-2.5 sm:px-4">
                   <PlusCircle className="h-4 w-4" /> <span className="hidden sm:inline">New Article</span>
                 </Button>
             )}
@@ -232,10 +232,10 @@ function ArticleCard({ article: a, showStatus, onTag }: {
   )
 }
 
-export function KnowledgeBasePage() {
+export function KnowledgeBasePage({ newArticleHref }: { newArticleHref?: string } = {}) {
   return (
     <Suspense fallback={<div><Skeleton className="h-40 rounded-2xl" /></div>}>
-      <KnowledgeBaseIndex />
+      <KnowledgeBaseIndex newArticleHref={newArticleHref} />
     </Suspense>
   )
 }

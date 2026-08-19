@@ -156,82 +156,128 @@ function AuditContent() {
       </div>
 
       {/* ── Toolbar: search + filters ─────────────────────────────────────────── */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex flex-wrap items-center gap-2.5 p-1 lg:p-0">
         <SearchInput
           value={query}
           onChange={setQuery}
           debounceMs={200}
           placeholder="Search by actor, entity type, entity ID or action…"
-          containerClassName="min-w-0 flex-1"
+          containerClassName="min-w-0 flex-1 lg:min-w-[220px]"
           aria-label="Search audit log"
           resultCount={filtered.length}
           resultLabel="event"
         />
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className={cn('shrink-0', hasActiveFilters && 'border-primary/50 text-primary')}>
-              <SlidersHorizontal className="h-4 w-4" /> Filters
-              {hasActiveFilters && (
-                <span className="ml-0.5 rounded-full bg-primary/15 px-1.5 text-xs font-semibold">{activeFilterCount}</span>
-              )}
+
+        {/* Mobile — compact "Filters" popover (unchanged) */}
+        <div className="lg:hidden">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className={cn('shrink-0', hasActiveFilters && 'border-primary/50 text-primary')}>
+                <SlidersHorizontal className="h-4 w-4" /> Filters
+                {hasActiveFilters && (
+                  <span className="ml-0.5 rounded-full bg-primary/15 px-1.5 text-xs font-semibold">{activeFilterCount}</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-72 max-h-[min(70vh,var(--radix-popover-content-available-height,70vh))] overflow-y-auto space-y-3 px-3 py-3"
+              align="end"
+              collisionPadding={8}
+            >
+              <div className="flex items-center justify-between p-2">
+                <p className="text-sm font-semibold">Filter events</p>
+                {hasActiveFilters && (
+                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground" onClick={clearFilters}>
+                    <X className="h-3 w-3" /> Clear
+                  </Button>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">Action</Label>
+                <Select value={actionFilter} onValueChange={setActionFilter}>
+                  <SelectTrigger className="h-8 text-sm"><SelectValue placeholder="All actions" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All actions</SelectItem>
+                    {(Object.keys(ACTION_META) as AuditAction[]).map((a) => (
+                      <SelectItem key={a} value={a}>{ACTION_META[a].label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">Entity type</Label>
+                <Select value={entityFilter} onValueChange={setEntityFilter}>
+                  <SelectTrigger className="h-8 text-sm"><SelectValue placeholder="All entities" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All entities</SelectItem>
+                    {entityOptions.map((e) => <SelectItem key={e} value={e}>{entityLabel(e)}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">Actor</Label>
+                <Select value={actorFilter} onValueChange={setActorFilter}>
+                  <SelectTrigger className="h-8 text-sm"><SelectValue placeholder="All actors" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All actors</SelectItem>
+                    {actorOptions.map((a) => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">Date</Label>
+                <input
+                  type="date"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
+                  className="flex h-8 w-full rounded-md border border-input bg-transparent px-2.5 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                />
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {/* Desktop — individual filters laid out in one row, like the cases page */}
+        <div className="hidden lg:flex lg:flex-wrap lg:items-center gap-2.5">
+          <Select value={actionFilter} onValueChange={setActionFilter}>
+            <SelectTrigger className="h-9 w-40"><SelectValue placeholder="All actions" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All actions</SelectItem>
+              {(Object.keys(ACTION_META) as AuditAction[]).map((a) => (
+                <SelectItem key={a} value={a}>{ACTION_META[a].label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={entityFilter} onValueChange={setEntityFilter}>
+            <SelectTrigger className="h-9 w-40"><SelectValue placeholder="All entities" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All entities</SelectItem>
+              {entityOptions.map((e) => <SelectItem key={e} value={e}>{entityLabel(e)}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Select value={actorFilter} onValueChange={setActorFilter}>
+            <SelectTrigger className="h-9 w-44"><SelectValue placeholder="All actors" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All actors</SelectItem>
+              {actorOptions.map((a) => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <input
+            type="date"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="flex h-9 w-40 rounded-md border border-input bg-transparent px-2.5 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          />
+          {hasActiveFilters && (
+            <Button variant="outline" className="h-9" onClick={clearFilters}>
+              <X className="h-4 w-4" /> Clear
             </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-72 space-y-3" align="end">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold">Filter events</p>
-              {hasActiveFilters && (
-                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-muted-foreground" onClick={clearFilters}>
-                  <X className="h-3 w-3" /> Clear
-                </Button>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Action</Label>
-              <Select value={actionFilter} onValueChange={setActionFilter}>
-                <SelectTrigger className="h-8 text-sm"><SelectValue placeholder="All actions" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All actions</SelectItem>
-                  {(Object.keys(ACTION_META) as AuditAction[]).map((a) => (
-                    <SelectItem key={a} value={a}>{ACTION_META[a].label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Entity type</Label>
-              <Select value={entityFilter} onValueChange={setEntityFilter}>
-                <SelectTrigger className="h-8 text-sm"><SelectValue placeholder="All entities" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All entities</SelectItem>
-                  {entityOptions.map((e) => <SelectItem key={e} value={e}>{entityLabel(e)}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Actor</Label>
-              <Select value={actorFilter} onValueChange={setActorFilter}>
-                <SelectTrigger className="h-8 text-sm"><SelectValue placeholder="All actors" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All actors</SelectItem>
-                  {actorOptions.map((a) => <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Date</Label>
-              <input
-                type="date"
-                value={dateFilter}
-                onChange={(e) => setDateFilter(e.target.value)}
-                className="flex h-8 w-full rounded-md border border-input bg-transparent px-2.5 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              />
-            </div>
-          </PopoverContent>
-        </Popover>
+          )}
+        </div>
       </div>
 
       {/* ── Content ───────────────────────────────────────────────────────────── */}

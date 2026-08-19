@@ -163,7 +163,7 @@ export default function ProductCategoriesPage() {
               position="popper"
               sideOffset={6}
               className={cn(
-                  'max-h-72 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]',
+                  'max-h-[min(24rem,var(--radix-select-content-available-height,24rem))] overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]',
                   'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2',
                   'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
                   'duration-150 ease-out'

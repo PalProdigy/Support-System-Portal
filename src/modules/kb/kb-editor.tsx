@@ -53,6 +53,8 @@ const VIEW_MODES: { id: ViewMode; label: string; icon: typeof PenLine }[] = [
 export interface KBEditorProps {
   /** Omit for a new article; pass the slug to edit an existing one. */
   slug?: string
+  /** Where "Back" and the blocked-state "Go back" return to. Defaults to /knowledge-base and, on the top bar, browser back. */
+  backHref?: string
 }
 
 /**
@@ -61,7 +63,7 @@ export interface KBEditorProps {
  * alongside, and Save Draft / Submit for Review workflow actions.
  * Only markdown is ever persisted.
  */
-export function KBEditor({ slug }: KBEditorProps) {
+export function KBEditor({ slug, backHref }: KBEditorProps) {
   const isEdit = slug !== undefined
   const session = useSession()
   const dp = getDataProvider()
@@ -81,7 +83,7 @@ export function KBEditor({ slug }: KBEditorProps) {
       <EditorBlockedState
         title="Read-only access"
         message="Clients can read and search the Knowledge Base, but only staff can write articles."
-        onBack={() => router.push('/knowledge-base')}
+        onBack={() => router.push(backHref ?? '/knowledge-base')}
       />
     )
   }
@@ -101,7 +103,7 @@ export function KBEditor({ slug }: KBEditorProps) {
       <EditorBlockedState
         title="Article not found"
         message="This article may have been removed or renamed."
-        onBack={() => router.push('/knowledge-base')}
+        onBack={() => router.push(backHref ?? '/knowledge-base')}
       />
     )
   }
@@ -110,10 +112,10 @@ export function KBEditor({ slug }: KBEditorProps) {
   // canWriteKB guard above); every save is versioned with who saved it.
 
   // key ensures a fresh form when navigating between different articles.
-  return <KBForm key={existing?.id ?? 'new'} article={existing ?? undefined} />
+  return <KBForm key={existing?.id ?? 'new'} article={existing ?? undefined} backHref={backHref} />
 }
 
-function KBForm({ article }: { article?: KBArticle }) {
+function KBForm({ article, backHref }: { article?: KBArticle; backHref?: string }) {
   const isEdit = article !== undefined
   const session = useSession()
   const dp = getDataProvider()
@@ -232,7 +234,7 @@ function KBForm({ article }: { article?: KBArticle }) {
     <div className="p-4 lg:p-6 space-y-4 max-w-[1700px] mx-auto">
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center gap-2">
-        <Button variant="ghost" size="sm" onClick={() => router.back()}>
+        <Button variant="ghost" size="sm" onClick={() => (backHref ? router.push(backHref) : router.back())}>
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
 

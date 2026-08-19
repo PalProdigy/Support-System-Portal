@@ -88,7 +88,7 @@ export function SearchableSelect({
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>
-          <div className="max-h-56 overflow-y-auto p-1">
+          <div className="max-h-[min(14rem,calc(var(--radix-popover-content-available-height,14rem)-48px))] overflow-y-auto p-1">
             {filtered.length === 0 ? (
               <p className="px-3 py-6 text-center text-xs text-muted-foreground">{emptyText}</p>
             ) : (
