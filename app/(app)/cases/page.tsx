@@ -227,9 +227,10 @@ function CasesPageContent() {
           </Button>
         </div>
       ) : (
-        <div className="flex   items-center gap-2.5">
+        <div className="flex flex-col gap-3 rounded-xl border bg-card p-2.5">
+          {/* Row 1 — search, full width */}
           <SearchInput
-            containerClassName="min-w-0 flex-1 lg:min-w-[220px]"
+            containerClassName="w-full"
             className="h-9"
             placeholder="Search by title or reference..."
             value={search}
@@ -331,74 +332,86 @@ function CasesPageContent() {
             </Popover>
           </div>
 
-          {/* Desktop — individual filters laid out inline in one row (unchanged) */}
-          <div className="hidden lg:flex lg:flex-wrap lg:items-center gap-2.5">
-            <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
-              <SelectTrigger className="h-9 w-36">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                {(Object.keys(STATUS_LABELS) as CaseStatus[]).map((s) => (
-                  <SelectItem key={s} value={s}>{STATUS_LABELS[s]}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={priority} onValueChange={(v) => { setPriority(v); setPage(1) }}>
-              <SelectTrigger className="h-9 w-36">
-                <SelectValue placeholder="Priority" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Priorities</SelectItem>
-                {(Object.keys(PRIORITY_LABELS) as Priority[]).map((p) => (
-                  <SelectItem key={p} value={p}>{PRIORITY_LABELS[p]}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={queueFilter} onValueChange={(v) => { setQueueFilter(v); setPage(1) }}>
-              <SelectTrigger className="h-9 w-48">
-                <SelectValue placeholder="Queue State" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Cases</SelectItem>
-                <SelectItem value="long_queue">Long Queuing (&gt; 24h)</SelectItem>
-                <SelectItem value="long_running">3+ Months Running</SelectItem>
-              </SelectContent>
-            </Select>
-            <SearchableSelect
-              icon={UserIcon}
-              options={engineers.map((u: User) => ({ id: u.id, label: u.name, sublabel: u.role === 'team_lead' ? 'Team Lead' : 'Engineer' }))}
-              value={engineerFilter}
-              onChange={(v) => { setEngineerFilter(v); setPage(1) }}
-              placeholder="All Engineers"
-              searchPlaceholder="Search engineers..."
-              triggerClassName="h-9 rounded-md w-48"
-            />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="h-9 w-48">
-                  <CalendarDays className="h-4 w-4" />
-                  {dateFrom || dateTo ? `${dateFrom || '…'} – ${dateTo || '…'}` : 'Date Range'}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-64 p-3 space-y-3" align="start">
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-medium text-muted-foreground">From</Label>
-                  <Input type="date" className="h-9" value={dateFrom} max={dateTo || undefined} onChange={(e) => { setDateFrom(e.target.value); setPage(1) }} />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-medium text-muted-foreground">To</Label>
-                  <Input type="date" className="h-9" value={dateTo} min={dateFrom || undefined} onChange={(e) => { setDateTo(e.target.value); setPage(1) }} />
-                </div>
-                {(dateFrom || dateTo) && (
-                  <Button variant="ghost" size="sm" className="w-full" onClick={() => { setDateFrom(''); setDateTo(''); setPage(1) }}>
-                    Clear dates
+          {/* Desktop — Row 2: filters, full width, stretched evenly */}
+          <div className="hidden lg:flex lg:flex-wrap gap-3 w-full">
+            <div className="flex-1 min-w-[160px]">
+              <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
+                <SelectTrigger className="h-9 w-full min-w-0">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  {(Object.keys(STATUS_LABELS) as CaseStatus[]).map((s) => (
+                    <SelectItem key={s} value={s}>{STATUS_LABELS[s]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex-1 min-w-[160px]">
+              <Select value={priority} onValueChange={(v) => { setPriority(v); setPage(1) }}>
+                <SelectTrigger className="h-9 w-full min-w-0">
+                  <SelectValue placeholder="Priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Priorities</SelectItem>
+                  {(Object.keys(PRIORITY_LABELS) as Priority[]).map((p) => (
+                    <SelectItem key={p} value={p}>{PRIORITY_LABELS[p]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex-1 min-w-[160px]">
+              <Select value={queueFilter} onValueChange={(v) => { setQueueFilter(v); setPage(1) }}>
+                <SelectTrigger className="h-9 w-full min-w-0">
+                  <SelectValue placeholder="Queue State" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Cases</SelectItem>
+                  <SelectItem value="long_queue">Long Queuing (&gt; 24h)</SelectItem>
+                  <SelectItem value="long_running">3+ Months Running</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex-1 min-w-[160px]">
+              <SearchableSelect
+                icon={UserIcon}
+                options={engineers.map((u: User) => ({ id: u.id, label: u.name, sublabel: u.role === 'team_lead' ? 'Team Lead' : 'Engineer' }))}
+                value={engineerFilter}
+                onChange={(v) => { setEngineerFilter(v); setPage(1) }}
+                placeholder="All Engineers"
+                searchPlaceholder="Search engineers..."
+                triggerClassName="h-9 rounded-md w-full min-w-0"
+              />
+            </div>
+            <div className="flex-1 min-w-[160px]">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="h-9 w-full min-w-0">
+                    <CalendarDays className="h-4 w-4 shrink-0" />
+                    <span className="truncate">
+                      {dateFrom || dateTo ? `${dateFrom || '…'} – ${dateTo || '…'}` : 'Date Range'}
+                    </span>
                   </Button>
-                )}
-              </PopoverContent>
-            </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-3 space-y-3" align="start">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-muted-foreground">From</Label>
+                    <Input type="date" className="h-9" value={dateFrom} max={dateTo || undefined} onChange={(e) => { setDateFrom(e.target.value); setPage(1) }} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-muted-foreground">To</Label>
+                    <Input type="date" className="h-9" value={dateTo} min={dateFrom || undefined} onChange={(e) => { setDateTo(e.target.value); setPage(1) }} />
+                  </div>
+                  {(dateFrom || dateTo) && (
+                    <Button variant="ghost" size="sm" className="w-full" onClick={() => { setDateFrom(''); setDateTo(''); setPage(1) }}>
+                      Clear dates
+                    </Button>
+                  )}
+                </PopoverContent>
+              </Popover>
+            </div>
             {hasFilters && (
-              <Button variant="outline" className="h-9" onClick={clearFilters}>
+              <Button variant="outline" className="h-9 shrink-0" onClick={clearFilters}>
                 <RotateCcw className="h-4 w-4" />
                 Reset
               </Button>
