@@ -98,9 +98,9 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           }}
           placeholder={placeholder}
           className={cn(
-            'flex h-10 w-full rounded-lg border border-input bg-background pl-9 pr-9 text-sm text-foreground shadow-sm outline-none transition-colors',
+            'flex h-10 w-full rounded-lg border border-input bg-background pl-9 pr-9 text-sm text-foreground shadow-sm outline-none transition-all duration-200 ease-out',
             'placeholder:text-muted-foreground',
-            'focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30',
+            'focus-visible:ring-0 focus-visible:border-primary/50 focus-visible:shadow-sm',
             'disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}

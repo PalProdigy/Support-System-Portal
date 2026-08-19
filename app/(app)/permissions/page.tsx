@@ -122,7 +122,7 @@ export default function PermissionsPage() {
           ) : filteredUsers.length === 0 ? (
             <EmptyState size="sm" icon={Users} title="No members found" />
           ) : (
-            <div className="max-h-[70vh] overflow-y-auto divide-y">
+            <div className="max-h-[30vh] overflow-y-auto lg:max-h-[70vh] lg:overflow-y-auto divide-y">
               {filteredUsers.map((u: User) => {
                 const count = overrideCountByUser.get(u.id) ?? 0
                 return (

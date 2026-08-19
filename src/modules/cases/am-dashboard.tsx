@@ -120,8 +120,7 @@ export default function AMDashboard() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Account Overview</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Your clients, orders, and license health at a glance</p>
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
         </div>
         <Button variant="outline" onClick={() => router.push('/clients')}>
           <Building2 className="h-4 w-4" />

@@ -15,12 +15,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/shared/empty-state'
 import { SearchableSelect } from '@/components/shared/searchable-select'
-import { IconField } from '@/components/shared/icon-field'
+import { ProductManagerField } from '@/components/shared/product-manager-field'
 import { toast } from '@/hooks/use-toast'
-import { Package, PlusCircle, ChevronRight, X, Factory, User, Mail, Phone, Briefcase, IdCard, CalendarDays } from 'lucide-react'
+import { Package, PlusCircle, ChevronRight, X, Factory } from 'lucide-react'
 import { canAccess } from '@/lib/rbac'
-import type { Product } from '@/types'
-import { getCategoryMeta, loadOemOptions, saveOemOptions } from '@/lib/products-shared'
+import { cn } from '@/lib/utils'
+import type { Product, ProductManager } from '@/types'
+import { getCategoryMeta, loadOemOptions, saveOemOptions, collectManagerCandidates } from '@/lib/products-shared'
 
 export default function ProductCategoriesPage() {
   const session = useSession()
@@ -33,7 +34,7 @@ export default function ProductCategoriesPage() {
   const [showCreate, setShowCreate] = useState(false)
   const emptyForm = {
     name: '', description: '', category: '', is_active: true,
-    manager: { name: '', email: '', phone: '', designation: '', employee_id: '', joining_date: '' },
+    managers: [] as ProductManager[],
   }
   const [form, setForm] = useState(emptyForm)
   const [oemOptions, setOemOptions] = useState<string[]>(() => loadOemOptions())
@@ -51,6 +52,7 @@ export default function ProductCategoriesPage() {
 
   const { data: products, isLoading } = useQuery({ queryKey: ['products'], queryFn: () => dp.listProducts() })
   const canManage = canAccess(scope, 'manage_products', 'product')
+  const managerCandidates = useMemo(() => collectManagerCandidates(products ?? []), [products])
 
   // Managers see inactive products too; everyone else only sees the live catalog.
   const visible = useMemo(() => (products ?? []).filter((p) => canManage || p.is_active), [products, canManage])
@@ -95,15 +97,15 @@ export default function ProductCategoriesPage() {
   const createMutation = useMutation({
     mutationFn: () => dp.createProduct({
       ...form,
-      manager: form.manager.name.trim() ? form.manager : undefined,
+      managers: form.managers.length ? form.managers : undefined,
     }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); toast({ title: 'Category created', variant: 'success' }); setShowCreate(false); setForm(emptyForm) },
     onError: () => toast({ title: 'Failed', variant: 'destructive' }),
   })
 
   return (
-    <div className="space-y-4 sm:space-y-6 px-6 py-10">
-      <div className="w-full rounded-xl border border-border bg-card px-4 pb-4 pt-[18px]">
+    <div className=" px-6 pb-6 pt-3">
+      <div className="w-full ">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-3">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
@@ -117,7 +119,7 @@ export default function ProductCategoriesPage() {
                 </span>
               )}
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">Browse NHQ&apos;s product portfolio by OEM</p>
+
           </div>
 
           {canManage && (
@@ -141,32 +143,69 @@ export default function ProductCategoriesPage() {
           )}
         </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        <SearchInput
+      <div className="flex items-center gap-2 py-3">
+      <SearchInput
           containerClassName="min-w-0 flex-1 sm:max-w-md"
+          className="h-9"
           placeholder="Search OEM or product…"
           value={query}
           onChange={setQuery}
           aria-label="Search OEM or product"
           resultCount={searching ? searchResults.length : undefined}
           resultLabel="OEM"
-        />
-
+      />
         <Select value={categoryFilter} onValueChange={handleCategoryChange}>
-          <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52"><SelectValue placeholder="OEM" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All OEMs</SelectItem>
-            {categoryOptions.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
+          <SelectTrigger className="h-9 w-28 shrink-0 sm:w-52">
+            <SelectValue placeholder="OEM" />
+          </SelectTrigger>
+
+          <SelectContent
+              position="popper"
+              sideOffset={6}
+              className={cn(
+                  'max-h-[min(24rem,var(--radix-select-content-available-height,24rem))] overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]',
+                  'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2',
+                  'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+                  'duration-150 ease-out'
+              )}
+          >
+            <SelectItem
+                value="all"
+                className="cursor-pointer transition-colors duration-150 ease-out data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground"
+            >
+              All OEMs
+            </SelectItem>
+            {categoryOptions.map((c) => (
+                <SelectItem
+                    key={c.name}
+                    value={c.name}
+                    className="cursor-pointer transition-colors duration-150 ease-out data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground"
+                >
+                  {c.name}
+                </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
         {hasDropdownFilter && (
-          <Button variant="ghost" size="sm" className="h-9 shrink-0 text-xs text-muted-foreground" onClick={clearDropdownFilters}>
-            <X className="h-3 w-3" /> Clear
-          </Button>
+            <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                    'h-9 shrink-0 text-xs text-muted-foreground gap-1',
+                    'transition-all duration-200 ease-out',
+                    'animate-in fade-in-0 zoom-in-95 slide-in-from-left-1',
+                    'hover:text-foreground hover:bg-accent/70'
+                )}
+                onClick={clearDropdownFilters}
+            >
+              <X className="h-3 w-3 transition-transform duration-150 ease-out group-hover:rotate-90" />
+              Clear
+            </Button>
         )}
-      </div>
+    </div>
+      <div className="space-y-4 sm:space-y-6 ">
+
 
       {isLoading ? (
         <div className="flex flex-col gap-2.5">{[...Array(6)].map((_, i) => <div key={i} className="h-[72px] animate-pulse rounded-2xl bg-muted" />)}</div>
@@ -215,7 +254,7 @@ export default function ProductCategoriesPage() {
 
       {/* Create dialog (managers only) */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent>
+        <DialogContent className="max-h-[85vh] overflow-y-auto">
           <DialogHeader><DialogTitle>Add Product</DialogTitle></DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5"><Label>Product Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
@@ -232,19 +271,11 @@ export default function ProductCategoriesPage() {
             <div className="space-y-1.5"><Label>Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></div>
             <div className="flex items-center gap-2"><Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /><Label>Active</Label></div>
 
-            <div className="space-y-3 rounded-xl border bg-muted/20 p-3.5">
-              <Label className="text-sm font-semibold">Product Manager</Label>
-              <IconField icon={User} label="Name" value={form.manager.name} onChange={(e) => setForm({ ...form, manager: { ...form.manager, name: e.target.value } })} placeholder="Full name" />
-              <IconField icon={Mail} label="Email" type="email" value={form.manager.email} onChange={(e) => setForm({ ...form, manager: { ...form.manager, email: e.target.value } })} placeholder="email@company.com" />
-              <div className="grid grid-cols-2 gap-3">
-                <IconField icon={Phone} label="Mobile Number" type="tel" value={form.manager.phone} onChange={(e) => setForm({ ...form, manager: { ...form.manager, phone: e.target.value } })} placeholder="+880 …" />
-                <IconField icon={Briefcase} label="Designation" value={form.manager.designation} onChange={(e) => setForm({ ...form, manager: { ...form.manager, designation: e.target.value } })} placeholder="Product Manager" />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <IconField icon={IdCard} label="Employee ID" value={form.manager.employee_id} onChange={(e) => setForm({ ...form, manager: { ...form.manager, employee_id: e.target.value } })} placeholder="EMP-1024" />
-                <IconField icon={CalendarDays} label="Joining Date" type="date" value={form.manager.joining_date} onChange={(e) => setForm({ ...form, manager: { ...form.manager, joining_date: e.target.value } })} />
-              </div>
-            </div>
+            <ProductManagerField
+              managers={form.managers}
+              onChange={(managers) => setForm({ ...form, managers })}
+              candidates={managerCandidates}
+            />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
@@ -289,6 +320,7 @@ export default function ProductCategoriesPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
     </div>
   )
 }

@@ -659,7 +659,7 @@ export function TeamDetail({ teamId }: { teamId: string }) {
 
       {/* Team workspace tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-3">
-        <TabsList className="h-auto w-full grid grid-cols-5 gap-1 p-1.5 bg-card rounded-[14px] border border-border [-webkit-tap-highlight-color:transparent]">
+        <TabsList className="h-auto w-full grid grid-cols-5 gap-1 p-1.5 bg-muted rounded-[14px] border border-border [-webkit-tap-highlight-color:transparent]">
           <TabsTrigger value="overview" className={TEAM_TAB_TRIGGER_CLASS}><LayoutGrid className="h-[18px] w-[18px]" /> Overview</TabsTrigger>
           <TabsTrigger value="members" className={TEAM_TAB_TRIGGER_CLASS}><Users className="h-[18px] w-[18px]" /> Members</TabsTrigger>
           <TabsTrigger value="cases" className={TEAM_TAB_TRIGGER_CLASS}><Ticket className="h-[18px] w-[18px]" /> Cases</TabsTrigger>

@@ -52,7 +52,7 @@ function EngineerHubContent() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">My Cases</h1>
-            <p className="text-sm text-muted-foreground">Every case assigned to you</p>
+
           </div>
         </div>
         <Button onClick={() => setNewCaseOpen(true)}>

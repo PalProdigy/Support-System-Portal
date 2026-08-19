@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/auth/context'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SearchInput } from '@/components/ui/search-input'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -46,6 +47,7 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
   const tab = searchParams.get('tab') || 'new'
 
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const [searchQuery, setSearchQuery] = useState('')
   const [teamFilter, setTeamFilter] = useState('all')
   const [engineerFilter, setEngineerFilter] = useState('all')
   const [clientFilter, setClientFilter] = useState('all')
@@ -121,6 +123,8 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
   ).map(([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name))
 
   const hasActiveFilters = teamFilter !== 'all' || engineerFilter !== 'all' || clientFilter !== 'all' || !!dateFilter
+  const hasSearchQuery = searchQuery.trim().length > 0
+  const hasAnyFilter = hasActiveFilters || hasSearchQuery
 
   const clearFilters = () => {
     setTeamFilter('all')
@@ -137,12 +141,22 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
     })
   }
 
+  const searchNeedle = searchQuery.trim().toLowerCase()
   const filteredFeedback = visibleFeedback.filter((f: Feedback) => {
     const relatedCase = casesMap[f.case_id]
     if (teamFilter !== 'all' && relatedCase?.team_id !== teamFilter) return false
     if (engineerFilter !== 'all' && relatedCase?.assignee_id !== engineerFilter) return false
     if (clientFilter !== 'all' && f.client_id !== clientFilter) return false
     if (dateFilter && new Date(f.created_at).toISOString().slice(0, 10) !== dateFilter) return false
+    if (searchNeedle) {
+      const client = clientsMap[f.client_id]
+      const engineer = relatedCase?.assignee_id ? usersMap[relatedCase.assignee_id] : undefined
+      const haystack = [relatedCase?.title, f.feedback_text, client?.company_name, engineer?.name]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+      if (!haystack.includes(searchNeedle)) return false
+    }
     return true
   })
 
@@ -168,17 +182,27 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
           <h1 className="text-2xl font-bold">{title}</h1>
           <p className="text-sm text-muted-foreground">
             {description ?? (
-              hasActiveFilters
+              hasAnyFilter
                 ? `${filteredFeedback.length} of ${visibleFeedback.length} responses`
                 : `${visibleFeedback.length} responses`
             )}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className={cn('flex items-center gap-2', !isClient && 'w-full sm:w-auto')}>
+          {!isClient && (
+            <SearchInput
+              containerClassName="min-w-0 flex-1 sm:w-64 sm:flex-none"
+              placeholder="Search case title, feedback…"
+              value={searchQuery}
+              onChange={setSearchQuery}
+              aria-label="Search feedback"
+              className="h-9"
+            />
+          )}
           {!isClient && (
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className={cn(hasActiveFilters && 'border-primary/50 text-primary')}>
+                <Button variant="outline" className={cn('shrink-0', hasActiveFilters && 'border-primary/50 text-primary')}>
                   <Search className="h-4 w-4" />
                   Search
                   {hasActiveFilters && (
@@ -268,8 +292,8 @@ export function FeedbackBoard({ mine = false, title = 'Feedback', description }:
       ) : tabbedFeedback.length === 0 ? (
         <EmptyState
           icon={Star}
-          title={hasActiveFilters ? 'No feedback matches these filters' : 'No feedback yet'}
-          description={hasActiveFilters ? 'Try a different team, engineer, client or date.' : 'Feedback from resolved cases will appear here.'}
+          title={hasAnyFilter ? 'No feedback matches these filters' : 'No feedback yet'}
+          description={hasAnyFilter ? 'Try a different search term, team, engineer, client or date.' : 'Feedback from resolved cases will appear here.'}
         />
       ) : (
         <div className="space-y-3">

@@ -91,10 +91,16 @@ export function PersonalSettings() {
 export function TeamLeadSettings() {
   return (
     <Tabs defaultValue="general">
-      <TabsList className="mb-4">
-        <TabsTrigger value="general"><Settings className="h-3.5 w-3.5" /> General</TabsTrigger>
-        <TabsTrigger value="notifications"><Bell className="h-3.5 w-3.5" /> Notifications</TabsTrigger>
-        <TabsTrigger value="security"><Shield className="h-3.5 w-3.5" /> Security</TabsTrigger>
+      <TabsList className="mb-4 grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 p-1">
+        <TabsTrigger value="general" className="w-full min-w-0 gap-1.5 truncate">
+          <Settings className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">General</span>
+        </TabsTrigger>
+        <TabsTrigger value="notifications" className="w-full min-w-0 gap-1.5 truncate">
+          <Bell className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Notifications</span>
+        </TabsTrigger>
+        <TabsTrigger value="security" className="w-full min-w-0 gap-1.5 truncate">
+          <Shield className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Security</span>
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="general" className="space-y-6">

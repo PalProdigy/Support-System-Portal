@@ -352,11 +352,19 @@ export function UserDetail({ id }: { id: string }) {
 
       {isEngineer && (
         <Tabs defaultValue="overview">
-          <TabsList className="h-auto flex-wrap gap-1 p-1">
-            <TabsTrigger value="overview" className="gap-1.5"><LayoutGrid className="h-3.5 w-3.5" /> Overview</TabsTrigger>
-            <TabsTrigger value="certification" className="gap-1.5"><Award className="h-3.5 w-3.5" /> Certification</TabsTrigger>
-            <TabsTrigger value="cases" className="gap-1.5"><Ticket className="h-3.5 w-3.5" /> Cases ({cases.length})</TabsTrigger>
-            <TabsTrigger value="articles" className="gap-1.5"><Newspaper className="h-3.5 w-3.5" /> Articles ({myArticles.length + myKbArticles.length})</TabsTrigger>
+          <TabsList className="grid h-auto w-full max-w-full grid-flow-col auto-cols-fr gap-1 p-1">
+            <TabsTrigger value="overview" className="w-full min-w-0 gap-1.5 truncate">
+              <LayoutGrid className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="certification" className="w-full min-w-0 gap-1.5 truncate">
+              <Award className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Certification</span>
+            </TabsTrigger>
+            <TabsTrigger value="cases" className="w-full min-w-0 gap-1.5 truncate">
+              <Ticket className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Cases ({cases.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="articles" className="w-full min-w-0 gap-1.5 truncate">
+              <Newspaper className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">Articles ({myArticles.length + myKbArticles.length})</span>
+            </TabsTrigger>
           </TabsList>
 
           {/* ── Overview tab ──────────────────────────────────────────────── */}
@@ -766,12 +774,20 @@ export function UserDetail({ id }: { id: string }) {
           {/* ── Articles tab ──────────────────────────────────────────────── */}
           <TabsContent value="articles" className="mt-4">
             <Tabs defaultValue="solution-articles">
-              <TabsList className="h-auto flex-wrap gap-1 p-1">
-                <TabsTrigger value="solution-articles" className="gap-1.5">
-                  <Lightbulb className="h-3.5 w-3.5" /> Solution Articles ({myArticles.length})
+              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 p-1">
+                <TabsTrigger value="solution-articles" className="min-w-0 gap-1.5 px-2">
+                  <Lightbulb className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">
+                    <span className="sm:hidden">Solutions ({myArticles.length})</span>
+                    <span className="hidden sm:inline">Solution Articles ({myArticles.length})</span>
+                  </span>
                 </TabsTrigger>
-                <TabsTrigger value="kb-articles" className="gap-1.5">
-                  <BookOpen className="h-3.5 w-3.5" /> Knowledge Base Articles ({myKbArticles.length})
+                <TabsTrigger value="kb-articles" className="min-w-0 gap-1.5 px-2">
+                  <BookOpen className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">
+                    <span className="sm:hidden">KB Articles ({myKbArticles.length})</span>
+                    <span className="hidden sm:inline">Knowledge Base Articles ({myKbArticles.length})</span>
+                  </span>
                 </TabsTrigger>
               </TabsList>
 

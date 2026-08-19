@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { getDataProvider } from '@/lib/data'
 import { useSession } from '@/lib/auth/context'
 import { PriorityChip } from '@/components/shared/priority-chip'
@@ -164,6 +164,29 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
   const [commentBody, setCommentBody] = useState('')
   const [isInternal, setIsInternal] = useState(false)
   const [wfCommentBody, setWfCommentBody] = useState('')
+  const wfTextareaRef = useRef<HTMLTextAreaElement>(null)
+  const wfResizeDrag = useRef<{ startY: number; startHeight: number } | null>(null)
+
+  // Pointer Events unify mouse + touch, so this drag handle resizes on both
+  // desktop (mouse) and mobile (touch) — the native CSS `resize` handle only
+  // responds to mouse drags and is inert on touch browsers.
+  function handleWfResizeStart(e: React.PointerEvent<HTMLDivElement>) {
+    const el = wfTextareaRef.current
+    if (!el) return
+    e.preventDefault()
+    wfResizeDrag.current = { startY: e.clientY, startHeight: el.offsetHeight }
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+  function handleWfResizeMove(e: React.PointerEvent<HTMLDivElement>) {
+    const drag = wfResizeDrag.current
+    const el = wfTextareaRef.current
+    if (!drag || !el) return
+    const next = Math.min(256, Math.max(28, drag.startHeight + (e.clientY - drag.startY)))
+    el.style.height = `${next}px`
+  }
+  function handleWfResizeEnd() {
+    wfResizeDrag.current = null
+  }
   const [resolveOpen, setResolveOpen] = useState(false)
   const [clientInfoOpen, setClientInfoOpen] = useState(false)
   const [progressOpen, setProgressOpen] = useState(false)
@@ -374,7 +397,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="px-6 pb-6 pt-1 max-w-7xl mx-auto ">
       {/* Back — a sub task returns to its parent case; otherwise browser back */}
       {isSubCase ? (
         <Button variant="ghost" size="sm" onClick={() => router.push(`/cases/${case_.parent_case_id}`)}>
@@ -385,7 +408,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
           <ArrowLeft className="h-4 w-4" /> Back
         </Button>
       )}
-
+      <div className=" space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="rounded-xl border bg-gradient-to-br from-card to-muted/30 shadow-sm p-5 space-y-4">
         <div className="flex items-start gap-3 flex-wrap">
@@ -597,13 +620,25 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
                                 >
                                   <Paperclip className="h-3.5 w-3.5" />
                                 </label>
-                                <Textarea
-                                  placeholder="Reply to your engineer…"
-                                  rows={1}
-                                  value={wfCommentBody}
-                                  onChange={(e) => setWfCommentBody(e.target.value)}
-                                  className="flex-1 min-h-0 border-0 bg-transparent resize-none px-1 py-1.5 text-xs shadow-none focus-visible:ring-0"
-                                />
+                                <div className="relative flex-1">
+                                  <div
+                                    onPointerDown={handleWfResizeStart}
+                                    onPointerMove={handleWfResizeMove}
+                                    onPointerUp={handleWfResizeEnd}
+                                    onPointerCancel={handleWfResizeEnd}
+                                    className="absolute -top-1.5 left-1/2 -translate-x-1/2 h-3 w-10 flex items-center justify-center cursor-ns-resize touch-none z-10"
+                                  >
+                                    <span className="h-1 w-6 rounded-full bg-muted-foreground/40" />
+                                  </div>
+                                  <Textarea
+                                    ref={wfTextareaRef}
+                                    placeholder="Reply to your engineer…"
+                                    rows={1}
+                                    value={wfCommentBody}
+                                    onChange={(e) => setWfCommentBody(e.target.value)}
+                                    className="min-h-[28px] max-h-64 w-full border-0 bg-transparent resize-none px-1 py-1.5 text-xs shadow-none focus-visible:ring-0"
+                                  />
+                                </div>
                                 <Button
                                   size="icon"
                                   className="shrink-0 h-7 w-7 rounded-md"
@@ -1257,6 +1292,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
           )}
         </>
       )}
+      </div>
     </div>
   )
 }

@@ -129,7 +129,7 @@ export default function ProjectsPage() {
   const serviceActive = serviceTotal - serviceExpired
 
   return (
-    <div className="px-6 pb-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
+    <div className="px-6 pb-6 pt-3 max-w-6xl mx-auto space-y-4 ">
       {/* Hero header */}
       <div className="  flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
@@ -192,7 +192,7 @@ export default function ProjectsPage() {
 
       {/* List */}
       {isLoading ? (
-        <div className="space-y-3">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-32 rounded-xl" />)}</div>
+        <div className="space-y-2">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-32 rounded-xl" />)}</div>
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={FolderKanban}

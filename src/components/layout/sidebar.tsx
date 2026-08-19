@@ -121,7 +121,7 @@ export function Sidebar({ userName = 'User', userRole }: SidebarProps) {
 
       {/* Nav */}
       <nav
-        className="flex-1 overflow-y-auto border-r scrollbar-auto-hide py-3 px-2 space-y-0.5"
+        className="flex-1 border-t overflow-y-auto border-r scrollbar-auto-hide py-3 px-2 space-y-0.5"
         onScroll={handleNavScroll}
         data-scrolling={navScrolling}
       >

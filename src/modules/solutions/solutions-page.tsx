@@ -32,7 +32,7 @@ type Banner = { kind: 'success' | 'error'; message: string }
 // Fallback Type options, unioned with categories already present in the data.
 const DEFAULT_TYPES = ['Integration', 'Data & Analytics', 'CRM', 'Operations', 'HR']
 
-export function SolutionsPage() {
+export function SolutionsPage({ newSolutionHref = '/solutions/new' }: { newSolutionHref?: string } = {}) {
   const session = useSession()
   const dp = getDataProvider()
   const qc = useQueryClient()
@@ -220,7 +220,7 @@ export function SolutionsPage() {
             resultLabel={isArticlesTab ? 'article' : 'solution'}
           />
           {canAddSolution && (
-            <Button onClick={() => router.push('/solutions/new')} className="shrink-0 px-2.5 sm:px-4">
+            <Button onClick={() => router.push(newSolutionHref)} className="shrink-0 px-2.5 sm:px-4">
               <PlusCircle className="h-4 w-4" /> <span className="hidden sm:inline">Add Solution</span>
             </Button>
           )}

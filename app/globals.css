@@ -31,6 +31,8 @@
     --radius: 0.5rem;
     --scrollbar-thumb: hsl(215 16% 65%);
     --scrollbar-thumb-hover: hsl(215 16% 50%);
+    --selection-bg: #dbeafe;
+    --selection-fg: #3D7DF0;
   }
 
   .dark {
@@ -55,6 +57,8 @@
     --ring: 224.3 76.3% 48%;
     --scrollbar-thumb: hsl(215 20% 35%);
     --scrollbar-thumb-hover: hsl(215 20% 48%);
+    --selection-bg: #081632;
+    --selection-fg: #93c5fd;
   }
 }
 
@@ -148,16 +152,16 @@
 }
 
 
-/* Global text selection styles */
+/* Global text selection styles — theme-aware via --selection-bg/--selection-fg (.dark class) */
 ::selection {
-  color: #3B82F6;
-  background-color: #081632;
+  background-color: var(--selection-bg);
+  color: var(--selection-fg);
 }
 
 /* Mozilla Firefox support */
 ::-moz-selection {
-  color: #3B82F6;
-  background-color: #081632;
+  background-color: var(--selection-bg);
+  color: var(--selection-fg);
 }
 
 /* NHQLoader — defined here (not injected at runtime) so the animation is

@@ -86,8 +86,8 @@ export default function ProjectDetail({ projectId }: { projectId: string }) {
   const [primary, ...support] = handlers
 
   return (
-    <div className=" max-w-6xl mx-auto ">
-      <Button variant="ghost" size="sm" className="gap-1.5 ml-4 pb-2" onClick={() => router.push('/projects')}>
+    <div className=" max-w-6xl mx-auto pt-2">
+      <Button variant="ghost" size="sm" className="gap-1.5 ml-4 mb-2" onClick={() => router.push('/projects')}>
         <ArrowLeft className="h-3.5 w-3.5" /> Back to Projects
       </Button>
       {/* Header */}

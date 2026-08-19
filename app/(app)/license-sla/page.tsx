@@ -84,15 +84,14 @@ export default function LicenseSlaPage() {
   const isLoading = clientsLoading || licensesLoading
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="px-6 pt-3 pb-6 max-w-6xl mx-auto space-y-4">
       {/* Hero header */}
-      <div className="rounded-xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 flex items-center gap-4">
+      <div className=" flex items-center gap-4">
         <div className="rounded-xl bg-primary/15 p-3 shrink-0">
           <ShieldX className="h-7 w-7 text-primary" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">License &amp; SLA Monitoring</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Track license and support-contract expiry across your clients</p>
         </div>
       </div>
 
@@ -112,23 +111,23 @@ export default function LicenseSlaPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1 shrink-0">
+        <div className="flex items-center gap-1 rounded-lg border bg-muted/30 p-1 w-full sm:w-auto sm:shrink-0">
           {([
             { key: 'expiring', label: 'Expiring Soon', count: expiringSoon.length },
             { key: 'expired', label: 'Expired', count: expired.length },
             { key: 'healthy', label: 'Healthy', count: healthy.length },
           ] as const).map(({ key, label, count }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setTab(key)}
-              className={cn(
-                'px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors',
-                tab === key ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
-              )}
-            >
-              {label} <span className="tabular-nums opacity-70">({count})</span>
-            </button>
+              <button
+                  key={key}
+                  type="button"
+                  onClick={() => setTab(key)}
+                  className={cn(
+                      'flex-1 sm:flex-none px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap',
+                      tab === key ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  )}
+              >
+                {label} <span className="tabular-nums opacity-70">({count})</span>
+              </button>
           ))}
         </div>
         <SearchInput
@@ -347,34 +346,38 @@ export default function LicenseSlaPage() {
                           </div>
                         </div>
 
-                        {product.manager?.name ? (
-                          <div className="rounded-lg bg-muted/40 p-3 space-y-2">
-                            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Product Manager</p>
-                            <div className="flex items-center gap-3">
-                              <UserAvatar name={product.manager.name} size="sm" border shadow />
-                              <div className="min-w-0 flex-1">
-                                <p className="text-sm font-medium text-foreground truncate">{product.manager.name}</p>
-                                {(product.manager.designation || product.manager.employee_id) && (
-                                  <p className="text-[11px] text-muted-foreground truncate">
-                                    {product.manager.designation}
-                                    {product.manager.designation && product.manager.employee_id ? ' · ' : ''}
-                                    {product.manager.employee_id}
-                                  </p>
-                                )}
+                        {(product.managers?.length ?? 0) > 0 ? (
+                          <div className="rounded-lg bg-muted/40 p-3 space-y-3 divide-y divide-border">
+                            {product.managers!.map((manager, i) => (
+                              <div key={manager.id} className={`space-y-2 ${i > 0 ? 'pt-3' : ''}`}>
+                                {i === 0 && <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Product Manager{product.managers!.length > 1 ? 's' : ''}</p>}
+                                <div className="flex items-center gap-3">
+                                  <UserAvatar name={manager.name} size="sm" border shadow />
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium text-foreground truncate">{manager.name}</p>
+                                    {(manager.designation || manager.employee_id) && (
+                                      <p className="text-[11px] text-muted-foreground truncate">
+                                        {manager.designation}
+                                        {manager.designation && manager.employee_id ? ' · ' : ''}
+                                        {manager.employee_id}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                                  {manager.email && (
+                                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                                      <Mail className="h-3 w-3 shrink-0" /> {manager.email}
+                                    </span>
+                                  )}
+                                  {manager.phone && (
+                                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
+                                      <Phone className="h-3 w-3 shrink-0" /> {manager.phone}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
-                              {product.manager.email && (
-                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
-                                  <Mail className="h-3 w-3 shrink-0" /> {product.manager.email}
-                                </span>
-                              )}
-                              {product.manager.phone && (
-                                <span className="flex items-center gap-1.5 text-xs text-muted-foreground truncate">
-                                  <Phone className="h-3 w-3 shrink-0" /> {product.manager.phone}
-                                </span>
-                              )}
-                            </div>
+                            ))}
                           </div>
                         ) : (
                           <p className="text-xs text-muted-foreground">No product manager on file.</p>

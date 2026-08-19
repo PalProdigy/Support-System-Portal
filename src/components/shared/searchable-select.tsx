@@ -52,8 +52,8 @@ export function SearchableSelect({
               'group relative flex h-11 w-full items-center gap-2 rounded-xl border border-input bg-transparent pr-9 text-sm shadow-sm transition-all',
               showAvatars ? 'pl-2' : Icon ? 'pl-9' : 'pl-3',
               'hover:border-primary/40 hover:bg-accent/30',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-primary/50',
-              open && 'border-primary/50 ring-2 ring-primary/40',
+              'focus-visible:outline-none focus-visible:ring-0 focus-visible:border-primary/50 focus-visible:shadow-sm',
+              open && 'border-primary/50 shadow-sm',
               triggerClassName
             )}
           >
@@ -88,7 +88,7 @@ export function SearchableSelect({
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>
-          <div className="max-h-56 overflow-y-auto p-1">
+          <div className="max-h-[min(14rem,calc(var(--radix-popover-content-available-height,14rem)-48px))] overflow-y-auto p-1">
             {filtered.length === 0 ? (
               <p className="px-3 py-6 text-center text-xs text-muted-foreground">{emptyText}</p>
             ) : (

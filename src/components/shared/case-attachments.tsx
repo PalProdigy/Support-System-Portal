@@ -121,18 +121,18 @@ export function CaseAttachments({ caseId, canManage = true }: { caseId: string; 
             Sorted by {sortBy === 'created_at' ? 'Last Modified' : sortBy === 'file_name' ? 'Name' : 'Size'}
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="relative">
+        <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+          <div className="relative flex-1 min-w-0 sm:flex-none">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <Input
               placeholder="Search files…"
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-              className="h-8 w-44 pl-8 text-xs"
+              className="h-8 w-full sm:w-44 pl-8 text-xs"
             />
           </div>
           <Select value={sortBy} onValueChange={(v) => { setSortBy(v as SortKey); setPage(1) }}>
-            <SelectTrigger className="h-8 w-36 text-xs">
+            <SelectTrigger className="h-8 flex-1 min-w-0 sm:flex-none sm:w-36 text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -142,7 +142,7 @@ export function CaseAttachments({ caseId, canManage = true }: { caseId: string; 
             </SelectContent>
           </Select>
           {canManage && (
-            <Button size="sm" className="h-8" onClick={() => inputRef.current?.click()}>
+            <Button size="sm" className="h-8 w-full sm:w-auto shrink-0" onClick={() => inputRef.current?.click()}>
               <Upload className="h-3.5 w-3.5" /> Add Files
             </Button>
           )}

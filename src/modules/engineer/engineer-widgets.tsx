@@ -191,7 +191,7 @@ export function EngineerWidgets() {
             <span className="text-xs text-muted-foreground shrink-0">
               {hoursTab === 'weekly' ? `${totalWeeklyHours.toFixed(1)}h this week` : `last ${WEEKS_BACK} weeks`}
             </span>
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1 w-full sm:w-auto sm:shrink-0">
               {([
                 { key: 'weekly',   label: 'Weekly' },
                 { key: 'weekwise', label: 'Week-wise' },

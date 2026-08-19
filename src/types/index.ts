@@ -189,8 +189,10 @@ export interface Team {
 }
 
 // The OEM/vendor-side contact responsible for a product — captured when the
-// product is added so there's always a point of contact on file.
+// product is added so there's always a point of contact on file. A product
+// can have several (e.g. a primary and a backup), so they're kept as a list.
 export interface ProductManager {
+  id: string
   name: string
   email: string
   phone: string
@@ -207,7 +209,7 @@ export interface Product {
   is_active: boolean
   created_at: string
   image_urls?: string[]   // base64 data URLs uploaded from the Add/Edit Product form (max 5)
-  manager?: ProductManager
+  managers?: ProductManager[]
 }
 
 export interface SLARule {
